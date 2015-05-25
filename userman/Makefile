@@ -8,7 +8,7 @@ LATEXMK += -synctex=1
 LATEXKO :=
 EXTRAMK ?=
 LINKS   := pdf log synctex.gz
-MAIN    := userman.pdf
+MAIN    := userman
 
 ifneq (${DRAFT},)
 LATEXMK += -e '$$max_repeat = 1' -interaction=nonstopmode
