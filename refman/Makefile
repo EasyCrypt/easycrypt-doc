@@ -8,7 +8,7 @@ LATEXMK += -synctex=1
 LATEXKO :=
 EXTRAMK ?=
 LINKS   := pdf log synctex.gz
-MAIN    := easycrypt
+MAIN    := refman
 
 ifneq (${DRAFT},)
 LATEXMK += -e '$$max_repeat = 1' -interaction=nonstopmode
