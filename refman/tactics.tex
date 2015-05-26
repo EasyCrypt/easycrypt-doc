@@ -15,7 +15,7 @@ In this chapter, we describe this proof engine in general before listing and
 describing the existing tactics for various fragments of \EasyCrypt's
 underlying logic.
 
-\section{The proof engine}
+\subsection{The proof engine}
 
 The proof engine deals with judgments or goals of the form
 $\epsilon; \Gamma \vdash \phi$ where $\epsilon$ is the (global) environment,
@@ -103,6 +103,11 @@ it is applied, the proof engine replaces it with the set of the
 premises of the applied rule - the subgoals. This application may generate
 no, one or several subgoals depending on the rule. This process is repeated
 iteratively, up to the point where no goals remain.
+
+\subsection{Intro-patterns and generalization}
+
+\label{s:intro-pattern}
+\label{s:gen-pattern}
 
 \subsection{Ambient logic}
 

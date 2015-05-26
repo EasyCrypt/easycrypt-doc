@@ -7,24 +7,43 @@ LATEXMK := latexmk -bibtex -output-directory=_build
 LATEXMK += -synctex=1
 LATEXKO :=
 EXTRAMK ?=
-LINKS   := pdf log synctex.gz
+ITMODE  ?= errorstopmode
+LINKS   := log synctex.gz
 MAIN    := userman
 
 ifneq (${DRAFT},)
-LATEXMK += -e '$$max_repeat = 1' -interaction=nonstopmode
-LATEXKO := -
-else
-LATEXMK += -interaction=batchmode
+LATEXMK += -e '$$max_repeat = 1'
+LATEXKO += -
 endif
 
-LATEXMK += $(EXTRAMK)
+LATEXMK += -interaction=$(ITMODE) $(EXTRAMK)
+
+export TEXINPUTS := ../common:${TEXINPUTS}
 
 # --------------------------------------------------------------------
-all: $(MAIN).pdf
+.PHONY: all links force scratch clean purge __force__
 
-%.pdf: __force__
-	$(LATEXKO)TEXINPUTS=${TEXINPUTS}:../common $(LATEXMK) -pdf $(@:%.pdf=%)
-	for i in $(LINKS); do ln -sf _build/$*.$$i .; done
+define latex
+	$(LATEXMK) -pdf $* $(MAIN); err=$$?; \
+	[ -f _build/$(MAIN).pdf ] && cp _build/$(MAIN).pdf .; \
+	exit $$err
+endef
+
+all: prepare __force__
+	$(LATEXKO)$(call latex)
+
+force: prepare __force__
+	$(LATEXKO)$(call latex,-g)
+
+prepare: __force__
+	for i in $(LINKS); do ln -sf _build/$(MAIN).$$i .; done
+	rm -f _build/$(MAIN).pdf
+
+scratch: purge all
+	@true
 
 clean:
 	rm -rf _build/ $(LINKS:%=$(MAIN).%)
+
+purge: clean
+	rm -f $(MAIN).pdf
