@@ -1,4 +1,3 @@
-auto/
 _build/
 refman/refman.pdf
 userman/userman.pdf
@@ -35,6 +34,9 @@ userman/userman.pdf
 *.synctex.gz
 *.synctex.gz(busy)
 *.pdfsync
+
+## Emacs AUCTeX files
+auto/
 
 ## Auxiliary and intermediate files from other packages:
 
