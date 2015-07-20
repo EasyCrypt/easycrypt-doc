@@ -1,6 +1,4 @@
 _build/
-refman/refman.pdf
-userman/userman.pdf
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
@@ -15,9 +13,9 @@ userman/userman.pdf
 *.dvi
 *-converted-to.*
 # these rules might exclude image files for figures etc.
-# *.ps
+*.ps
 # *.eps
-# *.pdf
+*.pdf
 
 ## Bibliography auxiliary files (bibtex/biblatex/biber):
 *.bbl
@@ -34,6 +32,9 @@ userman/userman.pdf
 *.synctex.gz
 *.synctex.gz(busy)
 *.pdfsync
+
+## Emacs files
+*~
 
 ## Emacs AUCTeX files
 auto/

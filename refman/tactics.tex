@@ -1,5 +1,4 @@
-% --------------------------------------------------------------------
-\section{Tactics}
+\chapter{Tactics}
 
 \EasyCrypt comes with a proof engine that allows to state and prove properties
 about programs written in the various languages.
@@ -15,7 +14,7 @@ In this chapter, we describe this proof engine in general before listing and
 describing the existing tactics for various fragments of \EasyCrypt's
 underlying logic.
 
-\subsection{The proof engine}
+\section{The proof engine}
 
 The proof engine deals with judgments or goals of the form
 $\epsilon; \Gamma \vdash \phi$ where $\epsilon$ is the (global) environment,
@@ -104,12 +103,12 @@ premises of the applied rule - the subgoals. This application may generate
 no, one or several subgoals depending on the rule. This process is repeated
 iteratively, up to the point where no goals remain.
 
-\subsection{Intro-patterns and generalization}
+\section{Intro-patterns and generalization}
 
 \label{s:intro-pattern}
 \label{s:gen-pattern}
 
-\subsection{Ambient logic}
+\section{Ambient logic}
 
 \input{tactics/idtac.tex}
 \input{tactics/move.tex}
@@ -145,7 +144,7 @@ iteratively, up to the point where no goals remain.
 
 \input{tactics/admit.tex}
 
-\subsection{Tacticals}
+\section{Tacticals}
 
 Tactics can be combined together, composed and modified by tacticals. Tacticals do not
 correspond to any deduction rule but make the proof process smoother, and sometimes permit
@@ -218,7 +217,7 @@ the reuse of proofs with similar patterns, but where the fine minutiae might dif
   \end{tsyntax}
 \end{tactic}
 
-\subsection{Program Logics}
+\section{Program Logics}
 
 \paragraph{Preliminaries and Notations.}
 Judgments in the program logics may refer to procedures or

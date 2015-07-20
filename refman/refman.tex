@@ -1,5 +1,5 @@
 % --------------------------------------------------------------------
-\documentclass[a4paper,oneside]{article}
+\documentclass[a4paper,notitlepage,oneside]{book}
 
 % --------------------------------------------------------------------
 \overfullrule=1mm
@@ -38,7 +38,11 @@
 
 % --------------------------------------------------------------------
 \usepackage{multind}
-\makeindex{tactics}
+\makeindex{easycrypt}
+\makeindex{ambient}
+\makeindex{hoare}
+\makeindex{phl}
+\makeindex{prhl}
 
 % --------------------------------------------------------------------
 \begin{document}
@@ -46,10 +50,34 @@
 \maketitle
 \thispagestyle{empty}
 
-\input{tactics}
+\tableofcontents
 
-\clearpage
-\printindex{tactics}{Index of Tactics}
+% Getting Started: Installation and Basic Usage
+\input{started}
+% Basic Specifications
+\input{specifications}
+% Tactics
+\input{tactics}
+% Structuring Specifications and Proofs: Theories and Sections
+\input{structuring}
+% Library
+\input{library}
+% Examples
+\input{examples}
+
+\addcontentsline{toc}{chapter}{References}
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+%\part{Language Reference}
+
+\cleardoublepage
+\addcontentsline{toc}{part}{Index}
+\printindex{easycrypt}{General Index}
+\printindex{ambient}{Index of Ambient Logic Tactics}
+\printindex{hoare}{Index of Possibilistic Hoare Logic Tactics}
+\printindex{phl}{Index of Probabilistic Hoare Logic Tactics}
+\printindex{prhl}{Index of Probabilistic Relational Hoare Logic Tactics}
 
 \clearpage
 \listoffixmes
