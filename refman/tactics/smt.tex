@@ -30,7 +30,7 @@
             provers;
           \item \ec{[+''CVC4'']}: add CVC4 to the current list of provers;
           \end{compactitem}
-      \fixme{Describe failure states of prover selection.}
+      \fix{Describe failure states of prover selection.}
      \item Axiom selection: axioms and lemmas are not all send to smt
        provers, \EasyCrypt use a strategy to automatically select
        them. Lemmas and axioms marked with ``nosmt'' are not selected
@@ -51,7 +51,7 @@
                number of selected axioms/lemmas. Last call will be
                equivalent to all.
            \end{compactitem}
-       \fixme{Describe \textit{dbhint} options.}
+       \fix{Describe \textit{dbhint} options.}
   \end{compactitem}
 
   \textbf{Variant}: Short options.\\
@@ -67,7 +67,7 @@
 
   Smt option can be set globally using the following syntax:
   \ec{prover} \textit{smt-options}
-  \fixme{Make this a pragma?}
+  \fix{Make this a pragma?}
 
   \textbf{Remark}: By default, \ec{smt} failures cannot be caught by
   the \rtactic{try} tactical.
