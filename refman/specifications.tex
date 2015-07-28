@@ -1,7 +1,75 @@
 \chapter{Specifications}
+\label{Specifications}
 
-\section{Types, Operators and Predicates}
+In this chapter, we see how cryptographic specifications may be written
+in EasyCrypt. We start by considering its typed expression language,
+go on to consider its module language for expressing cryptographic games,
+and conclude by considering its four logics.
+
+\EasyCrypt\ has a typed expression language based on the polymorphic
+typed lambda calculus. Expressions are guaranteed to terminate,
+although their values may be under-specified.  Its type system has:
+\begin{itemize}
+\item several pre-defined base types;
+
+\item product (tuple) types;
+
+\item user-defined abbreviations for types and parameterized types; and
+
+\item user-defined concrete datatypes (like lists and trees).
+\end{itemize}
+In its expression language:
+\begin{itemize}
+\item operators for the pre-defined base types may be imported from
+  the standard library;
+
+\item user-defined operations may be defined, including by
+  structural recursion on concrete datatypes.
+\end{itemize}
+For each type, there is a type of probability distributions over that
+type.
+
+\EasyCrypt's modules consist of typed global variables and procedures.
+The body of a procedure consists of local variable declartions followed
+by a sequence of statements:
+\begin{itemize}
+\item ordinary assignments;
+
+\item random assignments, assigning values chosen
+  from distributions to variables;
+
+\item procedure calls, whose results are assigned to variables;
+
+\item conditional (if-then-else) statements;
+
+\item while loops; and
+
+\item return statements (which may only appear at the end of
+  procedures).
+\end{itemize}
+A procedure's modules may refer to the global variables of previously
+declared modules.
+
+\EasyCrypt\ has four logics: a probabilistic, relational Hoare logic
+(\prhl), relating pairs of procedures; a probabilistic Hoare logic
+(\phl) allowing one to carry out proofs about the probability of a
+procedure's execution resulting in a postcondition holding; an
+ordinary (possibilistic) Hoare logic (\hl); and an ambient higher
+order logic for proving general mathematical facts, as well as for
+connecting judgments from the other logics
+
+Proofs are carried out using tactics, which is the focus of
+Chapter~\ref{Tactics}.  \EasyCrypt\ also has ways (theories and
+sections) of structuring specifications and proofs, which will be
+described in Chapter~\ref{Structuring}. In Chapter~\ref{Library},
+we'll survey the \EasyCrypt\ Library, which consists of numerous
+theories, definining mathematical structures (like groups, rings
+and fields), data structures (like finite sets and maps), and
+cryptographic constructions (like random oracles and different
+forms of encryption).
+
+\section{Typed Expressions}
 
 \section{Modules}
 
-\section{Logic}
+\section{Logics}
