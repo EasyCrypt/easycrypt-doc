@@ -31,15 +31,44 @@
 
 % --------------------------------------------------------------------
 % EasyCrypt listings
+
 \usepackage[final]{listings}
 
 \newcommand{\ensuretext}[1]{\ensuremath{\text{#1}}}
 
+\lstdefinestyle{mylistings}{
+  escapechar=\#,
+  mathescape=false,
+  columns=fullflexible,
+  keepspaces=true,
+  captionpos=b,
+  frame=tb,
+  xleftmargin=.1\textwidth,
+  xrightmargin=.1\textwidth,
+  rangebeginprefix={(**\ begin\ },
+  rangeendprefix={(**\ end\ },
+  rangesuffix={\ *)},
+  includerangemarker=false,
+  basicstyle=\small\sffamily,
+  identifierstyle={}
+}
+
+\lstdefinelanguage{mylistings}{
+  style=mylistings,
+}
+
+\lstset{language=mylistings}
+
 \input{easycrypt.lst}
-\lstset{language=easycrypt}
+
+\lstnewenvironment{easycrypt}[3][]%
+  {\lstset{language=easycrypt,caption={#2},label={#3},#1}}%
+  {}
+
+\newcommand{\ecinput}[4]{\lstinputlisting[language=easycrypt,linerange={#3},caption={#2},label={#4}]{#1}}
 
 \def\ls{\lstinline}
-\def\ec#1{\lstinline[language=easycrypt]"#1"}
+\def\ec#1{\lstinline[language=easycrypt-math]"#1"}
 
 \def\Arg{\ensuretext{\ec{arg}}}
 

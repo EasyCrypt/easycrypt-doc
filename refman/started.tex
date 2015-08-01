@@ -11,8 +11,8 @@ constructions and protocols using the sequence of games approach
 as \emph{modules}, which consist of procedures and global variables.
 Procedures are written in a simple imperative language featuring while
 loops and random assignments. Adversaries are modeled by \emph{abstract}
-procedures---procedures whose code isn't known. Modules may be parameterized
-by abstract procedures.
+modules---modules whose code isn't known. Modules may be parameterized
+by abstract modules.
 
 \EasyCrypt\ has four logics: a probabilistic, relational Hoare logic
 (\prhl), relating pairs of procedures; a probabilistic Hoare logic
@@ -40,29 +40,39 @@ instructions for building \EasyCrypt and supporting tools.
 
 \section{Running \EasyCrypt}
 
-\EasyCrypt\ code resides in files with the \texttt{.ec} suffix. (As
+\EasyCrypt\ scripts resides in files with the \texttt{.ec} suffix. (As
 we'll see in Chapter~\ref{Structuring}, \EasyCrypt\ also has
 \emph{abstract} theories, which must be cloned before being used. Such
 theories reside in files with the \texttt{.eca} suffix.)
 
 To run
 \EasyCrypt\ in \emph{batch} mode, simply invoke it from the shell,
-giving it a \texttt{.ec} file as argument:
+giving it an \EasyCrypt\ script---with suffix \texttt{.ec}---as argument:
 \begin{lstlisting}
-  easycrypt $\mathit{file}\mathtt{.ec}$
+  easycrypt #$\mathit{file}\mathtt{.ec}$#
 \end{lstlisting}
 \EasyCrypt\ will display its progress as it checks the file.
 Information about \EasyCrypt's command-line arguments can be found
 in Chapter~\ref{Advanced}.
 
-When developing \EasyCrypt\ specifications and proofs, though,
-\EasyCrypt\ should be run \emph{interactively}, as a subprocess of the
-Emacs text editor. One's interaction with \EasyCrypt\ is mediated by
-Proof General, a generic Emacs front-end for proof assistants.  Upon
-visiting a \texttt{.ec} file, the ``Proof-General'' tab of the Emacs menu
-may be used execute the file, step-by-step, as well as to undo
-steps, etc. Information about the ``EasyCrypt'' menu tab may be
-found in Chapter~\ref{Advanced}.
+When developing \EasyCrypt\ scripts, though, \EasyCrypt\ should be run
+\emph{interactively}, as a subprocess of the Emacs text editor. One's
+interaction with \EasyCrypt\ is mediated by Proof General, a generic
+Emacs front-end for proof assistants.  Upon visiting a \texttt{.ec}
+file, the ``Proof-General'' tab of the Emacs menu may be used execute
+the file, step-by-step, as well as to undo steps, etc. Information
+about the ``EasyCrypt'' menu tab may be found in
+Chapter~\ref{Advanced}.
+
+An example \EasyCrypt\ script is displayed in
+Listing~\ref{StartedExamp}.
+\ecinput{examps/started-examp-1.ec}{Example \EasyCrypt\
+  Script}{}{StartedExamp}
+As can be inferred from the example, comments begin and end with
+\ec{(*} and \ec{*)}, respectively; they may be nested. Each step of an
+\EasyCrypt\ script is terminated with a dot (period, full stop).  Much
+can be learned by experimenting with this script, e.g., by executing
+it step-by-step in Emacs.
 
 \section{More Information}
 

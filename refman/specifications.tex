@@ -1,10 +1,11 @@
 \chapter{Specifications}
 \label{Specifications}
 
-In this chapter, we see how cryptographic specifications may be written
-in EasyCrypt. We start by considering its typed expression language,
-go on to consider its module language for expressing cryptographic games,
-and conclude by considering its four logics.
+In this chapter, we present \EasyCrypt's language for writing
+cryptographic specifications.  We start by presenting its typed
+expression language, go on to consider its module language for
+expressing cryptographic games, and conclude by presenting its four
+logics.
 
 \EasyCrypt\ has a typed expression language based on the polymorphic
 typed lambda calculus. Expressions are guaranteed to terminate,
@@ -72,6 +73,139 @@ cryptographic constructions (like random oracles and different
 forms of encryption).
 
 \section{Typed Expressions}
+
+\EasyCrypt's \emph{types} are constructed from its built-in types and type
+constructor using function types, product (tuple) types, and user
+defined types and type constuctors, which include record types
+and datatypes.
+
+There are four built-in types:
+\begin{itemize}
+\item the type \ec{unit}, whose single element is \ec{tt} (which may
+  also be written \ec{()});
+
+\item the type \ec{bool} of booleans, \ec{true} and \ec{false};
+
+\item the type \ec{int} of integers; and
+
+\item the type \ec{real} of reals.
+\end{itemize}
+
+In addition, for every type $t$ there is a type \ec{$t\;$distr} of
+sub-distributions of type $t$, associating each element of $t$
+with a probability, in such a way that the same of the probabilities
+of all of $t$'s element is no more than $1$. When the same is equal
+to $1$, we have a distribution. \ec{distr} is a \emph{type constructor}
+taking a single type argument:
+\begin{easycrypt}{}{}
+  type 'a distr
+\end{easycrypt}
+Here, \ec{'a} is a \emph{type variable}, marking the type parameter of
+\ec{distr}; if we substitute an actual type for \ec{'a} in \ec{'a distr},
+we get a type.
+
+A type variable consists of an apostrophe, followed by a nonempty
+sequence of letters, digits, underscores and apostrophes, whose first
+character is a lowercase letter or underscore. A type name or
+constructor consists of a nonempty sequence of letters, digits,
+underscores and apostrophes whose first character is a letter or
+underscore (except that an underscore must be followed by additional
+characters).
+
+Given types $t_1$ and $t_2$, \ec{$t_1\;$->$\;t_2$} is a function type,
+the type of total function transforming inputs of type $t_1$ to
+outputs of type $t_2$. \ec{->} associates to the right, so that
+\ec{int -> bool -> real} means \ec{int -> (bool -> real)}.
+
+Given types $t_1$ and $t_2$, \ec{$t_1\;$*$\;t_2$} is a product (tuple)
+type, whose elements are pairs $(x_1, x_2$ where $x_1$ and $x_2$ are
+elements of $t_1$ and $t_2$, respectively. Tuples may have more than
+two components: e.g., \ec{int * int * real} is the type of triples
+$(x_1, x_2, x_3)$ where $x_1$ and $x_2$ are integers and $x_3$ is a real.
+Note that \ec{int * (int * real)}, \ec{(int * int) * real} and
+\ec{int * int * real} are distinct types; the first two are pair types.
+\ec{*} has higher precedence than \ec{->}, so that, e.g.,
+\ec{int * int -> bool * real} means \ec{(int * int) -> (bool * real)}.
+
+Record types may be declared like this:
+\begin{easycrypt}{}{}
+  type t = { x : int; y : bool; }.
+  type t' = { y : bool; x : int; }.
+  type u = { y : real; yy : int; yyy : real; }.
+\end{easycrypt}
+Here \ec{t} is the type of records with the fields: \ec{x} of type
+\ec{int}, and \ec{y} of type \ec{bool}. The order of fields is
+irrelevant, so that \ec{t'} is the same record type as
+\ec{t}. Different record types, though, can't use overlapping field
+names, though, and field names must be disjoint from operators (see
+below). Field names consist of nonempty sequences of letters, digts,
+underscores and apostrophes, except that a single underscore isn't a
+legal field name.  Records may have one or more fields; \ec{u} is a
+record with three fields. We may also define record type constructors,
+as in:
+\begin{easycrypt}{}{}
+  type 'a t = { x : 'a; f : 'a -> 'a; }.
+  type ('a, 'b) u = { f : 'a -> 'b; x : 'a; }.
+\end{easycrypt}
+Then, a value $v$ of type \ec{int t} would have fields \ec{x} and
+\ec{f} of types \ec{int} and \ec{int -> int}, respectively; and
+a value $v$ of type \ec{(int, bool) u} would have fields \ec{x} and
+\ec{f} with types \ec{int} and \ec{int -> bool}, respectively.
+
+Datatypes and datatype constructors may be declared like this:
+\begin{easycrypt}{}{}
+  type enum = [ First | Second | Third ].
+  type either_int_bool = [ First of int | Second of bool ].
+  type ('a, 'b) either = [ First of 'a | Second of 'b ].
+  type intlist = [
+    | Nil
+    | Cons of (int * intlist) ].
+  type 'a list = [
+    | Nil
+    | Cons of 'a & 'a list ].
+\end{easycrypt}
+Here, \ec{First}, \ec{Second}, \ec{Third}, \ec{Nil} and \ec{Cons}
+are constructors, and must be distinct from all operators, record
+fields and other constructors. Constructor names have the same form as
+record field names. \ec{enum} is an enumerated type with the three
+elements \ec{First}, \ec{Second} and \ec{Third}. The elements of
+\ec{either_int_bool} consist of \ec{First} applied to an integer,
+or \ec{Second} applied to a boolean, and the datatype constructor
+\ec{either} is simply its generalization to arbitrary types
+\ec{'a} and \ec{'b}. \ec{intlist} is an inductive datatype: its
+elements are \ec{Nil} and the results of applying \ec{Cons} to
+a pairs of the form $(x, \mathit{ys})$, where $x$ is an integer
+and $\mathit{ys}$ is a previously constructed \ec{intlist}.
+Note that a \ec{|} is permitted before the first constructor of
+a datatype. Finally, \ec{list} is the generalization of \ec{intlist}
+to lists over an arbitrary type \ec{'a}, but with a twist. The use
+of \ec{&} means that \ec{Cons} is curried---it has type
+\ec{'a -> 'a list -> 'a list}. Unsurprisingly, more than one occurrence
+of \ec{&} is allowed in a constructor's definition. E.g., here
+is the datatype for binary trees whose leaves and internal nodes
+are labeled by integers:
+\begin{easycrypt}{}{}
+  type tree = [
+    | Leaf of int
+    | Cons of tree & int & tree
+  ].
+\end{easycrypt}
+Here, \ec{Cons} has type \ec{tree -> int -> tree -> tree}.
+
+Types and type constructors that are simply abbreviations for pre-existing
+types may be declared, as in:
+\begin{easycrypt}{}{}
+type t = int * bool.
+type ('a, b) arr = 'a -> 'b.
+\end{easycrypt}
+Then, e.g., \ec{(int, bool) arr} is the same type as \ec{int -> bool}.
+
+Finally, abstract types and type constructors may be declared, as in:
+\begin{easycrypt}{}{}
+type t.
+type ('a, b) u.
+\end{easycrypt}
+We'll see later how such types and type constructors may be used.
 
 \section{Modules}
 
