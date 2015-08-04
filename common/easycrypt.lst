@@ -5,6 +5,7 @@
 
 % --------------------------------------------------------------------
 \lstdefinestyle{easycrypt-default}{
+  upquote=true,
   escapechar=\#,
   mathescape=false,
   columns=fullflexible,
@@ -54,6 +55,7 @@
 }
 
 \lstdefinestyle{easycrypt-math}{
+  upquote=true,
   mathescape=true,
   columns=fullflexible,
   keepspaces=true,
@@ -75,6 +77,30 @@
   keywordstyle=[6]{\color{Red}}
 }
 
+\lstdefinestyle{easycrypt-math-nocolors}{
+  upquote=true,
+  mathescape=true,
+  columns=fullflexible,
+  keepspaces=true,
+  captionpos=b,
+  frame=tb,
+  xleftmargin=.1\textwidth,
+  xrightmargin=.1\textwidth,
+  rangebeginprefix={(**\ begin\ },
+  rangeendprefix={(**\ end\ },
+  rangesuffix={\ *)},
+  includerangemarker=false,
+  basicstyle=\small\sffamily,
+  identifierstyle={},
+  keywordstyle=[1]{},
+  keywordstyle=[2]{},
+  keywordstyle=[3]{},
+  keywordstyle=[4]{},
+  keywordstyle=[5]{},
+  keywordstyle=[6]{}
+}
+
+
 % --------------------------------------------------------------------
 \input{easycrypt-kw.lst}
 
@@ -89,6 +115,14 @@
 
 \lstdefinelanguage{easycrypt-math}{
   style=easycrypt-math,
+  language=easycrypt-kw,
+  morekeywords=[1]{arg},
+  morecomment=[n][\itshape]{(*}{*)},
+  morecomment=[n][\bfseries]{(**}{*)},
+}
+
+\lstdefinelanguage{easycrypt-math-nocolors}{
+  style=easycrypt-math-nocolors,
   language=easycrypt-kw,
   morekeywords=[1]{arg},
   morecomment=[n][\itshape]{(*}{*)},
