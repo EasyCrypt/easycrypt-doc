@@ -133,16 +133,24 @@ forms of encryption).
   identifier, a binary operator name, a unary operator name.
 
 \item \textbf{Binary operator names}. A \emph{binary operator name}
-  is: a nonempty sequence of equal signs (\ec{=}), less
+  is:
+  \begin{itemize}
+  \item a nonempty sequence of equal signs (\ec{=}), less
   than signs (\ec{<}), greater than signs (\ec{>}), forward slashes
   (\ec{/}), backward slashes (\ec{\\}), plus signs (\ec{+}), minus
   signs (\ec{-}), times signs (\ec{*}), vertical bars (\ec{|}), colons
   (\ec{:}), ampersands (\ec{&}), up arrows (\ec{^}) and percent signs
-  (\ec{\%}); or a backtick mark (\ec{`}), followed by a nonempty sequence
-  of one of these characters, followed by a backtick mark.
+  (\ec{\%}); or
 
-  A binary operator name is an \emph{infix operator name} iff it is surrounded
-  by backticks or:
+  \item a backtick mark (\ec{`}), followed by a nonempty sequence of one
+    of these characters, followed by a backtick mark; or
+
+  \item a backward slash followed by a nonempty sequence of letters,
+    digits, underscores and apostrophes.
+  \end{itemize}
+
+  A binary operator name is an \emph{infix operator name} iff it is
+  surrounded by backticks, or begins with a backslash, or:
   \begin{itemize}
   \item it is neither \ecnocolors{<<} nor \ecnocolors{>>}; and
   \item it doesn't contain a colon, unless it is a sequence of colons
@@ -170,7 +178,7 @@ forms of encryption).
 
   \item \ecnocolors{-} and \ecnocolors{+} (left-associative);
 
-  \item \ecnocolors{*}, and any combination of \ecnocolors{/} and
+  \item \ecnocolors{*}, and any nonempty combination of \ecnocolors{/} and
     \ecnocolors{\%} (other than \ecnocolors{//}, which is illegal)
     (left-associative);
 
