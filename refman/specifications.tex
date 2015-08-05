@@ -73,64 +73,66 @@ cryptographic constructions (like random oracles and different
 forms of encryption).
 
 \section{Lexical Categories}
+\label{Lexical}
 
 \EasyCrypt's language has a number of lexical categories:
 \begin{itemize}
 \item \textbf{Keywords}. \EasyCrypt\ has the following
-  \emph{keywords}: \ecnocolors{admit}, \ecnocolors{algebra},
-  \ecnocolors{alias}, \ecnocolors{apply}, \ecnocolors{as},
-  \ecnocolors{assert}, \ecnocolors{assumption}, \ecnocolors{auto},
-  \ecnocolors{axiom}, \ecnocolors{axiomatized}, \ecnocolors{beta},
-  \ecnocolors{by}, \ecnocolors{byequiv}, \ecnocolors{byphoare},
-  \ecnocolors{bypr}, \ecnocolors{call}, \ecnocolors{case},
-  \ecnocolors{cfold}, \ecnocolors{change}, \ecnocolors{class},
-  \ecnocolors{clear}, \ecnocolors{clone}, \ecnocolors{congr},
-  \ecnocolors{conseq}, \ecnocolors{const}, \ecnocolors{cut},
-  \ecnocolors{declare}, \ecnocolors{delta}, \ecnocolors{do},
-  \ecnocolors{done}, \ecnocolors{eager}, \ecnocolors{elif},
-  \ecnocolors{elim}, \ecnocolors{else}, \ecnocolors{end},
-  \ecnocolors{equiv}, \ecnocolors{exact}, \ecnocolors{exfalso},
-  \ecnocolors{exists}, \ecnocolors{expect}, \ecnocolors{export},
-  \ecnocolors{fel}, \ecnocolors{fieldeq}, \ecnocolors{first},
-  \ecnocolors{fission}, \ecnocolors{forall}, \ecnocolors{fun},
-  \ecnocolors{fusion}, \ecnocolors{generalize}, \ecnocolors{glob},
-  \ecnocolors{goal}, \ecnocolors{have}, \ecnocolors{hint},
-  \ecnocolors{hoare}, \ecnocolors{hypothesis}, \ecnocolors{idtac},
-  \ecnocolors{if}, \ecnocolors{import}, \ecnocolors{in},
-  \ecnocolors{inline}, \ecnocolors{instance}, \ecnocolors{intros},
-  \ecnocolors{iota}, \ecnocolors{islossless}, \ecnocolors{kill},
-  \ecnocolors{last}, \ecnocolors{left}, \ecnocolors{lemma},
-  \ecnocolors{let}, \ecnocolors{local}, \ecnocolors{logic},
-  \ecnocolors{modpath}, \ecnocolors{module}, \ecnocolors{move},
-  \ecnocolors{nolocals}, \ecnocolors{nosmt}, \ecnocolors{of},
-  \ecnocolors{op}, \ecnocolors{phoare}, \ecnocolors{pose},
-  \ecnocolors{Pr}, \ecnocolors{pr_bounded}, \ecnocolors{pred},
-  \ecnocolors{print}, \ecnocolors{proc}, \ecnocolors{progress},
-  \ecnocolors{proof}, \ecnocolors{prover}, \ecnocolors{qed},
-  \ecnocolors{rcondf}, \ecnocolors{rcondt}, \ecnocolors{realize},
-  \ecnocolors{reflexivity}, \ecnocolors{require}, \ecnocolors{res},
-  \ecnocolors{return}, \ecnocolors{rewrite}, \ecnocolors{right},
-  \ecnocolors{ringeq}, \ecnocolors{rnd}, \ecnocolors{rwnormal},
-  \ecnocolors{search}, \ecnocolors{section}, \ecnocolors{seq},
-  \ecnocolors{sim}, \ecnocolors{simplify}, \ecnocolors{skip},
-  \ecnocolors{smt}, \ecnocolors{sp}, \ecnocolors{split},
-  \ecnocolors{splitwhile}, \ecnocolors{strict}, \ecnocolors{subst},
-  \ecnocolors{swap}, \ecnocolors{symmetry}, \ecnocolors{then},
-  \ecnocolors{theory}, \ecnocolors{timeout}, \ecnocolors{Top},
-  \ecnocolors{transitivity}, \ecnocolors{trivial}, \ecnocolors{try},
-  \ecnocolors{type}, \ecnocolors{unroll}, \ecnocolors{var},
-  \ecnocolors{while}, \ecnocolors{why3}, \ecnocolors{with},
-  \ecnocolors{wp} and \ecnocolors{zeta}.
+  \emph{keywords}: \ecn{admit}, \ecn{algebra},
+  \ecn{alias}, \ecn{apply}, \ecn{as},
+  \ecn{assert}, \ecn{assumption}, \ecn{auto},
+  \ecn{axiom}, \ecn{axiomatized}, \ecn{beta},
+  \ecn{by}, \ecn{byequiv}, \ecn{byphoare},
+  \ecn{bypr}, \ecn{call}, \ecn{case},
+  \ecn{cfold}, \ecn{change}, \ecn{class},
+  \ecn{clear}, \ecn{clone}, \ecn{congr},
+  \ecn{conseq}, \ecn{const}, \ecn{cut},
+  \ecn{declare}, \ecn{delta}, \ecn{do},
+  \ecn{done}, \ecn{eager}, \ecn{elif},
+  \ecn{elim}, \ecn{else}, \ecn{end},
+  \ecn{equiv}, \ecn{exact}, \ecn{exfalso},
+  \ecn{exists}, \ecn{expect}, \ecn{export},
+  \ecn{fel}, \ecn{fieldeq}, \ecn{first},
+  \ecn{fission}, \ecn{forall}, \ecn{fun},
+  \ecn{fusion}, \ecn{generalize}, \ecn{glob},
+  \ecn{goal}, \ecn{have}, \ecn{hint},
+  \ecn{hoare}, \ecn{hypothesis}, \ecn{idtac},
+  \ecn{if}, \ecn{import}, \ecn{in},
+  \ecn{inline}, \ecn{instance}, \ecn{intros},
+  \ecn{iota}, \ecn{islossless}, \ecn{kill},
+  \ecn{last}, \ecn{left}, \ecn{lemma},
+  \ecn{let}, \ecn{local}, \ecn{logic},
+  \ecn{modpath}, \ecn{module}, \ecn{move},
+  \ecn{nolocals}, \ecn{nosmt}, \ecn{of},
+  \ecn{op}, \ecn{phoare}, \ecn{pose},
+  \ecn{Pr}, \ecn{pr_bounded}, \ecn{pred},
+  \ecn{print}, \ecn{proc}, \ecn{progress},
+  \ecn{proof}, \ecn{prover}, \ecn{qed},
+  \ecn{rcondf}, \ecn{rcondt}, \ecn{realize},
+  \ecn{reflexivity}, \ecn{require}, \ecn{res},
+  \ecn{return}, \ecn{rewrite}, \ecn{right},
+  \ecn{ringeq}, \ecn{rnd}, \ecn{rwnormal},
+  \ecn{search}, \ecn{section}, \ecn{seq},
+  \ecn{sim}, \ecn{simplify}, \ecn{skip},
+  \ecn{smt}, \ecn{sp}, \ecn{split},
+  \ecn{splitwhile}, \ecn{strict}, \ecn{subst},
+  \ecn{swap}, \ecn{symmetry}, \ecn{then},
+  \ecn{theory}, \ecn{timeout}, \ecn{Top},
+  \ecn{transitivity}, \ecn{trivial}, \ecn{try},
+  \ecn{type}, \ecn{unroll}, \ecn{var},
+  \ecn{while}, \ecn{why3}, \ecn{with},
+  \ecn{wp} and \ecn{zeta}.
 
 \item \textbf{Identifiers}. An \emph{identifier} is a sequence of
-  letters, digits, underscores (\ecnocolors{_}) and apostrophes
-  (\ecnocolors{'}) that begins with a letter or underscore, and isn't
-  equal to an underscore or a keyword other than \ecnocolors{expect},
-  \ecnocolors{first}, \ecnocolors{last}, \ecnocolors{left},
-  \ecnocolors{right} or \ecnocolors{strict}.
+  letters, digits, underscores (\ecn{_}) and apostrophes
+  (\ecn{'}) that begins with a letter or underscore, and isn't
+  equal to an underscore or a keyword other than \ecn{expect},
+  \ecn{first}, \ecn{last}, \ecn{left},
+  \ecn{right} or \ecn{strict}.
 
 \item \textbf{Operator names}. An \emph{operator name} is an
-  identifier, a binary operator name, a unary operator name.
+  identifier, a binary operator name, a unary operator name, or
+  a mix fix operator name.
 
 \item \textbf{Binary operator names}. A \emph{binary operator name}
   is:
@@ -152,34 +154,34 @@ forms of encryption).
   A binary operator name is an \emph{infix operator name} iff it is
   surrounded by backticks, or begins with a backslash, or:
   \begin{itemize}
-  \item it is neither \ecnocolors{<<} nor \ecnocolors{>>}; and
+  \item it is neither \ecn{<<} nor \ecn{>>}; and
   \item it doesn't contain a colon, unless it is a sequence of colons
     of length at least two; and
-  \item it doesn't contain \ecnocolors{=>}, except if it is \ecnocolors{=>}; and
-  \item it doesn't contain \ecnocolors{|}, except if it is \ecnocolors{||}; and
-  \item it doesn't contain \ecnocolors{/}, except if it is \ecnocolors{/},
-    \ecnocolors{/\\}, or a sequence of slashes of length at least 3.
+  \item it doesn't contain \ecn{=>}, except if it is \ecn{=>}; and
+  \item it doesn't contain \ecn{|}, except if it is \ecn{||}; and
+  \item it doesn't contain \ecn{/}, except if it is \ecn{/},
+    \ecn{/\\}, or a sequence of slashes of length at least 3.
   \end{itemize}
 
   The precedence hierarchy for infix operators is (from lowest to highest):
   \begin{itemize}
-  \item \ecnocolors{=>} (right-associative);
+  \item \ecn{=>} (right-associative);
 
-  \item \ecnocolors{<=>} (non-associative);
+  \item \ecn{<=>} (non-associative);
 
-  \item \ecnocolors{||} and \ecnocolors{\\/} (right-associative);
+  \item \ecn{||} and \ecn{\\/} (right-associative);
 
-  \item \ecnocolors{&&} and \ecnocolors{/\\} (right-associative);
+  \item \ecn{&&} and \ecn{/\\} (right-associative);
 
-  \item \ecnocolors{=} and \ecnocolors{<>} (non-associative);
+  \item \ecn{=} and \ecn{<>} (non-associative);
 
-  \item \ecnocolors{<}, \ecnocolors{>}, \ecnocolors{<=} and \ecnocolors{>=}
+  \item \ecn{<}, \ecn{>}, \ecn{<=} and \ecn{>=}
     (left-associative);
 
-  \item \ecnocolors{-} and \ecnocolors{+} (left-associative);
+  \item \ecn{-} and \ecn{+} (left-associative);
 
-  \item \ecnocolors{*}, and any nonempty combination of \ecnocolors{/} and
-    \ecnocolors{\%} (other than \ecnocolors{//}, which is illegal)
+  \item \ecn{*}, and any nonempty combination of \ecn{/} and
+    \ecn{\%} (other than \ecn{//}, which is illegal)
     (left-associative);
 
   \item all other infix operators except sequences of colons
@@ -193,8 +195,13 @@ forms of encryption).
   a nonempty sequence of minus signs (\ec{-}), or a backward slash
   followed by a nonempty sequence of letters, digits, underscores and
   apostrophes.  A \emph{prefix operator name} is any unary operator
-  name except a sequence of two or more plus signs, or a sequence of
-  two or more minus signs.
+  name not consisting of either two more plus signs or two or more
+  minus signs.
+
+\item \textbf{Mixfix operator names}. A \emph{mixfix operator name} is
+  of the following sequences of characters:
+  \ec{\"`|_|\"}, \ec{\"[]\"}, \ec{\"_.[_]\"} or \ec{\"_.[_<-_]\"}.
+  (We'll see below how they may be used in mixfix form.)
 
 \item \textbf{Record projections}. A \emph{record projection} is an
   identifier.
@@ -229,6 +236,8 @@ an identifer whose initial character isn't an upper case letter.
 \end{itemize}
 
 \section{Typed Expressions}
+
+\subsection{Types}
 
 \EasyCrypt's \emph{types} are formed from its built-in types and
 type operator using function types, product (tuple) types, and
@@ -310,26 +319,26 @@ Datatypes and datatype operators may be declared like this:
     | Cons of 'a & 'a list ].
 \end{easycrypt}
 Here, \ec{First}, \ec{Second}, \ec{Third}, \ec{Nil} and \ec{Cons} are
-constructors, and must be distinct from all operators, record projections
-and other constructors.  \ec{enum} is an enumerated type with the
-three elements \ec{First}, \ec{Second} and \ec{Third}. The elements of
-\ec{either_int_bool} consist of \ec{First} applied to an integer, or
-\ec{Second} applied to a boolean, and the datatype operator
-\ec{either} is simply its generalization to arbitrary types \ec{'a}
-and \ec{'b}. \ec{intlist} is an inductive datatype: its elements are
-\ec{Nil} and the results of applying \ec{Cons} to a pairs of the form
-$(x, \mathit{ys})$, where $x$ is an integer and $\mathit{ys}$ is a
-previously constructed \ec{intlist}.  Note that a vertical bar
-(\ec{|}) is permitted before the first constructor of a
+constructors, and must be distinct from all operators, record
+projections and other constructors.  \ec{enum} is an enumerated type
+with the three elements \ec{First}, \ec{Second} and \ec{Third}. The
+elements of \ec{either_int_bool} consist of \ec{First} applied to an
+integer, or \ec{Second} applied to a boolean, and the datatype
+operator \ec{either} is simply its generalization to arbitrary types
+\ec{'a} and \ec{'b}.  \ec{intlist} is an inductive datatype: its
+elements are \ec{Nil} and the results of applying \ec{Cons} to a pairs
+of the form $(x, \mathit{ys})$, where $x$ is an integer and
+$\mathit{ys}$ is a previously constructed \ec{intlist}.  Note that a
+vertical bar (\ec{|}) is permitted before the first constructor of a
 datatype. Finally, \ec{list} is the generalization of \ec{intlist} to
 lists over an arbitrary type \ec{'a}, but with a twist. The use of
 \ec{&} means that \ec{Cons} is ``curried'': instead of applying
 \ec{Cons} to a pair $(x, \mathit{ys})$, one gives it \ec{$x$ : 'a} and
 \ec{$\mathit{ys}$ : 'a list} one at a time, as in \ec{Cons$\,x\,$
- $\,\mathit{ys}$}.  Unsurprisingly, more than one occurrence of \ec{&}
-is allowed in a constructor's definition. E.g., here is the datatype
-for binary trees whose leaves and internal nodes are labeled by
-integers:
+  $\,\mathit{ys}$}.  Unsurprisingly, more than one occurrence of
+\ec{&} is allowed in a constructor's definition. E.g., here is the
+datatype for binary trees whose leaves and internal nodes are labeled
+by integers:
 \begin{easycrypt}{}{}
   type tree = [
     | Leaf of int
@@ -339,6 +348,9 @@ integers:
 Here, \ec{Cons $\,\mathit{tr}_1\,$ $x\,$ $\mathit{tr}_2$} will be the tree
 constructed from an integer $x$ and trees $\mathit{tr}_1$ and
 $\mathit{tr}_2$.
+\EasyCrypt\ must be able to convince itself that a datatype is
+nonempty, most commonly because it has at least one constructor
+taking no arguments.
 
 Types and type operators that are simply abbreviations for pre-existing
 types may be declared, as in:
@@ -355,7 +367,190 @@ type ('a, b) u.
 \end{easycrypt}
 We'll see later how such types and type operators may be used.
 
-We'll now survey \EasyCrypt's typed expressions.
+\subsection{Expressions}
+
+We'll now survey \EasyCrypt's typed expressions. Anonymous functions
+are written \ec{fun ($x$ : $\,t_1$) => $\;e$}, where $x$ is an identifier,
+$t_1$ is a type, and $e$ is an expression---probably involving $x$.
+If $e$ has type $t_2$ under the assumption that $x$ has type $t_1$,
+then the anonymous function will have type \ec{$t_1$ -> $\;\,t_2$}.
+Function application is written using juxtapositioning, so that if
+$e_1$ has type \ec{$t_1$ -> $\;\,t_2$}, and $e_2$ has type $t_1$, then
+$e_1\,e_2$ has type $t_2$. Function application associates to the
+left, and anonymous functions extend as far to the right as possible.
+\EasyCrypt\ infers the types of the bound variables of anonymous function
+when it can. Nested anonymous functions may be abbreviated by
+collecting all their bound variables together. E.g., consider the
+expression
+\begin{easycrypt}{}{}
+(fun (x : int) => fun (y : int) => fun (z : bool) => y) 0 1 false
+\end{easycrypt}
+which evalutes to \ec{1}. It may be appreviated to
+\begin{easycrypt}{}{}
+(fun (x y : int, z : bool) => y) 0 1 false
+\end{easycrypt}
+or
+\begin{easycrypt}{}{}
+(fun (x : int) (y : int) (z : bool) => y) 0 1 false
+\end{easycrypt}
+or (letting \EasyCrypt\ carry out type inference)
+\begin{easycrypt}{}{}
+(fun x y z => y) 0 1 false
+\end{easycrypt}
+In the type inference, only the type of \ec{y} is determined, but
+that's acceptable.
+
+An operator may be declared by specifying its type and giving the
+expression to be evaluated. E.g.,
+\begin{easycrypt}{}{}
+op x : int = 3.
+op f : int -> bool -> int = fun (x : int) (y : bool) => x.
+op g : bool -> int = f 1.
+op y : int = g true.
+op z = f 1 true.
+\end{easycrypt}
+Here \ec{f} is a curried function---it takes its arguments one
+at a time. Hence \ec{y} and \ec{z} have the same value: \ec{1}.
+As illustrated by the declaration of \ec{z}, one may admit the
+operator's type when it can be inferred from its expression.
+The declaration of \ec{f} may be abbreviated to
+\begin{easycrypt}{}{}
+op f (x : int) (y : bool) = x.
+\end{easycrypt}
+or
+\begin{easycrypt}{}{}
+op f (x : int, y : bool) = x.
+\end{easycrypt}
+
+\emph{Polymorphic} operators may be declared, as in
+\begin{easycrypt}{}{}
+op g ['a, 'b] : 'a -> 'b -> 'a = fun (x : 'a, y : 'b) => x.
+\end{easycrypt}
+or
+\begin{easycrypt}{}{}
+op g ['a, 'b] (x : 'a, y : 'b) = x.
+\end{easycrypt}
+Here \ec{g} has all the types formed
+by substituting types for the types variable \ec{'a} and \ec{'b}
+in \ec{'a -> 'b -> 'a}. This allows us to use \ec{g} at different
+types
+\begin{easycrypt}{}{}
+op a = g true 0.
+op b = g 0 false.
+\end{easycrypt}
+making \ec{a} and \ec{b} evaluate to \ec{true} and \ec{0}, respectively.
+
+\emph{Abstract} operators may be declared, i.e., ones whose values
+are unspecified. E.g., we can declare
+\begin{easycrypt}{}{}
+op x : int.
+op f : int -> int.
+op g ['a, 'b] : 'a -> 'b -> 'a.
+\end{easycrypt}
+Equivalently, \ec{f} and \ec{g} may be declared like this:
+\begin{easycrypt}{}{}
+op f (x : int) : int.
+op g ['a, 'b] (x : 'a, y : 'b) : 'a.
+\end{easycrypt}
+We'll see later how abstract operators may be used.
+
+Binary operators may be declared and used with infix notation
+(as long as they are infix operators). E.g., if we declare
+\begin{easycrypt}{}{}
+op (--) ['a, 'b] (x : 'a) (y : 'b) = x.
+op x : int = 0 -- true.
+op y : bool = true -- 0.
+\end{easycrypt}
+then \ec{x} and \ec{y} evaluate to \ec{0} and \ec{true}, respectively.
+Unary operators may be declared and used with prefix notation
+(as long as they are prefix operators). E.g., if we declare
+\begin{easycrypt}{}{}
+op [!] : int -> int.
+op x : int.
+op y = !x.
+\end{easycrypt}
+then \ec{y} evaluated to the result of applying the abstract operator
+\ec{!} of type \ec{int -> int} to the abstract value \ec{x} of type
+\ec{int}.  Function application has higher precedence than prefix
+operators, which have higher precedence than infix operators, prefix
+operators group to the right, and infix operators have the
+associativities and relative precedences that were detailed in
+Section~\ref{Lexical}.
+
+An binary operator may be used as a standalone expression by
+enclosing it in parentheses, and a unary operator may be so used
+by enclosing it in square brackets:
+\begin{easycrypt}{}{}
+op (--) ['a, 'b] (x : 'a) (y : 'b) = x.
+op x : int = (--) 0 true.
+op [!] : int -> int.
+op double ['a] (f : 'a -> 'a) = fun x => f(f x).
+op u : int -> int = double [!].
+\end{easycrypt}
+
+Some operators are built-in to \EasyCrypt, automatically understood
+by its ambient logic:
+\begin{easycrypt}{}{}
+op (=) ['a]: 'a -> 'a -> bool.
+
+op [!] : bool -> bool.
+op (||) : bool -> bool -> bool.
+op (\\/) : bool -> bool -> bool.
+op (&&) : bool -> bool -> bool.
+op (/\\) : bool -> bool -> bool.
+op (=>) : bool -> bool -> bool.
+op (<=>) : bool -> bool -> bool.
+
+op mu : 'a distr -> ('a -> bool) -> real.
+\end{easycrypt}
+The operator \ec{=} is equality. On the booleans, we have negation
+\ec{!}, two forms of disjunction (\ec{\\/} and \ec{||}) and conjuction
+(\ec{/\\} and \ec{&&}), implication (\ec{=>}) and if-and-only-if
+(\ec{<=>}).  The two disjuctions (respectively, conjunctions) are
+semantically equivalent, but are treated differently by \EasyCrypt
+proof engine. The associativities and precedences of the infix
+operators were given in Section~\ref{Lexical}, and (as a prefix
+operator) \ec{!} has higher precedence than all of them. The
+expression \ec{$e_1$ <> $\;e_2$} is treated as \ec{!($e_1$ =
+  $\;e_2$)}; \ec{<>} is not an operator.
+The intended meaning of \ec{mu $\,d$ $\,p$} is the probability that
+randomly choosing a value of the given type from the sub-distribution
+$d$ will satisfy the function $p$ (in the sense of causing it to return
+\ec{true}).
+In addition, if $e$ is an expression of type \ec{int}, then
+\ec{$e$\%r} is the corresponding real.
+
+For the built-in types \ec{bool}, \ec{int} and \ec{real}, and the type
+operator \ec{distr}, the \EasyCrypt\ Library (see
+Chapter~\ref{Library}) provides corresponding theories, \ec{Bool},
+\ec{Int}, \ec{Real} and \ec{Distr}. These theories provide various
+operations, axioms, etc.  To make use of a theory, one must
+``require'' it.  E.g.,
+\begin{easycrypt}{}{}
+require Bool Int Real Distr.
+\end{easycrypt}
+will make the theories just mentioned available. This
+would allow us to write, e.g.,
+\begin{easycrypt}{}{}
+op x = Int.(+) 3 4.
+\end{easycrypt}
+making \ec{x} evaluate to \ec{7}. But to be able to use \ec{+}
+and the other operators provided by \ec{Int}
+in infix form without qualification (specifying which theory to
+find it in), we need to import \ec{Int}. If we do
+\begin{easycrypt}{}{}
+import Bool Int Real.
+op x : int = 3 + 4 - 7 * 2.
+op y : real = 5%r * 3%r / 2%r.
+op z : bool = x%r >= y.
+\end{easycrypt}
+we'll end up with \ec{z} evaluating to \ec{false}.
+One may combine requiring and importing in one step:
+\begin{easycrypt}{}{}
+require import Bool Int Real Instr.
+\end{easycrypt}
+We'll cover theories and their usage in detail in
+Chapter~\ref{Structuring}.
 
 \section{Modules}
 
