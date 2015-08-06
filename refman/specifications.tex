@@ -199,9 +199,9 @@ forms of encryption).
   minus signs.
 
 \item \textbf{Mixfix operator names}. A \emph{mixfix operator name} is
-  of the following sequences of characters:
-  \ec{\"`|_|\"}, \ec{\"[]\"}, \ec{\"_.[_]\"} or \ec{\"_.[_<-_]\"}.
-  (We'll see below how they may be used in mixfix form.)
+  of the following sequences of characters: \ec{`|_|}, \ec{[]},
+  \ec{_.[_]} or \ec{_.[_<-_]}.  (We'll see below how they may be used
+  in mixfix form.)
 
 \item \textbf{Record projections}. A \emph{record projection} is an
   identifier.
@@ -232,8 +232,49 @@ forms of encryption).
 \item \textbf{Memory identifiers}. A \emph{memory identifier} consists
 of an ampersand followed by either a nonempty sequence of digits or
 an identifer whose initial character isn't an upper case letter.
-
 \end{itemize}
+
+\section{Script Structure and Printing}
+
+An \EasyCrypt\ script consists of a sequence of \emph{steps},
+terminated by dots (\ec{.}). Steps may:
+\begin{itemize}
+\item declare types and type operators;
+
+\item declare operators and predicates;
+
+\item declare modules or module types;
+
+\item state axioms or lemmas;
+
+\item apply tactics;
+
+\item require (make available) theories;
+
+\item print types, operators, predicates, axioms and lemmas.
+\end{itemize}
+
+To print an entity, one may say:
+\begin{easycrypt}{}{}
+  print type t.
+  print op f.
+  print pred p.
+  print module Foo.
+  print module type FOO.
+  print axiom foo.
+  print lemma goo.
+\end{easycrypt}
+The entity kind may be omitted, in which case all entities with the
+given name are printed. \ec{print op} and \ec{print pred} may be used
+interchangeably, and may be applied to record field projections and
+datatype constructors, as well as to operators and predicates---all of which
+share the same name space.
+\ec{print axiom} and \ec{print lemma} are also interchangeable---axioms
+and lemmas share the same name space.
+
+Declared/stated entities may refer to previously declared/stated entities,
+but not to themselves or later ones (with the exception of recursively
+declared operators on datatypes).
 
 \section{Typed Expressions}
 
@@ -350,7 +391,7 @@ constructed from an integer $x$ and trees $\mathit{tr}_1$ and
 $\mathit{tr}_2$.
 \EasyCrypt\ must be able to convince itself that a datatype is
 nonempty, most commonly because it has at least one constructor
-taking no arguments.
+taking no arguments, or only arguments not involving the datatype.
 
 Types and type operators that are simply abbreviations for pre-existing
 types may be declared, as in:
@@ -454,38 +495,106 @@ op g ['a, 'b] (x : 'a, y : 'b) : 'a.
 \end{easycrypt}
 We'll see later how abstract operators may be used.
 
-Binary operators may be declared and used with infix notation
-(as long as they are infix operators). E.g., if we declare
-\begin{easycrypt}{}{}
-op (--) ['a, 'b] (x : 'a) (y : 'b) = x.
-op x : int = 0 -- true.
-op y : bool = true -- 0.
-\end{easycrypt}
-then \ec{x} and \ec{y} evaluate to \ec{0} and \ec{true}, respectively.
-Unary operators may be declared and used with prefix notation
-(as long as they are prefix operators). E.g., if we declare
-\begin{easycrypt}{}{}
-op [!] : int -> int.
-op x : int.
-op y = !x.
-\end{easycrypt}
-then \ec{y} evaluated to the result of applying the abstract operator
-\ec{!} of type \ec{int -> int} to the abstract value \ec{x} of type
-\ec{int}.  Function application has higher precedence than prefix
-operators, which have higher precedence than infix operators, prefix
-operators group to the right, and infix operators have the
-associativities and relative precedences that were detailed in
-Section~\ref{Lexical}.
-
-An binary operator may be used as a standalone expression by
-enclosing it in parentheses, and a unary operator may be so used
-by enclosing it in square brackets:
+Binary operators may be declared and used with infix notation (as long
+as they are infix operators). One parenthesizes a binary operator when
+declaring it and using it in non-infix form (i.e., as a value).  If
+$\mathit{io}$ is an infix operator and $e_1,e_2$ are expressions, then
+$e_1\mathbin{\mathit{io}}e_2$ is translated to \ec{($\mathit{io}$)
+  $\,e_1$ $\,e_2$}, whenever the latter expression is
+well-typed. E.g., if we declare
 \begin{easycrypt}{}{}
 op (--) ['a, 'b] (x : 'a) (y : 'b) = x.
 op x : int = (--) 0 true.
+op x' : int = 0 -- true.
+op y : bool = (--) true 0.
+op y' : bool = true -- 0.
+\end{easycrypt}
+then \ec{x} and \ec{x'} evaluate to \ec{0}, and
+\ec{y} and \ec{y'} evaluate to \ec{true}.
+
+Unary operators may be declared and used with prefix notation
+(as long as they are prefix operators).
+One (square) brackets a unary operator when
+declaring it and using it in non-prefix form (i.e., as a value).
+If $\mathit{po}$ is
+a prefix operator and $e$ is an expression, then
+$\mathit{po}\,e$ is translated to
+\ec{[$\mathit{po}$] $\,e$}, whenever the latter
+expression is well-typed. E.g., if we declare
+\begin{easycrypt}{}{}
+op x : int.
+op f : int -> int.
 op [!] : int -> int.
-op double ['a] (f : 'a -> 'a) = fun x => f(f x).
-op u : int -> int = double [!].
+op y : int = ! f x.
+op y' : int = [!](f x).
+\end{easycrypt}
+then \ec{y} and \ec{y'} both evaluate to the result of applying the
+abstract operator \ec{!} of type \ec{int -> int} to the result of
+applying the abstract operator \ec{f} of type \ec{int -> int} to the
+abstract value \ec{x} of type \ec{int}.  Function application has
+higher precedence than prefix operators, which have higher precedence
+than infix operators, prefix operators group to the right, and infix
+operators have the associativities and relative precedences that were
+detailed in Section~\ref{Lexical}.
+
+The four mixfix operators may be declared and used as follows. They
+are (double) quoted when being declared or used in non-mixfix form
+(i.e., as values).
+\begin{itemize}
+\item (\ec{[]})\quad \ec{[]} is translated to \ec{\"[]\"}. E.g.,
+  if we declare
+\begin{easycrypt}{}{}
+  op "[]" : int = 3.
+  op x : int = [].
+\end{easycrypt}
+then \ec{x} will evaluate to \ec{3}.
+
+\item (\ec{`|_|})\quad If $e$ is an expression, then \ec{`|$e$|} is
+  translated to \ec{\"`|_|\" $\,e$}, as long as the latter expression
+  is well-typed.  E.g., if we declare
+\begin{easycrypt}{}{}
+  op "`|_|" : int -> bool.
+  op x : bool = "`|_|" 3.
+  op y : bool = `|3|.
+\end{easycrypt}
+then \ec{y} will evaluate to the same value as \ec{x}.
+
+\item (\ec{_.[_]})\quad If $e_1,e_2$ are expressions, then
+    \ec{$e_1$.[$e_2$]} is translated to \ec{\"_.[_]\" $\,e_1$
+      $\,e_2$}, whenever the latter expression is well-typed. E.g., if
+    we declare
+\begin{easycrypt}{}{}
+  op "_.[_]" : int -> int -> bool.
+  op x : bool = "_.[_]" 3 4.
+  op y : bool = 3.[4].
+\end{easycrypt}
+then \ec{y} will evaluate to the same value as \ec{x}.
+
+\item (\ec{_.[_<-_]})\quad If $e_1,e_2,e_3$ are expressions, then
+    \ec{$e_1$.[$e_2$ <- $\,e_3$]} is translated to \ec{\"_.[_<-_]\"
+      $\,e_1$ $\,e_2$ $\,e_3$}, whenever the latter expression is
+    well-typed. E.g., if we declare
+\begin{easycrypt}{}{}
+  op "_.[_<-_]" : int -> int -> int -> bool.
+  op x : bool = "_.[_<-_]" 3 4 5.
+  op y : bool = 3.[4 <- 5].
+\end{easycrypt}
+then \ec{y} will evaluate to the same value as \ec{x}.
+\end{itemize}
+In addition, if $e_1,\ldots,e_n$ are expressions then
+\begin{center}
+\ec{[$e_1$; $\;\ldots\,$; $\,e_n$]}  
+\qquad is translated to \qquad
+\ec{$e_1$ :: $\;\ldots$ :: $\;e_n$ :: []}
+\end{center}
+whenever the latter expression is well-typed.
+The initial argument of \ec{\"_.[_]\"} and \ec{\"_.[_<-_]\"} have
+higher precedence than even function application. E.g., one
+can't omit the parentheses in
+\begin{easycrypt}{}{}
+  op f : int -> int.
+  op y : bool = (f 3).[4].
+  op z : bool = (f 3).[4 <- 5].
 \end{easycrypt}
 
 Some operators are built-in to \EasyCrypt, automatically understood
@@ -512,13 +621,27 @@ proof engine. The associativities and precedences of the infix
 operators were given in Section~\ref{Lexical}, and (as a prefix
 operator) \ec{!} has higher precedence than all of them. The
 expression \ec{$e_1$ <> $\;e_2$} is treated as \ec{!($e_1$ =
-  $\;e_2$)}; \ec{<>} is not an operator.
+  $\;e_2$)}. \ec{<>} is not an operator, but it the precedence and
+non-associative status of Section~\ref{Lexical}.
 The intended meaning of \ec{mu $\,d$ $\,p$} is the probability that
 randomly choosing a value of the given type from the sub-distribution
 $d$ will satisfy the function $p$ (in the sense of causing it to return
 \ec{true}).
 In addition, if $e$ is an expression of type \ec{int}, then
 \ec{$e$\%r} is the corresponding real.
+
+If $e_1$ is an expression of type \ec{bool} and $e_2,e3$ are expressions
+of some type $t$, then the \emph{conditional expression}
+\ec{$e_1$ ? $\,e_2$ : $\,e_3$} evaluates $e_2$, if $e_1$ evaluates to
+\ec{true}, and evaluates $e_3$, if $e_1$ evaluates to \ec{false}.
+E.g., if we write
+\begin{easycrypt}{}{}
+op x : int = (3 < 4) ? 4 + 7 : (9 - 1).
+\end{easycrypt}
+then \ec{x} evaluates to \ec{11}. The precedence of a conditional
+expression's first and third argumens is lower than function
+application, but higher than the infix operators; its second argument
+needn't be parenthesized.
 
 For the built-in types \ec{bool}, \ec{int} and \ec{real}, and the type
 operator \ec{distr}, the \EasyCrypt\ Library (see
@@ -539,19 +662,199 @@ and the other operators provided by \ec{Int}
 in infix form without qualification (specifying which theory to
 find it in), we need to import \ec{Int}. If we do
 \begin{easycrypt}{}{}
-import Bool Int Real.
-op x : int = 3 + 4 - 7 * 2.
-op y : real = 5%r * 3%r / 2%r.
-op z : bool = x%r >= y.
+  import Bool Int Real.
+  op x : int = 3 + 4 - 7 * 2.
+  op y : real = 5%r * 3%r / 2%r.
+  op z : bool = x%r >= y.
 \end{easycrypt}
 we'll end up with \ec{z} evaluating to \ec{false}.
 One may combine requiring and importing in one step:
 \begin{easycrypt}{}{}
-require import Bool Int Real Instr.
+require import Bool Int Real Distr.
 \end{easycrypt}
 We'll cover theories and their usage in detail in
 Chapter~\ref{Structuring}.
 
+Requring the theory \ec{Bool} makes available the value \ec{\{0,1\}}
+of type \ec{bool distr} that is the uniform distribution on
+the booleans. (No whitespace is allowed in the name for this distribution,
+and the \ec{0} must come before the \ec{1}.)
+Requring the theory \ec{Distr} make available syntax for the uniform
+distribution of integers from a finite range. If $e_1$ and $e_2$
+are expressions of type \ec{int} denoting $n_1$ and $n_2$, respectively,
+then \ec{[$e_1$..$e_2$]} is the value of type \ec{int distr}
+that is the uniform distribution on the set of
+all integers that are greater-than-or-equal to $n_1$ and less-than-or-equal-to
+$n_2$---unless $n_1>n_2$, in which case it is the subdistribution assigning
+probability $0$ to all integers.
+
+Values of product (tuple) and record types are constructed and
+destructed as follows:
+\begin{easycrypt}{}{}
+  op x : int * int * bool = (3, 4, true).
+  op b : bool = x .` 3.
+  type t = { u : int; v : bool; }.
+  op y : t = {| v = false; u = 10; |}.
+  op a : bool = y .` v.
+\end{easycrypt}
+Then, \ec{b} evaluates to \ec{true}, and \ec{a} evaluates to \ec{false}.
+Note the field order in the declaration of \ec{y} was allowed to be
+a permutation of that of the record type \ec{t}.
+
+When we declare a datatype, its constructors are available to
+us as values. E.g, if we declare
+\begin{easycrypt}{}{}
+  type ('a, 'b) either = [Fst of 'a | Snd of 'b].
+  op x : (int, bool) either = Fst 10.
+  op y : int -> (int, bool) either = Fst.
+  op z : (int, bool) either = y 10.
+\end{easycrypt}
+then \ec{z} evaluates to the same result as \ec{x}.
+
+We can declare operators using pattern matching on the constructors
+of datatypes. E.g., continuing the previous example, we can
+declare and use an operator \ec{fst} by:
+\begin{easycrypt}{}{}
+  op fst ['a, 'b] (def : 'a) (ei : ('a, 'b) either) : 'a =
+    with ei = Fst a => a
+    with ei = Snd b => def.
+  op l1 : (int, bool) either = Fst 10.
+  op l2 : (int, bool) either = Snd true.
+  op m1 : int = fst (-1) l1.
+  op m2 : int = fst (-1) l2.
+\end{easycrypt}
+Here, \ec{m1} will evaluate to \ec{10}, whereas \ec{m2} will
+evaluate to \ec{-1}.
+Such operator declarations may be recursive, as long as \EasyCrypt\
+can determine that the recursion if well-founded. E.g., here is one
+way of declaring an operator \ec{list} that computes the length
+of a list:
+\begin{easycrypt}{}{}
+type 'a list = [Nil | Cons of 'a & 'a list].
+op len ['a] (acc : int, xs : 'a list) : int =
+  with xs = Nil => acc
+  with xs = Cons y ys => len (acc + 1) ys.
+op length ['a] (xs : 'a list) = len 0 xs.
+op xs = Cons 0 (Cons 1 (Cons 2 Nil)).
+op n : int = length xs.
+\end{easycrypt}
+Then \ec{n} will evaluate to \ec{3}.
+
 \section{Modules}
+
+\EasyCrypt's modules consist of typed global variables and procedures.
+Listing~\ref{SimpMod} contains the definition of a simple module,
+\ec{M}, which exemplifies much of the module language.
+\ecinputfloat{examps/specifications-examp1.ec}{Simple
+  Module}{}{SimpMod}
+\ec{M} has one \emph{global variable}---\ec{x}---which is used by the
+\emph{procedures} of \ec{M}---\ec{init}, \ec{incr}, \ec{get} and
+\ec{main}. Global variables must be declared before the procedures
+that use them.
+
+The procedure \ec{init} (``initialize'') has a \emph{parameter} (or
+\emph{argument}) \ec{bnd} (``bound'') of type \ec{int}. It declares a
+\emph{local variable} \ec{y}---local in the sense that other
+procedures can't access or affect it. \ec{init} uses a \emph{random
+  assignment} to assign to \ec{y} an integer chosen uniformly from the
+integers whose absolute values are at most \ec{bnd}. It then uses an
+\emph{ordinary assignment} to assign to \ec{x} the result of adding
+\ec{y} to the previous value of \ec{x}.  The return type of \ec{init}
+is \ec{unit}, whose only element is \ec{tt}; this is implicly returned
+by \ec{init} upon exit.
+
+The procedure \ec{incr} (``increment''), increments the value of
+\ec{x} by its parameter \ec{n}. The procedure \ec{get} takes no
+parameters, but simply returns the value of \ec{x}, using
+a \emph{return statement}---which is only allowed as the
+final statement of a procedure.
+
+And the \ec{main} procedures takes no parameters, and returns a boolean
+that's computed as follows:
+\begin{itemize}
+\item It declares a local variable, \ec{n}, of type \ec{int}.
+
+\item It uses a \emph{procedure call} to call the procedure \ec{init}
+  with a bound of \ec{100}, causing \ec{x} to be initialized to an
+  integer between \ec{-100} and \ec{100}.
+
+\item It calls \ec{incr} twice, with \ec{10} and then \ec{-50}.
+
+\item It uses a \emph{procedure call assignment} to call the procedure
+  \ec{get} with no arguments, and assign \ec{get}'s return value to \ec{n}.
+
+\item It evaluates the boolean expression \ec{n < 0}, and returns
+  the value of this expression as its boolean result.
+\end{itemize}
+
+As we've seen, each declaration or statement of a procedure is
+terminated with a semicolon.  \EasyCrypt tries to infer the types of
+local variables. So, in the above example, one could write \ec{var y;}
+and \ec{var n;} for the local declarations of \ec{y} and \ec{n}.
+One may combine multiple local variable declarations, as in:
+\begin{easycrypt}{}{}
+  var x, y, z : int;
+  var u, v;
+\end{easycrypt}
+The three kinds of assignment statements differ according to their
+allowed right-hand sides (rhs):
+\begin{itemize}
+\item The rhs of a random assignment must be a single
+  (sub-)distribution.
+
+\item The rhs of an ordinary assignment may be an arbitrary expression
+  (which doesn't include use of procedures or random assignments).
+
+\item the rhs of a procedure call assignment must be a single procedure
+  call.  
+\end{itemize}
+
+The two remaining kinds of statements are illustrated in
+Listing~\ref{CondWhileExamp}: \emph{conditionals} and \emph{while
+  loops}.
+\ecinputfloat{examps/specifications-examp2.ec}{Conditionals
+  and While Loops} {}{CondWhileExamp}
+\ec{N} has a single procedure,
+\ec{loop}, which begins by initializing a local variable \ec{y} to
+\ec{0}. It then enters a while loop, which continues executing until
+(which may never happen) \ec{y} becomes \ec{10} or more. At each
+iteration of the while loop, an integer between \ec{1} and \ec{10} is
+randomly chosen and assigned to the local variable \ec{z}. The
+conditional is used to behave differently depending upon whether the
+value of \ec{z} is less-than-or-equal-to \ec{5} or not.
+\begin{itemize}
+\item When the answer is ``yes'', \ec{y} is decremented by the \ec{z}.
+
+\item When the answer is ``no'', \ec{y} is incremented by \ec{z - 5}.
+\end{itemize}
+Once (if) the while loop is exited---which means \ec{y} is now \ec{10}
+or more---the procedure returns \ec{y}'s value as its return value.
+
+When the body of a while loop, or the then or else part of a conditional,
+has a single statement, the curly braces may be omitted. E.g., the
+conditional of the preceding example could be written:
+\begin{easycrypt}{}{}
+  if (z <= 5) y = y - z;
+  else y = y + (z - 5);
+\end{easycrypt}
+And when the else part of a conditional is empty (consists of
+\ec{\{\}}), it may be omitted, as in:
+\begin{easycrypt}{}{}
+  if (z <= 5) y = y - z;
+\end{easycrypt}
+
+As illustrated in Listing~\ref{UsingOtherModuleExamp}, modules may
+access the global variables, and call the procedures of previously
+declared modules.  \ecinputfloat{examps/specifications-examp3.ec}{One
+  Module Using Another Module} {}{UsingOtherModuleExamp} Procedure
+\ec{g} of \ec{N} both accesses the global varialble \ec{x} of module
+\ec{N}, and calls \ec{N}'s procedure, \ec{f}. And procedure \ec{h} of
+\ec{N} is an alias for procedure \ec{M.f}: calling it is equivalent
+to directly calling \ec{M.f}.
+
+A procedure call has a context---a \emph{memory} recording the global
+variables of all involved modules.  Even if a global variable of a
+module isn't explicitly initialized, it will still have a well-defined
+value in such a memory.
 
 \section{Logics}
