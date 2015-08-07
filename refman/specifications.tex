@@ -256,13 +256,13 @@ terminated by dots (\ec{.}). Steps may:
 
 To print an entity, one may say:
 \begin{easycrypt}{}{}
-  print type t.
-  print op f.
-  print pred p.
-  print module Foo.
-  print module type FOO.
-  print axiom foo.
-  print lemma goo.
+print type t.
+print op f.
+print pred p.
+print module Foo.
+print module type FOO.
+print axiom foo.
+print lemma goo.
 \end{easycrypt}
 The entity kind may be omitted, in which case all entities with the
 given name are printed. \ec{print op} and \ec{print pred} may be used
@@ -306,7 +306,7 @@ is no more than $1$. When the sum is equal to $1$, we have a
 \emph{distribution}. \ec{distr} is a \emph{type operator} taking a
 single type argument:
 \begin{easycrypt}{}{}
-  type 'a distr
+type 'a distr
 \end{easycrypt}
 Here, \ec{'a} is a \emph{type variable}, marking the type parameter of
 \ec{distr}; if we substitute an actual type for \ec{'a} in \ec{'a distr},
@@ -329,8 +329,8 @@ Note that \ec{int * (int * real)}, \ec{(int * int) * real} and
 
 Record types may be declared like this:
 \begin{easycrypt}{}{}
-  type t = { x : int; y : bool; }.
-  type u = { y : real; yy : int; yyy : real; }.
+type t = { x : int; y : bool; }.
+type u = { y : real; yy : int; yyy : real; }.
 \end{easycrypt}
 Here \ec{t} is the type of records with field projections \ec{x} of
 type \ec{int}, and \ec{y} of type \ec{bool}. The order of projections is
@@ -339,8 +339,8 @@ and record projections must be disjoint from operators (see
 below). Records any non-zero number of fields; \ec{u} is a record with
 three fields. We may also define record type operators, as in:
 \begin{easycrypt}{}{}
-  type 'a t = { x : 'a; f : 'a -> 'a; }.
-  type ('a, 'b) u = { f : 'a -> 'b; x : 'a; }.
+type 'a t = { x : 'a; f : 'a -> 'a; }.
+type ('a, 'b) u = { f : 'a -> 'b; x : 'a; }.
 \end{easycrypt}
 Then, a value $v$ of type \ec{int t} would have fields \ec{x} and
 \ec{f} of types \ec{int} and \ec{int -> int}, respectively; and
@@ -349,15 +349,15 @@ a value $v$ of type \ec{(int, bool) u} would have fields \ec{x} and
 
 Datatypes and datatype operators may be declared like this:
 \begin{easycrypt}{}{}
-  type enum = [ First | Second | Third ].
-  type either_int_bool = [ First of int | Second of bool ].
-  type ('a, 'b) either = [ First of 'a | Second of 'b ].
-  type intlist = [
-    | Nil
-    | Cons of (int * intlist) ].
-  type 'a list = [
-    | Nil
-    | Cons of 'a & 'a list ].
+type enum = [ First | Second | Third ].
+type either_int_bool = [ First of int | Second of bool ].
+type ('a, 'b) either = [ First of 'a | Second of 'b ].
+type intlist = [
+  | Nil
+  | Cons of (int * intlist) ].
+type 'a list = [
+  | Nil
+  | Cons of 'a & 'a list ].
 \end{easycrypt}
 Here, \ec{First}, \ec{Second}, \ec{Third}, \ec{Nil} and \ec{Cons} are
 constructors, and must be distinct from all operators, record
@@ -381,10 +381,10 @@ lists over an arbitrary type \ec{'a}, but with a twist. The use of
 datatype for binary trees whose leaves and internal nodes are labeled
 by integers:
 \begin{easycrypt}{}{}
-  type tree = [
-    | Leaf of int
-    | Cons of tree & int & tree
-  ].
+type tree = [
+  | Leaf of int
+  | Cons of tree & int & tree
+].
 \end{easycrypt}
 Here, \ec{Cons $\,\mathit{tr}_1\,$ $x\,$ $\mathit{tr}_2$} will be the tree
 constructed from an integer $x$ and trees $\mathit{tr}_1$ and
@@ -544,8 +544,8 @@ are (double) quoted when being declared or used in non-mixfix form
 \item (\ec{[]})\quad \ec{[]} is translated to \ec{\"[]\"}. E.g.,
   if we declare
 \begin{easycrypt}{}{}
-  op "[]" : int = 3.
-  op x : int = [].
+op "[]" : int = 3.
+op x : int = [].
 \end{easycrypt}
 then \ec{x} will evaluate to \ec{3}.
 
@@ -553,9 +553,9 @@ then \ec{x} will evaluate to \ec{3}.
   translated to \ec{\"`|_|\" $\,e$}, as long as the latter expression
   is well-typed.  E.g., if we declare
 \begin{easycrypt}{}{}
-  op "`|_|" : int -> bool.
-  op x : bool = "`|_|" 3.
-  op y : bool = `|3|.
+op "`|_|" : int -> bool.
+op x : bool = "`|_|" 3.
+op y : bool = `|3|.
 \end{easycrypt}
 then \ec{y} will evaluate to the same value as \ec{x}.
 
@@ -564,9 +564,9 @@ then \ec{y} will evaluate to the same value as \ec{x}.
       $\,e_2$}, whenever the latter expression is well-typed. E.g., if
     we declare
 \begin{easycrypt}{}{}
-  op "_.[_]" : int -> int -> bool.
-  op x : bool = "_.[_]" 3 4.
-  op y : bool = 3.[4].
+op "_.[_]" : int -> int -> bool.
+op x : bool = "_.[_]" 3 4.
+op y : bool = 3.[4].
 \end{easycrypt}
 then \ec{y} will evaluate to the same value as \ec{x}.
 
@@ -575,9 +575,9 @@ then \ec{y} will evaluate to the same value as \ec{x}.
       $\,e_1$ $\,e_2$ $\,e_3$}, whenever the latter expression is
     well-typed. E.g., if we declare
 \begin{easycrypt}{}{}
-  op "_.[_<-_]" : int -> int -> int -> bool.
-  op x : bool = "_.[_<-_]" 3 4 5.
-  op y : bool = 3.[4 <- 5].
+op "_.[_<-_]" : int -> int -> int -> bool.
+op x : bool = "_.[_<-_]" 3 4 5.
+op y : bool = 3.[4 <- 5].
 \end{easycrypt}
 then \ec{y} will evaluate to the same value as \ec{x}.
 \end{itemize}
@@ -592,9 +592,9 @@ The initial argument of \ec{\"_.[_]\"} and \ec{\"_.[_<-_]\"} have
 higher precedence than even function application. E.g., one
 can't omit the parentheses in
 \begin{easycrypt}{}{}
-  op f : int -> int.
-  op y : bool = (f 3).[4].
-  op z : bool = (f 3).[4 <- 5].
+op f : int -> int.
+op y : bool = (f 3).[4].
+op z : bool = (f 3).[4 <- 5].
 \end{easycrypt}
 
 Some operators are built-in to \EasyCrypt, automatically understood
@@ -638,10 +638,11 @@ E.g., if we write
 \begin{easycrypt}{}{}
 op x : int = (3 < 4) ? 4 + 7 : (9 - 1).
 \end{easycrypt}
-then \ec{x} evaluates to \ec{11}. The precedence of a conditional
-expression's first and third argumens is lower than function
-application, but higher than the infix operators; its second argument
-needn't be parenthesized.
+then \ec{x} evaluates to \ec{11}. The conditional expression's
+precedence at its first argument is lower than function
+application, but higher than the prefix operators; its second argument
+needn't be parenthesized; and the precedence at its third argument is
+lower than the prefix operators, but higher than the infix operators.
 
 For the built-in types \ec{bool}, \ec{int} and \ec{real}, and the type
 operator \ec{distr}, the \EasyCrypt\ Library (see
@@ -662,10 +663,10 @@ and the other operators provided by \ec{Int}
 in infix form without qualification (specifying which theory to
 find it in), we need to import \ec{Int}. If we do
 \begin{easycrypt}{}{}
-  import Bool Int Real.
-  op x : int = 3 + 4 - 7 * 2.
-  op y : real = 5%r * 3%r / 2%r.
-  op z : bool = x%r >= y.
+import Bool Int Real.
+op x : int = 3 + 4 - 7 * 2.
+op y : real = 5%r * 3%r / 2%r.
+op z : bool = x%r >= y.
 \end{easycrypt}
 we'll end up with \ec{z} evaluating to \ec{false}.
 One may combine requiring and importing in one step:
@@ -691,11 +692,11 @@ probability $0$ to all integers.
 Values of product (tuple) and record types are constructed and
 destructed as follows:
 \begin{easycrypt}{}{}
-  op x : int * int * bool = (3, 4, true).
-  op b : bool = x .` 3.
-  type t = { u : int; v : bool; }.
-  op y : t = {| v = false; u = 10; |}.
-  op a : bool = y .` v.
+op x : int * int * bool = (3, 4, true).
+op b : bool = x .` 3.
+type t = { u : int; v : bool; }.
+op y : t = {| v = false; u = 10; |}.
+op a : bool = y .` v.
 \end{easycrypt}
 Then, \ec{b} evaluates to \ec{true}, and \ec{a} evaluates to \ec{false}.
 Note the field order in the declaration of \ec{y} was allowed to be
@@ -704,10 +705,10 @@ a permutation of that of the record type \ec{t}.
 When we declare a datatype, its constructors are available to
 us as values. E.g, if we declare
 \begin{easycrypt}{}{}
-  type ('a, 'b) either = [Fst of 'a | Snd of 'b].
-  op x : (int, bool) either = Fst 10.
-  op y : int -> (int, bool) either = Fst.
-  op z : (int, bool) either = y 10.
+type ('a, 'b) either = [Fst of 'a | Snd of 'b].
+op x : (int, bool) either = Fst 10.
+op y : int -> (int, bool) either = Fst.
+op z : (int, bool) either = y 10.
 \end{easycrypt}
 then \ec{z} evaluates to the same result as \ec{x}.
 
@@ -715,13 +716,13 @@ We can declare operators using pattern matching on the constructors
 of datatypes. E.g., continuing the previous example, we can
 declare and use an operator \ec{fst} by:
 \begin{easycrypt}{}{}
-  op fst ['a, 'b] (def : 'a) (ei : ('a, 'b) either) : 'a =
-    with ei = Fst a => a
-    with ei = Snd b => def.
-  op l1 : (int, bool) either = Fst 10.
-  op l2 : (int, bool) either = Snd true.
-  op m1 : int = fst (-1) l1.
-  op m2 : int = fst (-1) l2.
+op fst ['a, 'b] (def : 'a) (ei : ('a, 'b) either) : 'a =
+  with ei = Fst a => a
+  with ei = Snd b => def.
+op l1 : (int, bool) either = Fst 10.
+op l2 : (int, bool) either = Snd true.
+op m1 : int = fst (-1) l1.
+op m2 : int = fst (-1) l2.
 \end{easycrypt}
 Here, \ec{m1} will evaluate to \ec{10}, whereas \ec{m2} will
 evaluate to \ec{-1}.
@@ -740,12 +741,15 @@ op n : int = length xs.
 \end{easycrypt}
 Then \ec{n} will evaluate to \ec{3}.
 
-\section{Modules}
+\section{Module System}
 
-\EasyCrypt's modules consist of typed global variables and procedures.
+\subsection{Modules}
+
+\EasyCrypt's modules consist of typed global variables and procedures,
+which have different name spaces.
 Listing~\ref{SimpMod} contains the definition of a simple module,
 \ec{M}, which exemplifies much of the module language.
-\ecinputfloat{examps/specifications-examp1.ec}{Simple
+\ecinput{examps/specifications-examp1.ec}{Simple
   Module}{}{SimpMod}
 \ec{M} has one \emph{global variable}---\ec{x}---which is used by the
 \emph{procedures} of \ec{M}---\ec{init}, \ec{incr}, \ec{get} and
@@ -793,8 +797,10 @@ local variables. So, in the above example, one could write \ec{var y;}
 and \ec{var n;} for the local declarations of \ec{y} and \ec{n}.
 One may combine multiple local variable declarations, as in:
 \begin{easycrypt}{}{}
-  var x, y, z : int;
-  var u, v;
+var x, y, z : int;
+var u, v;
+var x, y, z : int = 10;
+var x, y, z = 10;
 \end{easycrypt}
 The three kinds of assignment statements differ according to their
 allowed right-hand sides (rhs):
@@ -808,11 +814,17 @@ allowed right-hand sides (rhs):
 \item the rhs of a procedure call assignment must be a single procedure
   call.  
 \end{itemize}
+If the rhs of an assignment produces a tuple value, its left-hand side
+may use pattern matching, as in
+\begin{easycrypt}{}{}
+(x, y, z) <- #\ldots#;
+\end{easycrypt}
+in the case where $\ldots$ produces a triple.
 
 The two remaining kinds of statements are illustrated in
 Listing~\ref{CondWhileExamp}: \emph{conditionals} and \emph{while
   loops}.
-\ecinputfloat{examps/specifications-examp2.ec}{Conditionals
+\ecinput{examps/specifications-examp2.ec}{Conditionals
   and While Loops} {}{CondWhileExamp}
 \ec{N} has a single procedure,
 \ec{loop}, which begins by initializing a local variable \ec{y} to
@@ -834,27 +846,213 @@ When the body of a while loop, or the then or else part of a conditional,
 has a single statement, the curly braces may be omitted. E.g., the
 conditional of the preceding example could be written:
 \begin{easycrypt}{}{}
-  if (z <= 5) y = y - z;
-  else y = y + (z - 5);
+if (z <= 5) y <- y - z;
+else y <- y + (z - 5);
 \end{easycrypt}
 And when the else part of a conditional is empty (consists of
 \ec{\{\}}), it may be omitted, as in:
 \begin{easycrypt}{}{}
-  if (z <= 5) y = y - z;
+if (z <= 5) y <- y - z;
 \end{easycrypt}
 
 As illustrated in Listing~\ref{UsingOtherModuleExamp}, modules may
-access the global variables, and call the procedures of previously
-declared modules.  \ecinputfloat{examps/specifications-examp3.ec}{One
+access the global variables, and call the procedures, of previously
+declared modules.
+\ecinput{examps/specifications-examp3.ec}{One
   Module Using Another Module} {}{UsingOtherModuleExamp} Procedure
 \ec{g} of \ec{N} both accesses the global varialble \ec{x} of module
-\ec{N}, and calls \ec{N}'s procedure, \ec{f}. And procedure \ec{h} of
-\ec{N} is an alias for procedure \ec{M.f}: calling it is equivalent
-to directly calling \ec{M.f}.
+\ec{N} (\ec{M.x}), and calls \ec{N}'s procedure, \ec{f} (\ec{N.f}).
+The parameter list of \ec{g} could equivalently be written:
+\begin{easycrypt}{}{}
+n : int, m : int, b : bool  
+\end{easycrypt}
+A module may refer to its own global variables using its own module
+name, allowing us to write
+\begin{easycrypt}{}{}
+proc f() : unit = {
+  M.x <- M.x + 1;
+}
+\end{easycrypt}
+for the definition of procedure \ec{M.f}.  The procedure \ec{h} of
+\ec{N} is an alias for procedure \ec{M.f}: calling it is equivalent to
+directly calling \ec{M.f}.
+One declare a module name to be an alias for a module, as in
+\begin{easycrypt}{}{}
+module L = N.
+\end{easycrypt}
 
 A procedure call has a context---a \emph{memory} recording the global
 variables of all involved modules.  Even if a global variable of a
 module isn't explicitly initialized, it will still have a well-defined
 value in such a memory.
+
+\subsection{Module Types}
+
+\EasyCrypt's \emph{module types} specify the types for some number of
+procedures.  E.g., consider the module type \ec{OR} :
+\ecinput{examps/specifications-examp4.ec}{} {3-7}{}
+\ec{OR} describes minimum expectations
+for a ``guessing oracle''---that it provide at least procedures with
+the specified types.  The order of the procedures in a module type is
+irrelevant.  The names of procedure parameters used in module types
+are purely for documentation purposes; one may elide them instead
+using underscores, writing, e.g.,
+\begin{easycrypt}{}{}
+proc init(_ : int, _ : int, _ : bool) : unit
+\end{easycrypt}
+instead of
+\begin{easycrypt}{}{}
+proc init(secret tries : int, x : bool) : unit
+\end{easycrypt}
+Note that module types say nothing about the global variables a module
+should have.
+
+Listing~\ref{GuessOrModule} contains an example guessing oracle
+implementation.  \ecinput{examps/specifications-examp4.ec}{Guessing
+  Oracle Module} {9-30}{GuessOrModule} Its \ec{init} procedure stores
+the supplied secret in the global variable \ec{sec}, initializes the
+allowed number of guesses in the global variable \ec{tris}, and
+initializes the \ec{guessed} global variable to record that the secret
+hasn't yet been guessed.  If more allowed tries remain, the \ec{guess}
+procedure updates \ec{guessed} to take into account the supplied
+guess, and decrements the allowed number of tries; otherwise, it does
+nothing.  And its \ec{guessed} procedure returns the value of
+\ec{guessed}, indicating whether the secret has been successfully
+guessed, so far. \ec{Or} matches the specification of the module type
+\ec{OR}, and we can ask \EasyCrypt\ to check this by supplying that
+module type when declaring \ec{Or}, as in
+Listing~\ref{GuessOrModuleCheck}
+\ecinput{examps/specifications-examp5.ec}{Guessing Oracle Module with
+  Module Type Check} {9-30}{GuessOrModuleCheck} Supplying a module
+type \emph{doesn't} change the result of a module declaration. E.g.,
+if we had omitted \ec{guessed} from the module type \ec{OR}, then the
+module \ec{Or} would still have the procedure \ec{guessed}.
+
+Suppose we want to declare a cryptographic game using our guessing
+oracle, parameterized by an adversary with access to the \ec{guess}
+procedure of the oracle, and which provides two procedures---one
+for choosing the range in which the guessing game will operate, and
+one for doing the guessing.  We'd like to write something like:
+\begin{easycrypt}{}{}
+module type GAME = {
+  proc main() : bool
+}.
+
+module Game(Adv : ADV) : GAME = {
+  module A = Adv(Or)
+  proc main() : bool = { #\ldots# }
+}.
+\end{easycrypt}
+Thus, the module type \ec{ADV} for adversaries must be parameterized
+by an implementation of \ec{OR}. Given the adversary procedures we have
+in mind, the syntax for this is
+\begin{easycrypt}{}{}
+module type ADV(O : OR) = {
+  proc chooseRange() : int * int
+  proc doGuessing() : unit
+}.
+\end{easycrypt}
+But this declaration would give adversary access to all of \ec{O}'s
+procedures, which isn't what we want. Instead, we can write
+\begin{easycrypt}{}{}
+module type ADV(O : OR) = {
+  proc chooseRange() : int * int {}
+  proc doGuessing() : unit {O.guess}
+}.
+\end{easycrypt}
+meaning that \ec{chooseRange} has no access to the oracle, and
+\ec{doGuessing} may only call its \ec{guess} procedure. Using
+this notation, our original attempt would be written
+\begin{easycrypt}{}{}
+module type ADV(O : OR) = {
+  proc chooseRange() : int * int {O.init O.guess O.guessed}
+  proc doGuessing() : unit {O.init O.guess O.guessed}
+}
+\end{easycrypt}
+Finally, we can specify that \ec{chooseRange} must initialize
+all of the adversary's global variables (if any) by using a
+star annotation:
+\begin{easycrypt}{}{}
+module type ADV(O : OR) = {
+  proc * chooseRange() : int * int {}
+  proc doGuessing() : unit {O.guess}
+}.
+\end{easycrypt}
+
+The full Guessing Game example is contained in Listing~\ref{FullGuessing}.
+\ecinput{examps/specifications-examp5.ec}{Full
+  Guessing Game Example} {}{FullGuessing}
+%\ecinput{examps/specifications-examp5.ec}{Full
+%  Guessing Game Example (II)} {57-82}{FullGuessingII}
+%\ec{SimpAdv} is a simple implementation of an adversary.
+The inclusion of the constraint \ec{ADV(O)} in
+\begin{easycrypt}{}{}
+module SimpAdv(O : OR) : ADV(O) = #\ldots#
+\end{easycrypt}
+makes \EasyCrypt\ check that: its implementation of \ec{chooseRange}
+doesn't use \ec{O} at all; its implementation of \ec{doGuessing}
+doesn't use any of \ec{O}'s procedures other than \ec{guess}; and
+that \ec{doGuessing} initializes \ec{SimpAdv}'s global variables.
+Its \ec{chooseRange} procedure chooses the range of \ec{1} to \ec{100},
+and initializes global variables recording this range and the
+number of guesses it will make (see the code of \ec{Game} to see
+why \ec{10} is a sensible choice). The \ec{doGuessing} procedure
+make \ec{10} random guesses.
+
+Despite \ec{SimpAdv} being a parameterized module, to refer to one
+of its global variables from another module one ignores the parameter,
+saying, e.g.,
+\begin{easycrypt}{}{}
+module X = {
+  proc f() : int = {
+    return SimpAdv.tries;
+  }
+}.
+\end{easycrypt}
+On the other hand, to call one of \ec{SimpAdv}'s procedures, one needs
+to specify which oracle parameter it will use, as in:
+\begin{easycrypt}{}{}
+module X = {
+  proc f() : unit = {
+    SimpAdv(Or).doGuessing();
+  }
+}.
+\end{easycrypt}
+
+The module \ec{Game} gives its adversary parameter, \ec{Adv}, the
+concerete guessing oracle \ec{Or}, calling the result \ec{A}. It's
+main function then uses \ec{Or} and \ec{A} to run the game.
+\begin{itemize}
+\item It calls \ec{A}'s \ec{chooseRange} procedure to get the adversary's
+  choice of guessing range. If the range doesn't have at least ten elements,
+  it returns \ec{false} without doing anything else---the adversary
+  has supplied a range that's too small.
+
+\item Otherwise, it uses \ec{Or.init} to initialize the guessing
+  oracle with a secret that's randomly chosen from the range, plus a
+  number of allowed guesses that's one tenth of the range's size.
+
+\item It then calls \ec{A.doGuessing}, allowing the adversay to
+  attempt the guess the secret.
+
+\item Finally, it calls \ec{Or.guessed} to learn whether the
+  adversary has guessed the secret, returning this boolean
+  value as its result.
+\end{itemize}
+
+Finally, the declaration
+\begin{easycrypt}{}{}
+module SimpGame = Game(SimpAdv).
+\end{easycrypt}
+declares \ec{SimpGame} to be the specialization of \ec{Game} to
+our simple adversary, \ec{SimpAdv}.
+
+The reader might be wondering what---if anything---prevents us writing
+a version of \ec{SimpAdv} that directly accesses/calls the global
+variables and procedures of \ec{Or} (or of \ec{Game}, were \ec{SimpAdv}
+declared after it), violating our understanding of the adversary's
+power. The answer is that \EasyCrypt's type checker isn't in a position
+to do this. Instead, we'll see in the next section how such
+constraints are modeled using \EasyCrypt's logic.
 
 \section{Logics}

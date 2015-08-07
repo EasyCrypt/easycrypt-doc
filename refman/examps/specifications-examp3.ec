@@ -4,16 +4,16 @@ module M = {
   var x : int
 
   proc f() : unit = {
-    x = x + 1;
+    x <- x + 1;
   }
 }.
 
 module N = {
   var x : int
 
-  proc g(n : int) : bool = {
-    M.f();
-    M.x <- M.x + x + n;
+  proc g(n m : int, b : bool) : bool = {
+    if (b) M.f();
+    M.x <- M.x + x + n - m;
     return M.x > 0;
   }
 

@@ -69,12 +69,12 @@
   {}
 
 \lstnewenvironment{easycryptfloat}[3][]%
-  {\lstset{language=easycrypt,float=p,caption={#2},label={#3},#1}}%
+  {\lstset{language=easycrypt,float=tp,caption={#2},label={#3},#1}}%
   {}
 
 \newcommand{\ecinput}[4]{\lstinputlisting[language=easycrypt,linerange={#3},caption={#2},label={#4}]{#1}}
 
-\newcommand{\ecinputfloat}[4]{\lstinputlisting[language=easycrypt,float=t,linerange={#3},caption={#2},label={#4}]{#1}}
+\newcommand{\ecinputfloat}[4]{\lstinputlisting[language=easycrypt,float=tp,linerange={#3},caption={#2},label={#4}]{#1}}
 
 \def\ls{\lstinline}
 \def\ec#1{\lstinline[language=easycrypt-math]"#1"}
