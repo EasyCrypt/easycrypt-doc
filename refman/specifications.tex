@@ -230,8 +230,8 @@ forms of encryption).
   identifier that begins with an uppercase letter.
 
 \item \textbf{Memory identifiers}. A \emph{memory identifier} consists
-of an ampersand followed by either a nonempty sequence of digits or
-an identifer whose initial character isn't an upper case letter.
+  an ampersand followed by either a nonempty sequence of digits or an
+  identifer whose initial character isn't an upper case letter.
 \end{itemize}
 
 \section{Script Structure and Printing}
@@ -470,6 +470,10 @@ op g ['a, 'b] : 'a -> 'b -> 'a = fun (x : 'a, y : 'b) => x.
 or
 \begin{easycrypt}{}{}
 op g ['a, 'b] (x : 'a, y : 'b) = x.
+\end{easycrypt}
+or
+\begin{easycrypt}{}{}
+op g (x : 'a, y : 'b) = x.
 \end{easycrypt}
 Here \ec{g} has all the types formed
 by substituting types for the types variable \ec{'a} and \ec{'b}
@@ -1056,3 +1060,140 @@ to do this. Instead, we'll see in the next section how such
 constraints are modeled using \EasyCrypt's logic.
 
 \section{Logics}
+
+\subsection{Formulas}
+
+The \emph{formulas} of \EasyCrypt's ambient logic are formed by
+adding to \EasyCrypt's expressions
+\begin{itemize}
+\item universal and existential quantification,
+
+\item application of built-in and user-defined predicates,
+
+\item probability assertions, and
+
+\item \hl, \phl and \prhl judgements,
+\end{itemize}
+and identifying the formulas with the extended expressions of type
+\ec{bool}.
+This means we automatically have all boolean operators as operators on
+formulas, with their normal precedences and associativities, including
+negation
+\begin{easycrypt}{}{}
+op [!] : bool -> bool.
+\end{easycrypt}
+the two semantically equivalent disjunctions
+\begin{easycrypt}{}{}
+op (||) : bool -> bool -> bool.
+op (\\/) : bool -> bool -> bool.
+\end{easycrypt}
+the two semantically equivalent conjunctions
+\begin{easycrypt}{}{}
+op (&&) : bool -> bool -> bool.
+op (/\\) : bool -> bool -> bool.
+\end{easycrypt}
+implication
+\begin{easycrypt}{}{}
+op (=>) : bool -> bool -> bool.
+\end{easycrypt}
+and if-and-only-if
+\begin{easycrypt}{}{}
+op (<=>) : bool -> bool -> bool.
+\end{easycrypt}
+
+The quantifiers' bound identifiers are typed, although \EasyCrypt\
+will attempt to infer their types if they are omitted. Universal and
+existential quantification are written as
+\begin{easycrypt}{}{}
+forall (#$x$# : #$t$#), #$\,\phi$#
+\end{easycrypt}
+and
+\begin{easycrypt}{}{}
+exists (#$x$# : #$t$#), #$\,\phi$#
+\end{easycrypt}
+respectively, where the formula $\phi$ typically involves the
+identifier $x$ of type $t$. We can abbreviate nested universal or
+existential quantification in the style of nested anonymous functions,
+writing, e.g.,
+\begin{easycrypt}{}{}
+forall (x : int, y : int, z : bool), #\ldots#
+forall (x y : int, z : bool), #\ldots#
+forall (x y : int) (z : bool), #\ldots#
+exists (x : int, y : int, z : bool), #\ldots#
+exists (x y : int, z : bool), #\ldots#
+exists (x y : int) (z : bool), #\ldots#
+\end{easycrypt}
+Quantification extends as far to the right as possible, i.e.,
+has lower precedence than the binary operations on formulas.
+
+Abstract \emph{predicates} may be defined as in:
+\begin{easycrypt}{}{}
+pred P0 : ().
+pred P1 : (int).
+pred P2 : (int, int * bool).
+pred P3 : (int, int * bool, real -> int).
+\end{easycrypt}
+Then, \ec{P0}, \ec{P1}, \ec{P2} and \ec{P3} are extended expressions
+of types \ec{bool}, \ec{int -> bool}, \ec{int -> int * bool -> bool}
+and \ec{int -> int * bool -> (real -> int) -> bool}, respectively.
+Thus, if $e_1$, $e_2$ and $e_3$ are extended expressions of types
+\ec{int}, \ec{int * bool} and \ec{real -> int}, respectively, then
+\ec{P0}, \ecn{P1 $\,e_1$}, \ecn{P2 $\,e_1$ $\,e_2$} and \ecn{P3
+  $\,e_1$ $\,e_2$ $\,e_3$} are formulas.
+One may also declare \ec{P0} as simply
+\begin{easycrypt}{}{}
+pred P0.
+\end{easycrypt}
+
+Concrete predicates are defined in a way that is similar to how
+operators are declared.  E.g., if we declare
+\begin{easycrypt}{}{}
+pred Q (x y : int, z : bool) = x = y /\ z.
+\end{easycrypt}
+or
+\begin{easycrypt}{}{}
+pred Q (x : int) (z : bool) = x = y /\ z.
+\end{easycrypt}
+then \ec{Q} is an extended expression of type
+\begin{easycrypt}{}{}
+int -> int -> bool -> bool
+\end{easycrypt}
+meaning that
+\begin{easycrypt}{}{}
+(fun (b : bool -> bool) => b true) (Q 3 4)
+\end{easycrypt}
+is a formula.
+And here is how polymorphic predicates may be defined:
+\begin{easycrypt}{}{}
+pred R ['a, 'b] : ('a, 'a * 'b).
+pred R' ['a, 'b] (x : 'a, y : 'a * 'b) = (y.`1 = x).
+\end{easycrypt}
+
+Extended expressions also include program memories, although there
+isn't a type of memories, nor any operators on memories.  If \ec{&$m$}
+is a memory and $x$ is a global variable of a module $M$, then
+\ec{$M$.$x$\{$m$\}} is the extended expression for the value of
+\ec{$M$.$x$} in \ec{&$m$}.  Quantification over memories is allowed:
+\begin{easycrypt}{}{}
+forall &#$m$#, #\ldots
+\end{easycrypt}
+E.g., suppose we have these modules in scope:
+\begin{easycrypt}{}{}
+module X = { var x : int }.
+module Y = { var y : int }.
+\end{easycrypt}
+Then, this is a (true) formula:
+\begin{easycrypt}{}{}
+forall &m, X.x{m} < Y.y{m} => X.x{m} + 1 <= Y.y{m}
+\end{easycrypt}
+We can't do anything with memories other than look up
+the values of variables in them; in particular, we can't
+talk about the equality of memories.
+
+Extended expressions also include modules, although there isn't a type
+of modules, nor module constants. Quantification over modules is
+allowed. If $T$ is a module type, and $M$ is a module name, we can
+say:
+\begin{easycrypt}{}{}
+forall (#$M$# <: #$T$#), #\ldots#
+\end{easycrypt}
