@@ -251,7 +251,8 @@ terminated by dots (\ec{.}). Steps may:
 
 \item require (make available) theories;
 
-\item print types, operators, predicates, axioms and lemmas.
+\item print types, operators, predicates, modules, module types,
+  axioms and lemmas.
 \end{itemize}
 
 To print an entity, one may say:
@@ -909,7 +910,7 @@ instead of
 proc init(secret tries : int, x : bool) : unit
 \end{easycrypt}
 Note that module types say nothing about the global variables a module
-should have.
+should have. Modules types have a different name space than modules.
 
 Listing~\ref{GuessOrModule} contains an example guessing oracle
 implementation.  \ecinput{examps/specifications-examp4.ec}{Guessing
@@ -922,9 +923,9 @@ procedure updates \ec{guessed} to take into account the supplied
 guess, and decrements the allowed number of tries; otherwise, it does
 nothing.  And its \ec{guessed} procedure returns the value of
 \ec{guessed}, indicating whether the secret has been successfully
-guessed, so far. \ec{Or} matches the specification of the module type
-\ec{OR}, and we can ask \EasyCrypt\ to check this by supplying that
-module type when declaring \ec{Or}, as in
+guessed, so far. \ec{Or} \emph{satisfies} the specification of the
+module type \ec{OR}, and we can ask \EasyCrypt\ to check this by
+supplying that module type when declaring \ec{Or}, as in
 Listing~\ref{GuessOrModuleCheck}
 \ecinput{examps/specifications-examp5.ec}{Guessing Oracle Module with
   Module Type Check} {9-30}{GuessOrModuleCheck} Supplying a module
@@ -1059,6 +1060,65 @@ power. The answer is that \EasyCrypt's type checker isn't in a position
 to do this. Instead, we'll see in the next section how such
 constraints are modeled using \EasyCrypt's logic.
 
+\subsection{Global Variables}
+\label{GlobalVariables}
+
+The set of all \emph{global variables of} a module $M$ is the
+union of
+\begin{itemize}
+\item the set of variables that are declared as global to $M$; and
+
+\item the set of all global variables of all modules that \emph{could}
+  be read or written by a series of procedure calls beginning with a
+  call of one of $M$'s procedures. By ``could'' we mean the read/write
+  analysis assumes the execution of both branches of conditionals, the
+  execution of while loop bodies, and the terminal of while loops.
+\end{itemize}
+To print the global variables of a module $M$, one runs:
+\begin{easycrypt}{}{}
+print glob #$M$#.
+\end{easycrypt}
+
+For example, suppose we make these declarations:
+\begin{easycrypt}{}{}
+module Y1 = {
+  var y : int
+  proc f() : unit = { y <- 0; }
+  proc g() : unit = { }
+}.
+
+module Y2 = {
+  var y : int
+  proc f() : unit = { Y1.f(); }
+}.
+
+module Y3 = {
+  var y : int
+  proc f() : unit = { Y1.g(); }
+}.
+
+module type X = {
+  proc f() : unit
+}.
+
+module Z(X : X) = {
+  var y : int
+  proc f() : unit = { X.f(); }
+}.
+\end{easycrypt}
+Then: the set of global variables of \ec{Y1} consists of \ec{Y1.y} and
+\ec{Y1.z}; the set of global variables of \ec{Y2} consists of
+\ec{Y1.y} and \ec{Y2.y}; the set of global variables of \ec{Y3}
+consists of \ec{Y3.y}; the set of global variables of \ec{Z} consists
+of \ec{Z.y}; and the set of global variables of \ec{Z(Y1)} consists of
+\ec{Z.y} and \ec{Y1.y}. In the case of \ec{Z}, because its parameter
+\ec{X} is abstract, no global variables are obtained from \ec{X}.
+
+For every module $M$, there is a corresponding type, \ec{glob $\,M$},
+where a value of type \ec{glob $\,M$} is a tuple consisting of
+a value for each global variable of $M$. Nothing can be done with
+values of such types other than compare them for equality.
+
 \section{Logics}
 
 \subsection{Formulas}
@@ -1170,12 +1230,15 @@ pred R' ['a, 'b] (x : 'a, y : 'a * 'b) = (y.`1 = x).
 \end{easycrypt}
 
 Extended expressions also include program memories, although there
-isn't a type of memories, nor any operators on memories.  If \ec{&$m$}
-is a memory and $x$ is a global variable of a module $M$, then
-\ec{$M$.$x$\{$m$\}} is the extended expression for the value of
-\ec{$M$.$x$} in \ec{&$m$}.  Quantification over memories is allowed:
+isn't a type of memories, nor are there any operators on memories.  If
+\ec{&$m$} is a memory and $x$ is a program variable that's currently
+in scope (either because it's a global variable of module $M$ that's
+in scope, or because it's a local variable of a procedure that's the
+focus of an \EasyCrypt\ proof goal) then \ec{$x$\{$m$\}} is the
+extended expression for the value of $x$ in \ec{&$m$}.  Quantification
+over memories is allowed:
 \begin{easycrypt}{}{}
-forall &#$m$#, #\ldots
+forall &#$m$#, #$\phi$#
 \end{easycrypt}
 E.g., suppose we have these modules in scope:
 \begin{easycrypt}{}{}
@@ -1187,13 +1250,100 @@ Then, this is a (true) formula:
 forall &m, X.x{m} < Y.y{m} => X.x{m} + 1 <= Y.y{m}
 \end{easycrypt}
 We can't do anything with memories other than look up
-the values of variables in them; in particular, we can't
+the values of variables in them; in particular, formulas can't
 talk about the equality of memories.
 
+If $M$ is a module and \ec{&$m$} is a memory, then \ec{(glob
+  $\,M$)\{$m$\}} is the value of type \ec{glob $\,M$} consisting of the
+tuple whose components are the values of all the global variables of
+$M$ in \ec{&$m$}.  (See Subsection~\ref{GlobalVariables} for the
+definition of the set of all global variables of a module.)
+
 Extended expressions also include modules, although there isn't a type
-of modules, nor module constants. Quantification over modules is
-allowed. If $T$ is a module type, and $M$ is a module name, we can
-say:
+of modules, nor are there module constants. Quantification over modules is
+allowed. If $T$ is a module type, and $M$ is a module name, then
 \begin{easycrypt}{}{}
-forall (#$M$# <: #$T$#), #\ldots#
+forall (#$M$# <: #$T$#), #$\phi$#
 \end{easycrypt}
+means
+\begin{center}
+ ``for all modules $M$ satisfying $T$, $\phi$ holds.
+\end{center}
+Formulas can't talk about module equality.
+
+There is also a variant form of module quantification of the
+the form
+\begin{easycrypt}{}{}
+forall (#$M$# <: #$T$#{#$N_1$#,#\ldots#,#$N_l$#}), #$\phi$#
+\end{easycrypt}
+where $N_1,\ldots,N_l$ are modules, for $l\geq 1$. It's meaning is
+\begin{center}
+  ``for all modules $M$ satisfying $T$ whose sets of global
+  variables\\are disjoint from the sets of global variables of the
+  $N_i$, $\phi$ holds.
+\end{center}
+
+For convenience, we have the following derived syntax for formulas: If
+$\phi$ is a formula and \ec{&$m$} is a memory, then
+\ec{($\phi$)\{$m$\}} means the formula in which every subterm $u$ of
+$\phi$ consisting of a variable or having the form \ec{glob $\,M$} for
+a module $M$ is replaced by \ec{$u$\{$m$\}}.
+For example,
+\begin{easycrypt}{}{}
+(Y1.y = Y1.z => Y1.z = Y1.y){m}
+\end{easycrypt}
+expands to
+\begin{easycrypt}{}{}
+Y1.y{m} = Y1.z{m} => Y1.z{m} = Y1.y{m}
+\end{easycrypt}
+
+Finally, \EasyCrypt's ambient logic has probability expressions, \hl,
+\phl and \prhl judgements, and lossless assertions:
+\begin{itemize}
+\item (\textbf{Probability Expressions})\quad A \emph{probability expression}
+  has the form
+  \begin{center}
+    \ec{Pr[$M$.$p$($e_1$,$\,\ldots$,$\,e_n$) @ &$m$ : $\,\phi$]}
+  \end{center}
+Here:
+\begin{itemize}
+\item $p$ is a procedure of module $M$ that takes $n$ arguments, whose
+types agree with the types of the $e_i$.
+
+\item \ec{&$m$} is a memory over the global variables of the modules
+  the call of \ec{$M$.$p$} depends on.
+
+\item The formula $\phi$ may involve the term \ec{res}, whose
+  type is \ec{$M$.$p$}'s return type. Any memory that results
+  from running the procedure will have a component named \ec{res}
+  storing the procedure's return value.
+\end{itemize}
+The informal meaning of the probability expression is
+the probability that running \ec{$M$.$p$} with arguments
+$e_1$, \ldots, $e_n$, and initial memory \ec{&$m$} will terminate
+in a final memory \ec{&$m$} satisfying $\phi$, such that
+$\phi\{m\}$ holds.
+
+\item (\hl Judgements)\quad A \hl \emph{judgement} has the form
+  \begin{center}
+    \ec{hoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$]}
+  \end{center}
+
+\item (\phl Judgements)\quad A \phl \emph{judgement} has one of the forms
+  \begin{center}
+    \ec{phoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$] < $\,r$} \\
+    \ec{phoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$] = $\,r$} \\
+    \ec{phoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$] > $\,r$}
+  \end{center}
+
+\item (\prhl Judgements)\quad A \prhl \emph{judgement} has the form
+  \begin{center}
+     \ec{equiv[$M$.$p$ ~ $\,N$.$q$ : $\,\phi$ ==> $\,\psi$]}
+  \end{center}
+
+\item (Lossless Assertions)\quad A \emph{lossless assertion} has the form
+  \begin{center}
+    \ec{islossless M.p}
+  \end{center}
+
+\end{itemize}
