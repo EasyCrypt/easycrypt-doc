@@ -6,7 +6,7 @@ module type OR = {
   proc guessed() : bool
 }.
 
-module Or : OR = {
+module Or = {
   var sec : int
   var tris : int
   var guessed : bool

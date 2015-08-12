@@ -807,8 +807,11 @@ var u, v;
 var x, y, z : int = 10;
 var x, y, z = 10;
 \end{easycrypt}
-The three kinds of assignment statements differ according to their
-allowed right-hand sides (rhs):
+Procedure parameters are variables; they may be modified during the
+execution of their procedures.  A procedure's parameters and local
+variables must be distinct variable names.  The three kinds of
+assignment statements differ according to their allowed right-hand
+sides (rhs):
 \begin{itemize}
 \item The rhs of a random assignment must be a single
   (sub-)distribution.
@@ -923,15 +926,27 @@ procedure updates \ec{guessed} to take into account the supplied
 guess, and decrements the allowed number of tries; otherwise, it does
 nothing.  And its \ec{guessed} procedure returns the value of
 \ec{guessed}, indicating whether the secret has been successfully
-guessed, so far. \ec{Or} \emph{satisfies} the specification of the
+guessed, so far.
+\ec{Or} \emph{satisfies} the specification of the
 module type \ec{OR}, and we can ask \EasyCrypt\ to check this by
 supplying that module type when declaring \ec{Or}, as in
 Listing~\ref{GuessOrModuleCheck}
 \ecinput{examps/specifications-examp5.ec}{Guessing Oracle Module with
-  Module Type Check} {9-30}{GuessOrModuleCheck} Supplying a module
-type \emph{doesn't} change the result of a module declaration. E.g.,
-if we had omitted \ec{guessed} from the module type \ec{OR}, then the
-module \ec{Or} would still have the procedure \ec{guessed}.
+  Module Type Check} {9-30}{GuessOrModuleCheck}
+
+Supplying a module type \emph{doesn't} change the result of a module
+declaration. E.g., if we had omitted \ec{guessed} from the module type
+\ec{OR}, then the module \ec{Or} would still have the procedure
+\ec{guessed}. Furthermore, when declaring a module, we can ask \EasyCrypt\ to check whether it satisfies multiple module types, as in:
+\begin{easycrypt}{}{}
+module type A = { proc f() : unit }.
+module type B = { proc g() : unit }.
+module X : A, B = {
+  var x, y : int
+  proc f() : unit = { x <- x + 1; }
+  proc g() : unit = { y <- y + 1; }
+}.
+\end{easycrypt}
 
 Suppose we want to declare a cryptographic game using our guessing
 oracle, parameterized by an adversary with access to the \ec{guess}
@@ -1050,8 +1065,9 @@ Finally, the declaration
 module SimpGame = Game(SimpAdv).
 \end{easycrypt}
 declares \ec{SimpGame} to be the specialization of \ec{Game} to
-our simple adversary, \ec{SimpAdv}.
-
+our simple adversary, \ec{SimpAdv}. When processing this declaration,
+\EasyCrypt's type checker verifies that \ec{SimpAdv} satisfies
+the specification \ec{ADV}.
 The reader might be wondering what---if anything---prevents us writing
 a version of \ec{SimpAdv} that directly accesses/calls the global
 variables and procedures of \ec{Or} (or of \ec{Game}, were \ec{SimpAdv}
@@ -1231,16 +1247,15 @@ pred R' ['a, 'b] (x : 'a, y : 'a * 'b) = (y.`1 = x).
 
 Extended expressions also include program memories, although there
 isn't a type of memories, nor are there any operators on memories.  If
-\ec{&$m$} is a memory and $x$ is a program variable that's currently
-in scope (either because it's a global variable of module $M$ that's
-in scope, or because it's a local variable of a procedure that's the
-focus of an \EasyCrypt\ proof goal) then \ec{$x$\{$m$\}} is the
-extended expression for the value of $x$ in \ec{&$m$}.  Quantification
-over memories is allowed:
+\ec{&$m$} is a memory and $x$ is a program variable that's in
+\ec{&$m$}'s domain, then the extended expression for the value of $x$
+in \ec{&$m$}.  Quantification over memories is allowed:
 \begin{easycrypt}{}{}
 forall &#$m$#, #$\phi$#
 \end{easycrypt}
-E.g., suppose we have these modules in scope:
+Here, \ec{&$m$} ranges over all memories with domains equal to the
+set of all global variables of all currently declared modules.
+E.g., suppose we have declared:
 \begin{easycrypt}{}{}
 module X = { var x : int }.
 module Y = { var y : int }.
@@ -1249,15 +1264,42 @@ Then, this is a (true) formula:
 \begin{easycrypt}{}{}
 forall &m, X.x{m} < Y.y{m} => X.x{m} + 1 <= Y.y{m}
 \end{easycrypt}
-We can't do anything with memories other than look up
-the values of variables in them; in particular, formulas can't
-talk about the equality of memories.
+
+\EasyCrypt's logics can introduce memories whose domains include not
+just the global variables of modules but also:
+\begin{itemize}
+\item the local variables and parameters of a
+  procedure; and
+
+\item \ec{res}, whose value in a memory resulting from running a
+  procedure will record the result (return value) of the procedure.
+\end{itemize}
+There is no way for the user to introduce such memories directly.  We
+can't do anything with memories other than look up the values of
+variables in them. In particular, formulas can't test or assert the
+equality of memories.
 
 If $M$ is a module and \ec{&$m$} is a memory, then \ec{(glob
   $\,M$)\{$m$\}} is the value of type \ec{glob $\,M$} consisting of the
 tuple whose components are the values of all the global variables of
 $M$ in \ec{&$m$}.  (See Subsection~\ref{GlobalVariables} for the
 definition of the set of all global variables of a module.)
+
+For convenience, we have the following derived syntax for formulas: If
+$\phi$ is a formula and \ec{&$m$} is a memory, then \ec{$\phi$\{$m$\}}
+means the formula in which every subterm $u$ of $\phi$ consisting of a
+variable or \ec{res} or \ec{glob $\,M$}, for a module
+$M$, is replaced by \ec{$u$\{$m$\}}.  For example,
+\begin{easycrypt}{}{}
+(Y1.y = Y1.z => Y1.z = Y1.y){m}
+\end{easycrypt}
+expands to
+\begin{easycrypt}{}{}
+Y1.y{m} = Y1.z{m} => Y1.z{m} = Y1.y{m}
+\end{easycrypt}
+The parentheses are necessary, because \ec{$\_$\{$m$\}} has
+higher precedence than even function application.
+We say that \ec{&$m$} satisfies $\phi$ iff \ec{$\phi$\{$m$\}} holds.
 
 Extended expressions also include modules, although there isn't a type
 of modules, nor are there module constants. Quantification over modules is
@@ -1267,7 +1309,7 @@ forall (#$M$# <: #$T$#), #$\phi$#
 \end{easycrypt}
 means
 \begin{center}
- ``for all modules $M$ satisfying $T$, $\phi$ holds.
+ for all modules $M$ satisfying $T$, $\phi$ holds.
 \end{center}
 Formulas can't talk about module equality.
 
@@ -1278,72 +1320,166 @@ forall (#$M$# <: #$T$#{#$N_1$#,#\ldots#,#$N_l$#}), #$\phi$#
 \end{easycrypt}
 where $N_1,\ldots,N_l$ are modules, for $l\geq 1$. It's meaning is
 \begin{center}
-  ``for all modules $M$ satisfying $T$ whose sets of global
+  for all modules $M$ satisfying $T$ whose sets of global
   variables\\are disjoint from the sets of global variables of the
   $N_i$, $\phi$ holds.
 \end{center}
 
-For convenience, we have the following derived syntax for formulas: If
-$\phi$ is a formula and \ec{&$m$} is a memory, then
-\ec{($\phi$)\{$m$\}} means the formula in which every subterm $u$ of
-$\phi$ consisting of a variable or having the form \ec{glob $\,M$} for
-a module $M$ is replaced by \ec{$u$\{$m$\}}.
-For example,
-\begin{easycrypt}{}{}
-(Y1.y = Y1.z => Y1.z = Y1.y){m}
-\end{easycrypt}
-expands to
-\begin{easycrypt}{}{}
-Y1.y{m} = Y1.z{m} => Y1.z{m} = Y1.y{m}
-\end{easycrypt}
-
 Finally, \EasyCrypt's ambient logic has probability expressions, \hl,
-\phl and \prhl judgements, and lossless assertions:
+\phl and \prhl judgements, and lossless assertions. When we speak of
+running the body of a procedure from an initial memory whose domain is
+the global variables of declared modules plus the procedure's
+parameters and local variables, we understand that if this process
+terminates, the resulting memory will have a component \ec{res}
+recording the procedure's return value (it will also contain the final
+values of the global variables, as well as the procedure's parameters
+and local variables).
+
 \begin{itemize}
 \item (\textbf{Probability Expressions})\quad A \emph{probability expression}
   has the form
   \begin{center}
     \ec{Pr[$M$.$p$($e_1$,$\,\ldots$,$\,e_n$) @ &$m$ : $\,\phi$]}
   \end{center}
-Here:
+where:
 \begin{itemize}
 \item $p$ is a procedure of module $M$ that takes $n$ arguments, whose
-types agree with the types of the $e_i$.
+types agree with the types of the $e_i$;
 
-\item \ec{&$m$} is a memory over the global variables of the modules
-  the call of \ec{$M$.$p$} depends on.
+\item \ec{&$m$} is a memory whose domain is the global variables of
+  all declared modules;
 
-\item The formula $\phi$ may involve the term \ec{res}, whose
-  type is \ec{$M$.$p$}'s return type. Any memory that results
-  from running the procedure will have a component named \ec{res}
-  storing the procedure's return value.
+\item the formula $\phi$ may involve the term \ec{res}, whose
+  type is \ec{$M$.$p$}'s return type, as well as global variables
+  of modules.
 \end{itemize}
+Occurrences in $\phi$ of bound identifiers (bound outside
+the probability expression) whose names conflict with parameters and local
+variables of \ec{$M$.$p$} will refer to the bound identifiers, not the
+parameters/local variables.
+
 The informal meaning of the probability expression is
 the probability that running \ec{$M$.$p$} with arguments
 $e_1$, \ldots, $e_n$, and initial memory \ec{&$m$} will terminate
-in a final memory \ec{&$m$} satisfying $\phi$, such that
-$\phi\{m\}$ holds.
+in a final memory satisfying $\phi$. To run \ec{$M$.$p$}:
+\begin{itemize}
+\item \ec{&$m$} is extended to map \ec{$M$.$p$}'s parameters to the
+ $e_i$, and to map the procedure's local variables to \emph{arbitrary}
+ initial values;
+
+\item the body of the procedure is run in this extended memory.
+\end{itemize}
+If initializing the procedure's local variables to different values
+affects the result of running the procedure's body, the probability
+may be poorly defined.
 
 \item (\hl Judgements)\quad A \hl \emph{judgement} has the form
   \begin{center}
     \ec{hoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$]}
   \end{center}
+where:
+\begin{itemize}
+\item $p$ is a procedure of module $M$;
+
+\item the formula $\phi$ may involve the global variables of declared
+  modules, as well as the parameters of \ec{$M$.$p$};
+
+\item the formula $\psi$ may involve the term \ec{res}, whose type is
+  \ec{$M$.$p$}'s return type, as well as the global variables of
+  declared modules.
+\end{itemize}
+Occurrences in $\phi$ and $\psi$ of bound identifiers (bound outside
+the judgement) whose names conflict with parameters and local
+variables of \ec{$M$.$p$} will refer to the bound identifiers, not the
+parameters/local variables.
+
+The informal meaning of the \hl judgement is that, for all initial
+memories \ec{&$m$} satisfying $\phi$ and whose domains consist of the
+global variables of declared modules plus the parameters and local
+variables of \ec{$M$.$p$}, if running the body of \ec{$M$.$p$} in
+\ec{&$m$} results in termination with a memory, that memory
+satisfies $\psi$.
 
 \item (\phl Judgements)\quad A \phl \emph{judgement} has one of the forms
   \begin{center}
-    \ec{phoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$] < $\,r$} \\
-    \ec{phoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$] = $\,r$} \\
-    \ec{phoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$] > $\,r$}
+    \ec{phoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$] < $\,e$} \\
+    \ec{phoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$] = $\,e$} \\
+    \ec{phoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$] > $\,e$}
   \end{center}
+where:
+\begin{itemize}
+\item $p$ is a procedure of module $M$;
+
+\item the formula $\phi$ may involve the global variables of declared
+  modules, as well as the parameters of \ec{$M$.$p$};
+
+\item the formula $\psi$ may involve the term \ec{res}, whose type is
+  \ec{$M$.$p$}'s return type, as well as the global variables of
+  declared modules;
+
+\item $e$ is an expression of type \ec{real}.
+\end{itemize}
+Occurrences in $\phi$ and $\psi$ and of bound identifiers (bound
+outside the judgement) whose names conflict with parameters or local
+variables of \ec{$M$.$p$} will refer to the bound identifiers, not the
+parameters/local variables.
+
+The informal meaning of the \phl judgement is that, for all initial
+memories \ec{&$m$} satisfying $\phi$ and whose domains consist of the
+global variables of declared modules plus the parameters and local
+variables of \ec{$M$.$p$}, that the probability that
+\begin{center}
+  running the body of \ec{$M$.$p$} in \ec{&$m$} results in\\
+  termination with a memory satisfying $\psi$
+\end{center}
+has the indicated relation to the value of $e$.
 
 \item (\prhl Judgements)\quad A \prhl \emph{judgement} has the form
   \begin{center}
      \ec{equiv[$M$.$p$ ~ $\,N$.$q$ : $\,\phi$ ==> $\,\psi$]}
   \end{center}
+where:
+\begin{itemize}
+\item $p$ is a procedure of module $M$, and $q$ is a procedure of module
+ $N$;
+
+\item the formula $\phi$ may involve the global variables of declared
+  modules, the parameters of \ec{$M$.$p$}, which must be interpreted
+  in memory \ec{&1} (e.g., \ec{x\{1\}}), and the parameters of
+  \ec{$N$.$q$}, which must be interpreted in memory \ec{&2};
+
+\item the formula $\psi$ may involve the global variables of declared
+  modules, \ec{res\{1\}}, which has the type of \ec{$M$.$p$}'s return type,
+  and \ec{res\{2\}}, which has the type of \ec{$N$.$q$}'s return type.
+\end{itemize}
+Occurrences in $\psi$ of bound identifiers (bound outside the
+judgement) whose names conflict with parameters and local variables of
+\ec{$M$.$p$} and \ec{$N$.$q$} will refer to the bound identifiers, not
+the parameters and local variables, even if they are enclosed in
+memory references (e.g., \ec{x\{1\}}). If \ec{&1} (resp., \ec{&2}) is
+a bound memory (outside the judgement), then all references to \ec{&1}
+(resp., \ec{&2}) in $\phi$ and $\psi$ are renamed to use a fresh
+memory.
+
+The informal meaning of the \prhl judgement is that, for all initial
+memories \ec{&1} whose domains consist of the global variables of
+declared modules plus the parameters and local variables of
+\ec{$M$.$p$}, for all initial memories \ec{&2} whose domains consist
+of the global variables of declared modules plus the parameters and
+local variables of \ec{$N$.$q$}, if $\phi$ holds, then there is an
+isomorphism from the probability distribution of final memories of
+\ec{$M$.$p$} to the probability distribution of the final memories of
+\ec{$N$.$q$} that respects $\psi$, i.e., such that for each pair of
+memories $(\ec{&}m,\ec{&}n)$, the formula formed by replacing
+references to \ec{&1} with \ec{&$m$}, and references to \ec{&2} with
+\ec{&$n$} in \phi, holds. \textbf(This isn't quite right!)}
 
 \item (Lossless Assertions)\quad A \emph{lossless assertion} has the form
   \begin{center}
-    \ec{islossless M.p}
+    \ec{islossless $\,M$.$p$}
   \end{center}
-
+  and is simply an abbreviation for
+  \begin{center}
+    \ec{phoare[$M$.$p$ : true ==> true] = 1\%r}
+  \end{center}
 \end{itemize}
