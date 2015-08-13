@@ -4,9 +4,7 @@ module M = {
   var x : int
     
   proc init(bnd : int) : unit = {
-    var y : int;
-    y <$ [-bnd .. bnd];
-    x <- x + y;
+    x <$ [-bnd .. bnd];
   }
     
   proc incr(n : int) : unit = {

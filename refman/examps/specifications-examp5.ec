@@ -68,8 +68,7 @@ module Game(Adv : ADV) : GAME = {
     if (high - low < 10)
       advWon <- false;
     else {
-      tries <- (high - low + 1) /% 10;       (* /% is integer division *)
-
+      tries <- (high - low + 1) /% 10;  (* /% is integer division *)
       secret <$ [low .. high];
       Or.init(secret, tries);
       A.doGuessing();
