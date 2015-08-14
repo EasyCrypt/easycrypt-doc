@@ -910,44 +910,33 @@ One declare a module name to be an alias for a module, as in
 module L = N.
 \end{easycrypt}
 
-\subsection{Procedure Execution}
-
-A procedure call has a context---a \emph{memory} recording the global
-variables of all declared modules.  Even if a global variable of a
-module isn't explicitly initialized, it will still have a well-defined
-value of the variable's type in that memory.
-
-When the procedure is called, the memory is extended with initial
-values for the procedure's parameters (the actual arguments to the
-function) and local variables. The intial values for the local
-variables are thus arbitrary values of the variable's types. This is
-modeled in \EasyCrypt's program logics by our not knowing anything
-about them; in the operational semantics, it can be modeled by
-using symbolic values and doing symbolic evaluation.
-
-When a procedure returns, its return value is stored in a special
-component \ec{res} of its memory, but the procedure's parameters
-and local variables are removed from the memory.
-
-When one procedure calls another, the calling procedure's parameters
-and local variables are stored on an auxiliary stack before the call.
-Upon return from the procedure call, those saved variable are loaded
-back into the memory, and the \ec{res} component of the memory is
-removed and stored (in the case of a procedure call assignment) in the
-variable on the left hand side of the procedure call.
-
-For example, given this declaration
+A procedure call is carried out in the context of a \emph{memory}
+recording the values of all global variables of all declared modules.
+So all global variables are---by definition---initialized. On the
+other hand, the local variables of a procedure start out as arbitrary
+values of their types.  This is modeled in \EasyCrypt's program logics
+by our not knowing anything about them. For example, the probability
+of \ec{X.f()}
 \begin{easycrypt}{}{}
 module X = {
+  proc f() : bool = {
+    var b : bool;
+    return b;
+  }
+}.
+\end{easycrypt}
+returning \ec{true} is undefined---we can't prove anything about it.
+On the other hand, just because a local variable isn't initialized
+before use doesn't mean the result of its use will be indeterminiate,
+as illustrated by the procedure \ec{Y.f}, which always returns \ec{0}:
+\begin{easycrypt}{}{}
+module Y = {
   proc f() : int = {
     var x : int;
     return x - x;
   }
 }.
 \end{easycrypt}
-the procedure \ec{X.f} always returns \ec{0}, even though nothing is
-known about which integer is used as the intial value for the local
-variable \ec{x}.
 
 \subsection{Module Types}
 
@@ -1141,12 +1130,12 @@ union of
 \begin{itemize}
 \item the set of global variables that are declared in $M$; and
 
-\item the set of all global variables declared in modules that
-  \emph{could} be read or written by a series of procedure calls
-  beginning with a call of one of $M$'s procedures. By ``could'' we
-  mean the read/write analysis assumes the execution of both branches
-  of conditionals, the execution of while loop bodies, and the
-  terminal of while loops.
+\item the set of all that global variables declared in other modules
+  such that the variables \emph{could} be read or written by a series
+  of procedure calls beginning with a call of one of $M$'s
+  procedures. By ``could'' we mean the read/write analysis assumes the
+  execution of both branches of conditionals, the execution of while
+  loop bodies, and the terminal of while loops.
 \end{itemize}
 To print the global variables of a module $M$, one runs:
 \begin{easycrypt}{}{}
@@ -1309,7 +1298,7 @@ Quantification over memories is allowed:
 forall &#$m$#, #$\phi$#
 \end{easycrypt}
 Here, \ec{&$m$} ranges over all memories with domains equal to the
-set of all global variables of all currently declared modules.
+set of all variables declared as global in currently declared modules.
 E.g., suppose we have declared:
 \begin{easycrypt}{}{}
 module X = { var x : int }.
@@ -1394,15 +1383,15 @@ where:
 \item $p$ is a procedure of module $M$ that takes $n$ arguments, whose
 types agree with the types of the $e_i$;
 
-\item \ec{&$m$} is a memory whose domain is the global variables of
-  all declared modules;
+\item \ec{&$m$} is a memory whose domain is the global variables
+  of all declared modules;
 
 \item the formula $\phi$ may involve the term \ec{res}, whose
   type is \ec{$M$.$p$}'s return type, as well as global variables
   of modules.
 \end{itemize}
-Occurrences in $\phi$ of bound identifiers (bound outside
-the probability expression) whose names conflict with parameters and local
+Occurrences in $\phi$ of bound identifiers (bound outside the
+probability expression) whose names conflict with parameters and local
 variables of \ec{$M$.$p$} will refer to the bound identifiers, not the
 parameters/local variables.
 
@@ -1415,11 +1404,15 @@ in a final memory satisfying $\phi$. To run \ec{$M$.$p$}:
  $e_i$, and to map the procedure's local variables to \emph{arbitrary}
  initial values;
 
-\item the body of the procedure is run in this extended memory.
+\item the body of the procedure is run in this extended memory;
+
+\item if the procedure returns, its return value will be stored in
+  a component \ec{res} of the resulting memory, and the procedure's
+  parameters and local variables will be removed from that
+  memory.
 \end{itemize}
-If initializing the procedure's local variables to different values
-affects the result of running the procedure's body, the probability
-may be poorly defined.
+If the procedure doesn't initialize its local variables before using
+them, the probability expression may be undefined.
 
 \item (\hl Judgments)\quad A \hl \emph{judgment} has the form
   \begin{center}
@@ -1445,14 +1438,15 @@ The informal meaning of the \hl judgment is that, for all initial
 memories \ec{&$m$} satisfying $\phi$ and whose domains consist of the
 global variables of declared modules plus the parameters and local
 variables of \ec{$M$.$p$}, if running the body of \ec{$M$.$p$} in
-\ec{&$m$} results in termination with a memory, that memory
+\ec{&$m$} results in termination with a memory, the restriction of that
+memory to \ec{res} and the global variables of declared modules
 satisfies $\psi$.
 
 \item (\phl Judgments)\quad A \phl \emph{judgment} has one of the forms
   \begin{center}
-    \ec{phoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$] < $\,e$} \\
-    \ec{phoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$] = $\,e$} \\
-    \ec{phoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$] > $\,e$}
+    \ec{phoare [$M$.$p$ : $\,\phi$ ==> $\,\psi$] < $\,e$} \\
+    \ec{phoare [$M$.$p$ : $\,\phi$ ==> $\,\psi$] = $\,e$} \\
+    \ec{phoare [$M$.$p$ : $\,\phi$ ==> $\,\psi$] > $\,e$}
   \end{center}
 where:
 \begin{itemize}
@@ -1476,10 +1470,11 @@ unless it is a constant or nullary operator.
 The informal meaning of the \phl judgment is that, for all initial
 memories \ec{&$m$} satisfying $\phi$ and whose domains consist of the
 global variables of declared modules plus the parameters and local
-variables of \ec{$M$.$p$}, that the probability that
+variables of \ec{$M$.$p$}, the probability that
 \begin{center}
-  running the body of \ec{$M$.$p$} in \ec{&$m$} results in\\
-  termination with a memory satisfying $\psi$
+  running the body of \ec{$M$.$p$} in \ec{&$m$} results in
+  termination \\ with a memory whose restriction to \ec{res} and
+  the global \\ variables of declared modules satisfies $\psi$
 \end{center}
 has the indicated relation to the value of $e$.
 
@@ -1515,8 +1510,30 @@ memories \ec{&1} whose domains consist of the global variables of
 declared modules plus the parameters and local variables of
 \ec{$M$.$p$}, for all initial memories \ec{&2} whose domains consist
 of the global variables of declared modules plus the parameters and
-local variables of \ec{$N$.$q$}, if $\phi$ holds, then
-\fix{missing definition}
+local variables of \ec{$N$.$q$}, if $\phi$ holds, then the
+sub-distributions on memories $\Pi_p$ and $\Pi_q$ obtained by running
+\ec{$M$.$p$} on \ec{&1}, storing $p$'s result in the component
+\ec{res} of the resulting memory, from which $p$'s parameters and
+local variables are removed, and running \ec{$N$.$q$} on \ec{&2},
+storing $q$'s result in the component \ec{res} of the resulting
+memory, from which $q$'s parameters and local variables are removed,
+satisfy $\psi$, in the following sense.  (The probability of a memory
+in $\Pi_p$ (resp., $\Pi_q$) is the probability that $p$ (resp., $q$)
+will terminate with that memory. $\Pi_p$ and $\Pi_q$ are
+\emph{sub}-distributions on memories because $p$ and $q$ may
+fail to terminate.)
+
+We say that $(\Pi_p, \Pi_q)$ \emph{satisfy} $\psi$ iff there is a
+function $f$ dividing the probability assigned to each memory
+\ec{&$m$} by $\Pi_p$ among the memories \ec{&$n$} related to it by
+$\psi$ (\ec{&$m$} and \ec{&$n$} are related according to $\psi$ iff
+$\psi$ holds when references to \ec{&1} are replaced by reference to
+\ec{&$m$}, and reference to \ec{&2} are replaced by reference to
+\ec{&$n$}) such that, for all memories \ec{&$n$}, the value assigned
+to \ec{&$n$} by $\Pi_q$ is the sum of all the probabilities
+distributed to \ec{&$n$} by $f$. (When $\psi$ is an
+equivalence like \ec{=\{res\}} (i.e., \ec{res\{1\} = res\{2\}}), this
+  is particulary easy to interpret.)
 
 \item (Lossless Assertions)\quad A \emph{lossless assertion} has the form
   \begin{center}
@@ -1524,11 +1541,11 @@ local variables of \ec{$N$.$q$}, if $\phi$ holds, then
   \end{center}
   and is simply an abbreviation for
   \begin{center}
-    \ec{phoare[$M$.$p$ : true ==> true] = 1\%r}
+    \ec{phoare [$M$.$p$ : true ==> true] = 1\%r}
   \end{center}
 \end{itemize}
 
-Consider these declarations:
+For the purpose of giving some examples, consider these declarations:
 \begin{easycrypt}{}{}
 module G1 = {
   proc f() : bool = {
@@ -1548,12 +1565,13 @@ module G2 = {
 \end{easycrypt}
 Then:
 \begin{itemize}
-\item If \ec{&$m$} is a memory,
+\item The expression
 \begin{easycrypt}{}{}
 Pr[G1.f() @ &m : res]
 \end{easycrypt}
 is the probability that \ec{G1.f()} returns \ec{true} when run
-in this memory. (It's value is \ec{1\%r / 2\%r}.)
+in the memory \ec{&m}. (The memory is irrelevant, and the expression's
+value is \ec{1\%r / 2\%r}.)
 
 \item The \hl judgment
 \begin{easycrypt}{}{}
@@ -1564,7 +1582,7 @@ its return value will be \ec{false}. (This judgment is \ec{false}.)
 
 \item The \phl judgment
 \begin{easycrypt}{}{}
-phoare[G2.f : true ==> res] = (1%r / 2%r)
+phoare [G2.f : true ==> res] = (1%r / 2%r)
 \end{easycrypt}
 says that the probability of \ec{G2.f()} returning \ec{true} is
 \ec{1\%r / 2\%r}. (This judgment is \ec{true}.)
@@ -1598,14 +1616,17 @@ by \EasyCrypt, whereas lemmas must be proved, in the steps that
 follow. The \emph{proof} of a lemma has the form
 \begin{easycrypt}{}{}
 proof.
-#$\mathit{step}_1$#, #\ldots# #$\mathit{step}_1$#.
+#$\mathit{tactic}_1$#. #\ldots# #$\mathit{tactic}_n$#.
 qed.
 \end{easycrypt}
-Actually the \ec{proof.} step is optional, but it's good style to include
-it. The steps of the proof consist of tactic applications as well
-as \ec{print} and \ec{search} commands.
-The \ec{qed.} step saves the lemma, making it available for reuse;
+Actually the \ec{proof} step is optional, but it's good style to include
+it. The steps of the proof consist of tactic applications; but
+\ec{print} and \ec{search} commands are also legal steps.
+The \ec{qed} step saves the lemma, making it available for reuse;
 it's only allowed when the proof is complete.
+If the name chosen for a lemma conflicts with an already stated
+axiom or lemma, one only finds this out upon running \ec{qed}, which
+will fail.
 When the proof for a lemma has a very simple form, the proof may be
 included as part of the lemma's statement:
 \begin{easycrypt}{}{}
@@ -1627,13 +1648,12 @@ or
 \begin{easycrypt}{}{}
 lemma Sym (x y : int) : x = y => y = x.
 \end{easycrypt}
-Parameterizing an axiom or lemma by the free identifiers of its formula
-has the same logical meaning as universally quantifying those identifiers
-in the formula. But we'll see in Chapter~\ref{Tactics} why the
+This version of \ec{Sym} has the same logical meaning as the previous
+one. But we'll see in Chapter~\ref{Tactics} why the
 parameterized form makes an axiom or lemma easier to apply.
 
 Polymorphic axioms and lemmas may be stated using a syntax reminiscent
-of the one for operators:
+of the one for polymorphic operators:
 \begin{easycrypt}{}{}
 lemma Sym ['a] (x y : 'a) : x = y => y = x.
 lemma PairEq ['a, 'b] (x x' : 'a) (y y' : 'b) :
@@ -1652,14 +1672,14 @@ E.g., an abstract type of monoids may be axiomatized by:
 type monoid.
 op id : monoid.
 op (+) : monoid -> monoid -> monoid.
-axiom LeftIdentity (x : monoid) :
-  id + x = x.
-axiom RightIdentity (x : monoid) :
-  x + id = x.
-axiom Associative (x y z : monoid) :
-  x + (y + z) = (x + y) + z.
+axiom LeftIdentity (x : monoid) : id + x = x.
+axiom RightIdentity (x : monoid) : x + id = x.
+axiom Associative (x y z : monoid) : x + (y + z) = (x + y) + z.
 \end{easycrypt}
-Here, we know nothing about \ec{monoid} other than these axioms.
+Any proofs we do involving monoids will then apply to any valid
+instantiation of \ec{monoid}, \ec{id} and \ec{(+)}. In
+Chapter~\ref{Structuring}, we'll see how to carry out such instantiations
+using theory cloning.
 
 One must be careful with axioms, however, because it's easy to introduce
 inconsistencies, allowing one to prove false formulas. E.g., because
@@ -1694,7 +1714,7 @@ Lemma \ec{Invar}
 \begin{easycrypt}{}{}
 lemma Invar (X <: T{G}) (n : int) :
   islossless X.f =>
-  phoare[G(X).g : G.x = n ==> G.x = n] = 1%r.
+  phoare [G(X).g : G.x = n ==> G.x = n] = 1%r.
 \end{easycrypt}
 which is parameterized by an abstract module \ec{X} of module type
 \ec{T} that is guaranteed not to access or modify \ec{G.x}, and an

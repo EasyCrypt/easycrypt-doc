@@ -20,38 +20,12 @@
   includerangemarker=false,
   basicstyle=\small\sffamily,
   identifierstyle={},
-  keywordstyle=[1]{\color{OliveGreen}},
+  keywordstyle=[1]{\bfseries},
   keywordstyle=[2]{\bfseries},
-  keywordstyle=[3]{\color{Blue}},
-  keywordstyle=[4]{\bfseries\color{OliveGreen}},
-  keywordstyle=[5]{\color{Red}},
-  keywordstyle=[6]{\color{Red}}%,
-%  literate=
-%    {=>}{$\Rightarrow$}{1}
-%    {<=}{{$\mathrel{\leq}\;$}}1
-%    {>=}{{$\mathrel{\geq}\;$}}1
-%    {<>}{{$\mathrel{\neq}\;$}}1
-%    {->}{{$\rightarrow\;$}}1
-%    {<-}{{$\leftarrow\;$}}1
-%    {<=>}{{$\Leftrightarrow\;$}}1
-%    {=>}{{$\Rightarrow\;$}}1
-%    {==>}{{$\pmb{\Longrightarrow}$}}1
-%    {\/\\}{{$\wedge\;$}}1
-%    {\\\/}{{$\vee\;$}}1
-%    {!!}{{$\neg\,$}}1
-%    {//=}{{$\dslasheq$}}1
-%    {//}{{$\dslash$}}1
-%    {/=}{{$\slasheq$}}1
-%    {phi}{{$\!\phi\,$}}1
-%    {phi1}{{$\!\phi_1$}}1
-%    {phi2}{{$\!\phi_2$}}1
-%    {phi3}{{$\!\phi_3$}}1
-%    {phin}{{$\!\phi_n$}}1
-%    {psi}{{$\!\psi\,$}}1
-%    {psi1}{{$\!\psi_1$}}1
-%    {psi2}{{$\!\psi_2$}}1
-%    {psi3}{{$\!\psi_3$}}1
-%    {psin}{{$\!\psi_n$}}1
+  keywordstyle=[3]{\bfseries},
+  keywordstyle=[4]{\bfseries},
+  keywordstyle=[5]{\bfseries},
+  keywordstyle=[6]{\bfseries\color{Red}}
 }
 
 \lstdefinestyle{easycrypt-math}{
@@ -69,12 +43,12 @@
   includerangemarker=false,
   basicstyle=\small\sffamily,
   identifierstyle={},
-  keywordstyle=[1]{\color{OliveGreen}},
+  keywordstyle=[1]{\bfseries},
   keywordstyle=[2]{\bfseries},
-  keywordstyle=[3]{\color{Blue}},
-  keywordstyle=[4]{\bfseries\color{OliveGreen}},
-  keywordstyle=[5]{\color{Red}},
-  keywordstyle=[6]{\color{Red}}
+  keywordstyle=[3]{\bfseries},
+  keywordstyle=[4]{\bfseries},
+  keywordstyle=[5]{\bfseries},
+  keywordstyle=[6]{\bfseries\color{Red}}
 }
 
 \lstdefinestyle{easycrypt-math-nocolors}{
@@ -92,14 +66,13 @@
   includerangemarker=false,
   basicstyle=\small\sffamily,
   identifierstyle={},
-  keywordstyle=[1]{},
-  keywordstyle=[2]{},
-  keywordstyle=[3]{},
-  keywordstyle=[4]{},
-  keywordstyle=[5]{},
-  keywordstyle=[6]{}
+  keywordstyle=[1]{\bfseries},
+  keywordstyle=[2]{\bfseries},
+  keywordstyle=[3]{\bfseries},
+  keywordstyle=[4]{\bfseries},
+  keywordstyle=[5]{\bfseries},
+  keywordstyle=[6]{\bfseries\color{Red}}
 }
-
 
 % --------------------------------------------------------------------
 \input{easycrypt-kw.lst}
