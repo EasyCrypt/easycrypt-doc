@@ -8,7 +8,7 @@ expressing cryptographic games, and conclude by presenting its
 ambient logic---which includes judgements of the \hl, \phl and \prhl
 logics.
 
-\EasyCrypt\ has a typed expression language based on the polymorphic
+\EasyCrypt has a typed expression language based on the polymorphic
 typed lambda calculus. Expressions are guaranteed to terminate,
 although their values may be under-specified.  Its type system has:
 \begin{itemize}
@@ -22,7 +22,7 @@ although their values may be under-specified.  Its type system has:
 \end{itemize}
 In its expression language:
 \begin{itemize}
-\item one may use operators imported from the \EasyCrypt\ library, e.g.,
+\item one may use operators imported from the \EasyCrypt library, e.g.,
   for the pre-defined base types;
 
 \item user-defined operators may be defined, including by
@@ -55,7 +55,7 @@ modules, which may be used to model adversaries; and modules
 types---or interfaces---may be formalized, describing modules with at
 least certain specified typed procedures.
 
-\EasyCrypt\ has four logics: a probabilistic, relational Hoare logic
+\EasyCrypt has four logics: a probabilistic, relational Hoare logic
 (\prhl), relating pairs of procedures; a probabilistic Hoare logic
 (\phl) allowing one to carry out proofs about the probability of a
 procedure's execution resulting in a postcondition holding; an
@@ -64,10 +64,10 @@ higher-order logic for proving general mathematical facts, as well as
 for connecting judgements from the other logics
 
 Proofs are carried out using tactics, which is the focus of
-Chapter~\ref{Tactics}.  \EasyCrypt\ also has ways (theories and
+Chapter~\ref{Tactics}.  \EasyCrypt also has ways (theories and
 sections) of structuring specifications and proofs, which will be
 described in Chapter~\ref{Structuring}. In Chapter~\ref{Library},
-we'll survey the \EasyCrypt\ Library, which consists of numerous
+we'll survey the \EasyCrypt Library, which consists of numerous
 theories, defining mathematical structures (like groups, rings
 and fields), data structures (like finite sets and maps), and
 cryptographic constructions (like random oracles and different
@@ -78,7 +78,7 @@ forms of encryption).
 
 \EasyCrypt's language has a number of lexical categories:
 \begin{itemize}
-\item \textbf{Keywords}. \EasyCrypt\ has the following
+\item \textbf{Keywords}. \EasyCrypt has the following
   \emph{keywords}: \ecn{admit}, \ecn{algebra},
   \ecn{alias}, \ecn{apply}, \ecn{as},
   \ecn{assert}, \ecn{assumption}, \ecn{auto},
@@ -237,7 +237,7 @@ forms of encryption).
 
 \section{Script Structure, Printing and Searching}
 
-An \EasyCrypt\ script consists of a sequence of \emph{steps},
+An \EasyCrypt script consists of a sequence of \emph{steps},
 terminated by dots (\ec{.}). Steps may:
 \begin{itemize}
 \item declare types and type operators;
@@ -404,7 +404,7 @@ type tree = [
 \ec{Cons $\,\mathit{tr}_1\,$ $x\,$ $\mathit{tr}_2$} will be the tree
 constructed from an integer $x$ and trees $\mathit{tr}_1$ and
 $\mathit{tr}_2$.
-\EasyCrypt\ must be able to convince itself that a datatype is
+\EasyCrypt must be able to convince itself that a datatype is
 nonempty, most commonly because it has at least one constructor
 taking no arguments, or only arguments not involving the datatype.
 
@@ -435,7 +435,7 @@ Function application is written using juxtapositioning, so that if
 $e_1$ has type \ec{$t_1$ -> $\;\,t_2$}, and $e_2$ has type $t_1$, then
 $e_1\,e_2$ has type $t_2$. Function application associates to the
 left, and anonymous functions extend as far to the right as possible.
-\EasyCrypt\ infers the types of the bound variables of anonymous function
+\EasyCrypt infers the types of the bound variables of anonymous function
 when it can. Nested anonymous functions may be abbreviated by
 collecting all their bound variables together. E.g., consider the
 expression
@@ -450,7 +450,7 @@ or
 \begin{easycrypt}{}{}
 (fun (x : int) (y : int) (z : bool) => y) 0 1 false
 \end{easycrypt}
-or (letting \EasyCrypt\ carry out type inference)
+or (letting \EasyCrypt carry out type inference)
 \begin{easycrypt}{}{}
 (fun x y z => y) 0 1 false
 \end{easycrypt}
@@ -672,7 +672,7 @@ needn't be parenthesized; and the precedence at its third argument is
 lower than the prefix operators, but higher than the infix operators.
 
 For the built-in types \ec{bool}, \ec{int} and \ec{real}, and the type
-operator \ec{distr}, the \EasyCrypt\ Library (see
+operator \ec{distr}, the \EasyCrypt Library (see
 Chapter~\ref{Library}) provides corresponding theories, \ec{Bool},
 \ec{Int}, \ec{Real} and \ec{Distr}. These theories provide various
 operations, axioms, etc.  To make use of a theory, one must
@@ -816,7 +816,7 @@ that's computed as follows:
   the value of this expression as its boolean result.
 \end{itemize}
 
-\EasyCrypt\ tries to infer the return types of procedures and the
+\EasyCrypt tries to infer the return types of procedures and the
 types of parameters and local variables. E.g., our example module
 could be written \ecinput{examps/specifications-examp1a.ec}{Simple
   Module with Type Inference}{3-25}{SimpModInfer} As we've seen, each
@@ -975,7 +975,7 @@ nothing.  And its \ec{guessed} procedure returns the value of
 \ec{guessed}, indicating whether the secret has been successfully
 guessed, so far.
 \ec{Or} \emph{satisfies} the specification of the
-module type \ec{OR}, and we can ask \EasyCrypt\ to check this by
+module type \ec{OR}, and we can ask \EasyCrypt to check this by
 supplying that module type when declaring \ec{Or}, as in
 Listing~\ref{GuessOrModuleCheck}.
 \ecinput{examps/specifications-examp5.ec}{Guessing Oracle Module with
@@ -985,7 +985,7 @@ Supplying a module type \emph{doesn't} change the result of a module
 declaration. E.g., if we had omitted \ec{guessed} from the module type
 \ec{OR}, the module \ec{Or} would still have had the procedure
 \ec{guessed}. Furthermore, when declaring a module, we can ask
-\EasyCrypt\ to check whether it satisfies multiple module types, as
+\EasyCrypt to check whether it satisfies multiple module types, as
 in:
 \begin{easycrypt}{}{}
 module type A = { proc f() : unit }.
@@ -1058,7 +1058,7 @@ The inclusion of the constraint \ec{ADV(O)} in \ec{SimpAdv}'s declaration
 \begin{easycrypt}{}{}
 module SimpAdv(O : OR) : ADV(O) = #\ldots#
 \end{easycrypt}
-makes \EasyCrypt\ check that: its implementation of \ec{chooseRange}
+makes \EasyCrypt check that: its implementation of \ec{chooseRange}
 doesn't use \ec{O} at all; its implementation of \ec{doGuessing}
 doesn't use any of \ec{O}'s procedures other than \ec{guess}; and
 that \ec{chooseRange} initializes \ec{SimpAdv}'s global variables.
