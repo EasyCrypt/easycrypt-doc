@@ -1,6 +1,6 @@
 require import Int Bool Distr.
 
-module M' = {
+module M = {
   var x : int
     
   proc init(bnd) = {
