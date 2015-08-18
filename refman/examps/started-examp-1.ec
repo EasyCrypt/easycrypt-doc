@@ -1,6 +1,7 @@
-(* Make the theory of the booleans available (require) and import its
-   operators, etc., into environment. Bool provides exclusive or (^^)
-   plus uniform distribution on booleans ({0,1}) *)
+(* Load (require) the theory of the booleans and import its symbols,
+   into the environment. The Bool theory defines, among other symbols,
+   the exclusive-or operator (^^) and the uniform distribution on
+   booleans ({0,1}) *)
 
 require import Bool.
 
@@ -9,12 +10,12 @@ require import Bool.
 module G1 = {
   proc f() : bool = {
     var x : bool;
-    x <$ {0,1};
+    x <$ {0,1};       (* sample x in {0,1} *)
     return x;
   }
 }.
 
-(* G2.f() yields the exclusive or of two randomly chosen
+(* G2.f() yields the exclusive-or of two randomly chosen
    booleans *)
 
 module G2 = {
@@ -31,12 +32,12 @@ module G2 = {
 
 lemma G1_G2_f : equiv[G1.f ~ G2.f : true ==> ={res}].
 proof.
-proc.
-(* handle choice of x in G2.f *)
-seq 0 1 : (true).
-rnd {2}. skip. smt.
-(* handle choice of x in G1.f / y in G2.f *)
-rnd (fun (z : bool) => z ^^ x{2}). skip. smt.
+  proc.
+  (* handle choice of x in G2.f *)
+  seq 0 1 : true.
+    rnd {2}. skip. smt.
+  (* handle choice of x in G1.f / y in G2.f *)
+  rnd (fun (z : bool) => z ^^ x{2}). skip. smt.
 qed.
 
 (* G1.f and G2.f are equally likely to return true: *)
@@ -44,8 +45,8 @@ qed.
 lemma G1_G2_true &m :
   Pr[G1.f() @ &m : res] = Pr[G2.f() @ &m : res].
 proof.
-byequiv.
-apply G1_G2_f. trivial. trivial.
+  byequiv.
+  apply G1_G2_f. trivial. trivial.
 qed.
 
 (* G1.f and G2.f are equally likely to return false: *)
@@ -53,6 +54,6 @@ qed.
 lemma G1_G2_false &m :
   Pr[G1.f() @ &m : !res] = Pr[G2.f() @ &m : !res].
 proof.
-byequiv.
-apply G1_G2_f. trivial. trivial.
+  byequiv.
+  apply G1_G2_f. trivial. trivial.
 qed.
