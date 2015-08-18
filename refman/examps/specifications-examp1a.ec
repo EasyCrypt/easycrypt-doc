@@ -1,22 +1,22 @@
 require import Int Bool Distr.
 
-module M = {
+module M' = {
   var x : int
     
-  proc init(bnd : int) : unit = {
+  proc init(bnd) = {
     x <$ [-bnd .. bnd];
   }
     
-  proc incr(n : int) : unit = {
+  proc incr(n) = {
     x <- x + n;
   }
     
-  proc get() : int = {
+  proc get() = {
     return x;
   }
     
-  proc main() : bool = {
-    var n : int;
+  proc main() = {
+    var n;
     init(100);
     incr(10); incr(-50);
     n <@ get();
