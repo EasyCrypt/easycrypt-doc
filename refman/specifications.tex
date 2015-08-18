@@ -5,7 +5,7 @@ In this chapter, we present \EasyCrypt's language for writing
 cryptographic specifications.  We start by presenting its typed
 expression language, go on to consider its module language for
 expressing cryptographic games, and conclude by presenting its
-ambient logic---which includes judgements of the \hl, \phl and \prhl
+ambient logic---which includes judgments of the \hl, \phl and \prhl
 logics.
 
 \EasyCrypt has a typed expression language based on the polymorphic
@@ -59,9 +59,9 @@ least certain specified typed procedures.
 (\prhl), relating pairs of procedures; a probabilistic Hoare logic
 (\phl) allowing one to carry out proofs about the probability of a
 procedure's execution resulting in a postcondition holding; an
-ordinary (possibilistic) Hoare logic (\hl); and an ambient
+ordinary (probabilistic) Hoare logic (\hl); and an ambient
 higher-order logic for proving general mathematical facts, as well as
-for connecting judgements from the other logics
+for connecting judgments from the other logics
 
 Proofs are carried out using tactics, which is the focus of
 Chapter~\ref{Tactics}.  \EasyCrypt also has ways (theories and
@@ -930,7 +930,7 @@ module X = {
 \end{easycrypt}
 returning \ec{true} is undefined---we can't prove anything about it.
 On the other hand, just because a local variable isn't initialized
-before use doesn't mean the result of its use will be indeterminiate,
+before use doesn't mean the result of its use will be indeterminate,
 as illustrated by the procedure \ec{Y.f}, which always returns \ec{0}:
 \begin{easycrypt}{}{}
 module Y = {
@@ -1194,7 +1194,7 @@ adding to \EasyCrypt's expressions
 
 \item probability expressions and lossless assertions, and
 
-\item \hl, \phl and \prhl judgements,
+\item \hl, \phl and \prhl judgments,
 \end{itemize}
 and identifying the formulas with the extended expressions of type
 \ec{bool}.
@@ -1372,7 +1372,7 @@ where $N_1,\ldots,N_l$ are modules, for $l\geq 1$. Its meaning is
 \end{center}
 
 Finally, \EasyCrypt's ambient logic has probability expressions, \hl,
-\phl and \prhl judgements, and lossless assertions:
+\phl and \prhl judgments, and lossless assertions:
 \begin{itemize}
 \item (\textbf{Probability Expressions})\quad A \emph{probability expression}
   has the form
@@ -1415,7 +1415,7 @@ in a final memory satisfying $\phi$. To run \ec{$M$.$p$}:
 If the procedure doesn't initialize its local variables before using
 them, the probability expression may be undefined.
 
-\item (\hl Judgments)\quad A \hl \emph{judgement} has the form
+\item (\hl Judgments)\quad A \hl \emph{judgment} has the form
   \begin{center}
     \ec{hoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$]}
   \end{center}
@@ -1431,11 +1431,11 @@ where:
   declared modules.
 \end{itemize}
 Occurrences in $\phi$ and $\psi$ of bound identifiers (bound outside
-the judgement) whose names conflict with parameters and local
+the judgment) whose names conflict with parameters and local
 variables of \ec{$M$.$p$} will refer to the bound identifiers, not the
 parameters/local variables.
 
-The informal meaning of the \hl judgement is that, for all initial
+The informal meaning of the \hl judgment is that, for all initial
 memories \ec{&$m$} satisfying $\phi$ and whose domains consist of the
 global variables of declared modules plus the parameters and local
 variables of \ec{$M$.$p$}, if running the body of \ec{$M$.$p$} in
@@ -1443,7 +1443,7 @@ variables of \ec{$M$.$p$}, if running the body of \ec{$M$.$p$} in
 memory to \ec{res} and the global variables of declared modules
 satisfies $\psi$.
 
-\item (\phl Judgments)\quad A \phl \emph{judgement} has one of the forms
+\item (\phl Judgments)\quad A \phl \emph{judgment} has one of the forms
   \begin{center}
     \ec{phoare [$M$.$p$ : $\,\phi$ ==> $\,\psi$] < $\,e$} \\
     \ec{phoare [$M$.$p$ : $\,\phi$ ==> $\,\psi$] = $\,e$} \\
@@ -1463,12 +1463,12 @@ where:
 \item $e$ is an expression of type \ec{real}.
 \end{itemize}
 Occurrences in $\phi$ and $\psi$ and of bound identifiers (bound
-outside the judgement) whose names conflict with parameters or local
+outside the judgment) whose names conflict with parameters or local
 variables of \ec{$M$.$p$} will refer to the bound identifiers, not the
 parameters/local variables. \ec{e} will have to be parenthesized
 unless it is a constant or nullary operator.
 
-The informal meaning of the \phl judgement is that, for all initial
+The informal meaning of the \phl judgment is that, for all initial
 memories \ec{&$m$} satisfying $\phi$ and whose domains consist of the
 global variables of declared modules plus the parameters and local
 variables of \ec{$M$.$p$}, the probability that
@@ -1479,7 +1479,7 @@ variables of \ec{$M$.$p$}, the probability that
 \end{center}
 has the indicated relation to the value of $e$.
 
-\item (\prhl Judgments)\quad A \prhl \emph{judgement} has the form
+\item (\prhl Judgments)\quad A \prhl \emph{judgment} has the form
   \begin{center}
      \ec{equiv[$M$.$p$ ~ $\,N$.$q$ : $\,\phi$ ==> $\,\psi$]}
   \end{center}
@@ -1498,15 +1498,15 @@ where:
   and \ec{res\{2\}}, which has the type of \ec{$N$.$q$}'s return type.
 \end{itemize}
 Occurrences in $\psi$ of bound identifiers (bound outside the
-judgement) whose names conflict with parameters and local variables of
+judgment) whose names conflict with parameters and local variables of
 \ec{$M$.$p$} and \ec{$N$.$q$} will refer to the bound identifiers, not
 the parameters and local variables, even if they are enclosed in
 memory references (e.g., \ec{x\{1\}}). If \ec{&1} (resp., \ec{&2}) is
-a bound memory (outside the judgement), then all references to \ec{&1}
+a bound memory (outside the judgment), then all references to \ec{&1}
 (resp., \ec{&2}) in $\phi$ and $\psi$ are renamed to use a fresh
 memory.
 
-The informal meaning of the \prhl judgement is that, for all initial
+The informal meaning of the \prhl judgment is that, for all initial
 memories \ec{&1} whose domains consist of the global variables of
 declared modules plus the parameters and local variables of
 \ec{$M$.$p$}, for all initial memories \ec{&2} whose domains consist
@@ -1534,7 +1534,7 @@ $\psi$ holds when references to \ec{&1} are replaced by reference to
 to \ec{&$n$} by $\Pi_q$ is the sum of all the probabilities
 distributed to \ec{&$n$} by $f$. (When $\psi$ is an
 equivalence like \ec{=\{res\}} (i.e., \ec{res\{1\} = res\{2\}}), this
-  is particulary easy to interpret.)
+  is particularly easy to interpret.)
 
 \item (Lossless Assertions)\quad A \emph{lossless assertion} has the form
   \begin{center}
