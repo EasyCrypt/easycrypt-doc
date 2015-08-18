@@ -5,7 +5,7 @@ In this chapter, we present \EasyCrypt's language for writing
 cryptographic specifications.  We start by presenting its typed
 expression language, go on to consider its module language for
 expressing cryptographic games, and conclude by presenting its
-ambient logic---which includes judgments of the \hl, \phl and \prhl
+ambient logic---which includes judgements of the \hl, \phl and \prhl
 logics.
 
 \EasyCrypt\ has a typed expression language based on the polymorphic
@@ -61,7 +61,7 @@ least certain specified typed procedures.
 procedure's execution resulting in a postcondition holding; an
 ordinary (possibilistic) Hoare logic (\hl); and an ambient
 higher-order logic for proving general mathematical facts, as well as
-for connecting judgments from the other logics
+for connecting judgements from the other logics
 
 Proofs are carried out using tactics, which is the focus of
 Chapter~\ref{Tactics}.  \EasyCrypt\ also has ways (theories and
@@ -654,7 +654,8 @@ $d$ will satisfy the function $p$ (in the sense of causing it to return
 \ec{true}).
 
 If $e$ is an expression of type \ec{int}, then
-\ec{$e$\%r} is the corresponding real.
+\ec{$e$\%r} is the corresponding real. \ec{$\_$\%r} has higher precedence
+than even function application.
 
 If $e_1$ is an expression of type \ec{bool} and $e_2,e_3$ are expressions
 of some type $t$, then the \emph{conditional expression}
@@ -815,11 +816,13 @@ that's computed as follows:
   the value of this expression as its boolean result.
 \end{itemize}
 
-As we've seen, each declaration or statement of a procedure is
-terminated with a semicolon.  \EasyCrypt tries to infer the types of
-local variables. So, in the above example, one could write
-\ec{var n;} for the local declaration of \ec{n}.
-One may combine multiple local variable declarations, as in:
+\EasyCrypt\ tries to infer the return types of procedures and the
+types of parameters and local variables. E.g., our example module
+could be written \ecinput{examps/specifications-examp1a.ec}{Simple
+  Module with Type Inference}{3-25}{SimpModInfer} As we've seen, each
+declaration or statement of a procedure is terminated with a
+semicolon.  One may combine multiple local variable declarations, as
+in:
 \begin{easycrypt}{}{}
 var x, y, z : int;
 var u, v;
@@ -1191,7 +1194,7 @@ adding to \EasyCrypt's expressions
 
 \item probability expressions and lossless assertions, and
 
-\item \hl, \phl and \prhl judgments,
+\item \hl, \phl and \prhl judgements,
 \end{itemize}
 and identifying the formulas with the extended expressions of type
 \ec{bool}.
@@ -1247,22 +1250,20 @@ has lower precedence than the binary operations on formulas.
 
 Abstract \emph{predicates} may be defined as in:
 \begin{easycrypt}{}{}
-pred P0 : ().
-pred P1 : (int).
-pred P2 : (int, int * bool).
-pred P3 : (int, int * bool, real -> int).
+pred P0.
+pred P1 : int.
+pred P2 : int & (int * bool).
+pred P3 : int & (int * bool) & (real -> int).
 \end{easycrypt}
 Then, \ec{P0}, \ec{P1}, \ec{P2} and \ec{P3} are extended expressions
 of types \ec{bool}, \ec{int -> bool}, \ec{int -> int * bool -> bool}
 and \ec{int -> int * bool -> (real -> int) -> bool}, respectively.
+The parentheses around \ec{(int * bool)} and \ec{(real -> int)} are
+mandatory.
 Thus, if $e_1$, $e_2$ and $e_3$ are extended expressions of types
 \ec{int}, \ec{int * bool} and \ec{real -> int}, respectively, then
 \ec{P0}, \ecn{P1 $\,e_1$}, \ecn{P2 $\,e_1$ $\,e_2$} and \ecn{P3
   $\,e_1$ $\,e_2$ $\,e_3$} are formulas.
-One may also declare \ec{P0} by simply
-\begin{easycrypt}{}{}
-pred P0.
-\end{easycrypt}
 
 Concrete predicates are defined in a way that is similar to how
 operators are declared.  E.g., if we declare
@@ -1371,7 +1372,7 @@ where $N_1,\ldots,N_l$ are modules, for $l\geq 1$. Its meaning is
 \end{center}
 
 Finally, \EasyCrypt's ambient logic has probability expressions, \hl,
-\phl and \prhl judgments, and lossless assertions:
+\phl and \prhl judgements, and lossless assertions:
 \begin{itemize}
 \item (\textbf{Probability Expressions})\quad A \emph{probability expression}
   has the form
@@ -1414,7 +1415,7 @@ in a final memory satisfying $\phi$. To run \ec{$M$.$p$}:
 If the procedure doesn't initialize its local variables before using
 them, the probability expression may be undefined.
 
-\item (\hl Judgments)\quad A \hl \emph{judgment} has the form
+\item (\hl Judgments)\quad A \hl \emph{judgement} has the form
   \begin{center}
     \ec{hoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$]}
   \end{center}
@@ -1430,11 +1431,11 @@ where:
   declared modules.
 \end{itemize}
 Occurrences in $\phi$ and $\psi$ of bound identifiers (bound outside
-the judgment) whose names conflict with parameters and local
+the judgement) whose names conflict with parameters and local
 variables of \ec{$M$.$p$} will refer to the bound identifiers, not the
 parameters/local variables.
 
-The informal meaning of the \hl judgment is that, for all initial
+The informal meaning of the \hl judgement is that, for all initial
 memories \ec{&$m$} satisfying $\phi$ and whose domains consist of the
 global variables of declared modules plus the parameters and local
 variables of \ec{$M$.$p$}, if running the body of \ec{$M$.$p$} in
@@ -1442,7 +1443,7 @@ variables of \ec{$M$.$p$}, if running the body of \ec{$M$.$p$} in
 memory to \ec{res} and the global variables of declared modules
 satisfies $\psi$.
 
-\item (\phl Judgments)\quad A \phl \emph{judgment} has one of the forms
+\item (\phl Judgments)\quad A \phl \emph{judgement} has one of the forms
   \begin{center}
     \ec{phoare [$M$.$p$ : $\,\phi$ ==> $\,\psi$] < $\,e$} \\
     \ec{phoare [$M$.$p$ : $\,\phi$ ==> $\,\psi$] = $\,e$} \\
@@ -1462,12 +1463,12 @@ where:
 \item $e$ is an expression of type \ec{real}.
 \end{itemize}
 Occurrences in $\phi$ and $\psi$ and of bound identifiers (bound
-outside the judgment) whose names conflict with parameters or local
+outside the judgement) whose names conflict with parameters or local
 variables of \ec{$M$.$p$} will refer to the bound identifiers, not the
 parameters/local variables. \ec{e} will have to be parenthesized
 unless it is a constant or nullary operator.
 
-The informal meaning of the \phl judgment is that, for all initial
+The informal meaning of the \phl judgement is that, for all initial
 memories \ec{&$m$} satisfying $\phi$ and whose domains consist of the
 global variables of declared modules plus the parameters and local
 variables of \ec{$M$.$p$}, the probability that
@@ -1478,7 +1479,7 @@ variables of \ec{$M$.$p$}, the probability that
 \end{center}
 has the indicated relation to the value of $e$.
 
-\item (\prhl Judgments)\quad A \prhl \emph{judgment} has the form
+\item (\prhl Judgments)\quad A \prhl \emph{judgement} has the form
   \begin{center}
      \ec{equiv[$M$.$p$ ~ $\,N$.$q$ : $\,\phi$ ==> $\,\psi$]}
   \end{center}
@@ -1497,15 +1498,15 @@ where:
   and \ec{res\{2\}}, which has the type of \ec{$N$.$q$}'s return type.
 \end{itemize}
 Occurrences in $\psi$ of bound identifiers (bound outside the
-judgment) whose names conflict with parameters and local variables of
+judgement) whose names conflict with parameters and local variables of
 \ec{$M$.$p$} and \ec{$N$.$q$} will refer to the bound identifiers, not
 the parameters and local variables, even if they are enclosed in
 memory references (e.g., \ec{x\{1\}}). If \ec{&1} (resp., \ec{&2}) is
-a bound memory (outside the judgment), then all references to \ec{&1}
+a bound memory (outside the judgement), then all references to \ec{&1}
 (resp., \ec{&2}) in $\phi$ and $\psi$ are renamed to use a fresh
 memory.
 
-The informal meaning of the \prhl judgment is that, for all initial
+The informal meaning of the \prhl judgement is that, for all initial
 memories \ec{&1} whose domains consist of the global variables of
 declared modules plus the parameters and local variables of
 \ec{$M$.$p$}, for all initial memories \ec{&2} whose domains consist
@@ -1573,34 +1574,34 @@ is the probability that \ec{G1.f()} returns \ec{true} when run
 in the memory \ec{&m}. (The memory is irrelevant, and the expression's
 value is \ec{1\%r / 2\%r}.)
 
-\item The \hl judgment
+\item The \hl judgement
 \begin{easycrypt}{}{}
 hoare[G2.f : true ==> !res]
 \end{easycrypt}
 says that, if \ec{G2.f()} halts (which we know it will), then
-its return value will be \ec{false}. (This judgment is \ec{false}.)
+its return value will be \ec{false}. (This judgement is \ec{false}.)
 
-\item The \phl judgment
+\item The \phl judgement
 \begin{easycrypt}{}{}
 phoare [G2.f : true ==> res] = (1%r / 2%r)
 \end{easycrypt}
 says that the probability of \ec{G2.f()} returning \ec{true} is
-\ec{1\%r / 2\%r}. (This judgment is \ec{true}.)
+\ec{1\%r / 2\%r}. (This judgement is \ec{true}.)
 
-\item The \prhl judgment
+\item The \prhl judgement
 \begin{easycrypt}{}{}
 equiv[G1.f ~ G2.f : true ==> res]
 \end{easycrypt}
 says that \ec{G1.f()} and \ec{G2.f()} are equally likely to return
 \ec{true} as well as equally likely to return \ec{false}.
-(This judgment is \ec{true}.)
+(This judgement is \ec{true}.)
 
 \item The lossless assertion
 \begin{easycrypt}{}{}
 lossless G2.f    
 \end{easycrypt}
 says that \ec{G2.f()} always terminates, no matter what memory it's
-run in. (This judgment is \ec{true}.)
+run in. (This judgement is \ec{true}.)
 \end{itemize}
 
 \subsection{Axioms and Lemmas}
@@ -1729,4 +1730,4 @@ lemma Invar' (X <: T{G}) (n : int) &m :
 \end{easycrypt}
 which has the parameters of \ec{Invar} plus a memory \ec{&m},
 says the same thing as \ec{Invar}, but using a probability
-expression rather than a \phl judgment.
+expression rather than a \phl judgement.
