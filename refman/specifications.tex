@@ -312,19 +312,17 @@ There are four built-in types:
 \item the type \ec{real} of reals.
 \end{itemize}
 
-In addition, for every type $t$ there is a type \ec{$t\;$distr}, which
-should be axiomatized so as to be a \emph{sub-distribution} of type
-$t$, i.e., so that each element of $t$ is assigned a probability in
-such a way that the sum of the probabilities of all of $t$'s element
-is no more than $1$. When the sum is equal to $1$, we have a
-\emph{distribution}. \ec{distr} is a \emph{type operator} taking a
-single type argument:
-\begin{easycrypt}{}{}
-type 'a distr
-\end{easycrypt}
-Here, \ec{'a} is a \emph{type variable}, marking the type parameter of
-\ec{distr}; if we substitute an actual type for \ec{'a} in \ec{'a distr},
-we get a type.
+In addition, to every type $t$ is associated the type \ec{$t\;$distr}
+of \emph{(real) discrete sub-distribution}. A discrete sub-distribution over
+a type $t$ is fully defined by its mass function, i.e. by non-negative function
+from $t$ to $\mathbb{R}$ s.t. $\sum_{x \in E} f(x) \le 1$ --- implying that
+$f$ has a discrete support. When the sum is equal to $1$, we say that we have a
+\emph{distribution}.
+%
+Note that \ec{distr} is not a proper type on its own, but a
+\emph{type constructor}, i.e. a function from types to types.
+A proper type is obtained by \emph{applying} \ec{distr} to an
+actual type, as in \ec{int distr} or \ec{bool distr}.
 
 Given types $t_1$ and $t_2$, \ec{$t_1\;$->$\;t_2$} is a function type,
 the type of total function transforming inputs of type $t_1$ to
