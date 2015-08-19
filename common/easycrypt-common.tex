@@ -34,34 +34,9 @@
 % EasyCrypt listings
 
 \usepackage{textcomp}
-
-\usepackage{listings}
+\usepackage[savemem]{listings}
 
 \newcommand{\ensuretext}[1]{\ensuremath{\text{#1}}}
-
-\lstdefinestyle{mylistings}{
-  upquote=true,
-  escapechar=\#,
-  mathescape=false,
-  columns=fullflexible,
-  keepspaces=true,
-  captionpos=b,
-  frame=tb,
-  xleftmargin=.1\textwidth,
-  xrightmargin=.1\textwidth,
-  rangebeginprefix={(**\ begin\ },
-  rangeendprefix={(**\ end\ },
-  rangesuffix={\ *)},
-  includerangemarker=false,
-  basicstyle=\small\sffamily,
-  identifierstyle={}
-}
-
-\lstdefinelanguage{mylistings}{
-  style=mylistings,
-}
-
-\lstset{language=mylistings}
 
 \input{easycrypt.lst}
 
@@ -73,9 +48,11 @@
   {\lstset{language=easycrypt,float=tp,caption={#2},label={#3},#1}}%
   {}
 
-\newcommand{\ecinput}[5][]{\lstinputlisting[language=easycrypt,linerange={#4},caption={#3},label={#5},#1]{#2}}
+\newcommand{\ecinput}[5][]%
+{\lstinputlisting[language=easycrypt,linerange={#4},caption={#3},label={#5},#1]{#2}}
 
-\newcommand{\ecinputfloat}[4]{\lstinputlisting[language=easycrypt,float=tp,linerange={#3},caption={#2},label={#4}]{#1}}
+\newcommand{\ecinputfloat}[4]%
+{\lstinputlisting[language=easycrypt,float=tp,linerange={#3},caption={#2},label={#4}]{#1}}
 
 \def\ls{\lstinline}
 \def\ec#1{\lstinline[language=easycrypt-math]"#1"}
