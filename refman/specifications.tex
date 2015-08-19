@@ -240,7 +240,7 @@ forms of encryption).
 An \EasyCrypt script consists of a sequence of \emph{steps},
 terminated by dots (\ec{.}). Steps may:
 \begin{itemize}
-\item declare types and type operators;
+\item declare types and type constructors;
 
 \item declare operators and predicates;
 
@@ -302,6 +302,8 @@ user-defined types, such as \emph{record} types and \emph{datatypes}
 in Figure~\ref{fig:tyexpr}, whereas the precedence and associativity
 of type operators are given in Figure~\ref{fig:typrec}.
 
+It is worth noting that \EasyCrypt's types must be inhabited --- i.e. nonempty.
+
 \begin{figure}
   \begin{center}
   \begin{tabular}{rcl>{\bf}l}
@@ -357,8 +359,6 @@ A proper type is obtained by \emph{applying} \ec{distr} to an
 actual type, as in \ec{int distr} or \ec{bool distr}. See the
 paragraph on type constructors for more information.
 
-\paragraph{Type variables}
-
 \paragraph{Function types}
 The type expression \ec{tau -> sigma} denotes the type of
 \emph{total functions} mapping elements of type $\tau$ to
@@ -368,15 +368,42 @@ denotes the same type.
 
 \paragraph{Tuple (product) types}
 The type expression \ec{tau_1 * ... * tau_n} denotes the
-type of $n$-tuple whose elements are resp. of type $\tau_i$. This
+type of $n$-tuples whose elements are resp. of type $\tau_i$. This
 includes the type of pairs as well as the type of tuples of $3$ elements
 or more.
 %
 Note that \ec{tau_1 * (tau_2 * tau_3)}, \ec{(tau_1 * tau_2) * tau_3} and
 \ec{tau_1 * tau_2 * tau_3} are all distinct types. The first two
-are pair types, whereas the last one is the type of $3$-tuple.
+are pair types, whereas the last one is the type of $3$-tuples.
+
+\paragraph{Type variables}
+Type variables represent unknown types or type parameters. For example,
+the type \ec{'a * 'a} is the type the of pair whose elements
+are of unknown type \ec{'a}. Type variables may be used in type declarations
+(Section~\ref{sec:tydecl}) to define type constructors or in
+operators/predicates declarations (Section~\ref{sec:opdecl}) to define
+polymorphic operators/predicates. The special type variable \ec{_}
+(underscore) represents a type variable whose name is not specified.
 
 \paragraph{Type constructors}
+
+Type constructors are not type expressions per se, but functions from
+types to types. As seen in the built-in section, \ec{distr} is such
+a type constructor: when applied to the type $\tau$, it gives the
+type \ec{tau distr} of sub-distributions over $\tau$. Note that the
+application is in \emph{postfix} form. One other common type constructors
+is the one \ec{list} of polymorphic list, the type expression
+\ec{tau list} denoting the type of lists whose elements are of type $\tau$.
+
+Type constructors may depend on several type arguments, i.e. may be
+of arity strictly greater than $1$. In that case,
+the type application is curried. For example, the type of finite map
+\ec{(tau, sigma) map} (whose keys are of type $\tau$ and values of
+type $\sigma$) is constructed from the type constructor \ec{map} of
+arity $2$.
+
+By abuse of notations, named types (as \ec{bool} or \ec{int}) can be seen
+as type constructors with no arguments.
 
 \paragraph{Datatypes and record types}
 
@@ -385,8 +412,6 @@ those are always named and must be defined and named before use. See
 Section~\ref{sec:tydecl} for how to define variant and record types.
 
 \subsection{Type Declarations}
-
-\EasyCrypt's types are required to be inhabited --- i.e., nonempty.
 
 Record types may be declared like this:
 \begin{easycrypt}{}{}
