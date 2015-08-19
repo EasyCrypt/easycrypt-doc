@@ -48,6 +48,9 @@
 \makeindex{prhl}
 
 % --------------------------------------------------------------------
+% \includeonly{specifications}
+
+% --------------------------------------------------------------------
 \begin{document}
 
 \maketitle
@@ -56,19 +59,19 @@
 \tableofcontents
 
 % Getting Started: Installation and Basic Usage
-\input{started}
+\include{started}
 % Basic Specifications
-\input{specifications}
+\include{specifications}
 % Tactics
-\input{tactics}
+\include{tactics}
 % Structuring Specifications and Proofs: Theories and Sections
-\input{structuring}
+\include{structuring}
 % Library
-\input{library}
+\include{library}
 % Advanced Features: Options, Pragmas, ...
-\input{advanced}
+\include{advanced}
 % Examples
-\input{examples}
+\include{examples}
 
 \addcontentsline{toc}{chapter}{References}
 \bibliographystyle{alpha}
