@@ -308,16 +308,16 @@ of type operators are given in Figure~\ref{fig:typrec}.
     $\tau, \sigma$ & ::=
       & {\ec{tyvar}} & type variable\\
      && {\ec{_}} & anonymous type variable\\
-     && {\ec{($\tau$)}} & parenthesized type\\
-     && {\ec{$\tau_1\;$ -> $\;\tau_2$}} & function type\\
-     && {\ec{($\tau_1$ * $\;\cdots\;$ * $\tau_n$)}} & tuple type\\
+     && {\ec{(tau)}} & parenthesized type\\
+     && {\ec{tau -> sigma}} & function type\\
+     && {\ec{(tau_1 * ... * tau_n)}} & tuple type\\
      && {\ec{tyname}} & named type\\
-     && {\ec{$\tau\;$ tyname}} & applied type constructor\\
-     && {\ec{($\tau_1$, $\ldots$, $\tau_n$) tyname}} & \emph{ibid.}\\
+     && {\ec{tau tyname}} & applied type constructor\\
+     && {\ec{(tau_1, $\;\ldots$, tau_n) tyname}} & \emph{ibid.}\\
   \end{tabular}
   \end{center}
 
-  \caption{\label{fig:tyexpr} \EasyCrypt's type expressions}}
+  \caption{\label{fig:tyexpr} \EasyCrypt's type expressions}
 \end{figure}
 
 \begin{figure}
@@ -339,17 +339,10 @@ of type operators are given in Figure~\ref{fig:typrec}.
 
 \paragraph{Built-in types}
 
-There are four built-in types:
-\begin{itemize}
-\item the type \ec{unit}, whose single element is \ec{tt} (which may
-  also be written \ec{()});
-
-\item the type \ec{bool} of booleans, \ec{true} and \ec{false};
-
-\item the type \ec{int} of integers; and
-
-\item the type \ec{real} of reals.
-\end{itemize}
+\EasyCrypt comes with built-in types for booleans (\ec{bool}),
+integers (\ec{int}) and reals (\ec{real}), along with the
+singleton type \ec{unit} that is inhabited by the single
+element \ec{tt} (or \ec{()}).
 
 In addition, to every type $t$ is associated the type \ec{$t\;$distr}
 of \emph{(real) discrete sub-distribution}. A discrete sub-distribution
@@ -361,24 +354,39 @@ we say that we have a \emph{distribution}.
 Note that \ec{distr} is not a proper type on its own, but a
 \emph{type constructor}, i.e. a function from types to types.
 A proper type is obtained by \emph{applying} \ec{distr} to an
-actual type, as in \ec{int distr} or \ec{bool distr}.
+actual type, as in \ec{int distr} or \ec{bool distr}. See the
+paragraph on type constructors for more information.
 
-\EasyCrypt's types are required to be inhabited---i.e., nonempty.
+\paragraph{Type variables}
 
-Given types $t_1$ and $t_2$, \ec{$t_1\;$->$\;t_2$} is a function type,
-the type of total function transforming inputs of type $t_1$ to
-outputs of type $t_2$. \ec{->} associates to the right, so that
-\ec{int -> bool -> real} means \ec{int -> (bool -> real)}.
+\paragraph{Function types}
+The type expression \ec{tau -> sigma} denotes the type of
+\emph{total functions} mapping elements of type $\tau$ to
+elements of type $\sigma$. Note that \ec{->} associates to the right,
+so that \ec{int -> bool -> real} and \ec{int -> (bool -> real)}
+denotes the same type.
 
-Given types $t_1$ and $t_2$, \ec{$t_1\;$*$\;t_2$} is a product (tuple)
-type, whose elements are pairs $(x_1, x_2)$ where $x_1$ and $x_2$ are
-elements of $t_1$ and $t_2$, respectively. Tuples may have more than
-two components: e.g., \ec{int * int * real} is the type of triples
-$(x_1, x_2, x_3)$ where $x_1$ and $x_2$ are integers and $x_3$ is a real.
-Note that \ec{int * (int * real)}, \ec{(int * int) * real} and
-\ec{int * int * real} are distinct types; the first two are pair types.
-\ec{*} has higher precedence than \ec{->}, so that, e.g.,
-\ec{int * int -> bool * real} means \ec{(int * int) -> (bool * real)}.
+\paragraph{Tuple (product) types}
+The type expression \ec{tau_1 * ... * tau_n} denotes the
+type of $n$-tuple whose elements are resp. of type $\tau_i$. This
+includes the type of pairs as well as the type of tuples of $3$ elements
+or more.
+%
+Note that \ec{tau_1 * (tau_2 * tau_3)}, \ec{(tau_1 * tau_2) * tau_3} and
+\ec{tau_1 * tau_2 * tau_3} are all distinct types. The first two
+are pair types, whereas the last one is the type of $3$-tuple.
+
+\paragraph{Type constructors}
+
+\paragraph{Datatypes and record types}
+
+There are no expressions for describing datatypes and record types. Indeed,
+those are always named and must be defined and named before use. See
+Section~\ref{sec:tydecl} for how to define variant and record types.
+
+\subsection{Type Declarations}
+
+\EasyCrypt's types are required to be inhabited --- i.e., nonempty.
 
 Record types may be declared like this:
 \begin{easycrypt}{}{}
