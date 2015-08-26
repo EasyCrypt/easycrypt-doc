@@ -1,0 +1,11 @@
+Type variables: <none>
+
+n : int
+H : n = 1 \/ n = 2
+#\hrulefill\hspace*{.5cm}#
+Context : M.f
+
+pre = x %% 3 = n /\ x %% 3 = 1
+
+
+post = (x + 4) %% 3 = n %% 2 + 1

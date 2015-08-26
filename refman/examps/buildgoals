@@ -1,0 +1,15 @@
+#!/bin/bash
+
+shopt -s extglob
+
+rm -f tactics-examp0-*
+easycrypt tactics-examp0.ec
+../../common/procgoals tactics-examp0-+([0-9]).ec
+
+rm -f tactics-examp1-*
+easycrypt tactics-examp1.ec
+../../common/procgoals tactics-examp1-+([0-9]).ec
+
+rm -f tactics-examp2-*
+easycrypt tactics-examp2.ec
+../../common/procgoals tactics-examp2-+([0-9]).ec
