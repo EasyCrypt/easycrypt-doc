@@ -1,115 +1,116 @@
 \chapter{Tactics}
 \label{Tactics}
 
-\EasyCrypt comes with a proof engine that allows to state and prove properties
-about programs written in the various languages.
-%
-Proofs are built interactively by applying tactics, that transform a
-current proof goal into a (possibly empty) set of subgoals such that the
-conjunction of the subgoals implies the original goal.
-%
-This process is repeated, starting from the theorem statement, up to the point
-where all the subgoals correspond to general axioms or premises of the theorem.
+Proofs in \EasyCrypt are carried out using \emph{tactics}, logical
+rules embodying general reasoning principles, which transform the
+current lemma (or \emph{goal}) into zero or more
+\emph{subgoals}---sufficient conditions for the lemma/goal to
+hold. Simple ambient logic goals may be automatically proved using SMT
+solvers.
 
-In this chapter, we describe this proof engine in general before listing and
-describing the existing tactics for various fragments of \EasyCrypt's
-underlying logic.
+In this chapter, we introduce \EasyCrypt's proof engine, before
+describing the tactics for \EasyCrypt's four logics: ambient, \prhl,
+\phl and \hl.
 
-\section{The proof engine}
+\section{Proof Engine}
 
-The proof engine deals with judgments or goals of the form
-$\epsilon; \Gamma \vdash \phi$ where $\epsilon$ is the (global) environment,
-$\Gamma$ is the context (a set of local facts) and $\phi$ is the
-formula we want to prove. Here is an example of such a judgment:
+\EasyCrypt's proof engine works with goal lists, where a \emph{goal}
+has three parts:
+\begin{itemize}
+\item A set of type variables.
 
-\begin{center}
-$\mathsf{Int}; x, y , z: \tint, x \le y \vdash x + z \le y + z$.
-\end{center}
+\item A set of \emph{assumptions}, consisting of identifiers with
+  their types, memories, module names with their module types and
+  restrictions, and named formulas. An identifier's type may involve
+  the type variables, the formulas may involve the type variables,
+  identifiers, memories and module names.
 
-It states that in the environment ($\mathsf{Int}$) solely composed of the
-theory of integers, having three local variables $x, y, z$ of type
-$\mathsf{int}$ along with the fact $x \le y$ (the context $\Gamma$), we are
-interested in proving $x + z \le y + z$.
+\item A \emph{conclusion}, consisting of a single formula, with
+  the same constraints as the assumption formulas.
+\end{itemize}
+Informally, to prove a goal, one must show the conclusion to be true,
+given the truth of the formula assumptions, for all valid instantiations
+of the assumption identifiers, memories and module names.
 
-\medskip
+For example,
+\ecinput{examps/tactics-examp0-2.1.ec}{}{}{}{}
+is a goal.
+And, in the context of the declarations
+\ecinput{examps/tactics-examp2.ec}{}{3-11}{}{}
+this is a goal:
+\ecinput{examps/tactics-examp2-2.0.ec}{}{}{}{}
+The conclusion of this goal is just a nonlinear rendering of the formula
+\begin{easycrypt}{}{}
+phoare [G(X).g : G.x = n ==> G.x = n] = 1%r.
+\end{easycrypt}
+\EasyCrypt's pretty printer renders \prhl, \phl and \hl judgements
+in such a nonlinear style when the judgements appear as
+(as opposed to in) the conclusions of goals.
 
-On top on this, a set of deduction rules is given. They describe how one can
-derive a judgment $\epsilon; \Gamma \vdash \phi$ given that a set of prerequisites
-(or premises) are fulfilled. The general form of such a rule is given
-as follow:
+Internally, \EasyCrypt's proof engine also works with \prhl, \phl and
+\hl judgments involving lists of statements rather than procedure
+names, which we'll call \emph{statement judgements}, below. For
+example, given this declaration
+\ecinput{examps/tactics-examp1.ec}{}{3-9}{}{}
+this is an \phl statement judgement:
+\ecinput{examps/tactics-examp1-3.0.ec}{}{}{}{}
+The pre- and post-conditions of a statement judgement may refer to the
+parameters and local variables of the procedure that's the
+\emph{context} of the conclusion---\ec{M.f} in the preceding
+example. They may also refer to the memories \ec{&$1$} and \ec{&$2$}
+in the case of \prhl statement judgements.
+When a statement judgement appears anywhere other than as the conclusion of
+a goal, the pretty printer renders it in abbreviated linear syntax.
+E.g., the preceding goal is rendered as
+\begin{easycrypt}{}{}
+hoare[if (x %% 3 = 1) {...} : x %% 3 = n ==> x %% 3 = n %% 2 + 1]
+\end{easycrypt}
+Statement judgements can't be directly input by the user.
 
-\begin{mathpar}
- \inferrule{A_1 \cdots A_n}{\epsilon; \Gamma \vdash \phi}
-\end{mathpar}
+When the proof of a lemma is begun, the proof engine starts out with
+a single goal, consisting of the lemma's statement. E.g.,
+the lemma
+\ecinput{examps/tactics-examp0.ec}{}{1-3}{}{}
+gives rise to the goal
+\ecinput{examps/tactics-examp0-1.0.ec}{}{}{}{}
+For parameterized lemmas, the goal includes the lemma's parameters
+as assumptions. E.g.,
+\begin{easycrypt}{}{}
+lemma PairEq (x x' : 'a) (y y' : 'b) :
+  x = x' => y = y' => (x, y) = (x', y').
+\end{easycrypt}
+gives rise to
+\ecinput{examps/tactics-examp0-2.0.ec}{}{}{}{}
 
-It has to be read as: \emph{given that $A_1 \cdots A_n$ are derivable, then
-so is $\epsilon, \Gamma \vdash \phi$}. We give three examples of such deduction
-rules:
+\EasyCrypt's tactics, when applicable, reduce the first goal to zero
+or more subgoals.  E.g., if the first goal is
+\ecinput{examps/tactics-examp1-3.0.ec}{}{}{}{}
+then applying the \ec{if} tactic (handle a conditional) reduces
+(replaces) this goal with the two goals
+\ecinput{examps/tactics-examp1-3.1.ec}{}{}{}{} and
+\ecinput{examps/tactics-examp1-3.2.ec}{}{}{}{}
+(leaving the remaining goals, if any, unchanged).
+If the first goal is
+\ecinput{examps/tactics-examp1-6.0.ec}{}{}{}{}
+then applying the \ec{smt} tactic (try to solve the goal using
+SMT provers) solves the goal, i.e., replaces it with no subgoals.
+Applying a tactic may fail; in this case an error message is issued
+and the list of goals is left unchanged.
 
-\begin{cmathpar}
- \inferrule*[left=MP]
-         {\epsilon; \Gamma \vdash \phi_1 \quad
-          \epsilon; \Gamma \vdash \phi_1 \Rightarrow \phi_2}
-         {\epsilon; \Gamma \vdash \phi_2}
-
- \inferrule*[left=$\Rightarrow$-I]
-         {\epsilon; \Gamma, \phi_1 \vdash \phi_2}
-         {\epsilon; \Gamma \vdash \phi_1 \Rightarrow \phi_2}
-
- \inferrule*[left=Ax]{ }{\epsilon; \Gamma, \phi, \Delta \vdash \phi}
-\end{cmathpar}
-
-The first, the \emph{modus ponens}, states that one can derive
-$\epsilon; \Gamma \vdash \phi_2$ given that $\epsilon; \Gamma \vdash \phi_1
-\Rightarrow \phi_2$ and $\epsilon; \Gamma \vdash \phi_1$ are derivable.
-%
-The next provides a way for deriving $\phi_1 \Rightarrow \phi_2$ from
-a derivation of $\phi_2$, but with a context augmented by $\phi_1$.
-%
-The last states that $\epsilon; \Gamma, \phi, \Delta \vdash \phi$ is derivable as-is.
-
-Combining these deduction rules, it is possible to build a tree rooted by
-a judgment $\epsilon; \Gamma \vdash \phi$ and with leaves composed of deduction
-rules with no premises (as the third one in the previous example). Such a
-tree forms a proof of $\epsilon; \Gamma \vdash \phi$.
-%
-For instance, Figure~\ref{fig:LJproof} gives a proof of
-%
-\[\epsilon; b_1, b_2 : \tbool \vdash (b_1 \Rightarrow b_2) \Rightarrow b_1 \Rightarrow b_2\]
-
-\begin{figure}
-  \begin{mathpar}
-    \inferrule
-      {\inferrule{ }{\epsilon; b_1, b_2 : \tbool, b_1 \Rightarrow b_2, b_1 \vdash b_1 \Rightarrow b_2} \quad
-       \inferrule{ }{\epsilon; b_1, b_2 : \tbool, b_1 \Rightarrow b_2, b_1 \vdash b_1}}
-      {\inferrule
-        {\epsilon; b_1, b_2 : \tbool, b_1 \Rightarrow b_2, b_1 \vdash b_2}
-        {\inferrule
-           {\epsilon; b_1, b_2 : \tbool, b_1 \Rightarrow b_2 \vdash b_1 \Rightarrow b_2}
-           {\epsilon; b_1, b_2 : \tbool \vdash (b_1 \Rightarrow b_2) \Rightarrow b_1 \Rightarrow b_2}}}
-  \end{mathpar}
-
-  \caption{\label{fig:LJproof} Proof tree of
-    $\epsilon; b_1, b_2 : \tbool \vdash
-        (b_1 \Rightarrow b_2) \Rightarrow b_1 \Rightarrow b_2$}
-\end{figure}
-
-The \EasyCrypt proof engine helps the user build such proofs. At each step
-of the proof building, the system presents to the user the set of goals
-that have to be proved. The user can then \emph{apply} a tactic to one of
-them, each tactic corresponding to a deduction rule. If the conclusion
-of the rule corresponding to the applied tactic matches the goal to which
-it is applied, the proof engine replaces it with the set of the
-premises of the applied rule - the subgoals. This application may generate
-no, one or several subgoals depending on the rule. This process is repeated
-iteratively, up to the point where no goals remain.
-
-\section{Intro-patterns and generalization}
-
-\label{s:intro-pattern}
-\label{s:gen-pattern}
+A lemma's proof may be saved, using the step \ec{qed}, when the list
+of goals becomes empty. And this must be done before anything else may
+be done.
 
 \section{Ambient logic}
+\label{AmbientLogic}
+
+In this section, we describe the tactics of \EasyCrypt's
+ambient logic.
+
+\subsection{Intro-patterns and Generalization}
+\label{IntroPatterns}
+
+\subsection{Ambient Logic Tactics}
 
 \input{tactics/idtac.tex}
 \input{tactics/move.tex}
@@ -146,10 +147,13 @@ iteratively, up to the point where no goals remain.
 \input{tactics/admit.tex}
 
 \section{Tacticals}
+\label{Tacticals}
 
-Tactics can be combined together, composed and modified by tacticals. Tacticals do not
-correspond to any deduction rule but make the proof process smoother, and sometimes permit
-the reuse of proofs with similar patterns, but where the fine minutiae might differ.
+Tactics can be combined together, composed and modified by
+\emph{tacticals}. Tacticals do not correspond to any deduction rule
+but make the proof process smoother, and sometimes permit the reuse of
+proofs with similar patterns, but where the fine minutiae might
+differ.
 
 \begin{tactic}[t1; t2]{sequence}
   \begin{tsyntax}[empty]{t1; t2}
@@ -219,115 +223,49 @@ the reuse of proofs with similar patterns, but where the fine minutiae might dif
 \end{tactic}
 
 \section{Program Logics}
+\label{ProgramLogics}
 
-\paragraph{Preliminaries and Notations.}
-Judgments in the program logics may refer to procedures or
-statements. Whenever the context allows both, we use $c$ (or \ec{c})
-to denote programs, using $f$ (or \ec{f}) when only judgments on
-procedures are allowed by the context, and $s$ (or \ec{s}) when only
-judgments on statements are allowed.
+In this section, we describe the tactics of \EasyCrypt's three program
+logics: \prhl, \phl and \hl.  There are five rough classes of program
+logic tactics:
+\begin{enumerate}
+\item those that actually reason about the program in Hoare logic
+  style;
 
-\EasyCrypt includes three different program logics:
-\begin{itemize}
-\item \prhl, or probabilistic relational Hoare logic, with judgments of the form
-%%
-$$\pRHL{P}{c_1}{c_2}{Q}$$
-%%
-where $c_1$ and $c_2$ are programs, and $P$ and $Q$
-are relations on memories.
-\item \phl, or probabilistic Hoare logic, with judgments of the form
-%%
-$$\pHL{P}{c}{Q}{\diamond}{\delta}$$
-%%
-where $c$ is a program, $P$ and $Q$ are predicates on memories,
-$\diamond\in\{\leq,\geq,=\}$ is a comparison relation and $\delta$ is
-a real-valued expression, evaluated in the initial memory.
-\item \hl, or (possibilistic) Hoare logic, with judgments of the form
-%%
-$$\HL{P}{c}{Q}$$
-%%
-where $c$ is a program, and $P$ and $Q$ are predicates on memories.
-\end{itemize}
+\item those that correspond to semantics-preserving program
+  transformations or compiler optimizations;
 
-When $c$ is a procedure, preconditions ($P$ above) operate on memories
-extended with a special $\Arg$ location that refers to the procedure's
-arguments, and postcondition ($Q$ above) operate on memories extended
-with a special $\Res$ location that refers to the procedure's return
-value.
+\item those that operate at the level of specifications,
+  strenghtening, combining or splitting goals without modifying the
+  program;
 
-In the following, given a relation $R$, we denote with $\invrel{R}$
-its inverse relation (that is,
-%%
-$m_1 \rel{R} m_2 \Leftrightarrow m_2 \rel{\invrel{R}} m_1$).
+\item tactics that automate the application of other tactics;
 
-We denote with $\diamond^{\uparrow}$ the function defined by
-$$
-\diamond^{\uparrow} =
-\left\{\begin{array}{l l}
-=    & \textit{if }\ \diamond = \Leftrightarrow \\
-\leq & \textit{if }\ \diamond = \Leftarrow      \\
-\geq & \textit{if }\ \diamond = \Rightarrow
-\end{array}\right.
-$$
+\item advanced tactics for handling eager/lazy sampling and bounding
+  the probability of failure.
+\end{enumerate}
+We discuss these five classes in turn.
 
-Given a predicate $P$, we denote with $\inmem{P}{1}$
-(resp. $\inmem{P}{2}$) the relation defined by
-%%
-$m_1 \rel{\inmem{P}{1}} m_2 \Leftrightarrow P~m_1$
-(resp. $m_1 \rel{\inmem{P}{2}} m_2 \Leftrightarrow P~m_2$).
-We lift logical connectors to predicates and relations over memories
-in the natural way.
+\subsection{Tactics for Reasoning about Programs}
+\label{ReasoningPrograms}
 
-When describing tactics, \ec{<prhl>} denotes a \prhl specification (of
-the form \ec{(_: P ==> Q)} with \ec{P} and \ec{Q} relations on
-memories), \ec{<phl>} denotes a \phl specification (of the form
-\ec{(_: P ==> Q: $\diamond\ \delta$)}, with \ec{P} and \ec{Q}
-predicates on memories, $\diamond$ a comparison operator and $\delta$
-a real-valued expression), and \ec{<hl>} denotes a \hl specification
-(of the form \ec{(_: P ==> Q)}, with \ec{P} and \ec{Q} predicates on
-memories).
-
-\paragraph{Structure of this Section.}
-There are three rough classes of program logic tactics: those that
-operate at the level of specifications, strenghtening, combining or
-splitting goals without modifying the program; those that actually
-reason about the program in Hoare logic style; and those that
-correspond to semantics-preserving program transformations or compiler
-optimizations. We discuss these three classes separately.
-
-\paragraph{Reasoning on Specifications}
-\input{tactics/symmetry.tex}
-\input{tactics/transitivity.tex}
-\input{tactics/conseq.tex}
-\input{tactics/case_pl.tex}
-\input{tactics/phoare_split.tex}
-\input{tactics/byequiv.tex}
-\input{tactics/byphoare.tex}
-\input{tactics/hoare.tex}
-\input{tactics/bypr.tex}
-\input{tactics/exists_star.tex}
-\input{tactics/elim_star.tex}
-\input{tactics/exfalso.tex}
-%\input{tactics/pr_bounded.tex}
-
-\paragraph{Reasoning on Programs}
 Unless specified, the following program logic tactics operate on a
-program's last instruction. Although we describe these tactics as if
-they operated on single instructions, their practical implementation
+program's last statement. Although we describe these tactics as if
+they operated on single statements, their practical implementation
 automatically and implicitly applies tactic \rtactic{seq} to deal with
 context when necessary.
 
 For simple proofs, it is often enough to simply apply the program
-tactic corresponding to the last instruction in the program and let
-\ec{smt} deal with the verification condition once the program has
-been exhausted.
+tactic corresponding to the last statement in the program and let
+\ec{smt} deal with the residual program-free formula, once the program
+has been consumed.
 
-Most of the program reasoning tactics discussed in this paragraph have
-two modes when used on \prhl proof obligations. Their default mode is
-to operate on both programs at once. When a side is specified (using
-\ec{<tactic>\{1\}} or \ec{<tactic>\{2\}}), a one-sided variant is
-used. Apart from the \rtactic{if} tactic, the one-sided variant is in
-fact a combination of the \phl tactic and \rtactic{conseq}.
+Most of the program reasoning tactics discussed in this subsection
+have two modes when used on \prhl proof obligations. Their default
+mode is to operate on both programs at once. When a side is specified
+(using \ec{<tactic>\{1\}} or \ec{<tactic>\{2\}}), a one-sided variant
+is used. Apart from the \rtactic{if} tactic, the one-sided variant is
+in fact a combination of the \phl tactic and \rtactic{conseq}.
 
 \medskip
 
@@ -341,8 +279,9 @@ fact a combination of the \phl tactic and \rtactic{conseq}.
 \input{tactics/call.tex}
 \input{tactics/proc.tex}
 
+\subsection{Tactics for Transforming Programs}
+\label{TransformingPrograms}
 
-\paragraph{Transforming Programs}
 \input{tactics/swap.tex}
 \input{tactics/inline.tex}
 
@@ -359,10 +298,29 @@ fact a combination of the \phl tactic and \rtactic{conseq}.
 \input{tactics/kill.tex}
 \input{tactics/modpath.tex}
 
-\paragraph{Automated Tactics}
+\subsection{Tactics for Reasoning about Specifications}
+
+\input{tactics/symmetry.tex}
+\input{tactics/transitivity.tex}
+\input{tactics/conseq.tex}
+\input{tactics/case_pl.tex}
+\input{tactics/phoare_split.tex}
+\input{tactics/byequiv.tex}
+\input{tactics/byphoare.tex}
+\input{tactics/hoare.tex}
+\input{tactics/bypr.tex}
+\input{tactics/exists_star.tex}
+\input{tactics/elim_star.tex}
+\input{tactics/exfalso.tex}
+
+\subsection{Automated Tactics}
+\label{AutomatedTactics}
+
 \input{tactics/auto.tex}
 \input{tactics/sim.tex}
 
-\paragraph{Advanced Tactics}
+\subsection{Advanced Tactics}
+\label{AdvancedTactics}
+
 \input{tactics/eager.tex}
 \input{tactics/fel.tex}

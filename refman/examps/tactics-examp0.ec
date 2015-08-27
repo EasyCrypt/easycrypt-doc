@@ -1,4 +1,4 @@
-lemma PairEq :
+lemma PairEq ['a, 'b] :
   forall (x x' : 'a) (y y' : 'b),
   x = x' => y = y' => (x, y) = (x', y').
 proof.
