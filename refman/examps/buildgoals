@@ -13,3 +13,39 @@ easycrypt tactics-examp1.ec
 rm -f tactics-examp2-*
 easycrypt tactics-examp2.ec
 ../../common/procgoals tactics-examp2-+([0-9]).ec
+
+rm -f tactics-generalize1-*
+easycrypt tactics-generalize1.ec
+../../common/procgoals tactics-generalize1-+([0-9]).ec
+
+rm -f tactics-generalize2-*
+easycrypt tactics-generalize2.ec
+../../common/procgoals tactics-generalize2-+([0-9]).ec
+
+rm -f tactics-introduction1-*
+easycrypt tactics-introduction1.ec
+../../common/procgoals tactics-introduction1-+([0-9]).ec
+
+rm -f tactics-introduction2-*
+easycrypt tactics-introduction2.ec
+../../common/procgoals tactics-introduction2-+([0-9]).ec
+
+rm -f tactics-introduction3-*
+easycrypt tactics-introduction3.ec
+../../common/procgoals tactics-introduction3-+([0-9]).ec
+
+rm -f tactics-introduction4-*
+easycrypt tactics-introduction4.ec
+../../common/procgoals tactics-introduction4-+([0-9]).ec
+
+rm -f tactics-introduction5-*
+easycrypt tactics-introduction5.ec
+../../common/procgoals tactics-introduction5-+([0-9]).ec
+
+rm -f tactics-introduction6-*
+easycrypt tactics-introduction6.ec
+../../common/procgoals tactics-introduction6-+([0-9]).ec
+
+rm -f tactics-introduction7-*
+easycrypt tactics-introduction7.ec
+../../common/procgoals tactics-introduction7-+([0-9]).ec

@@ -1,0 +1,1 @@
+generalize (y = x)

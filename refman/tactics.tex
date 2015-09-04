@@ -19,11 +19,11 @@ has three parts:
 \begin{itemize}
 \item A set of type variables.
 
-\item A set of \emph{assumptions}, consisting of identifiers with
-  their types, memories, module names with their module types and
-  restrictions, and named formulas. An identifier's type may involve
-  the type variables, the formulas may involve the type variables,
-  identifiers, memories and module names.
+\item An \emph{ordered} set of \emph{assumptions}, consisting of
+  identifiers with their types, memories, module names with their
+  module types and restrictions, and named formulas. An identifier's
+  type may involve the type variables, the formulas may involve the
+  type variables, identifiers, memories and module names.
 
 \item A \emph{conclusion}, consisting of a single formula, with
   the same constraints as the assumption formulas.
@@ -107,8 +107,198 @@ be done.
 In this section, we describe the tactics of \EasyCrypt's
 ambient logic.
 
+\subsection{Proof Terms}
+\label{Proof Terms}
+
+Formulas introduce identifier and formula assumptions using universal
+quantifiers and implications. For example, the formula
+\begin{easycrypt}{}{}
+forall (x y : bool), x = y => forall (z : bool), y = z => x = z.
+\end{easycrypt}
+introduces the assumptions
+\begin{easycrypt}{}{}
+x  : bool
+y  : bool
+H1 : x = y
+z  : bool
+H2 : y = z
+\end{easycrypt}
+(where the names of the two formulas are arbitrary), and has
+\ec{x = z} as its conclusion.
+
+\EasyCrypt has \emph{proof terms}, which partially describe how
+to prove a formula.  Their syntax is described in Figure~\ref{fig:ProofTerms},
+where $X$ ranges over lemma (or formula assumption) names.
+\begin{figure}
+  \begin{center}
+  \begin{tabular}{rcl>{\bf}l}
+    $p$ & ::=
+      & {\ec{_}} & proof hole \\
+     && {\ec{($X$, $\;q_1$, $\;\ldots$, $\;q_n$)}} & lemma application \\
+    $q$ & ::=
+      & {$e$} & expression \\
+      && {$p$} & proof term \\
+  \end{tabular}
+  \end{center}
+  \caption{\label{fig:ProofTerms} \EasyCrypt's Proof Terms}
+\end{figure}
+A proof term for a lemma (or formula assumption) $X$ has components
+corresponding to the assumptions introduced by $X$.  A component
+corresponding to a variable consists of an expression of the
+variable's type. The proof term is explaining how the instantiation of
+the lemma's conclusion with these expressions may be proved from the
+instantiation of the formula components.  A formula component consists
+of a proof term explaining how the instantiation of the formula
+component may be proved.  Proof holes will get turned into subgoals
+when a proof term is applied, e.g., by the \ec{apply} tactic.
+
+Consider, e.g., the following declarations and axioms
+\begin{easycrypt}{}{}
+pred P : int.
+pred Q : int.
+pred R : int.
+axiom P (x : int) : P x.
+axiom Q (x : int) : P x => Q x.
+axiom R (x : int) : P(x + 1) => Q x => R x.
+\end{easycrypt}
+Then, given that \ec{x : int} is an assumption,
+\begin{easycrypt}{}{}
+(R x (P(x + 1)) (Q x (P x)))
+\end{easycrypt}
+is a proof term proving the conclusion \ec{R x}. And
+\begin{easycrypt}{}{}
+(R x _ (Q x _))
+\end{easycrypt}
+is a proof term that, when applied to a goal with conclusion \ec{R x},
+will generated subgoals with conclusions \ec{P(x + 1)} and \ec{P x},
+corresponding to the first and second occurrences of \ec{_}.  When
+using a proof term at the top-level, e.g., via \ec{apply}, one may
+abbreviate some or all of its expressions to \ec{_}, letting
+\EasyCrypt infer the expressions from the conclusion of the goal at
+hand. Going even further, one may abbreviate a single-level proof term
+with lemma $X$ to just $X$, e.g., writing \ec{R} for \ec{(R _ _ _)}.
+Applying \ec{R} to \ec{R x} will generate two subgoals: \ec{P(x + 1)}
+and \ec{Q x}. Below, we'll consider such abbreviates to \emph{be} proof
+terms.
+
+\subsection{Occurrence Selectors}
+\label{OccSels}
+
+Some ambient logic tactics use \emph{occurrence selectors} to restrict
+their operation to certain occurrences of a term or formula in a
+goal's conclusion or formula assumption. The syntax is \ec{\{$i_1$,
+  $\;\ldots$, $\;i_n$\}}, specifying that only occurrences $i_1$
+throught $i_n$ of the term/formula in a depth-first, left-to-right
+traversal of the goal's conclusion or formula assumption should be
+operated on. Specifying \ec{\{- $i_1$, $\;\ldots$, $\;i_n$\}}
+restricts attention to all occurrences \emph{not} in the following
+list.
+
 \subsection{Intro-patterns and Generalization}
 \label{IntroPatterns}
+
+One moves the assumptions of a goal's conclusions into the goal's
+ordered set of assumptions using the introduction tactical.
+\textbf{Description of intro-patterns and matching tomorrow!}
+
+\begin{tactic}[$t$ =>$\;\iota_1 \cdots \iota_n$]{introduction}
+  \begin{tsyntax}[empty]{t=> ip1 ... ipn}
+    Runs the tactic $t$, processing the resulting goals with the
+    introduction patterns $\iota_1$, \ldots, $\iota_n$.
+
+    For example, if the current goal is
+    \ecinput{examps/tactics-introduction1-1.0.ec}{}{}{}{}
+    then running
+    \ecinput{examps/tactics-introduction1-1.ec}{}{}{}{}
+    produces
+    \ecinput{examps/tactics-introduction1-1.1.ec}{}{}{}{}
+
+    For example, if the current goal is
+    \ecinput{examps/tactics-introduction2-1.0.ec}{}{}{}{}
+    then running
+    \ecinput{examps/tactics-introduction2-1.ec}{}{}{}{}
+    produces
+    \ecinput{examps/tactics-introduction2-1.1.ec}{}{}{}{}
+
+    For example, if the current goal is
+    \ecinput{examps/tactics-introduction3-1.0.ec}{}{}{}{}
+    then running
+    \ecinput{examps/tactics-introduction3-1.ec}{}{}{}{}
+    produces
+    \ecinput{examps/tactics-introduction3-1.1.ec}{}{}{}{}
+
+    For example, if the current goal is
+    \ecinput{examps/tactics-introduction4-1.0.ec}{}{}{}{}
+    then running
+    \ecinput{examps/tactics-introduction4-1.ec}{}{}{}{}
+    produces
+    \ecinput{examps/tactics-introduction4-1.1.ec}{}{}{}{}
+
+    For example, if the current goal is
+    \ecinput{examps/tactics-introduction5-1.0.ec}{}{}{}{}
+    then running
+    \ecinput{examps/tactics-introduction5-1.ec}{}{}{}{}
+    produces
+    \ecinput{examps/tactics-introduction5-1.1.ec}{}{}{}{}
+    And then running
+    \ecinput{examps/tactics-introduction5-2.ec}{}{}{}{}
+    on this goal produces
+    \ecinput{examps/tactics-introduction5-2.1.ec}{}{}{}{}
+
+    For example, if the current goal is
+    \ecinput{examps/tactics-introduction6-1.0.ec}{}{}{}{}
+    then running
+    \ecinput{examps/tactics-introduction6-1.ec}{}{}{}{}
+    produces
+    \ecinput{examps/tactics-introduction6-1.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/tactics-introduction6-1.2.ec}{}{}{}{}
+
+    For example, if the current goal is
+    \ecinput{examps/tactics-introduction7-1.0.ec}{}{}{}{}
+    then running
+    \ecinput{examps/tactics-introduction7-1.ec}{}{}{}{}
+    produces
+    \ecinput{examps/tactics-introduction7-1.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/tactics-introduction7-1.2.ec}{}{}{}{}
+  \end{tsyntax}
+\end{tactic}
+
+Generalization moves assumptions back into a goal's conclusion:
+
+\begin{tactic}[generalize $\;\pi_1 \cdots \pi_n$]{generalize}
+  \begin{tsyntax}[empty]{generalize $\;\pi_1 \cdots \pi_n$}
+    Generalize the patterns $\pi_1, \cdots, \pi_n$, starting from
+    $\pi_n$ and going back.
+
+    If a pattern $\pi$ is an assumption, it's moved back into the
+    conclusion, using universal quantification or an implication,
+    as appropriate. If one assumption depends on another, one can't
+    generalize the later without also generalizing the former.
+
+    For example, if the current goal is
+    \ecinput{examps/tactics-generalize2-1.0.ec}{}{}{}{}
+    then running
+    \ecinput{examps/tactics-generalize2-1.ec}{}{}{}{}
+    produces
+    \ecinput{examps/tactics-generalize2-1.1.ec}{}{}{}{}
+    In this example, one can't generalize \ec{x} without also
+    generalizing \ec{H1}.
+
+    A pattern $\pi$ may also be a subformula or subterm of the goal,
+    or \ec{_}, which standard for the whole goal, possibly prefixed by
+    an occurrence selector. This replaces the formula or subterm
+    with a universally quantified identifier of the approprate type.
+
+    For example, if the current goal is
+    \ecinput{examps/tactics-generalize1-1.0.ec}{}{}{}{}
+    then running
+    \ecinput{examps/tactics-generalize1-1.ec}{}{}{}{}
+    produces
+    \ecinput{examps/tactics-generalize1-1.1.ec}{}{}{}{}
+  \end{tsyntax}
+\end{tactic}
 
 \subsection{Ambient Logic Tactics}
 
