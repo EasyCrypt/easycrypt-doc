@@ -1,4 +1,5 @@
 \chapter{Getting Started}
+\label{chap:started}
 
 \section{Introduction}
 
@@ -54,7 +55,7 @@ supporting tools can be found in the project's
 \section{Running \EasyCrypt}
 
 \EasyCrypt scripts resides in files with the \texttt{.ec} suffix. (As
-we will see in Chapter~\ref{Structuring}, \EasyCrypt also has
+we will see in Chapter~\ref{chap:structuring}, \EasyCrypt also has
 \emph{abstract} theories, which must be cloned before being used. Such
 theories reside in files with the \texttt{.eca} suffix.)
 
@@ -66,7 +67,7 @@ easycrypt #$\mathit{file}\mathtt{.ec}$#
 \end{lstlisting}
 \EasyCrypt will display its progress as it checks the file.
 Information about \EasyCrypt's command-line arguments can be found in
-Chapter~\ref{Advanced}.
+Chapter~\ref{chap:advanced}.
 
 When developing \EasyCrypt scripts, though, \EasyCrypt can be run
 \emph{interactively}, as a subprocess of the Emacs text editor. One's
@@ -75,11 +76,11 @@ Emacs front-end for proof assistants.  Upon visiting an \EasyCrypt
 file, the ``Proof-General'' tab of the Emacs menu may be used execute
 the file, step-by-step, as well as to undo steps, etc. Information
 about the ``EasyCrypt'' menu tab may be found in
-Chapter~\ref{Advanced}.
+Chapter~\ref{chap:advanced}.
 
-A sample \EasyCrypt script is shown in Listing~\ref{StartedExamp}.
+A sample \EasyCrypt script is shown in Listing~\ref{list:startedexamp}.
 \ecinput[xleftmargin=.09\textwidth,xrightmargin=.09\textwidth]{examps/started-examp-1.ec}{Sample \EasyCrypt
-  Script}{}{StartedExamp}
+  Script}{}{list:startedexamp}
 %%
 As can be inferred from the example, comments begin and end with
 \ec{(*} and \ec{*)}, respectively; they may be nested. Each sentence
@@ -126,6 +127,6 @@ macros if you have any.
 This document is intended as a reference manual for the \EasyCrypt
 tool, and not as a tutorial on how to build a cryptographic proof, or
 how to conduct interactive proofs. We provide some detailed examples
-in Chapter~\ref{Examples}, but they may still seem obscure even with a
+in Chapter~\ref{chap:examples}, but they may still seem obscure even with a
 good understanding of cryptographic theory. We recommend
 experimenting.

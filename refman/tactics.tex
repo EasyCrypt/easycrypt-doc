@@ -1,5 +1,5 @@
 \chapter{Tactics}
-\label{Tactics}
+\label{chap:tactics}
 
 Proofs in \EasyCrypt are carried out using \emph{tactics}, logical
 rules embodying general reasoning principles, which transform the
@@ -102,13 +102,13 @@ of goals becomes empty. And this must be done before anything else may
 be done.
 
 \section{Ambient logic}
-\label{AmbientLogic}
+\label{sec:ambientlogic}
 
 In this section, we describe the tactics of \EasyCrypt's
 ambient logic.
 
 \subsection{Proof Terms}
-\label{Proof Terms}
+\label{subsec:proofterms}
 
 Formulas introduce identifier and formula assumptions using universal
 quantifiers and implications. For example, the formula
@@ -127,7 +127,7 @@ H2 : y = z
 \ec{x = z} as its conclusion.
 
 \EasyCrypt has \emph{proof terms}, which partially describe how
-to prove a formula.  Their syntax is described in Figure~\ref{fig:ProofTerms},
+to prove a formula.  Their syntax is described in Figure~\ref{fig:proofterms},
 where $X$ ranges over lemma (or formula assumption) names.
 \begin{figure}
   \begin{center}
@@ -140,7 +140,7 @@ where $X$ ranges over lemma (or formula assumption) names.
       && {$p$} & proof term \\
   \end{tabular}
   \end{center}
-  \caption{\label{fig:ProofTerms} \EasyCrypt's Proof Terms}
+  \caption{\label{fig:proofterms} \EasyCrypt's Proof Terms}
 \end{figure}
 A proof term for a lemma (or formula assumption) $X$ has components
 corresponding to the assumptions introduced by $X$.  A component
@@ -182,7 +182,7 @@ and \ec{Q x}. Below, we'll consider such abbreviates to \emph{be} proof
 terms.
 
 \subsection{Occurrence Selectors}
-\label{OccSels}
+\label{subsec:occsels}
 
 Some ambient logic tactics use \emph{occurrence selectors} to restrict
 their operation to certain occurrences of a term or formula in a
@@ -195,7 +195,7 @@ restricts attention to all occurrences \emph{not} in the following
 list.
 
 \subsection{Intro-patterns and Generalization}
-\label{IntroPatterns}
+\label{subsec:intropatterns}
 
 One moves the assumptions of a goal's conclusions into the goal's
 ordered set of assumptions using the introduction tactical.
@@ -207,61 +207,61 @@ ordered set of assumptions using the introduction tactical.
     introduction patterns $\iota_1$, \ldots, $\iota_n$.
 
     For example, if the current goal is
-    \ecinput{examps/tactics-introduction1-1.0.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/1-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics-introduction1-1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/1-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics-introduction1-1.1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/1-1.1.ec}{}{}{}{}
 
     For example, if the current goal is
-    \ecinput{examps/tactics-introduction2-1.0.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/2-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics-introduction2-1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/2-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics-introduction2-1.1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/2-1.1.ec}{}{}{}{}
 
     For example, if the current goal is
-    \ecinput{examps/tactics-introduction3-1.0.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/3-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics-introduction3-1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/3-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics-introduction3-1.1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/3-1.1.ec}{}{}{}{}
 
     For example, if the current goal is
-    \ecinput{examps/tactics-introduction4-1.0.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/4-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics-introduction4-1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/4-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics-introduction4-1.1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/4-1.1.ec}{}{}{}{}
 
     For example, if the current goal is
-    \ecinput{examps/tactics-introduction5-1.0.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/5-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics-introduction5-1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/5-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics-introduction5-1.1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/5-1.1.ec}{}{}{}{}
     And then running
-    \ecinput{examps/tactics-introduction5-2.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/5-2.ec}{}{}{}{}
     on this goal produces
-    \ecinput{examps/tactics-introduction5-2.1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/5-2.1.ec}{}{}{}{}
 
     For example, if the current goal is
-    \ecinput{examps/tactics-introduction6-1.0.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/6-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics-introduction6-1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/6-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics-introduction6-1.1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/6-1.1.ec}{}{}{}{}
     and
-    \ecinput{examps/tactics-introduction6-1.2.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/6-1.2.ec}{}{}{}{}
 
     For example, if the current goal is
-    \ecinput{examps/tactics-introduction7-1.0.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/7-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics-introduction7-1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/7-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics-introduction7-1.1.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/7-1.1.ec}{}{}{}{}
     and
-    \ecinput{examps/tactics-introduction7-1.2.ec}{}{}{}{}
+    \ecinput{examps/tactics/introduction/7-1.2.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}
 
@@ -278,11 +278,11 @@ Generalization moves assumptions back into a goal's conclusion:
     generalize the later without also generalizing the former.
 
     For example, if the current goal is
-    \ecinput{examps/tactics-generalize2-1.0.ec}{}{}{}{}
+    \ecinput{examps/tactics/generalize/2-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics-generalize2-1.ec}{}{}{}{}
+    \ecinput{examps/tactics/generalize/2-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics-generalize2-1.1.ec}{}{}{}{}
+    \ecinput{examps/tactics/generalize/2-1.1.ec}{}{}{}{}
     In this example, one can't generalize \ec{x} without also
     generalizing \ec{H1}.
 
@@ -292,11 +292,11 @@ Generalization moves assumptions back into a goal's conclusion:
     with a universally quantified identifier of the approprate type.
 
     For example, if the current goal is
-    \ecinput{examps/tactics-generalize1-1.0.ec}{}{}{}{}
+    \ecinput{examps/tactics/generalize/1-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics-generalize1-1.ec}{}{}{}{}
+    \ecinput{examps/tactics/generalize/1-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics-generalize1-1.1.ec}{}{}{}{}
+    \ecinput{examps/tactics/generalize/1-1.1.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}
 
@@ -337,7 +337,7 @@ Generalization moves assumptions back into a goal's conclusion:
 \input{tactics/admit.tex}
 
 \section{Tacticals}
-\label{Tacticals}
+\label{sec:tacticals}
 
 Tactics can be combined together, composed and modified by
 \emph{tacticals}. Tacticals do not correspond to any deduction rule
@@ -413,7 +413,7 @@ differ.
 \end{tactic}
 
 \section{Program Logics}
-\label{ProgramLogics}
+\label{sec:programlogics}
 
 In this section, we describe the tactics of \EasyCrypt's three program
 logics: \prhl, \phl and \hl.  There are five rough classes of program
@@ -437,7 +437,7 @@ logic tactics:
 We discuss these five classes in turn.
 
 \subsection{Tactics for Reasoning about Programs}
-\label{ReasoningPrograms}
+\label{subsec:reasoningprograms}
 
 Unless specified, the following program logic tactics operate on a
 program's last statement. Although we describe these tactics as if
@@ -470,7 +470,7 @@ in fact a combination of the \phl tactic and \rtactic{conseq}.
 \input{tactics/proc.tex}
 
 \subsection{Tactics for Transforming Programs}
-\label{TransformingPrograms}
+\label{subsec:transformingprograms}
 
 \input{tactics/swap.tex}
 \input{tactics/inline.tex}
@@ -504,13 +504,13 @@ in fact a combination of the \phl tactic and \rtactic{conseq}.
 \input{tactics/exfalso.tex}
 
 \subsection{Automated Tactics}
-\label{AutomatedTactics}
+\label{subsec:automatedtactics}
 
 \input{tactics/auto.tex}
 \input{tactics/sim.tex}
 
 \subsection{Advanced Tactics}
-\label{AdvancedTactics}
+\label{subsec:advancedtactics}
 
 \input{tactics/eager.tex}
 \input{tactics/fel.tex}

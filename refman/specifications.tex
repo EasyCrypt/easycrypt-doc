@@ -1,5 +1,5 @@
 \chapter{Specifications}
-\label{Specifications}
+\label{chap:specifications}
 
 In this chapter, we present \EasyCrypt's language for writing
 cryptographic specifications.  We start by presenting its typed
@@ -64,9 +64,9 @@ higher-order logic for proving general mathematical facts, as well as
 for connecting judgments from the other logics
 
 Proofs are carried out using tactics, which is the focus of
-Chapter~\ref{Tactics}.  \EasyCrypt also has ways (theories and
+Chapter~\ref{chap:tactics}.  \EasyCrypt also has ways (theories and
 sections) of structuring specifications and proofs, which will be
-described in Chapter~\ref{Structuring}. In Chapter~\ref{Library},
+described in Chapter~\ref{chap:structuring}. In Chapter~\ref{chap:library},
 we'll survey the \EasyCrypt Library, which consists of numerous
 theories, defining mathematical structures (like groups, rings
 and fields), data structures (like finite sets and maps), and
@@ -74,7 +74,7 @@ cryptographic constructions (like random oracles and different
 forms of encryption).
 
 \section{Lexical Categories}
-\label{Lexical}
+\label{sec:lexical}
 
 \EasyCrypt's language has a number of lexical categories:
 \begin{itemize}
@@ -380,8 +380,8 @@ are pair types, whereas the last one is the type of $3$-tuples.
 Type variables represent unknown types or type parameters. For example,
 the type \ec{'a * 'a} is the type the of pair whose elements
 are of unknown type \ec{'a}. Type variables may be used in type declarations
-(Section~\ref{sec:tydecl}) to define type constructors or in
-operators/predicates declarations (Section~\ref{sec:opdecl}) to define
+(Section~\ref{subsec:tydecl}) to define type constructors or in
+operators/predicates declarations (Section~\ref{subsec:expressions}) to define
 polymorphic operators/predicates. The special type variable \ec{_}
 (underscore) represents a type variable whose name is not specified.
 
@@ -409,9 +409,10 @@ as type constructors with no arguments.
 
 There are no expressions for describing datatypes and record types. Indeed,
 those are always named and must be defined and named before use. See
-Section~\ref{sec:tydecl} for how to define variant and record types.
+Section~\ref{subsec:tydecl} for how to define variant and record types.
 
 \subsection{Type Declarations}
+\label{subsec:tydecl}
 
 Record types may be declared like this:
 \begin{easycrypt}{}{}
@@ -496,10 +497,15 @@ type t, ('a, b) u.
 \end{easycrypt}
 We'll see later how such types and type operators may be used.
 
-\subsection{Expressions}
+\subsection{Expressions and Operator Declarations}
+\label{subsec:expressions}
 
 We'll now survey \EasyCrypt's typed expressions. Anonymous functions
-are written \ec{fun ($x$ : $\,t_1$) => $\;e$}, where $x$ is an identifier,
+are written
+\begin{center}
+\ec{fun ($x$ : $\,t_1$) => $\;e$},  
+\end{center}
+where $x$ is an identifier,
 $t_1$ is a type, and $e$ is an expression---probably involving $x$.
 If $e$ has type $t_2$ under the assumption that $x$ has type $t_1$,
 then the anonymous function will have type \ec{$t_1$ -> $\;\,t_2$}.
@@ -632,7 +638,7 @@ abstract value \ec{x} of type \ec{int}.  Function application has
 higher precedence than prefix operators, which have higher precedence
 than infix operators, prefix operators group to the right, and infix
 operators have the associativities and relative precedences that were
-detailed in Section~\ref{Lexical}.
+detailed in Section~\ref{sec:lexical}.
 
 The four mixfix operators may be declared and used as follows. They
 are (double) quoted when being declared or used in non-mixfix form
@@ -667,7 +673,7 @@ op y : bool = 3.[4].
 \end{easycrypt}
 then \ec{y} will evaluate to the same value as \ec{x}.
 
-\item (\ec{_.[_<-_]})\quad If $e_1,e_2,e_3$ are expressions, then
+\item (\ec{_.[_<-_]})\quad If $e_1,e_2,e_3$ are expressions,
     \ec{$e_1$.[$e_2$ <- $\,e_3$]} is translated to \ec{\"_.[_<-_]\"
       $\,e_1$ $\,e_2$ $\,e_3$}, whenever the latter expression is
     well-typed. E.g., if we declare
@@ -715,11 +721,11 @@ The operator \ec{=} is equality. On the booleans, we have negation
 (\ec{<=>}).  The two disjunctions (respectively, conjunctions) are
 semantically equivalent, but are treated differently by \EasyCrypt
 proof engine. The associativities and precedences of the infix
-operators were given in Section~\ref{Lexical}, and (as a prefix
+operators were given in Section~\ref{sec:lexical}, and (as a prefix
 operator) \ec{!} has higher precedence than all of them. The
 expression \ec{$e_1$ <> $\;e_2$} is treated as \ec{!($e_1$ =
   $\;e_2$)}. \ec{<>} is not an operator, but it has the precedence and
-non-associative status of Section~\ref{Lexical}.
+non-associative status of Section~\ref{sec:lexical}.
 The intended meaning of \ec{mu $\,d$ $\,p$} is the probability that
 randomly choosing a value of the given type from the sub-distribution
 $d$ will satisfy the function $p$ (in the sense of causing it to return
@@ -745,7 +751,7 @@ lower than the prefix operators, but higher than the infix operators.
 
 For the built-in types \ec{bool}, \ec{int} and \ec{real}, and the type
 operator \ec{distr}, the \EasyCrypt Library (see
-Chapter~\ref{Library}) provides corresponding theories, \ec{Bool},
+Chapter~\ref{chap:library}) provides corresponding theories, \ec{Bool},
 \ec{Int}, \ec{Real} and \ec{Distr}. These theories provide various
 operations, axioms, etc.  To make use of a theory, one must
 ``require'' it.  E.g.,
@@ -773,7 +779,7 @@ One may combine requiring and importing in one step:
 require import Bool Int Real Distr.
 \end{easycrypt}
 We'll cover theories and their usage in detail in
-Chapter~\ref{Structuring}.
+Chapter~\ref{chap:structuring}.
 
 Requiring the theory \ec{Bool} makes available the value \ec{\{0,1\}}
 of type \ec{bool distr}, which is the uniform distribution on
@@ -846,10 +852,10 @@ Then \ec{n} will evaluate to \ec{3}.
 
 \EasyCrypt's modules consist of typed global variables and procedures,
 which have different name spaces.
-Listing~\ref{SimpMod} contains the definition of a simple module,
+Listing~\ref{list:simpmod} contains the definition of a simple module,
 \ec{M}, which exemplifies much of the module language.
 \ecinput{examps/specifications-examp1.ec}{Simple
-  Module}{}{SimpMod}
+  Module}{}{list:simpmod}
 \ec{M} has one \emph{global variable}---\ec{x}---which is used by the
 \emph{procedures} of \ec{M}---\ec{init}, \ec{incr}, \ec{get} and
 \ec{main}. Global variables must be declared before the procedures
@@ -926,10 +932,10 @@ may use pattern matching, as in
 in the case where $\ldots$ produces a triple.
 
 The two remaining kinds of statements are illustrated in
-Listing~\ref{CondWhileExamp}: \emph{conditionals} and \emph{while
+Listing~\ref{list:condwhileexamp}: \emph{conditionals} and \emph{while
   loops}.
 \ecinput{examps/specifications-examp2.ec}{Conditionals
-  and While Loops} {}{CondWhileExamp}
+  and While Loops} {}{list:condwhileexamp}
 \ec{N} has a single procedure,
 \ec{loop}, which begins by initializing a local variable \ec{y} to
 \ec{0}. It then enters a while loop, which continues executing until
@@ -959,11 +965,11 @@ And when the else part of a conditional is empty (consists of
 if (z <= 5) y <- y - z;
 \end{easycrypt}
 
-As illustrated in Listing~\ref{UsingOtherModuleExamp}, modules may
+As illustrated in Listing~\ref{list:usingothermoduleexamp}, modules may
 access the global variables, and call the procedures, of previously
 declared modules.
 \ecinput{examps/specifications-examp3.ec}{One
-  Module Using Another Module} {}{UsingOtherModuleExamp} Procedure
+  Module Using Another Module} {}{list:usingothermoduleexamp} Procedure
 \ec{g} of \ec{N} both accesses the global variable \ec{x} of module
 \ec{M} (\ec{M.x}), and calls \ec{M}'s procedure, \ec{f} (\ec{M.f}).
 The parameter list of \ec{g} could equivalently be written:
@@ -1034,9 +1040,9 @@ proc init(_ : int, _ : int) : unit
 Note that module types say nothing about the global variables a module
 should have. Modules types have a different name space than modules.
 
-Listing~\ref{GuessOrModule} contains an example guessing oracle
+Listing~\ref{list:guessormodule} contains an example guessing oracle
 implementation.  \ecinput{examps/specifications-examp4.ec}{Guessing
-  Oracle Module} {9-30}{GuessOrModule} Its \ec{init} procedure stores
+  Oracle Module} {9-30}{list:guessormodule} Its \ec{init} procedure stores
 the supplied secret in the global variable \ec{sec}, initializes the
 allowed number of guesses in the global variable \ec{tris}, and
 initializes the \ec{guessed} global variable to record that the secret
@@ -1049,9 +1055,9 @@ guessed, so far.
 \ec{Or} \emph{satisfies} the specification of the
 module type \ec{OR}, and we can ask \EasyCrypt to check this by
 supplying that module type when declaring \ec{Or}, as in
-Listing~\ref{GuessOrModuleCheck}.
+Listing~\ref{list:guessormodulecheck}.
 \ecinput{examps/specifications-examp5.ec}{Guessing Oracle Module with
-  Module Type Check}{9-30}{GuessOrModuleCheck}
+  Module Type Check}{9-30}{list:guessormodulecheck}
 Supplying a module type \emph{doesn't} change the result of a module
 declaration. E.g., if we had omitted \ec{guessed} from the module type
 \ec{OR}, the module \ec{Or} would still have had the procedure
@@ -1119,9 +1125,9 @@ module type ADV(O : OR) = {
 }.
 \end{easycrypt}
 
-The full Guessing Game example is contained in Listing~\ref{FullGuessing}.
+The full Guessing Game example is contained in Listing~\ref{list:fullguessing}.
 \ecinput{examps/specifications-examp5.ec}{Full
-  Guessing Game Example} {}{FullGuessing}
+  Guessing Game Example} {}{list:fullguessing}
 \ec{SimpAdv} is a simple implementation of an adversary.
 The inclusion of the constraint \ec{ADV(O)} in \ec{SimpAdv}'s declaration
 \begin{easycrypt}{}{}
@@ -1195,7 +1201,7 @@ to do this. Instead, we'll see in the next section how such
 constraints are modeled using \EasyCrypt's logic.
 
 \subsection{Global Variables}
-\label{GlobalVariables}
+\label{subsec:globalvariables}
 
 The set of all \emph{global variables of} a module $M$ is the
 union of
@@ -1396,7 +1402,7 @@ equality of memories.
 If $M$ is a module and \ec{&$m$} is a memory, then \ec{(glob
   $\,M$)\{$m$\}} is the value of type \ec{glob $\,M$} consisting of the
 tuple whose components are the values of all the global variables of
-$M$ in \ec{&$m$}.  (See Subsection~\ref{GlobalVariables} for the
+$M$ in \ec{&$m$}.  (See Subsection~\ref{subsec:globalvariables} for the
 definition of the set of all global variables of a module.)
 
 For convenience, we have the following derived syntax for formulas: If
@@ -1707,7 +1713,7 @@ or
 lemma #$\mathit{name}$# : #$\phi$# by [].
 \end{easycrypt}
 In the first case, the proof consists of a single tactic; the meaning of
-\ec{by []} will be described in Chapter~\ref{Tactics}.
+\ec{by []} will be described in Chapter~\ref{chap:tactics}.
 
 One may also parameterize an axiom of lemma by the free identifiers of
 its formula, as in:
@@ -1719,7 +1725,7 @@ or
 lemma Sym (x y : int) : x = y => y = x.
 \end{easycrypt}
 This version of \ec{Sym} has the same logical meaning as the previous
-one. But we'll see in Chapter~\ref{Tactics} why the
+one. But we'll see in Chapter~\ref{chap:tactics} why the
 parameterized form makes an axiom or lemma easier to apply.
 
 Polymorphic axioms and lemmas may be stated using a syntax reminiscent
@@ -1748,7 +1754,7 @@ axiom Associative (x y z : monoid) : x + (y + z) = (x + y) + z.
 \end{easycrypt}
 Any proofs we do involving monoids will then apply to any valid
 instantiation of \ec{monoid}, \ec{id} and \ec{(+)}. In
-Chapter~\ref{Structuring}, we'll see how to carry out such instantiations
+Chapter~\ref{chap:structuring}, we'll see how to carry out such instantiations
 using theory cloning.
 
 One must be careful with axioms, however, because it's easy to introduce
