@@ -10,7 +10,7 @@ lemma L (x y : bool) :
   (forall (z : bool), P x z) \/
   (forall (z w : bool), Q y z w).
 proof.
-dump "tactics-introduction7-1" (case=> [Hx HP X | Hy X HQ] {X}).
+dump "7-1" (case=> [Hx HP X | Hy X HQ] {X}).
 left; apply HP=> //.
 right; apply HQ=> //.
 qed.

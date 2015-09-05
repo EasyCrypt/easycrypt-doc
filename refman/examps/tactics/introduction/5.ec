@@ -5,7 +5,7 @@ lemma L :
   forall (x y : int), x = y => forall (z : int), y = z => x = z.
 proof.
 move=> Sym x y.
-dump "tactics-introduction5-1" (move=> /Sym).
-dump "tactics-introduction5-2" (move=> ->).
+dump "5-1" (move=> /Sym).
+dump "5-2" (move=> ->).
 trivial.
 qed.
