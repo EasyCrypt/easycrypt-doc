@@ -33,12 +33,12 @@ given the truth of the formula assumptions, for all valid instantiations
 of the assumption identifiers, memories and module names.
 
 For example,
-\ecinput{examps/tactics-examp0-2.1.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp0-2.1.ec}{}{}{}{}
 is a goal.
 And, in the context of the declarations
 \ecinput{examps/tactics-examp2.ec}{}{3-11}{}{}
 this is a goal:
-\ecinput{examps/tactics-examp2-2.0.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp2-2.0.ec}{}{}{}{}
 The conclusion of this goal is just a nonlinear rendering of the formula
 \begin{easycrypt}{}{}
 phoare [G(X).g : G.x = n ==> G.x = n] = 1%r.
@@ -53,7 +53,7 @@ names, which we'll call \emph{statement judgements}, below. For
 example, given this declaration
 \ecinput{examps/tactics-examp1.ec}{}{3-9}{}{}
 this is an \phl statement judgement:
-\ecinput{examps/tactics-examp1-3.0.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp1-3.0.ec}{}{}{}{}
 The pre- and post-conditions of a statement judgement may refer to the
 parameters and local variables of the procedure that's the
 \emph{context} of the conclusion---\ec{M.f} in the preceding
@@ -72,7 +72,7 @@ a single goal, consisting of the lemma's statement. E.g.,
 the lemma
 \ecinput{examps/tactics-examp0.ec}{}{1-3}{}{}
 gives rise to the goal
-\ecinput{examps/tactics-examp0-1.0.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp0-1.0.ec}{}{}{}{}
 For parameterized lemmas, the goal includes the lemma's parameters
 as assumptions. E.g.,
 \begin{easycrypt}{}{}
@@ -80,18 +80,18 @@ lemma PairEq (x x' : 'a) (y y' : 'b) :
   x = x' => y = y' => (x, y) = (x', y').
 \end{easycrypt}
 gives rise to
-\ecinput{examps/tactics-examp0-2.0.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp0-2.0.ec}{}{}{}{}
 
 \EasyCrypt's tactics, when applicable, reduce the first goal to zero
 or more subgoals.  E.g., if the first goal is
-\ecinput{examps/tactics-examp1-3.0.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp1-3.0.ec}{}{}{}{}
 then applying the \ec{if} tactic (handle a conditional) reduces
 (replaces) this goal with the two goals
-\ecinput{examps/tactics-examp1-3.1.ec}{}{}{}{} and
-\ecinput{examps/tactics-examp1-3.2.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp1-3.1.ec}{}{}{}{} and
+\ecinput{examps/parts/tactics-examp1-3.2.ec}{}{}{}{}
 (leaving the remaining goals, if any, unchanged).
 If the first goal is
-\ecinput{examps/tactics-examp1-6.0.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp1-6.0.ec}{}{}{}{}
 then applying the \ec{smt} tactic (try to solve the goal using
 SMT provers) solves the goal, i.e., replaces it with no subgoals.
 Applying a tactic may fail; in this case an error message is issued
@@ -293,72 +293,72 @@ see Subsection~\ref{subsec:occsels}).
 
     In its simplest form, the introduction tactical simply gives names
     to assumptions.  For example, if the current goal is
-    \ecinput{examps/tactics/introduction/1-1.0.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/1-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics/introduction/1-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/1-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics/introduction/1-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/1-1.1.ec}{}{}{}{}
     Alternatively, we can use the introduction pattern \ec{?}
     to let \EasyCrypt choose the assumption names, using
     \ec{H} as a base for formula assumptions and starting
     from the identifier names given in universal quantifiers:
-    \ecinput{examps/tactics/introduction/2-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/2-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics/introduction/2-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/2-1.1.ec}{}{}{}{}
     Or we can use the \ec{!} pattern suffix to specify our
     own base assumption names: running
-    \ecinput{examps/tactics/introduction/3-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/3-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics/introduction/3-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/3-1.1.ec}{}{}{}{}
 
     To see how the \ec{->} rewriting pattern works, suppose
     the current goal is
-    \ecinput{examps/tactics/introduction/4-1.0.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/4-1.0.ec}{}{}{}{}
     Then running
-    \ecinput{examps/tactics/introduction/4-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/4-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics/introduction/4-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/4-1.1.ec}{}{}{}{}
     Alternatively, one can introduce the assumption \ec{x = y},
     and then use the \ec{->>} substitution pattern:
     if the current goal is
-    \ecinput{examps/tactics/introduction/8-1.0.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/8-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics/introduction/8-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/8-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics/introduction/8-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/8-1.1.ec}{}{}{}{}
 
     To see how a view may be applied to a not-yet-introduced formula
     assumption, suppose the current goal is
-    \ecinput{examps/tactics/introduction/5-1.0.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/5-1.0.ec}{}{}{}{}
     Then running
-    \ecinput{examps/tactics/introduction/5-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/5-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics/introduction/5-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/5-1.1.ec}{}{}{}{}
     And then running
-    \ecinput{examps/tactics/introduction/5-2.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/5-2.ec}{}{}{}{}
     on this goal produces
-    \ecinput{examps/tactics/introduction/5-2.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/5-2.1.ec}{}{}{}{}
 
     Finally, let's see examples of how a disjunction assumption
     may be destructed, either using the \ec{case} tactic followed
     by a case introduction pattern, or by making the
     case introduction pattern do the destruction.
     For the first case, if the current goal is
-    \ecinput{examps/tactics/introduction/6-1.0.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/6-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics/introduction/6-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/6-1.ec}{}{}{}{}
     produces the two goals
-    \ecinput{examps/tactics/introduction/6-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/6-1.1.ec}{}{}{}{}
     and
-    \ecinput{examps/tactics/introduction/6-1.2.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/6-1.2.ec}{}{}{}{}
     And for the second case, if the current goal is
-    \ecinput{examps/tactics/introduction/7-1.0.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/7-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics/introduction/7-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/7-1.ec}{}{}{}{}
     produces the two goals
-    \ecinput{examps/tactics/introduction/7-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/7-1.1.ec}{}{}{}{}
     and
-    \ecinput{examps/tactics/introduction/7-1.2.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/7-1.2.ec}{}{}{}{}
     Note how we used the clear pattern to discard the assumption
     \ec{X}.
   \end{tsyntax}
@@ -377,11 +377,11 @@ Generalization moves assumptions back into a goal's conclusion:
     generalize the later without also generalizing the former.
 
     For example, if the current goal is
-    \ecinput{examps/tactics/generalize/2-1.0.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/generalize/2-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics/generalize/2-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/generalize/2-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics/generalize/2-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/generalize/2-1.1.ec}{}{}{}{}
     In this example, one can't generalize \ec{x} without also
     generalizing \ec{H1}.
 
@@ -391,15 +391,15 @@ Generalization moves assumptions back into a goal's conclusion:
     with a universally quantified identifier of the approprate type.
 
     For example, if the current goal is
-    \ecinput{examps/tactics/generalize/1-1.0.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/generalize/1-1.0.ec}{}{}{}{}
     then running
-    \ecinput{examps/tactics/generalize/1-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/generalize/1-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics/generalize/1-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/generalize/1-1.1.ec}{}{}{}{}
     Alternatively, running
-    \ecinput{examps/tactics/generalize/3-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/generalize/3-1.ec}{}{}{}{}
     produces
-    \ecinput{examps/tactics/generalize/3-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/generalize/3-1.1.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}
 
