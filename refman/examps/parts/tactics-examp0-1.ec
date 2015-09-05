@@ -1,1 +1,1 @@
-intros x x' y y'
+move=> x x' y y'

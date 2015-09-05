@@ -12,7 +12,7 @@ lemma L (n : int) :
   n = 1 \/ n = 2 =>
   hoare[M.f : x %% 3 = n ==> res %% 3 = (n %% 2) + 1].
 proof.
-dump "tactics-examp1-1" (intros H).
+dump "tactics-examp1-1" (move=> H).
 dump "tactics-examp1-2" (proc).
 dump "tactics-examp1-3" (if).
   (* if branch *)

@@ -1,1 +1,1 @@
-intros H
+move=> H

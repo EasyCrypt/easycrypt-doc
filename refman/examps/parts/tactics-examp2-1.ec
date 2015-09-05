@@ -1,1 +1,1 @@
-intros LL
+move=> LL
