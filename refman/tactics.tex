@@ -104,8 +104,8 @@ be done.
 \section{Ambient logic}
 \label{sec:ambientlogic}
 
-In this section, we describe the tactics of \EasyCrypt's
-ambient logic.
+In this section, we describe the proof terms, tactics and tacticals of
+\EasyCrypt's ambient logic.
 
 \subsection{Proof Terms}
 \label{subsec:proofterms}
@@ -134,7 +134,7 @@ where $X$ ranges over lemma (or formula assumption) names.
   \begin{tabular}{rcl>{\bf}l}
     $p$ & ::=
       & {\ec{_}} & proof hole \\
-     && {\ec{($X$, $\;q_1$, $\;\ldots$, $\;q_n$)}} & lemma application \\
+     && {\ec{($X$, $\;q_1$, $\;\ldots$, $\;q_n$)}} & lemma application \\[.2cm]
     $q$ & ::=
       & {$e$} & expression \\
       && {$p$} & proof term \\
@@ -181,7 +181,7 @@ Applying \ec{R} to \ec{R x} will generate two subgoals: \ec{P(x + 1)}
 and \ec{Q x}. Below, we'll consider such abbreviates to \emph{be} proof
 terms.
 
-\subsection{Occurrence Selectors}
+\subsection{Occurrence Selectors and Rewriting Directions}
 \label{subsec:occsels}
 
 Some ambient logic tactics use \emph{occurrence selectors} to restrict
@@ -192,51 +192,145 @@ throught $i_n$ of the term/formula in a depth-first, left-to-right
 traversal of the goal's conclusion or formula assumption should be
 operated on. Specifying \ec{\{- $i_1$, $\;\ldots$, $\;i_n$\}}
 restricts attention to all occurrences \emph{not} in the following
-list.
+list. They may also be empty, meaning that all applicable occurrences
+should be operated on.
 
-\subsection{Intro-patterns and Generalization}
+Some ambient logic tactics uses \emph{rewriting directions}, $\mathit{dir}$,
+which may either be empty (meaning rewriting from left to right), or \ec{-},
+meaning rewriting from right to left.
+
+\subsection{Introduction Tactical  and Generalization}
 \label{subsec:intropatterns}
 
 One moves the assumptions of a goal's conclusions into the goal's
 ordered set of assumptions using the introduction tactical.
-\textbf{Description of intro-patterns and matching tomorrow!}
+This tactical uses introduction patterns, $\iota$, which are defined
+in Figure~\ref{fig:intropat}.
+\begin{figure}
+  \begin{center}
+  \begin{tabular}{rcl>{\bf}l}
+    $\iota$ & ::=
+      & {$b$} & name \\
+      && {\ec{$b\,$!}} & rename \\
+      && {\ec{_}} & no name \\
+      && {\ec{+}} & auto revert \\
+      && {\ec{?}} & find name \\
+      && {$\mathit{occ}\;$\ec{->}} & rewrite using assumption \\
+      && {$\mathit{occ}\;$\ec{<-}} & rewrite in reverse using assumption \\
+      && {\ec{->>}} & substitute using assumption \\
+      && {\ec{<-}} & substitute in reverse using assumption \\
+      && {\ec{/$p$}} & apply proof term view to assumption \\
+      && {\ec{\{$b_1\cdots b_n$\}}} & clear introduced assumptions \\
+      && {\ec{/=}} & simplify \\
+      && {\ec{//}} & trivial \\
+      && {\ec{//=}} & simplify then trivial \\
+      && {\ec{$\mathit{dir}\;\mathit{occ}\;$@/$p$}} & rewrite using proof term \\
+      && {\ec{[$\iota_{11}\cdots\iota_{1{m_1}}$ | $\;\cdots\,$ | $\;\iota_{n1}\cdots\iota_{n{m_n}}$]}} & case pattern \\[.2cm]
+    $\mathit{b}$ & ::=
+      & {$x$} & identifier \\
+      && {$M$} & module name \\
+      && {\ec{&$m$}} & memory name \\
+  \end{tabular}
+  \end{center}
+  \caption{\label{fig:intropat} \EasyCrypt's Proof Terms}
+\end{figure}
+In this definition, $\mathit{occ}$ ranges over occurrence selectors,
+and $\mathit{dir}$ ranges over directions---see
+see Subsection~\ref{subsec:occsels}).
 
 \begin{tactic}[$t$ =>$\;\iota_1 \cdots \iota_n$]{introduction}
   \begin{tsyntax}[empty]{t=> ip1 ... ipn}
     Runs the tactic $t$, processing the resulting goals with the
-    introduction patterns $\iota_1$, \ldots, $\iota_n$.
+    introduction patterns $\iota_1$, \ldots, $\iota_n$. The introduction
+    patterns are processed from left to right, as follows:
+    \begin{itemize}
+    \item ($b$)\quad The next assumption (universally quantified
+      identifier, module name or memory; or left side of implication)
+      is consumed, and introduced with this name. Fails if the next
+      assumption has neither of these forms.
 
-    For example, if the current goal is
+    \item (\ec{$b\,$!})\quad Same as the preceding case, except that
+      $b$ is used as the base of the introduced name, to avoid naming
+      conflicts.
+
+    \item (\ec{_})\quad Same as the preceding case, except the
+      assumption is introduced with an anonymous name (which can't be
+      uttered by the user).
+
+    \item (\ec{+})\quad Same as the preceding case, except that after
+      the introduction tactical completes, the assumption will be
+      reverted, i.e., un-introduced (using a universal quantifier or
+      implication as appropriate).
+
+    \item (\ec{?})\quad Same as the preceding case, except \EasyCrypt
+      chooses the name by which the assuption is introduced (using
+      universally quantified names as assumption bases).
+
+    \item ($\mathit{occ}\;$\ec{->})\quad Consume the next assumption,
+      which must be an equality, and use it as a left-to-right rewriting
+      rule in the remainder of the goal's conclusion, restricting rewriting
+      to the specified occurrences of the equality's left side.
+
+    \item ($\mathit{occ}\;$\ec{<-})\quad The same as the preceding case,
+      except the rewriting is from right-to-left.
+
+    \item (\ec{->>})\quad The same as \ec{->}, except the consumed
+      equality assuption is used to perform a left-to-right substitution
+      in the entire goal, i.e., in its assumptions, as well as its
+      conclusion.
+
+    \item (\ec{<$$<-})\quad The same as the preceding case, except
+      the substitution is from right-to-left.
+
+    \item (\ec{/$p$})\quad Applies the proof term $p$ to
+
+    \item (\ec{\{$b_1\cdots b_n$\}})\quad Doesn't affect the goal's
+      conclusion, but clears the specified assumptions, i.e., removes
+      them. Fails if one or more of the assumptions can't be cleared,
+      because a remaining assumption depends upon it.
+
+    \end{itemize}
+
+    In its simplest form, the introduction tactical simply gives names
+    to assumptions.  For example, if the current goal is
     \ecinput{examps/tactics/introduction/1-1.0.ec}{}{}{}{}
     then running
     \ecinput{examps/tactics/introduction/1-1.ec}{}{}{}{}
     produces
     \ecinput{examps/tactics/introduction/1-1.1.ec}{}{}{}{}
-
-    For example, if the current goal is
-    \ecinput{examps/tactics/introduction/2-1.0.ec}{}{}{}{}
-    then running
+    Alternatively, we can use the introduction pattern \ec{?}
+    to let \EasyCrypt choose the assumption names, using
+    \ec{H} as a base for formula assumptions and starting
+    from the identifier names given in universal quantifiers:
     \ecinput{examps/tactics/introduction/2-1.ec}{}{}{}{}
     produces
     \ecinput{examps/tactics/introduction/2-1.1.ec}{}{}{}{}
-
-    For example, if the current goal is
-    \ecinput{examps/tactics/introduction/3-1.0.ec}{}{}{}{}
-    then running
+    Or we can use the \ec{!} pattern suffix to specify our
+    own base assumption names: running
     \ecinput{examps/tactics/introduction/3-1.ec}{}{}{}{}
     produces
     \ecinput{examps/tactics/introduction/3-1.1.ec}{}{}{}{}
 
-    For example, if the current goal is
+    To see how the \ec{->} rewriting pattern works, suppose
+    the current goal is
     \ecinput{examps/tactics/introduction/4-1.0.ec}{}{}{}{}
-    then running
+    Then running
     \ecinput{examps/tactics/introduction/4-1.ec}{}{}{}{}
     produces
     \ecinput{examps/tactics/introduction/4-1.1.ec}{}{}{}{}
-
-    For example, if the current goal is
-    \ecinput{examps/tactics/introduction/5-1.0.ec}{}{}{}{}
+    Alternatively, one can introduce the assumption \ec{x = y},
+    and then use the \ec{->>} substitution pattern:
+    if the current goal is
+    \ecinput{examps/tactics/introduction/8-1.0.ec}{}{}{}{}
     then running
+    \ecinput{examps/tactics/introduction/8-1.ec}{}{}{}{}
+    produces
+    \ecinput{examps/tactics/introduction/8-1.1.ec}{}{}{}{}
+
+    To see how a view may be applied to a not-yet-introduced formula
+    assumption, suppose the current goal is
+    \ecinput{examps/tactics/introduction/5-1.0.ec}{}{}{}{}
+    Then running
     \ecinput{examps/tactics/introduction/5-1.ec}{}{}{}{}
     produces
     \ecinput{examps/tactics/introduction/5-1.1.ec}{}{}{}{}
@@ -245,23 +339,28 @@ ordered set of assumptions using the introduction tactical.
     on this goal produces
     \ecinput{examps/tactics/introduction/5-2.1.ec}{}{}{}{}
 
-    For example, if the current goal is
+    Finally, let's see examples of how a disjunction assumption
+    may be destructed, either using the \ec{case} tactic followed
+    by a case introduction pattern, or by making the
+    case introduction pattern do the destruction.
+    For the first case, if the current goal is
     \ecinput{examps/tactics/introduction/6-1.0.ec}{}{}{}{}
     then running
     \ecinput{examps/tactics/introduction/6-1.ec}{}{}{}{}
-    produces
+    produces the two goals
     \ecinput{examps/tactics/introduction/6-1.1.ec}{}{}{}{}
     and
     \ecinput{examps/tactics/introduction/6-1.2.ec}{}{}{}{}
-
-    For example, if the current goal is
+    And for the second case, if the current goal is
     \ecinput{examps/tactics/introduction/7-1.0.ec}{}{}{}{}
     then running
     \ecinput{examps/tactics/introduction/7-1.ec}{}{}{}{}
-    produces
+    produces the two goals
     \ecinput{examps/tactics/introduction/7-1.1.ec}{}{}{}{}
     and
     \ecinput{examps/tactics/introduction/7-1.2.ec}{}{}{}{}
+    Note how we used the clear pattern to discard the assumption
+    \ec{X}.
   \end{tsyntax}
 \end{tactic}
 
@@ -287,7 +386,7 @@ Generalization moves assumptions back into a goal's conclusion:
     generalizing \ec{H1}.
 
     A pattern $\pi$ may also be a subformula or subterm of the goal,
-    or \ec{_}, which standard for the whole goal, possibly prefixed by
+    or \ec{_}, which stands for the whole goal, possibly prefixed by
     an occurrence selector. This replaces the formula or subterm
     with a universally quantified identifier of the approprate type.
 
@@ -297,6 +396,10 @@ Generalization moves assumptions back into a goal's conclusion:
     \ecinput{examps/tactics/generalize/1-1.ec}{}{}{}{}
     produces
     \ecinput{examps/tactics/generalize/1-1.1.ec}{}{}{}{}
+    Alternatively, running
+    \ecinput{examps/tactics/generalize/3-1.ec}{}{}{}{}
+    produces
+    \ecinput{examps/tactics/generalize/3-1.1.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}
 
