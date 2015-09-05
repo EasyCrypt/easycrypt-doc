@@ -14,7 +14,7 @@ lemma Invar (X <: T{G}) (n : int) :
   islossless X.f =>
   phoare [G(X).g : G.x = n ==> G.x = n] = 1%r.
 proof.
-dump "tactics-examp2-1" (intros LL).
+dump "tactics-examp2-1" (move=> LL).
 dump "tactics-examp2-2" (proc).
 dump "tactics-examp2-3" (call (_ : true)).
 dump "tactics-examp2-4" (apply LL).
