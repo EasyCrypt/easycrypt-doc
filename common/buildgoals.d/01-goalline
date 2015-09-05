@@ -1,0 +1,3 @@
+#! /bin/sh
+
+exec sed 's/^--*$/#\\hrulefill\\hspace*{.5cm}#/'

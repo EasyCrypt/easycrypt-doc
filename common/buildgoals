@@ -1,0 +1,72 @@
+#! /usr/bin/env python
+
+# --------------------------------------------------------------------
+import sys, os, subprocess as sp, glob, re, tempfile, shutil
+
+# --------------------------------------------------------------------
+COMMAND = ['easycrypt', '-pragmas', 'Proofs:weak']
+
+# --------------------------------------------------------------------
+def _noexn(cb):
+    try:
+        cb()
+    except Exception:
+        pass
+
+# --------------------------------------------------------------------
+def _pr(filename, filters):
+    for filter in filters:
+        outputname = None
+        try:
+            with tempfile.NamedTemporaryFile(delete = False) as ostream:
+                outputname = ostream.name
+                with open(filename, 'r') as istream:
+                    sp.check_call([filter], stdin=istream, stdout=ostream)
+            shutil.copyfile(ostream.name, filename)
+        finally:
+            _noexn(lambda : os.unlink(outputname))
+
+# --------------------------------------------------------------------
+def _main():
+    # ----------------------------------------------------------------
+    if len(sys.argv)-1 < 1:
+        print >>sys.stderr, "Usage: %s [outdir] <files.ec...>" % (sys.argv[1],)
+    outdir  = sys.argv[1]
+    ecfiles = sys.argv[2:]
+
+    # ----------------------------------------------------------------
+    myname = os.path.basename(__file__)
+    mydir  = os.path.dirname (__file__)
+    myprd  = os.path.join(mydir, myname + '.d')
+    mypr   = []
+
+    if os.path.isdir(myprd):
+        mypr = sorted(os.listdir(myprd))
+        mypr = filter(lambda x : re.match(r'^[0-9]+.*', x), mypr)
+        mypr = [os.path.join(myprd, x) for x in mypr]
+        mypr = filter(os.path.isfile, mypr)
+
+    # ----------------------------------------------------------------
+    for ecf in ecfiles:
+        cwd = os.path.join(outdir, os.path.dirname(ecf))
+        ecf = os.path.realpath(ecf)
+
+        _noexn(lambda : os.makedirs(cwd))
+        sp.check_call(COMMAND + [ecf], cwd=cwd)
+
+        ref = os.path.splitext(os.path.basename(ecf))[0]
+        ref = re.compile(r'^%s-[0-9]+\.ec$' % re.escape(ref))
+        out = filter(lambda x : ref.search(x), os.listdir(cwd))
+        out = [os.path.splitext(x)[0] for x in out]
+
+        for out1 in out:
+            ref  = re.compile(r'^%s\.[0-9]+\.ec' % re.escape(out1))
+            out1 = filter(lambda x : ref.search(x), os.listdir(cwd))
+            out1 = [os.path.join(cwd, x) for x in out1]
+
+            for out2 in out1:
+                _pr(out2, mypr)
+
+# --------------------------------------------------------------------
+if __name__ == '__main__':
+    _main()
