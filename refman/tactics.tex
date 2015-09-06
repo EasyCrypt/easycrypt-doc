@@ -201,10 +201,10 @@ Some ambient logic tactics uses \emph{rewriting directions}, $\mathit{dir}$,
 which may either be empty (meaning rewriting from left to right), or \ec{-},
 meaning rewriting from right to left.
 
-\subsection{Introduction Tactical  and Generalization}
-\label{subsec:intropatterns}
+\subsection{Introduction and Generalization}
+\label{subsec:introgen}
 
-One moves the assumptions of a goal's conclusions into the goal's
+One moves the assumptions of a goal's conclusion into the goal's
 ordered set of assumptions using the introduction tactical.
 This tactical uses introduction patterns, $\iota$, which are defined
 in Figure~\ref{fig:intropat}.
@@ -238,7 +238,7 @@ in Figure~\ref{fig:intropat}.
 \end{figure}
 In this definition, $\mathit{occ}$ ranges over occurrence selectors,
 and $\mathit{dir}$ ranges over directions---see
-see Subsection~\ref{subsec:occsels}).
+Subsection~\ref{subsec:occsels}).
 
 \begin{tactic}[$t$=>$\;\iota_1 \cdots \iota_n$]{introduction}
   \begin{tsyntax}[empty]{t=> ip1 ... ipn}
