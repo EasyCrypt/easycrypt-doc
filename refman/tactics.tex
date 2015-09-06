@@ -142,7 +142,7 @@ where $X$ ranges over lemma (or formula assumption) names.
       && {$p$} & proof term \\
   \end{tabular}
   \end{center}
-  \caption{\label{fig:proofterms} \EasyCrypt's Proof Terms}
+  \caption{\label{fig:proofterms}Proof Terms}
 \end{figure}
 A proof term for a lemma (or formula assumption) $X$ has components
 corresponding to the assumptions introduced by $X$.  A component
@@ -221,7 +221,7 @@ in Figure~\ref{fig:intropat}.
       && {$\mathit{occ}\;$\ec{<-}} & rewrite in reverse using assumption \\
       && {\ec{->>}} & substitute using assumption \\
       && {\ec{<<-}} & substitute in reverse using assumption \\
-      && {\ec{/$p$}} & replace assumption by application of proof term to it \\
+      && {\ec{/$p$}} & replace assumption by applying proof term \\
       && {\ec{\{$b_1\cdots b_n$\}}} & clear introduced assumptions \\
       && {\ec{/=}} & simplify \\
       && {\ec{//}} & trivial \\
@@ -234,13 +234,13 @@ in Figure~\ref{fig:intropat}.
       && {\ec{&$m$}} & memory name \\
   \end{tabular}
   \end{center}
-  \caption{\label{fig:intropat} \EasyCrypt's Proof Terms}
+  \caption{\label{fig:intropat} Introduction Patterns}
 \end{figure}
 In this definition, $\mathit{occ}$ ranges over occurrence selectors,
 and $\mathit{dir}$ ranges over directions---see
 see Subsection~\ref{subsec:occsels}).
 
-\begin{tactic}[$t$ =>$\;\iota_1 \cdots \iota_n$]{introduction}
+\begin{tactic}[$t$=>$\;\iota_1 \cdots \iota_n$]{introduction}
   \begin{tsyntax}[empty]{t=> ip1 ... ipn}
     Runs the tactic $t$, matching the resulting goals, $G_1,\ldots,G_l$,
     with the introduction patterns $\iota_1,\ldots,\iota_n$:
