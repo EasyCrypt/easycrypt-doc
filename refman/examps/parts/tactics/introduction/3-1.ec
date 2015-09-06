@@ -1,1 +1,1 @@
-move=> x! x! H! x! H!
+move=> x! x! eq! x! eq!

@@ -1,1 +1,1 @@
-rewrite H1 H2
+rewrite eq_xx' eq_yy'

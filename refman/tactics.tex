@@ -117,14 +117,16 @@ forall (x y : bool), x = y => forall (z : bool), y = z => x = z.
 \end{easycrypt}
 introduces the assumptions
 \begin{easycrypt}{}{}
-x  : bool
-y  : bool
-H1 : x = y
-z  : bool
-H2 : y = z
+x     : bool
+y     : bool
+eq_xy : x = y
+z     : bool
+eq_yz : y = z
 \end{easycrypt}
-(where the names of the two formulas are arbitrary), and has
-\ec{x = z} as its conclusion.
+(where the names of the two formulas were chosen to be meaningful),
+and has \ec{x = z} as its conclusion. We refer to the first assumption
+of a formula as the formula's \emph{top assumption}. E.g., the top
+assumption of the preceding formula is \ec{x : bool}.
 
 \EasyCrypt has \emph{proof terms}, which partially describe how
 to prove a formula.  Their syntax is described in Figure~\ref{fig:proofterms},
@@ -219,13 +221,13 @@ in Figure~\ref{fig:intropat}.
       && {$\mathit{occ}\;$\ec{<-}} & rewrite in reverse using assumption \\
       && {\ec{->>}} & substitute using assumption \\
       && {\ec{<-}} & substitute in reverse using assumption \\
-      && {\ec{/$p$}} & apply proof term view to assumption \\
+      && {\ec{/$p$}} & replace assumption by application of proof term to it \\
       && {\ec{\{$b_1\cdots b_n$\}}} & clear introduced assumptions \\
       && {\ec{/=}} & simplify \\
       && {\ec{//}} & trivial \\
       && {\ec{//=}} & simplify then trivial \\
-      && {\ec{$\mathit{dir}\;\mathit{occ}\;$@/$p$}} & rewrite using proof term \\
-      && {\ec{[$\iota_{11}\cdots\iota_{1{m_1}}$ | $\;\cdots\,$ | $\;\iota_{n1}\cdots\iota_{n{m_n}}$]}} & case pattern \\[.2cm]
+      && {\ec{$\mathit{dir}\;\mathit{occ}\;$@/$\mathit{op}$}} & unfold definition of operator \\
+      && {\ec{[$\iota_{11}\cdots\iota_{1{m_1}}$ | $\;\cdots$ | $\;\iota_{r1}\cdots\iota_{r{m_r}}$]}} & case pattern \\[.2cm]
     $\mathit{b}$ & ::=
       & {$x$} & identifier \\
       && {$M$} & module name \\
@@ -240,33 +242,80 @@ see Subsection~\ref{subsec:occsels}).
 
 \begin{tactic}[$t$ =>$\;\iota_1 \cdots \iota_n$]{introduction}
   \begin{tsyntax}[empty]{t=> ip1 ... ipn}
-    Runs the tactic $t$, processing the resulting goals with the
-    introduction patterns $\iota_1$, \ldots, $\iota_n$. The introduction
-    patterns are processed from left to right, as follows:
+    Runs the tactic $t$, matching the resulting goals, $G_1,\ldots,G_l$,
+    with the introduction patterns $\iota_1,\ldots,\iota_n$:
     \begin{itemize}
-    \item ($b$)\quad The next assumption (universally quantified
+    \item  If $l=0$, the tactical produces no subgoals.
+
+    \item Otherwise, if $n=0$, i.e., there are no remaining
+      introduction patterns, the subgoals of the tactical are the
+      $G_i$.
+
+    \item Otherwise, if $\iota_1$ is not a case pattern, each subgoal
+      $G_i$ is matched against $\iota_1,\ldots,\iota_n$ by the
+      procedure described below, with the resulting subgoals being
+      collected into a list of goals (maintaining order viz a viz the
+      indices $i$) as the tactical's result.
+
+    \item Otherwise, $\iota_1$ is a case pattern
+          \ec{[$\iota_{11}\cdots\iota_{1{m_1}}$ | $\;\cdots$ | $\;\iota_{r1}\cdots\iota_{r{m_r}}$]}.
+
+     \item If $t$ is not equivalent to \rtactic{idtac}, the tactic fails
+       unless $r = l$, in which case each $G_i$ is matched against 
+        \begin{displaymath}
+          \iota_{i1}\cdots\iota_{i{m_i}}\iota_2\cdots \iota_n
+        \end{displaymath}
+       by the procedure described below, with the resulting subgoals
+       being collected into the tactical's result.
+
+    \item Otherwise, $t$ is equivalent to \rtactic{idtac} (and so
+      $l=1$).
+
+    \item If the case pattern is \ec{[]}, then the top assumption of
+      $G_1$ is destructed using the \rtactic{case} tactic, the
+      resulting goals are matched against $\iota_2,\ldots,\iota_n$,
+      and their subgoals are assembled into a list of goals as the
+      tactical's result.
+
+    \item Otherwise, $r>0$. Then the top assumption of $G_1$ is
+      destructed using the \rtactic{case} tactic, yielding
+      sub-subgoals $H_1,\ldots H_p$. If $p\neq r$, the tactical
+      fails. Otherwise each $H_i$ is matched against
+      \begin{displaymath}
+        \iota_{i1}\cdots\iota_{i{m_i}}\iota_2\cdots \iota_n
+      \end{displaymath}
+      using the procedure described below, with the resulting goals
+      being collected into a list as the tactical's result.
+    \end{itemize}
+
+    \paragraph{Matching a single goal against a list of patterns:}
+
+    The introduction patterns are processed from left-to-right, as
+    follows:
+    \begin{itemize}
+    \item ($b$)\quad The top assumption (universally quantified
       identifier, module name or memory; or left side of implication)
-      is consumed, and introduced with this name. Fails if the next
+      is consumed, and introduced with this name. Fails if the top
       assumption has neither of these forms.
 
     \item (\ec{$b\,$!})\quad Same as the preceding case, except that
-      $b$ is used as the base of the introduced name, to avoid naming
-      conflicts.
+      $b$ is used as the base of the introduced name, extending the
+      base to avoid naming conflicts.
 
     \item (\ec{_})\quad Same as the preceding case, except the
       assumption is introduced with an anonymous name (which can't be
       uttered by the user).
 
     \item (\ec{+})\quad Same as the preceding case, except that after
-      the introduction tactical completes, the assumption will be
-      reverted, i.e., un-introduced (using a universal quantifier or
-      implication as appropriate).
+      a branch of the procedure completes, yielding a goal, the
+      assumption will be reverted, i.e., un-introduced (using a
+      universal quantifier or implication as appropriate).
 
     \item (\ec{?})\quad Same as the preceding case, except \EasyCrypt
-      chooses the name by which the assuption is introduced (using
+      chooses the name by which the assumption is introduced (using
       universally quantified names as assumption bases).
 
-    \item ($\mathit{occ}\;$\ec{->})\quad Consume the next assumption,
+    \item ($\mathit{occ}\;$\ec{->})\quad Consume the top assumption,
       which must be an equality, and use it as a left-to-right rewriting
       rule in the remainder of the goal's conclusion, restricting rewriting
       to the specified occurrences of the equality's left side.
@@ -282,15 +331,50 @@ see Subsection~\ref{subsec:occsels}).
     \item (\ec{<$$<-})\quad The same as the preceding case, except
       the substitution is from right-to-left.
 
-    \item (\ec{/$p$})\quad Applies the proof term $p$ to
+    \item (\ec{/$p$})\quad Replace the top assumption by the result
+    of applying the proof term $p$ to it using forward reasoning.
 
     \item (\ec{\{$b_1\cdots b_n$\}})\quad Doesn't affect the goal's
       conclusion, but clears the specified assumptions, i.e., removes
       them. Fails if one or more of the assumptions can't be cleared,
       because a remaining assumption depends upon it.
 
+    \item (\ec{/=})\quad Apply \rtactic{simplify} to goal's conclusion.
+
+    \item (\ec{//})\quad Apply \rtactic{trivial} to goal's conclusion;
+      this may solve the goal, i.e., so that the procedure's current
+      branch yields no goals.
+
+    \item (\ec{/=})\quad Apply \rtactic{simplify} and then \rtactic{trivial}
+      to goal's conclusion; this may solve the goal, so that the
+      procedure's current branch yields no goals.
+
+    \item ({\ec{$\mathit{dir}\;\mathit{occ}\;$@/$\mathit{op}$}})\quad
+      Unfold (fold, if the direction is \ec{-}) the definition of
+      operator $\mathit{op}$ at the specified occurrences of the
+      goal's conclusion.
+
+    \item (\ec{[$\iota_{11}\cdots\iota_{1{m_1}}$ | $\;\cdots$ | $\;\iota_{r1}\cdots\iota_{r{m_r}}$]})\quad
+      \begin{itemize}
+      \item If $r=0$, then the top assumption of the goal is destructed
+        using the \rtactic{case} tactic, the resulting goals are
+        matched against $\iota_2,\ldots,\iota_n$, and their subgoals
+        are assembled into a list of goals.
+
+      \item Otherwise $r>0$. The goal's top assumption is destructed
+        using the \rtactic{case} tactic, yielding subgoals
+        $H_1,\ldots H_p$.  If $p\neq r$, the procedure fails. Otherwise
+        each subgoal $H_i$ is matched against
+        \begin{displaymath}
+          \iota_{i1}\cdots\iota_{i{m_i}}\iota_2\cdots \iota_n
+        \end{displaymath}
+        with the resulting goals being collected into a list as
+        the procedure's result.
+      \end{itemize}
     \end{itemize}
 
+    The following examples use the tactic \rtactic{move}, which is
+    equivalent to \rtactic{idtac}.
     In its simplest form, the introduction tactical simply gives names
     to assumptions.  For example, if the current goal is
     \ecinput{examps/parts/tactics/introduction/1-1.0.ec}{}{}{}{}
@@ -366,40 +450,42 @@ see Subsection~\ref{subsec:occsels}).
 
 Generalization moves assumptions back into a goal's conclusion:
 
-\begin{tactic}[generalize $\;\pi_1 \cdots \pi_n$]{generalize}
-  \begin{tsyntax}[empty]{generalize $\;\pi_1 \cdots \pi_n$}
+\begin{tactic}[$t$: $\;\pi_1 \cdots \pi_n$]{generalization}
+  \begin{tsyntax}[empty]{$t$: $\;\pi_1 \cdots \pi_n$}
     Generalize the patterns $\pi_1, \cdots, \pi_n$, starting from
-    $\pi_n$ and going back.
+    $\pi_n$ and going back, and then run tactic $t$.
 
-    If a pattern $\pi$ is an assumption, it's moved back into the
-    conclusion, using universal quantification or an implication,
-    as appropriate. If one assumption depends on another, one can't
-    generalize the later without also generalizing the former.
+    \begin{itemize}
+    \item If a pattern $\pi$ is an assumption, it's moved back into
+      the conclusion, using universal quantification or an
+      implication, as appropriate. If one assumption depends on
+      another, one can't generalize the later without also
+      generalizing the former.
 
-    For example, if the current goal is
-    \ecinput{examps/parts/tactics/generalize/2-1.0.ec}{}{}{}{}
-    then running
-    \ecinput{examps/parts/tactics/generalize/2-1.ec}{}{}{}{}
-    produces
-    \ecinput{examps/parts/tactics/generalize/2-1.1.ec}{}{}{}{}
-    In this example, one can't generalize \ec{x} without also
-    generalizing \ec{H1}.
+      For example, if the current goal is
+      \ecinput{examps/parts/tactics/generalize/2-1.0.ec}{}{}{}{} then
+      running \ecinput{examps/parts/tactics/generalize/2-1.ec}{}{}{}{}
+      produces
+      \ecinput{examps/parts/tactics/generalize/2-1.1.ec}{}{}{}{} In
+      this example, one can't generalize \ec{x} without also
+      generalizing \ec{eq_xy}.
 
-    A pattern $\pi$ may also be a subformula or subterm of the goal,
-    or \ec{_}, which stands for the whole goal, possibly prefixed by
-    an occurrence selector. This replaces the formula or subterm
-    with a universally quantified identifier of the approprate type.
+    \item A pattern $\pi$ may also be a subformula or subterm of the
+      goal, or \ec{_}, which stands for the whole goal, possibly
+      prefixed by an occurrence selector. This replaces the formula or
+      subterm with a universally quantified identifier of the
+      approprate type.
 
-    For example, if the current goal is
-    \ecinput{examps/parts/tactics/generalize/1-1.0.ec}{}{}{}{}
-    then running
-    \ecinput{examps/parts/tactics/generalize/1-1.ec}{}{}{}{}
-    produces
-    \ecinput{examps/parts/tactics/generalize/1-1.1.ec}{}{}{}{}
-    Alternatively, running
-    \ecinput{examps/parts/tactics/generalize/3-1.ec}{}{}{}{}
-    produces
-    \ecinput{examps/parts/tactics/generalize/3-1.1.ec}{}{}{}{}
+      For example, if the current goal is
+      \ecinput{examps/parts/tactics/generalize/1-1.0.ec}{}{}{}{} then
+      running \ecinput{examps/parts/tactics/generalize/1-1.ec}{}{}{}{}
+      produces
+      \ecinput{examps/parts/tactics/generalize/1-1.1.ec}{}{}{}{}
+      Alternatively, running
+      \ecinput{examps/parts/tactics/generalize/3-1.ec}{}{}{}{}
+      produces
+      \ecinput{examps/parts/tactics/generalize/3-1.1.ec}{}{}{}{}
+    \end{itemize}
   \end{tsyntax}
 \end{tactic}
 

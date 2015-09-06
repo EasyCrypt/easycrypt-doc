@@ -4,7 +4,7 @@ x : 'a
 x': 'a
 y : 'b
 y': 'b
-H1: x = x'
-H2: y = y'
+eq_xx': x = x'
+eq_yy': y = y'
 #\hrulefill\hspace*{.5cm}#
 (x, y) = (x', y')

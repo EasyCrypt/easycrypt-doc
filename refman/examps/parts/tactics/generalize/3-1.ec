@@ -1,1 +1,1 @@
-generalize {2} y {2} x
+move: {2} y {2} x

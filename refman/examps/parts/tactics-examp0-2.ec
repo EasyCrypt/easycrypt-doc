@@ -1,1 +1,1 @@
-move=> H1 H2
+move=> eq_xx' eq_yy'

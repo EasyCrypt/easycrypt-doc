@@ -3,5 +3,5 @@ require import Int.
 lemma L :
   forall (x y : int), x = y => y = x.
 proof.
-move=> x y H1.
-dump "2-1" (generalize y x H1).
+move=> x y eq_xy.
+dump "2-1" (move: x eq_xy).

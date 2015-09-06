@@ -1,4 +1,5 @@
 Type variables: <none>
 
+y : int
 #\hrulefill\hspace*{.5cm}#
-forall (y x : int), x = y => y = x
+forall (x : int), x = y => y = x

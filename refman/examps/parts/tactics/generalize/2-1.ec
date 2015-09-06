@@ -1,1 +1,1 @@
-generalize y x H1
+move: x eq_xy

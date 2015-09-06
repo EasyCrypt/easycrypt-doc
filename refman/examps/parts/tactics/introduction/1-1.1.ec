@@ -2,8 +2,8 @@ Type variables: <none>
 
 x : int
 y : int
-H1: x = y
+eq_xy: x = y
 z : int
-H2: y = z
+eq_yz: y = z
 #\hrulefill\hspace*{.5cm}#
 x = z

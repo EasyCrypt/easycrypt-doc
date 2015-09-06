@@ -1,1 +1,1 @@
-generalize (y = x)
+move: (y = x)

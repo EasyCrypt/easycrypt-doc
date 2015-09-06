@@ -1,1 +1,1 @@
-move=> x y H1 z H2
+move=> x y eq_xy z eq_yz

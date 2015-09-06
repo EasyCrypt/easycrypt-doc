@@ -2,6 +2,6 @@ Type variables: <none>
 
 x : int
 y : int
-H1: x = y
+eq_xy: x = y
 #\hrulefill\hspace*{.5cm}#
 y = x

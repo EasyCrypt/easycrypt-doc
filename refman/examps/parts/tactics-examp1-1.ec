@@ -1,1 +1,1 @@
-move=> H
+move=> zor1_n

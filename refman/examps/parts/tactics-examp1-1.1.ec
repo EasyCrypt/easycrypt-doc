@@ -1,7 +1,7 @@
 Type variables: <none>
 
 n : int
-H : n = 1 \/ n = 2
+zor1_n: n = 1 \/ n = 2
 #\hrulefill\hspace*{.5cm}#
 pre = x %% 3 = n
 
