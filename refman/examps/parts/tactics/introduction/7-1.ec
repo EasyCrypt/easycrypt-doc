@@ -1,1 +1,1 @@
-case=> [Hx HP X | Hy X HQ] {X}
+case=> [Hx HP X | Hy X HQ] {X}.

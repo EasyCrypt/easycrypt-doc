@@ -1,1 +1,1 @@
-move: (y = x)
+move: (y = x).

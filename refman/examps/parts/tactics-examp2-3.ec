@@ -1,1 +1,1 @@
-call (_ : true)
+call (_ : true).

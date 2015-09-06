@@ -1,1 +1,1 @@
-trivial
+trivial.

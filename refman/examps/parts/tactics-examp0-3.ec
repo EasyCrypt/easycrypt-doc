@@ -1,1 +1,1 @@
-rewrite eq_xx' eq_yy'
+rewrite eq_xx' eq_yy'.

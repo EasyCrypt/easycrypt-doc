@@ -1,1 +1,1 @@
-move=> [Hx HP _ | Hy _ HQ]
+move=> [Hx HP _ | Hy _ HQ].

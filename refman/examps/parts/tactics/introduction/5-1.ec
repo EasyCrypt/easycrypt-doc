@@ -1,1 +1,1 @@
-move=> /Sym
+move=> /Sym.
