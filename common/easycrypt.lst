@@ -22,7 +22,7 @@
   rangeendprefix={(**\ end\ },
   rangesuffix={\ *)},
   includerangemarker=false,
-  basicstyle=\small\sffamily,
+  basicstyle=\small\ttfamily,
   identifierstyle={},
   keywordstyle=[1]{\bfseries},
   keywordstyle=[2]{\bfseries},
