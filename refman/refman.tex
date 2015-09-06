@@ -26,7 +26,7 @@
 % --------------------------------------------------------------------
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
+\usepackage[lighttt]{lmodern}
 \usepackage{microtype}
 \usepackage{bold-extra}
 \usepackage[dvipsnames]{xcolor}
@@ -35,6 +35,9 @@
 \usepackage{tabularx}
 \usepackage{paralist}
 \usepackage{todonotes}
+
+\ttfamily
+\DeclareFontShape{T1}{lmtt}{m}{it}{<->sub*lmtt/m/sl}{}
 
 % --------------------------------------------------------------------
 \input{prelude}

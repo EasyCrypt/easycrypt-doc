@@ -24,12 +24,12 @@
   includerangemarker=false,
   basicstyle=\small\ttfamily,
   identifierstyle={},
-  keywordstyle=[1]{\bfseries},
-  keywordstyle=[2]{\bfseries},
-  keywordstyle=[3]{\bfseries},
-  keywordstyle=[4]{\bfseries},
-  keywordstyle=[5]{\bfseries},
-  keywordstyle=[6]{\bfseries\color{Red}}.
+  keywordstyle=[1]{\bfseries\color{violet}},
+  keywordstyle=[2]{\bfseries\color{olive}},
+  keywordstyle=[3]{\bfseries\color{blue}},
+  keywordstyle=[4]{\bfseries\color{blue}},
+  keywordstyle=[5]{\bfseries\color{red}},
+  keywordstyle=[6]{\bfseries\color{violet}},
 }
 
 \lstdefinestyle{easycrypt-math}{
@@ -40,6 +40,11 @@
 \lstdefinestyle{easycrypt-math-nocolors}{
   style=easycrypt-default,
   mathescape=true,
+  keywordstyle=[1]{\bfseries},
+  keywordstyle=[2]{\bfseries},
+  keywordstyle=[3]{\bfseries},
+  keywordstyle=[4]{\bfseries},
+  keywordstyle=[5]{\bfseries},
   keywordstyle=[6]{\bfseries},
 }
 
@@ -47,6 +52,7 @@
 \input{easycrypt-kw.lst}
 
 \lstdefinelanguage{easycrypt-base}{
+  language=easycrypt-kw,
   morekeywords=[1]{arg},
   morecomment=[n][\itshape]{(*}{*)},
   morecomment=[n][\bfseries]{(**}{*)},
@@ -68,16 +74,16 @@
 
 % --------------------------------------------------------------------
 \lstdefinelanguage{easycrypt}{
-  style=easycrypt-default,
   language=easycrypt-base,
+  style=easycrypt-default,
 }
 
 \lstdefinelanguage{easycrypt-math}{
-  style=easycrypt-math,
   language=easycrypt-base,
+  style=easycrypt-math,
 }
 
 \lstdefinelanguage{easycrypt-math-nocolors}{
-  style=easycrypt-math-nocolors,
   language=easycrypt-base,
+  style=easycrypt-math-nocolors,
 }
