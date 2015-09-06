@@ -268,24 +268,11 @@ see Subsection~\ref{subsec:occsels}).
        by the procedure described below, with the resulting subgoals
        being collected into the tactical's result.
 
-    \item Otherwise, $t$ is equivalent to \rtactic{idtac} (and so
-      $l=1$).
-
-    \item If the case pattern is \ec{[]}, then the top assumption of
-      $G_1$ is destructed using the \rtactic{case} tactic, the
-      resulting goals are matched against $\iota_2,\ldots,\iota_n$,
-      and their subgoals are assembled into a list of goals as the
-      tactical's result.
-
-    \item Otherwise, $r>0$. Then the top assumption of $G_1$ is
-      destructed using the \rtactic{case} tactic, yielding
-      sub-subgoals $H_1,\ldots H_p$. If $p\neq r$, the tactical
-      fails. Otherwise each $H_i$ is matched against
-      \begin{displaymath}
-        \iota_{i1}\cdots\iota_{i{m_i}}\iota_2\cdots \iota_n
-      \end{displaymath}
-      using the procedure described below, with the resulting goals
-      being collected into a list as the tactical's result.
+     \item Otherwise, $t$ is equivalent to \rtactic{idtac} (and so
+       $l=1$). In this case $G_1$ is matched against
+       $\iota_1,\ldots,\iota_n$ by the procedure described below, with
+       the resulting subgoals being collected into a list of goals as
+       the tactical's result.
     \end{itemize}
 
     \paragraph{Matching a single goal against a list of patterns:}
