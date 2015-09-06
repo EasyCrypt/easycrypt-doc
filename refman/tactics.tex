@@ -220,7 +220,7 @@ in Figure~\ref{fig:intropat}.
       && {$\mathit{occ}\;$\ec{->}} & rewrite using assumption \\
       && {$\mathit{occ}\;$\ec{<-}} & rewrite in reverse using assumption \\
       && {\ec{->>}} & substitute using assumption \\
-      && {\ec{<-}} & substitute in reverse using assumption \\
+      && {\ec{<<-}} & substitute in reverse using assumption \\
       && {\ec{/$p$}} & replace assumption by application of proof term to it \\
       && {\ec{\{$b_1\cdots b_n$\}}} & clear introduced assumptions \\
       && {\ec{/=}} & simplify \\
@@ -328,7 +328,7 @@ see Subsection~\ref{subsec:occsels}).
       in the entire goal, i.e., in its assumptions, as well as its
       conclusion.
 
-    \item (\ec{<$$<-})\quad The same as the preceding case, except
+    \item (\ec{<<-})\quad The same as the preceding case, except
       the substitution is from right-to-left.
 
     \item (\ec{/$p$})\quad Replace the top assumption by the result

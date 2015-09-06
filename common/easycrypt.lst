@@ -2,7 +2,10 @@
 \newcommand{\dslash}{\mathbin{\mathsf{/\mkern-4mu/}}}
 \newcommand{\dslasheq}{\mathbin{\mathsf{/\mkern-4mu/\mkern-8mu=}}}
 \newcommand{\slasheq}{\mathbin{\mathsf{/\mkern-6mu=}}}
-\newcommand{\darrow}{\raisebox{.07em}{$\mathbin{\scriptstyle\mathsf{-\mkern-3mu>}}$}}
+\newcommand{\drarrow}{\raisebox{.07em}{$\mathbin{\scriptstyle\mathsf{-\mkern-3mu>}}$}}
+\newcommand{\dlarrow}{\raisebox{.07em}{$\mathbin{\scriptstyle\mathsf{<\mkern-3mu-}}$}}
+\newcommand{\drrarrow}{\raisebox{.07em}{$\mathbin{\scriptstyle\mathsf{-\mkern-3mu>\mkern-3mu>}}$}}
+\newcommand{\dllarrow}{\raisebox{.07em}{$\mathbin{\scriptstyle\mathsf{<\mkern-3mu<\mkern-3mu-}}$}}
 
 % --------------------------------------------------------------------
 \lstdefinestyle{easycrypt-default}{
@@ -57,7 +60,10 @@
     {_p}{${}_{\!p}$}1
     {,,,}{$\mathrel{\ldots}$}1
     {...}{$\mathrel{\cdots}$}1
-    {->}{$\darrow$}1
+    {->}{$\drarrow$}1
+    {<-}{$\dlarrow$}1
+    {->>}{$\drrarrow$}2
+    {<<-}{$\dllarrow$}2
 }
 
 % --------------------------------------------------------------------
