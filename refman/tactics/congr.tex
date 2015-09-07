@@ -1,8 +1,23 @@
 % --------------------------------------------------------------------
 \begin{tactic}{congr}
   \begin{tsyntax}[empty]{congr}
-  Replace a goal of the form \ec{f t$_1$ ... t$_n$ = f u$_1$ ... u$_n$}
-  with the subgoals \ec{t$_i$ = u$_i$} for all \ec{$i$}. Subgoals solvable
-  by \ec{reflexivity} are automatically closed.
+    Replace a goal of the form
+    $f\,t_1\,\cdots\,t_n = f\,u_1\,\cdots\,u_n$, where $f$ is an
+    assumption identifier or operator, with the subgoals $t_i = u_i$
+    for all $i$.  Subgoals solvable by \ec{reflexivity} are
+    automatically closed. Also works when the operator is used in
+    infix form.
+
+  For example, if the current goal is
+  \ecinput{../examps/parts/tactics/congr/1-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/congr/1-1.ec}{}{}{}{}
+  produces the goals
+  \ecinput{../examps/parts/tactics/congr/1-1.1.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/congr/1-1.2.ec}{}{}{}{}
+  And if the current goal is
+  \ecinput{../examps/parts/tactics/congr/2-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/congr/2-1.ec}{}{}{}{}
+  produces this same pair of subgoals.
   \end{tsyntax}
 \end{tactic}

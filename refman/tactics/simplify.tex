@@ -10,5 +10,17 @@
   \ec{beta} (resp. \ec{iota}, \ec{zeta}, \ec{logic}). These tactics can be
   combined together, separated by spaces, to perform head reduction by any
   combination of the rule sets.
+
+  For example, if the current goal is
+  \ecinput{../examps/parts/tactics/simplify/1-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/simplify/1-1.ec}{}{}{}{}
+  produces the goal
+  \ecinput{../examps/parts/tactics/simplify/1-1.1.ec}{}{}{}{}
+  And if the current goal is
+  \ecinput{../examps/parts/tactics/simplify/1-2.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/simplify/1-2.ec}{}{}{}{}
+  produces the goal
+  \ecinput{../examps/parts/tactics/simplify/1-2.1.ec}{}{}{}{}
   \end{tsyntax}
+  \fix{Is this the right place to define ``convertible''?}
 \end{tactic}
