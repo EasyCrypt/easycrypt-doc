@@ -1,9 +1,33 @@
 % --------------------------------------------------------------------
-\begin{tactic}[subst | subst x]{subst}
-  \begin{tsyntax}[empty]{subst}
-  Search for the first equation of the form \ec{x = f} or \ec{f = x} in the context
-  and replace all the occurrences of \ec{x} by \ec{f} everywhere in the context and the
-  goal before clearing it. If no identifier is given, repeatedly apply the tactic to
-  all identifiers for which such an equation exists.
+\begin{tactic}[subst $\;x$ | subst]{subst}
+  \begin{tsyntax}{subst $\;x$}
+    Search for the first equation of the form $x = t$ or $t = x$ in
+    the context and replace all the occurrences of $x$ by $t$
+    everywhere in the context and the conclusion before clearing it.
+
+  For example, if the current goal is
+  \ecinput{../examps/parts/tactics/subst/1-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/subst/1-1.ec}{}{}{}{}
+  takes us to
+  \ecinput{../examps/parts/tactics/subst/1-1.1.ec}{}{}{}{}
+  from which running
+  \ecinput{../examps/parts/tactics/subst/1-2.ec}{}{}{}{}
+  takes us to
+  \ecinput{../examps/parts/tactics/subst/1-2.1.ec}{}{}{}{}
+  from which running
+  \ecinput{../examps/parts/tactics/subst/1-3.ec}{}{}{}{}
+  takes us to
+  \ecinput{../examps/parts/tactics/subst/1-3.1.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{subst}
+     Repeatedly apply \ec{subst $\;x$} to all identifiers in
+     the context.
+
+     For example, if the current goal is
+     \ecinput{../examps/parts/tactics/subst/2-1.0.ec}{}{}{}{} then
+     running \ecinput{../examps/parts/tactics/subst/2-1.ec}{}{}{}{}
+     takes us to
+     \ecinput{../examps/parts/tactics/subst/2-1.1.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}

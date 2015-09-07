@@ -1,10 +1,16 @@
 % --------------------------------------------------------------------
-\begin{tactic}[pose x := $\;\pi$]{pose}
+\begin{tactic}[pose $\;x\!$ := $\;\pi$]{pose}
   \begin{tsyntax}[empty]{pose}
-  Search for the first subterm \ec{p} of the goal matching $\pi$ and
+  Search for the first subterm $t$ of the goal matching $\pi$ and
   leading to the full instantiation of the pattern. Then introduce,
-  after instantiation, the local definition \ec{x := p} and abstract
-  all occurrences of \ec{p} in the goal as \ec{x}. An occurence
-  selector can be used (see \rtactic{rewrite}).
+  after instantiation, the local definition \ec{$x\!$ := $\;t$} and abstract
+  all occurrences of $t$ in the goal as $x$. An occurence
+  selector can be used (see Subsection~\ref{subsec:occsels}).
+
+  For example, if the current goal is
+  \ecinput{../examps/parts/tactics/pose/1-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/pose/1-1.ec}{}{}{}{}
+  produces the goal
+  \ecinput{../examps/parts/tactics/pose/1-1.1.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}

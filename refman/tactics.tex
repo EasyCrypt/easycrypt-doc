@@ -15,15 +15,19 @@ describing the tactics for \EasyCrypt's four logics: ambient, \prhl,
 \section{Proof Engine}
 
 \EasyCrypt's proof engine works with goal lists, where a \emph{goal}
-has three parts:
+has two parts:
 \begin{itemize}
-\item A set of type variables.
+\item A \emph{context} consisting of a
+  \begin{itemize}
+  \item a set of type variables, and
 
-\item An \emph{ordered} set of \emph{assumptions}, consisting of
-  identifiers with their types, memories, module names with their
-  module types and restrictions, and named formulas. An identifier's
-  type may involve the type variables, the formulas may involve the
-  type variables, identifiers, memories and module names.
+  \item an \emph{ordered} set of \emph{assumptions}, consisting of
+    identifiers with their types, memories, module names with their
+    module types and restrictions, local definitions, and named
+    formulas. An identifier's type may involve the type variables, the
+    local definitions and formulas may involve the type variables,
+    identifiers, memories and module names.
+  \end{itemize}
 
 \item A \emph{conclusion}, consisting of a single formula, with
   the same constraints as the assumption formulas.
@@ -208,9 +212,8 @@ meaning rewriting from right to left.
 \label{subsec:introgen}
 
 One moves the assumptions of a goal's conclusion into the goal's
-ordered set of assumptions using the introduction tactical.
-This tactical uses introduction patterns, which are defined
-in Figure~\ref{fig:intropat}.
+context using the introduction tactical.  This tactical uses
+introduction patterns, which are defined in Figure~\ref{fig:intropat}.
 \begin{figure}
   \begin{center}
   \begin{tabular}{rcl>{\bf}l}
@@ -252,9 +255,9 @@ done by applying the tactics corresponding to the $\iota_i$ in order
 to each $G_j$, causing some of the goals to be solved and thus
 disappear and some of the goals to be simplified.
 
-\begin{tactic}[$t$=>$\;\iota_1 \cdots \iota_n$]{introduction}
+\begin{tactic}[$\tau$=>$\;\iota_1 \cdots \iota_n$]{introduction}
   \begin{tsyntax}[empty]{}
-    Runs the tactic $t$, matching the resulting goals, $G_1,\ldots,G_l$,
+    Runs the tactic $\tau$, matching the resulting goals, $G_1,\ldots,G_l$,
     with the introduction patterns $\iota_1,\ldots,\iota_n$:
     \begin{itemize}
     \item Suppose $k$ is such that all of $\iota_1,\ldots,\iota_{k-1}$
@@ -278,7 +281,7 @@ disappear and some of the goals to be simplified.
     \item Otherwise, $\iota_k$ is a case pattern
           \ec{[$\iota_{11}\cdots\iota_{1{m_1}}$ | $\;\cdots$ | $\;\iota_{r1}\cdots\iota_{r{m_r}}$]}.
 
-     \item If $t$ is not equivalent to \rtactic{idtac}, the tactic fails
+     \item If $\tau$ is not equivalent to \rtactic{idtac}, the tactic fails
        unless $r = l'$, in which case each $G'_i$ is matched against 
         \begin{displaymath}
           \iota_{i1}\cdots\iota_{i{m_i}}\iota_{k+1}\cdots \iota_n
@@ -286,7 +289,7 @@ disappear and some of the goals to be simplified.
        by the procedure described below, with the resulting subgoals
        being collected into the tactical's result.
 
-     \item Otherwise, $t$ is equivalent to \rtactic{idtac} (and so
+     \item Otherwise, $\tau$ is equivalent to \rtactic{idtac} (and so
        $l'=1$). In this case $G'_1$ is matched against
        $\iota_k,\ldots,\iota_n$ by the procedure described below, with
        the resulting subgoals being collected into a list of goals as
@@ -456,10 +459,10 @@ disappear and some of the goals to be simplified.
 
 Generalization moves assumptions back into a goal's conclusion:
 
-\begin{tactic}[$t$: $\;\pi_1 \cdots \pi_n$]{generalization}
-  \begin{tsyntax}[empty]{$t$: $\;\pi_1 \cdots \pi_n$}
+\begin{tactic}[$\tau$: $\;\pi_1 \cdots \pi_n$]{generalization}
+  \begin{tsyntax}[empty]{$\tau$: $\;\pi_1 \cdots \pi_n$}
     Generalize the patterns $\pi_1, \cdots, \pi_n$, starting from
-    $\pi_n$ and going back, and then run tactic $t$.
+    $\pi_n$ and going back, and then run tactic $\tau$.
 
     \begin{itemize}
     \item If a pattern $\pi$ is an assumption, it's moved back into
@@ -506,10 +509,12 @@ Generalization moves assumptions back into a goal's conclusion:
 \input{tactics/right.tex}
 \input{tactics/split.tex}
 \input{tactics/congr.tex}
+\input{tactics/subst.tex}
 
 \input{tactics/trivial.tex}
 \input{tactics/done.tex}
 \input{tactics/simplify.tex}
+\input{tactics/progress.tex}
 \input{tactics/smt.tex}
 \input{tactics/admit.tex}
 
@@ -521,32 +526,34 @@ Generalization moves assumptions back into a goal's conclusion:
 \input{tactics/apply.tex}
 \input{tactics/exact.tex}
 \input{tactics/rewrite.tex}
-\input{tactics/subst.tex}
 
 \input{tactics/case.tex}
 \input{tactics/elim.tex}
 
-\input{tactics/progress.tex}
 \input{tactics/algebra.tex}
 
 \subsection{Tacticals}
 \label{subsec:tacticals}
 
 Tactics can be combined together, composed and modified by
-\emph{tacticals}. Tacticals do not correspond to any deduction rule
-but make the proof process smoother, and sometimes permit the reuse of
-proofs with similar patterns, but where the fine minutiae might
-differ.
+\emph{tacticals}. We've already seen the introduction and generalization
+tacticals, which turn a tactic $\tau$ and a list of patterns into
+a composite tactic, which may then combined with other tactics.
 
-\begin{tactic}[t1; t2]{sequence}
+\begin{tactic}[$\tau_1$; $\;\tau_2$]{sequence}
   \begin{tsyntax}[empty]{t1; t2}
-  Execute \ec{t1} and then \ec{t2} on all the subgoals generated by \ec{t1}.
+  Apply $\tau_2$ to all the subgoals generated by $\tau_1$.
+
+  \paragraph{Remark.} Sequencing groups to the left, so that
+    \ec{$\tau_1$; $\;\tau_2$; $\;\tau_3$} means
+    \ec{($\tau_1$; $\;\tau_2$); $\;\tau_3$}.
   \end{tsyntax}
 \end{tactic}
 
-\begin{tactic}[try t]{failure recovery}\label{tactic-try}
+\begin{tactic}[try $\;\tau$]{failure recovery}\label{tactic-try}
   \begin{tsyntax}[empty]{try t}
-  Execute the tactic \ec{t} if it succeeds; do nothing if it fails.
+  Execute the tactic $\tau$ if it succeeds; do nothing (leave the
+  goal unchanged) if it fails.
 
   \paragraph{Remark.}
   By default, \EasyCrypt proofs are run in \ec{strict} mode. In this
@@ -561,48 +568,66 @@ differ.
   \end{tsyntax}
 \end{tactic}
 
-\begin{tactic}[do! t]{tactic repetition}
+\begin{tactic}[do! $\;\tau$]{tactic repetition}
   \begin{tsyntax}[empty]{do! t}
-  Apply \ec{t} to the current goal, then repeatedly apply it to all subgoals,
-  stopping only when it fails. An error is produced it \ec{t} does not apply to
-  the current goal.
+    Apply $\tau$ to the current goal, then repeatedly apply it to all
+    subgoals, stopping on a branch only when it fails. An error is
+    produced it $\tau$ does not apply to the current goal.
   \end{tsyntax}
 
   \paragraph{Variants.}\strut
 
   \begin{tabularx}{\textwidth}{@{}ll@{}}
-  {\ec{do ?t}} & apply {\ec{t}} 0 or more times, until it fails\\
-  {\ec{do n !t}} & apply {\ec{t}} with depth exactly {\ec{n}}\\
-  {\ec{do n ?t}} & apply {\ec{t}} with depth at most {\ec{n}}
+  {\ec{do? $\;\tau$}} & apply $\tau$ 0 or more times, until it fails\\
+  {\ec{do $\;n$! $\;\tau$}} & apply $\tau$ with depth exactly $n$\\
+  {\ec{do $\;n$? $\;\tau$}} & apply $\tau$ with depth at most $n$
   \end{tabularx}
 \end{tactic}
 
-\begin{tactic}[t1; first t2]{goal selection}
+\begin{tactic}[$\tau$; first $\;\tau_2$]{goal selection}
   \begin{tsyntax}[empty]{t1; first t2}
-  Apply the tactic \ec{t1}, then apply \ec{t2} on the first subgoal
-  generated by \ec{t1}. An error is produced if no subgoals have been
-  generated by \ec{t1}.
+    Apply the tactic $\tau_1$, then apply $\tau_2$ on the first
+    subgoal generated by \ec{t1}, leaving the other goals unchanged.
+    An error is produced if no subgoals are generated by $\tau_1$.
 
   \paragraph{Variants.}\strut
 
   \noindent\begin{tabularx}{\textwidth}{@{}ll@{}}
-  {\ec{t1; first n t2}} & apply {\ec{t2}} on the first {\ec{n}} subgoals
-    generated by {\ec{t1}}\\
-  {\ec{t1; last t2}} & apply {\ec{t2}} on the last subgoal
-    generated by {\ec{t1}}\\
-  {\ec{t1; last n t2}} & apply {\ec{t2}} on the last {\ec{n}} subgoals
-    generated by {\ec{t1}}\\
-  {\ec{t; first n last}} & \parbox{200pt}{reorder the subgoals generated by {\ec{t}}, moving
-    the first n to the end of the list}
+    {\ec{$\tau_1$; first $\;n$ $\;\tau_2$}} & apply $\tau_2$ on the
+    first $n$ subgoals generated by $\tau_1$\\[.4cm]
+    {\ec{$\tau_1$; last $\;\tau_2$}} & apply $\tau_2$ on the last subgoal
+    generated by $\tau_1$\\[.4cm]
+    {\ec{$\tau_1$; last $\;n$ $\;\tau_2$}} & apply $\tau_2$ on the last $n$
+    subgoals generated by $\tau_1$\\[.4cm]
+    {\ec{$\tau$; first $\;n\!$ last}} & \parbox{250pt}{reorder the subgoals
+      generated by $\tau$, moving the first $n$ to the end of the
+      list} \\[.4cm]
+    {\ec{$\tau$; last $\;n\!$ first}} & \parbox{250pt}{reorder the subgoals
+      generated by $\tau$, moving the last $n$ to the beginning of the
+      list} \\[.4cm]
+    {\ec{$\tau$; last first}} & \parbox{250pt}{reorder the subgoals generated
+    by $\tau$, moving the last one to the beginning of the list}\\[.4cm]
+    {\ec{$\tau$; first last}} & \parbox{250pt}{reorder the subgoals
+     generated by $\tau$, moving the first one to the end of the list}
   \end{tabularx}
   \end{tsyntax}
 \end{tactic}
 
-\begin{tactic}[by t]{closing goals}
+\begin{tactic}[by $\;\tau$]{closing goals}
   \begin{tsyntax}[empty]{by t}
-  Apply the tactic \ec{t} and try to close all the generated subgoals using
+  Apply the tactic $\tau$ and try to close all the generated subgoals using
   \rtactic{trivial}. Fail if not all subgoals can be closed.
   \end{tsyntax}
+
+  \paragraph{Remark.} Inside the a lemma's proof, \ec{by []} is
+  equivalent to \ec{by trivial}.  But the form
+\begin{easycrypt}{}{}
+lemma #$\;\cdots$# by [].
+\end{easycrypt}
+  means
+\begin{easycrypt}{}{}
+lemma #$\;\cdots$# by (trivial; smt).
+\end{easycrypt}
 \end{tactic}
 
 \section{Program Logics}
