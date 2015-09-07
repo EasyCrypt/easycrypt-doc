@@ -148,11 +148,12 @@ A proof term for a lemma (or formula assumption) $X$ has components
 corresponding to the assumptions introduced by $X$.  A component
 corresponding to a variable consists of an expression of the
 variable's type. The proof term is explaining how the instantiation of
-the lemma's conclusion with these expressions may be proved from the
-instantiation of the formula components.  A formula component consists
-of a proof term explaining how the instantiation of the formula
-component may be proved.  Proof holes will get turned into subgoals
-when a proof term is applied, e.g., by the \ec{apply} tactic.
+the lemma's conclusion with these expressions may be proved.  A
+formula component consists of a proof term explaining how the
+instantiation of the formula may be proved.  Proof holes will get
+turned into subgoals when a proof term is used in backward reasoning,
+e.g., by the \rtactic{apply} tactic. \fix{Need explanation of how a
+  proof term may be used in forward reasoning.}
 
 Consider, e.g., the following declarations and axioms
 \begin{easycrypt}{}{}
@@ -171,17 +172,19 @@ is a proof term proving the conclusion \ec{R x}. And
 \begin{easycrypt}{}{}
 (R x _ (Q x _))
 \end{easycrypt}
-is a proof term that, when applied to a goal with conclusion \ec{R x},
-will generated subgoals with conclusions \ec{P(x + 1)} and \ec{P x},
-corresponding to the first and second occurrences of \ec{_}.  When
-using a proof term at the top-level, e.g., via \ec{apply}, one may
-abbreviate some or all of its expressions to \ec{_}, letting
-\EasyCrypt infer the expressions from the conclusion of the goal at
-hand. Going even further, one may abbreviate a single-level proof term
-with lemma $X$ to just $X$, e.g., writing \ec{R} for \ec{(R _ _ _)}.
-Applying \ec{R} to \ec{R x} will generate two subgoals: \ec{P(x + 1)}
-and \ec{Q x}. Below, we'll consider such abbreviates to \emph{be} proof
-terms.
+is a proof term that turns proofs of \ec{P(x + 1)} and \ec{P x}
+into proofs of \ec{R x}. When used in backward reasoning, it
+will reduce a goal with conclusion \ec{R x} to subgoals with
+conclusions \ec{P(x + 1)} and \ec{P x}.
+\fix{Can it be used in forward reasoning?}
+
+Some of a proof term's expressions may be replaced by \ec{_}, asking
+\EasyCrypt to infer them from the context.  Going even further, one
+may abbreviate a one-level proof term all of whose components are
+\ec{_} to just its lemma name. For example, we can write \ec{R} for
+\ec{(R _ _ _)}.  When used in backward reasoning, it will reduce a
+goal with conclusion \ec{R x} to subgoals with conclusions \ec{P(x +
+  1)} and \ec{Q x}. \fix{In forward reasoning they aren't equivalent---why?}
 
 \subsection{Occurrence Selectors and Rewriting Directions}
 \label{subsec:occsels}
@@ -206,7 +209,7 @@ meaning rewriting from right to left.
 
 One moves the assumptions of a goal's conclusion into the goal's
 ordered set of assumptions using the introduction tactical.
-This tactical uses introduction patterns, $\iota$, which are defined
+This tactical uses introduction patterns, which are defined
 in Figure~\ref{fig:intropat}.
 \begin{figure}
   \begin{center}
@@ -240,45 +243,61 @@ In this definition, $\mathit{occ}$ ranges over occurrence selectors,
 and $\mathit{dir}$ ranges over directions---see
 Subsection~\ref{subsec:occsels}).
 
+If a list $\iota_1,\ldots,\iota_n$ of introduction patterns consists
+entirely of \ec{//} (apply the \rtactic{trivial} tactic), \ec{/=}
+(apply the \rtactic{simplify} tactic) and \ec{//=} (apply the
+\ec{simplify} and then \ec{trivial}), then \emph{applying}
+$\iota_1,\ldots,\iota_n$ \emph{to} a list of goals $G_1,\ldots,G_m$ is
+done by applying the tactics corresponding to the $\iota_i$ in order
+to each $G_j$, causing some of the goals to be solved and thus
+disappear and some of the goals to be simplified.
+
 \begin{tactic}[$t$=>$\;\iota_1 \cdots \iota_n$]{introduction}
-  \begin{tsyntax}[empty]{t=> ip1 ... ipn}
+  \begin{tsyntax}[empty]{}
     Runs the tactic $t$, matching the resulting goals, $G_1,\ldots,G_l$,
     with the introduction patterns $\iota_1,\ldots,\iota_n$:
     \begin{itemize}
-    \item  If $l=0$, the tactical produces no subgoals.
+    \item Suppose $k$ is such that all of $\iota_1,\ldots,\iota_{k-1}$
+      are \ec{//}, \ec{/=} and \ec{//=}, and either $k>n$ or $\iota_k$
+      is not \ec{//}, \ec{/=} or \ec{//=}.
 
-    \item Otherwise, if $n=0$, i.e., there are no remaining
-      introduction patterns, the subgoals of the tactical are the
-      $G_i$.
+    \item Let $G'_1,\ldots,G'_{l'}$ be the goals resulting from
+      applying $\iota_1,\ldots,\iota_{k-1}$ to $G_1,\ldots,G_l$.
 
-    \item Otherwise, if $\iota_1$ is not a case pattern, each subgoal
-      $G_i$ is matched against $\iota_1,\ldots,\iota_n$ by the
+    \item If $l'=0$, the tactical produces no subgoals.
+
+    \item Otherwise, if $k>n$, the tactical's result is
+      $G'_1,\ldots,G'_{l'}$.
+
+    \item Otherwise, if $\iota_k$ is not a case pattern, each subgoal
+      $G'_i$ is matched against $\iota_k,\ldots,\iota_n$ by the
       procedure described below, with the resulting subgoals being
       collected into a list of goals (maintaining order viz a viz the
       indices $i$) as the tactical's result.
 
-    \item Otherwise, $\iota_1$ is a case pattern
+    \item Otherwise, $\iota_k$ is a case pattern
           \ec{[$\iota_{11}\cdots\iota_{1{m_1}}$ | $\;\cdots$ | $\;\iota_{r1}\cdots\iota_{r{m_r}}$]}.
 
      \item If $t$ is not equivalent to \rtactic{idtac}, the tactic fails
-       unless $r = l$, in which case each $G_i$ is matched against 
+       unless $r = l'$, in which case each $G'_i$ is matched against 
         \begin{displaymath}
-          \iota_{i1}\cdots\iota_{i{m_i}}\iota_2\cdots \iota_n
+          \iota_{i1}\cdots\iota_{i{m_i}}\iota_{k+1}\cdots \iota_n
         \end{displaymath}
        by the procedure described below, with the resulting subgoals
        being collected into the tactical's result.
 
      \item Otherwise, $t$ is equivalent to \rtactic{idtac} (and so
-       $l=1$). In this case $G_1$ is matched against
-       $\iota_1,\ldots,\iota_n$ by the procedure described below, with
+       $l'=1$). In this case $G'_1$ is matched against
+       $\iota_k,\ldots,\iota_n$ by the procedure described below, with
        the resulting subgoals being collected into a list of goals as
        the tactical's result.
     \end{itemize}
 
     \paragraph{Matching a single goal against a list of patterns:}
 
-    The introduction patterns are processed from left-to-right, as
-    follows:
+    To match a goal $G$ against a list of introduction patterns
+    $\iota_1,\ldots,\iota_n$, the introduction patterns are processed
+    from left-to-right, as follows:
     \begin{itemize}
     \item ($b$)\quad The top assumption (universally quantified
       identifier, module name or memory; or left side of implication)
