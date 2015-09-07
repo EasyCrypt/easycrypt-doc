@@ -2,6 +2,13 @@
 \begin{tactic}{trivial}
   \begin{tsyntax}[empty]{trivial}
   Try to solve the goal by using a mixture of low-level tactics.
-  This tactic is called by the intro-pattern \ec{//}.
+  This tactic is called by the introduction pattern \ec{//}.
+
+  For example, if the current goal is
+  \ecinput{../examps/parts/tactics/trivial/1-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/trivial/1-1.ec}{}{}{}{}
+  solves the goal.
   \end{tsyntax}
+  \fix{Probably good to be a bit more specific about what this tactic
+  does.}
 \end{tactic}

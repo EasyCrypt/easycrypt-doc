@@ -495,25 +495,30 @@ Generalization moves assumptions back into a goal's conclusion:
   \end{tsyntax}
 \end{tactic}
 
-\subsection{Ambient Logic Tactics}
+\subsection{Tactics}
 
 \input{tactics/idtac.tex}
 \input{tactics/move.tex}
 \input{tactics/clear.tex}
-\input{tactics/done.tex}
-\input{tactics/apply.tex}
-\input{tactics/exact.tex}
 \input{tactics/assumption.tex}
+\input{tactics/reflexivity.tex}
+\input{tactics/split.tex}
+\input{tactics/left.tex}
+\input{tactics/right.tex}
+
+\input{tactics/trivial.tex}
+\input{tactics/done.tex}
+\input{tactics/smt.tex}
+\input{tactics/admit.tex}
+
 \input{tactics/pose.tex}
 \input{tactics/have.tex}
 \input{tactics/cut.tex}
 
+\input{tactics/apply.tex}
+\input{tactics/exact.tex}
 \input{tactics/rewrite.tex}
 \input{tactics/subst.tex}
-
-\input{tactics/split.tex}
-\input{tactics/left.tex}
-\input{tactics/right.tex}
 
 \input{tactics/case.tex}
 \input{tactics/elim.tex}
@@ -522,17 +527,11 @@ Generalization moves assumptions back into a goal's conclusion:
 \input{tactics/change.tex}
 \input{tactics/progress.tex}
 
-\input{tactics/reflexivity.tex}
 \input{tactics/congr.tex}
 \input{tactics/algebra.tex}
 
-\input{tactics/trivial.tex}
-\input{tactics/smt.tex}
-
-\input{tactics/admit.tex}
-
-\section{Tacticals}
-\label{sec:tacticals}
+\subsection{Tacticals}
+\label{subsec:tacticals}
 
 Tactics can be combined together, composed and modified by
 \emph{tacticals}. Tacticals do not correspond to any deduction rule
