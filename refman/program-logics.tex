@@ -1,0 +1,102 @@
+\section{Program Logics}
+\label{sec:programlogics}
+
+In this section, we describe the tactics of \EasyCrypt's three program
+logics: \prhl, \phl and \hl.  There are five rough classes of program
+logic tactics:
+\begin{enumerate}
+\item those that actually reason about the program in Hoare logic
+  style;
+
+\item those that correspond to semantics-preserving program
+  transformations or compiler optimizations;
+
+\item those that operate at the level of specifications,
+  strenghtening, combining or splitting goals without modifying the
+  program;
+
+\item tactics that automate the application of other tactics;
+
+\item advanced tactics for handling eager/lazy sampling and bounding
+  the probability of failure.
+\end{enumerate}
+We discuss these five classes in turn.
+
+\subsection{Tactics for Reasoning about Programs}
+\label{subsec:reasoningprograms}
+
+Unless specified, the following program logic tactics operate on a
+program's last statement. Although we describe these tactics as if
+they operated on single statements, their practical implementation
+automatically and implicitly applies tactic \rtactic{seq} to deal with
+context when necessary.
+
+For simple proofs, it is often enough to simply apply the program
+tactic corresponding to the last statement in the program and let
+\ec{smt} deal with the residual program-free formula, once the program
+has been consumed.
+
+Most of the program reasoning tactics discussed in this subsection
+have two modes when used on \prhl proof obligations. Their default
+mode is to operate on both programs at once. When a side is specified
+(using \ec{<tactic>\{1\}} or \ec{<tactic>\{2\}}), a one-sided variant
+is used. Apart from the \rtactic{if} tactic, the one-sided variant is
+in fact a combination of the \phl tactic and \rtactic{conseq}.
+
+\medskip
+
+\input{tactics/skip.tex}
+\input{tactics/seq.tex}
+\input{tactics/sp.tex}
+\input{tactics/wp.tex}
+\input{tactics/rnd.tex}
+\input{tactics/if.tex}
+\input{tactics/while.tex}
+\input{tactics/call.tex}
+\input{tactics/proc.tex}
+
+\subsection{Tactics for Transforming Programs}
+\label{subsec:transformingprograms}
+
+\input{tactics/swap.tex}
+\input{tactics/inline.tex}
+
+\input{tactics/rcondf.tex}
+\input{tactics/rcondt.tex}
+
+\input{tactics/splitwhile.tex}
+\input{tactics/unroll.tex}
+\input{tactics/fission.tex}
+\input{tactics/fusion.tex}
+
+\input{tactics/alias.tex}
+\input{tactics/cfold.tex}
+\input{tactics/kill.tex}
+\input{tactics/modpath.tex}
+
+\subsection{Tactics for Reasoning about Specifications}
+
+\input{tactics/symmetry.tex}
+\input{tactics/transitivity.tex}
+\input{tactics/conseq.tex}
+\input{tactics/case_pl.tex}
+\input{tactics/phoare_split.tex}
+\input{tactics/byequiv.tex}
+\input{tactics/byphoare.tex}
+\input{tactics/hoare.tex}
+\input{tactics/bypr.tex}
+\input{tactics/exists_star.tex}
+\input{tactics/elim_star.tex}
+\input{tactics/exfalso.tex}
+
+\subsection{Automated Tactics}
+\label{subsec:automatedtactics}
+
+\input{tactics/auto.tex}
+\input{tactics/sim.tex}
+
+\subsection{Advanced Tactics}
+\label{subsec:advancedtactics}
+
+\input{tactics/eager.tex}
+\input{tactics/fel.tex}

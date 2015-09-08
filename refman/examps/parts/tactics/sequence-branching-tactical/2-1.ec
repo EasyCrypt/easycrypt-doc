@@ -1,0 +1,1 @@
+split; [assumption | split; assumption].

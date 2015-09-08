@@ -1,13 +1,58 @@
 % --------------------------------------------------------------------
-\begin{tactic}[apply $\;p$ | apply /$p_1$ $\;\cdots$ /$p_n$]{apply}
-  \begin{tsyntax}[empty]{apply (p : proof-term)}
-   If \ec{p} is a proof-term for the pattern (formula)
-  \begin{center}
-    \ec{forall (x1 : t1) ... (xn : tn), A1 -> ... -> An -> B}
-  \end{center}
-  \noindent then \ec{apply} tries to match B with the current G. If the
-  match succeeds and leads to the full instantiation of the pattern,
-  then the goal is replaced, after instantiation, with the $n$ subgoals
-  \ec{A1, ..., An}.
+\begin{tactic}[apply $\;p$ | apply /$p_1$ $\;\cdots$ /$p_n$ | apply $\;p$ in $\;H$]{apply}
+  \begin{tsyntax}{apply $\;p$}
+    Tries to match the conclusion of the proof term $p$ with the
+    goal's conclusion. If the match succeeds and leads to the full
+    instantiation of the pattern, then the goal is replaced, after
+    instantiation, with the subgoals of the proof term.
+
+    Consider the declarations
+\begin{easycrypt}{}{}
+pred P : int.
+pred Q : int.
+pred R : int.
+axiom P (x : int) : P x.
+axiom Q (x : int) : P x => Q x.
+axiom R (x : int) : P(x + 1) => Q x => R x.
+\end{easycrypt}
+    If the current goal is
+    \ecinput{../examps/parts/tactics/apply/1-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/apply/1-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{../examps/parts/tactics/apply/1-1.1.ec}{}{}{}{}
+    and
+    \ecinput{../examps/parts/tactics/apply/1-1.2.ec}{}{}{}{}
+    And running
+    \ecinput{../examps/parts/tactics/apply/2-1.ec}{}{}{}{}
+    from that initial goal
+    produces the goals
+    \ecinput{../examps/parts/tactics/apply/2-1.1.ec}{}{}{}{}
+    and
+    \ecinput{../examps/parts/tactics/apply/2-1.2.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{apply /$p_1$ $\;\cdots$ /$p_n$}
+    Apply the proof terms $p_1,\ldots,p_n$ in sequence. At each stage
+    of this process, we have some number of goals. Initially, we have
+    just the current goal. After applying $p_1$, we have whatever
+    goals $p_1$ has produced from the current goal. $p_2$ is applied
+    to the \emph{last} of these goals, and that last goal is replaced
+    by the goals produced by running $p_2$, etc.  Fails without
+    changing the goal if any of these applications fails.
+
+    For example, if the current goal is
+    \ecinput{../examps/parts/tactics/apply/3-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/apply/3-1.ec}{}{}{}{}
+    solves the goal.
+  \end{tsyntax}
+
+  \begin{tsyntax}{apply $\;p$ in $\;H$}
+    Apply $p$ in forward reasoning to $H$, replacing $H$ by the result.
+
+    For example, if the current goal is
+    \ecinput{../examps/parts/tactics/apply/4-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/apply/4-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/apply/4-1.1.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}

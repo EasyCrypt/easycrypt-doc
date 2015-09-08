@@ -1,7 +1,59 @@
 % --------------------------------------------------------------------
-\begin{tactic}[elim/$\phi$ $\;\;\pi_1 \cdots \pi_n$]{elim}
-  \begin{tsyntax}[empty]{elim}
-  Apply the elimination principle $\phi$ to the top assumption after
-  having generalized $\pi_1 \cdots \pi_n$.
+\begin{tactic}[elim | elim /$L$]{elim}
+  \begin{tsyntax}{elim}
+    Eliminates the top assumption of the goal's conclusion, generating
+    subgoals that are dependent upon the kind of assumption
+    eliminated. \emph{This tactic can be followed by
+    the generalization tactical---see Subsection~\ref{subsec:introgen}.}
+
+    \ec{elim} mostly works identically to \rtactic{case}, the exception
+    being inductive datatype and the integers (for which a built-in
+    induction principle is applied---see the other form).
+
+    Consider the inductive datatype declaration:
+\begin{easycrypt}{}{}
+type tree = [Leaf | Node of bool & tree & tree].
+\end{easycrypt}
+    Then, if the current goal is
+    \ecinput{../examps/parts/tactics/elim/1-1.0.ec}{}{}{}{}
+    running \ecinput{../examps/parts/tactics/elim/1-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{../examps/parts/tactics/elim/1-1.1.ec}{}{}{}{}
+    and
+    \ecinput{../examps/parts/tactics/elim/1-1.2.ec}{}{}{}{}
   \end{tsyntax}
+
+  \begin{tsyntax}{elim /$L$}
+    Eliminates the top assumption of the goal's conclusion using the
+    supplied induction principle lemma. \emph{This tactic can be
+      followed by the generalization tactical---see
+      Subsection~\ref{subsec:introgen}.}
+    For example, consider the declarations
+\begin{easycrypt}{}{}
+type tree = [Leaf | Node of bool & tree & tree].
+op rev (tr : tree) : tree =
+  with tr = Leaf => Leaf
+  with tr = Node b tr1 tr2 => Node b (rev tr1) (rev tr2).
+\end{easycrypt}
+and suppose we've already proved
+\begin{easycrypt}{}{}
+lemma IndPrin :
+  forall (p : tree -> bool) (tr : tree),
+  p Leaf =>
+  (forall (b : bool) (tr1 tr2 : tree),
+   p tr1 => p tr2 => p(Node b tr1 tr2)) =>
+  p tr.
+\end{easycrypt}
+    Then, if the current goal is
+    \ecinput{../examps/parts/tactics/elim/2-1.0.ec}{}{}{}{}
+    running \ecinput{../examps/parts/tactics/elim/2-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{../examps/parts/tactics/elim/2-1.1.ec}{}{}{}{}
+    and
+    \ecinput{../examps/parts/tactics/elim/2-1.2.ec}{}{}{}{}
+  \end{tsyntax}
+
+\smallskip
+When we consider the \ec{Int} theory in Chapter~\ref{chap:library},
+we'll discuss the induction principle on the integers.
 \end{tactic}

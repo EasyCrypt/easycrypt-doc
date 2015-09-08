@@ -1,8 +1,12 @@
 % --------------------------------------------------------------------
-\begin{tactic}[exact (p : proofterm)]{exact}
-  \begin{tsyntax}[empty]{exact}
-  Equivalent to \ec{by apply (p : proofterm)}, i.e. apply the given
-  proof-term and then try to close the goals with \ec{trivial} - failing
-  if not all goals can be closed.
+\begin{tactic}[exact $\;p$ | exact /$p_1$ $\;\cdots$ /$p_n$]{exact}
+  \begin{tsyntax}{exact $\;p$}
+    Equivalent to \ec{by apply $\;p$}, i.e., apply the given
+    proof-term and then try to close the goals with
+    \ec{trivial}---failing if not all goals can be closed.
+  \end{tsyntax}
+
+  \begin{tsyntax}{exact /$p_1$ $\;\cdots$ /$p_n$}
+    Equivalent to \ec{by apply /$p_1$ $\;\cdots$ /$p_n$}.
   \end{tsyntax}
 \end{tactic}

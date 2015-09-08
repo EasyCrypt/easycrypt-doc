@@ -1,9 +1,81 @@
 % --------------------------------------------------------------------
-\begin{tactic}[case $\;\phi$ | case | case $\;x$]{case}
-  \begin{tsyntax}[empty]{case}
-  Do an excluded-middle case analysis on $\phi$, substituting $\phi$
-  in the goal.
+\begin{tactic}[case $\;\phi$ | case]{case}
+  \begin{tsyntax}{case $\;\phi$}
+    Do an excluded-middle case analysis on $\phi$, substituting $\phi$
+    in the goal.
+
+    For example, if the current goal is
+    \ecinput{../examps/parts/tactics/case/1-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/case/1-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{../examps/parts/tactics/case/1-1.1.ec}{}{}{}{}
+    and
+    \ecinput{../examps/parts/tactics/case/1-1.2.ec}{}{}{}{}
   \end{tsyntax}
 
-  \fix{Describe the behaviour of \ec{case} on inductives.}
+  \begin{tsyntax}{case}
+    Destruct the top assumption of the goal's conclusion, generating
+    subgoals that are dependent upon the kind of assumption
+    destructed. \emph{This form of the tactic can be followed by
+    the generalization tactical---see Subsection~\ref{subsec:introgen}.}
+
+    \begin{itemize}
+    \item (\textbf{conjunction})
+    For example, if the current goal is
+    \ecinput{../examps/parts/tactics/case/2-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/case/2-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/case/2-1.1.ec}{}{}{}{}
+    \ec{&&} works identically.
+
+    \item (\textbf{disjunction})
+    For example, if the current goal is
+    \ecinput{../examps/parts/tactics/case/3-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/case/3-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{../examps/parts/tactics/case/3-1.1.ec}{}{}{}{}
+    and
+    \ecinput{../examps/parts/tactics/case/3-1.2.ec}{}{}{}{}
+    \ec{||} works identically.
+
+    \item (\textbf{existential})
+    For example, if the current goal is
+    \ecinput{../examps/parts/tactics/case/4-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/case/4-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/case/4-1.1.ec}{}{}{}{}
+
+    \item (\textbf{unit}) Substitutes \ec{tt} for the assumption in
+      the remainder of the conclusion.
+
+    \item (\textbf{bool})
+    For example, if the current goal is
+    \ecinput{../examps/parts/tactics/case/5-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/case/5-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{../examps/parts/tactics/case/5-1.1.ec}{}{}{}{}
+    and
+    \ecinput{../examps/parts/tactics/case/5-1.2.ec}{}{}{}{}
+
+    \item (\textbf{product type})
+    For example, if the current goal is
+    \ecinput{../examps/parts/tactics/case/6-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/case/6-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/case/6-1.1.ec}{}{}{}{}
+
+    \item (\textbf{inductive datatype})
+    Consider the inductive datatype declaration:
+\begin{easycrypt}{}{}
+type tree = [Leaf | Node of bool & tree & tree].
+\end{easycrypt}
+    Then, if the current goal is
+    \ecinput{../examps/parts/tactics/case/7-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/case/7-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{../examps/parts/tactics/case/7-1.1.ec}{}{}{}{}
+    and
+    \ecinput{../examps/parts/tactics/case/7-1.2.ec}{}{}{}{}
+    \end{itemize}
+  \end{tsyntax}
 \end{tactic}
