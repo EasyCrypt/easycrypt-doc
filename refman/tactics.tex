@@ -457,46 +457,43 @@ disappear and some of the goals to be simplified.
   \end{tsyntax}
 \end{tactic}
 
-Generalization moves assumptions back into a goal's conclusion:
+\begin{tactic}[$\tau$: $\;a_1 \cdots a_n$ | move: $\;\pi_1 \cdots \pi_n$]{generalization}
+  \begin{tsyntax}{$\tau$: $\;a_1 \cdots a_n$}
+    Generalize the assumptions $a_1, \ldots, a_n$, starting from
+    $a_n$ and going back, and then run tactic $\tau$.  This tactical
+    is only applicable to certain tactics: \rtactic{move},
+    \rtactic{case} (just the version that destructs the top assumption
+    of a goal's conclusion) and \rtactic{elim}.  An assumption is
+    moved back into the conclusion, using universal quantification or
+    an implication, as appropriate. If one assumption depends on
+    another, one can't generalize the later without also generalizing
+    the former.
 
-\begin{tactic}[$\tau$: $\;\pi_1 \cdots \pi_n$]{generalization}
-  \begin{tsyntax}[empty]{$\tau$: $\;\pi_1 \cdots \pi_n$}
-    Generalize the patterns $\pi_1, \cdots, \pi_n$, starting from
-    $\pi_n$ and going back, and then run tactic $\tau$.
-    This tactical is only applicable to certain tactics:
-    \rtactic{move}, \rtactic{case} and \rtactic{elim}.
+    For example, if the current goal is
+    \ecinput{examps/parts/tactics/generalize/2-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/generalize/2-1.ec}{}{}{}{}
+    produces
+    \ecinput{examps/parts/tactics/generalize/2-1.1.ec}{}{}{}{} In
+    this example, one can't generalize \ec{x} without also
+    generalizing \ec{eq_xy}.
+  \end{tsyntax}
 
-    \begin{itemize}
-    \item If a pattern $\pi$ is an assumption, it's moved back into
-      the conclusion, using universal quantification or an
-      implication, as appropriate. If one assumption depends on
-      another, one can't generalize the later without also
-      generalizing the former.
+  \begin{tsyntax}{move: $\;\pi_1 \cdots \pi_n$}
+    Generalize the patterns $\pi_1, \ldots, \pi_n$, working backward.
+    $\pi$ may be a subformula or subterm of the goal, or \ec{_}, which
+    stands for the whole goal, possibly prefixed by an occurrence
+    selector. This replaces the formula or subterm with a universally
+    quantified identifier of the approprate type.
 
-      For example, if the current goal is
-      \ecinput{examps/parts/tactics/generalize/2-1.0.ec}{}{}{}{} then
-      running \ecinput{examps/parts/tactics/generalize/2-1.ec}{}{}{}{}
-      produces
-      \ecinput{examps/parts/tactics/generalize/2-1.1.ec}{}{}{}{} In
-      this example, one can't generalize \ec{x} without also
-      generalizing \ec{eq_xy}.
-
-    \item A pattern $\pi$ may also be a subformula or subterm of the
-      goal, or \ec{_}, which stands for the whole goal, possibly
-      prefixed by an occurrence selector. This replaces the formula or
-      subterm with a universally quantified identifier of the
-      approprate type.
-
-      For example, if the current goal is
-      \ecinput{examps/parts/tactics/generalize/1-1.0.ec}{}{}{}{} then
-      running \ecinput{examps/parts/tactics/generalize/1-1.ec}{}{}{}{}
-      produces
-      \ecinput{examps/parts/tactics/generalize/1-1.1.ec}{}{}{}{}
-      Alternatively, running
-      \ecinput{examps/parts/tactics/generalize/3-1.ec}{}{}{}{}
-      produces
-      \ecinput{examps/parts/tactics/generalize/3-1.1.ec}{}{}{}{}
-    \end{itemize}
+    For example, if the current goal is
+    \ecinput{examps/parts/tactics/generalize/1-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/generalize/1-1.ec}{}{}{}{}
+    produces
+    \ecinput{examps/parts/tactics/generalize/1-1.1.ec}{}{}{}{}
+    Alternatively, running
+    \ecinput{examps/parts/tactics/generalize/3-1.ec}{}{}{}{}
+    produces
+    \ecinput{examps/parts/tactics/generalize/3-1.1.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}
 
