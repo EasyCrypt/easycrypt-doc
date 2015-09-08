@@ -463,6 +463,8 @@ Generalization moves assumptions back into a goal's conclusion:
   \begin{tsyntax}[empty]{$\tau$: $\;\pi_1 \cdots \pi_n$}
     Generalize the patterns $\pi_1, \cdots, \pi_n$, starting from
     $\pi_n$ and going back, and then run tactic $\tau$.
+    This tactical is only applicable to certain tactics:
+    \rtactic{move}, \rtactic{case} and \rtactic{elim}.
 
     \begin{itemize}
     \item If a pattern $\pi$ is an assumption, it's moved back into

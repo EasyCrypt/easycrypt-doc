@@ -535,6 +535,17 @@ or (letting \EasyCrypt carry out type inference)
 In the type inference, only the type of \ec{y} is determined, but
 that's acceptable.
 
+\EasyCrypt has let expressions
+\begin{center}
+  \ec{let $\;x$ : t = $\;e$ in $\;e'$}
+\end{center}
+which are equivalent to
+\begin{center}
+  \ec{(fun $\;x$ : t => $\;e'$) $e$}
+\end{center}
+As with anonymous expressions, the types of their bound variables may
+often be omitted, letting \EasyCrypt infer them.
+
 An operator may be declared by specifying its type and giving the
 expression to be evaluated. E.g.,
 \begin{easycrypt}{}{}
@@ -737,8 +748,15 @@ than even function application.
 
 If $e_1$ is an expression of type \ec{bool} and $e_2,e_3$ are expressions
 of some type $t$, then the \emph{conditional expression}
-\ec{$e_1$ ? $\,e_2$ : $\,e_3$} evaluates to $e_2$, if $e_1$ evaluates to
-\ec{true}, and evaluates to $e_3$, if $e_1$ evaluates to \ec{false}.
+\begin{center}
+  \ec{$e_1$ ? $\;e_2$ : $\;e_3$}  
+\end{center}
+evaluates to $e_2$, if $e_1$ evaluates to \ec{true}, and evaluates to
+$e_3$, if $e_1$ evaluates to \ec{false}.  Conditionals may also be
+written using if-then-else notation:
+\begin{center}
+  \ec{if $\;e_1$ then $\;e_2$ else $\;e_3$}
+\end{center}
 E.g., if we write
 \begin{easycrypt}{}{}
 op x : int = (3 < 4) ? 4 + 7 : (9 - 1).

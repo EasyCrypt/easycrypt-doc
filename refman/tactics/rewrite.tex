@@ -1,66 +1,74 @@
 % --------------------------------------------------------------------
-\begin{tactic}[rewrite $\;\pi_1 \cdots \pi_n$]{rewrite}
-  \begin{tsyntax}[empty]{rewrite}
+\begin{tactic}[rewrite $\;\pi_1 \cdots \pi_n$ | rewrite $\;\pi_1 \cdots \pi_n$ in $\;H$]{rewrite}
+  \begin{tsyntax}{rewrite $\;\pi_1 \cdots \pi_n$}
   Rewrite the rewrite-pattern $\pi_1 \cdots \pi_n$ from left to right,
   where the $\pi_i$ can be of the following form:
   \begin{itemize}
   \item one of \ec{//}, \ec{/=}, \ec{//=},
-  \item a proof-term, or
+  \item a proof-term $p$, or
   \item a pattern prefixed by \ec{/} (slash).
   \end{itemize}
-  The two last forms can be prefixed by a direction indicator (the sign
-  \ec{-}), followed by an occurrence selector (\ec{\{i1 ... in\}}),
-  followed (for proof-terms only) by a repetition marker
-  (\ec{!}, \ec{?}, \ec{n!} or \ec{n?}). All these prefixes are optional.
+  The two last forms can be prefixed by a direction indicator (the
+  sign \ec{-}, see Subsection~\ref{subsec:occsels}), followed by an
+  occurrence selector (see Subsection~\ref{subsec:occsels}), followed
+  (for proof-terms only) by a repetition marker (\ec{!}, \ec{?},
+  \ec{n!} or \ec{n?}). All these prefixes are optional.
 
+  \smallskip
   Depending on the form of $\pi$, \ec{rewrite $\;\pi$} does the following:
     \begin{itemize}
-    \item For \ec{//}, \ec{/=}, and \ec{//=}, see \ec{intros}.
-    \item If \ec{rw} is a proof-term for the pattern
-      \begin{center}
-	\ec{forall (x1 : t1) ... (xn : tn), A1 -> ... -> An -> f1 = f2}
-      \end{center}
-      \noindent then \ec{rewrite} searches for the first subterm of the goal
-      matching \ec{f1} and resulting in the full instantiation of the pattern.
-      It then replaces, after instantiation of the pattern, all the occurrences
-      of \ec{f1} by \ec{f2} in the goal, and creates $n$ new subgoals for the
-      \ec{Ai}'s. If no subterms of the goal match \ec{f1} or if the pattern
-      cannot be fully instantiated by matching, the tactic fails.
-      The tactic works the same if the pattern ends by \ec{f1 <=> f2}. If the
-      direction indicator \ec{-} is given, \ec{rewrite} works in the reverse
-      direction, searching for a match of \ec{f2} and then replacing all
-      occurrences of \ec{f2} by \ec{f1}.
-    \item If \ec{rw} is a \ec{/}-prefixed pattern of the form \ec{(o p1 ... pn)},
-      with \ec{o} a defined symbol, then \ec{rewrite} searches for the first subterm
-      of the goal matching \ec{(o p1 ... pn)} and resulting in the full instantiation
-      of the pattern. It then replaces, after instantiation of the pattern, all
-      the occurrences of \ec{(o p1 ... pn)} by the $\beta\delta$ head-normal form
-      of \ec{(o p1 ... pn)}, where the $\delta$-reduction is restricted to subterms
-      headed by the symbol \ec{o}. If no subterms of the goal match \ec{(o p1 ... pn)} or
-      if the pattern cannot be fully instantiated by matching, the tactic fails. If the
-      direction indicator \ec{-} is given, \ec{rewrite} works in the reverse
-      direction, searching for a match of the $\beta\delta_{\rm o}$ head-normal
-      of \ec{(o p1 ... pn)} and then replacing all occurrences of this head-normal
-      form with \ec{(o p1 ... pn)}.
+    \item For \ec{//}, \ec{/=}, and \ec{//=}, see
+      Subsection~\ref{subsec:introgen}.
+
+    \item If $\pi$ is a proof-term with conclusion $f_1=f_2$, then
+      \ec{rewrite} searches for the first subterm of the goal matching
+      $f_1$ and resulting in the full instantiation of the pattern.
+      It then replaces, after instantiation of the pattern, all the
+      occurrences of $f_1$ by $f_2$ in the goal, and creates
+      new subgoals for the instantiations of the assuptions of $p$.
+      If no subterms of the goal match $f_1$ or if the pattern
+      cannot be fully instantiated by matching, the tactic fails.  The
+      tactic works the same if the pattern ends by \ec{$f_1\!$ <=> $\;f_2$}. If
+      the direction indicator \ec{-} is given, \ec{rewrite} works in
+      the reverse direction, searching for a match of $f_2$ and then
+      replacing all occurrences of $f_2$ by $f_1$.
+
+    \item If $\pi$ is a \ec{/}-prefixed pattern of the form
+      $o\,p_1\,\cdots\,p_n$, with $o$ a defined symbol, then
+      \ec{rewrite} searches for the first subterm of the goal matching
+      $o\,p_1\,\cdots\,p_n$ and resulting in the full instantiation of
+      the pattern. It then replaces, after instantiation of the
+      pattern, all the occurrences of $o\,p_1\,\cdots\,p_n$ by the
+      $\beta\delta$ head-normal form of $o\,p_1\,\cdots\,p_n$, where
+      the $\delta$-reduction is restricted to subterms headed by the
+      symbol $o$. If no subterms of the goal match
+      $o\,p_1\,\cdots\,p_n$
+      or if the pattern cannot be fully instantiated by matching, the
+      tactic fails. If the direction indicator \ec{-} is given,
+      \ec{rewrite} works in the reverse direction, searching for a
+      match of the $\beta\delta_o$
+      head-normal of $o\,p_1\,\cdots\,p_n$
+      and then replacing all occurrences of this head-normal form with
+      $o\,p_1\,\cdots\,p_n$.
     \end{itemize}
     
     \smallskip
-    
-    The occurrence selector \ec{\{i1 ... in\}} restricts which occurrences
-    of the matching pattern are replaced in the goal. If given, only the
-    \ec{i1}-th, ..., \ec{in}-th ones are replaced (considering that the goal is
-    traversed in DFS mode). Note that this selection applies after the matching has
-    been done.
-    
-    \medskip
-    
-    Repetition markers allow the repetition of the same rewriting. For instance,
-    \ec{rewrite $\;\pi$} leads to \ec{do! rewrite $\;\pi$}. See \ec{do} for
-    more information.
-    
-    \medskip
+    The occurrence selector restricts which occurrences of the
+    matching pattern are replaced in the goal---see
+    Subsection~\ref{subsec:occsels}.
 
-    Last, \ec{rewrite} \ec{rw}${}_1$ ... \ec{rw}${}_n$ is equivalent to
-    \ec{rewrite} \ec{rw}${}_1$; ...; \ec{rewrite} \ec{rw}${}_n$.
+    Repetition markers allow the repetition of the same rewriting. For
+    instance, \ec{rewrite $\;\pi$} leads to \ec{do! rewrite
+      $\;\pi$}. See the tactical \ec{do} for more information.
+    
+    Lastly, \ec{rewrite $\;\pi_1 \cdots \pi_n$} is equivalent to
+    \ec{rewrite} $\;\pi_1$; ...; \ec{rewrite} $\;\pi_n$.
+  \end{tsyntax}
+
+  \begin{tsyntax}{rewrite $\;\pi_1 \cdots \pi_n$ in $\;H$} Like the
+    preceding case, except rewriting is done in the formula assumption
+    $H$ instead of in the goal's conclusion.  Rewriting using a proof
+    term is only allowed when the proof term was defined globally
+    or before the assumption $H$.
   \end{tsyntax}
 \end{tactic}
