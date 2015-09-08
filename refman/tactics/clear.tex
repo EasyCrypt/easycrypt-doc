@@ -1,14 +1,12 @@
 % --------------------------------------------------------------------
-\begin{tactic}[clear $\;x_1 \cdots x_n$]{clear}
+\begin{tactic}[clear $\;a_1 \cdots a_n$]{clear}
   \begin{tsyntax}[empty]{clear}
-  Clear the local variables and hypotheses $x_1 \cdots x_n$ from the
-  goal's context. Fail if any remaining hypotheses depend on any of the
-  $x_i$.
+    Clear assumptions $a_1 \cdots a_n$ from the goal's context. Fail
+    if any remaining hypotheses depend on any of the $a_i$.
 
-  For example, if the current goal is
-  \ecinput{../examps/parts/tactics/clear/1-1.0.ec}{}{}{}{} then
-  running \ecinput{../examps/parts/tactics/clear/1-1.ec}{}{}{}{}
-  produces
-  \ecinput{../examps/parts/tactics/clear/1-1.1.ec}{}{}{}{}
+    For example, if the current goal is
+    \ecinput{../examps/parts/tactics/clear/1-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/clear/1-1.ec}{}{}{}{}
+    produces \ecinput{../examps/parts/tactics/clear/1-1.1.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}

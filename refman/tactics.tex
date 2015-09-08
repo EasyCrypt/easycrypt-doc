@@ -23,17 +23,18 @@ has two parts:
 
   \item an \emph{ordered} set of \emph{assumptions}, consisting of
     identifiers with their types, memories, module names with their
-    module types and restrictions, local definitions, and named
-    formulas. An identifier's type may involve the type variables, the
-    local definitions and formulas may involve the type variables,
-    identifiers, memories and module names.
+    module types and restrictions, local definitions, and
+    \emph{hypotheses}, i.e., formulas. An identifier's type may
+    involve the type variables, the local definitions and formulas may
+    involve the type variables, identifiers, memories and module
+    names.
   \end{itemize}
 
 \item A \emph{conclusion}, consisting of a single formula, with
   the same constraints as the assumption formulas.
 \end{itemize}
 Informally, to prove a goal, one must show the conclusion to be true,
-given the truth of the formula assumptions, for all valid instantiations
+given the truth of the hypotheses, for all valid instantiations
 of the assumption identifiers, memories and module names.
 
 For example,
@@ -204,12 +205,14 @@ restricts attention to all occurrences \emph{not} in the following
 list. They may also be empty, meaning that all applicable occurrences
 should be operated on.
 
-Some ambient logic tactics uses \emph{rewriting directions}, $\mathit{dir}$,
+Some ambient logic tactics use \emph{rewriting directions}, $\mathit{dir}$,
 which may either be empty (meaning rewriting from left to right), or \ec{-},
 meaning rewriting from right to left.
 
 \subsection{Introduction and Generalization}
 \label{subsec:introgen}
+
+\paragraph{Introduction.}
 
 One moves the assumptions of a goal's conclusion into the goal's
 context using the introduction tactical.  This tactical uses
@@ -228,7 +231,7 @@ introduction patterns, which are defined in Figure~\ref{fig:intropat}.
       && {\ec{->>}} & substitute using assumption \\
       && {\ec{<<-}} & substitute in reverse using assumption \\
       && {\ec{/$p$}} & replace assumption by applying proof term \\
-      && {\ec{\{$b_1\cdots b_n$\}}} & clear introduced assumptions \\
+      && {\ec{\{$a_1\cdots a_n$\}}} & clear introduced assumptions \\
       && {\ec{/=}} & simplify \\
       && {\ec{//}} & trivial \\
       && {\ec{//=}} & simplify then trivial \\
@@ -343,7 +346,7 @@ disappear and some of the goals to be simplified.
     \item (\ec{/$p$})\quad Replace the top assumption by the result
     of applying the proof term $p$ to it using forward reasoning.
 
-    \item (\ec{\{$b_1\cdots b_n$\}})\quad Doesn't affect the goal's
+    \item (\ec{\{$a_1\cdots a_n$\}})\quad Doesn't affect the goal's
       conclusion, but clears the specified assumptions, i.e., removes
       them. Fails if one or more of the assumptions can't be cleared,
       because a remaining assumption depends upon it.
@@ -361,7 +364,8 @@ disappear and some of the goals to be simplified.
     \item ({\ec{$\mathit{dir}\;\mathit{occ}\;$@/$\mathit{op}$}})\quad
       Unfold (fold, if the direction is \ec{-}) the definition of
       operator $\mathit{op}$ at the specified occurrences of the
-      goal's conclusion.
+      goal's conclusion. See the \rtactic{rewrite} tactic for the
+      details.
 
     \item (\ec{[$\iota_{11}\cdots\iota_{1{m_1}}$ | $\;\cdots$ | $\;\iota_{r1}\cdots\iota_{r{m_r}}$]})\quad
       \begin{itemize}
@@ -457,43 +461,49 @@ disappear and some of the goals to be simplified.
   \end{tsyntax}
 \end{tactic}
 
-\begin{tactic}[$\tau$: $\;a_1 \cdots a_n$ | move: $\;\pi_1 \cdots \pi_n$]{generalization}
-  \begin{tsyntax}{$\tau$: $\;a_1 \cdots a_n$}
-    Generalize the assumptions $a_1, \ldots, a_n$, starting from
-    $a_n$ and going back, and then run tactic $\tau$.  This tactical
-    is only applicable to certain tactics: \rtactic{move},
-    \rtactic{case} (just the version that destructs the top assumption
-    of a goal's conclusion) and \rtactic{elim}.  An assumption is
-    moved back into the conclusion, using universal quantification or
-    an implication, as appropriate. If one assumption depends on
-    another, one can't generalize the later without also generalizing
-    the former.
+\paragraph{Generalization.}
 
-    For example, if the current goal is
-    \ecinput{examps/parts/tactics/generalize/2-1.0.ec}{}{}{}{} then
-    running \ecinput{examps/parts/tactics/generalize/2-1.ec}{}{}{}{}
-    produces
-    \ecinput{examps/parts/tactics/generalize/2-1.1.ec}{}{}{}{} In
-    this example, one can't generalize \ec{x} without also
-    generalizing \ec{eq_xy}.
-  \end{tsyntax}
+The generalization tactical moves assumptions from the context into
+the conclusion and generalizes subterms or formulas of the conclusion.
 
-  \begin{tsyntax}{move: $\;\pi_1 \cdots \pi_n$}
-    Generalize the patterns $\pi_1, \ldots, \pi_n$, working backward.
-    $\pi$ may be a subformula or subterm of the goal, or \ec{_}, which
-    stands for the whole goal, possibly prefixed by an occurrence
-    selector. This replaces the formula or subterm with a universally
-    quantified identifier of the approprate type.
+\begin{tactic}[$\tau$: $\;\pi_1 \cdots \pi_n$]{generalization}
+  \begin{tsyntax}[empty]{$\tau$: $\;\pi_1 \cdots \pi_n$}
+    Generalize the patterns $\pi_1, \ldots, \pi_n$, starting from
+    $\pi_n$ and going back, and then run tactic $\tau$.  \emph{This
+      tactical is only applicable to certain tactics: \rtactic{move},
+      \rtactic{case} (just the version that destructs the top
+      assumption of a goal's conclusion) and \rtactic{elim}.}
 
-    For example, if the current goal is
-    \ecinput{examps/parts/tactics/generalize/1-1.0.ec}{}{}{}{} then
-    running \ecinput{examps/parts/tactics/generalize/1-1.ec}{}{}{}{}
-    produces
-    \ecinput{examps/parts/tactics/generalize/1-1.1.ec}{}{}{}{}
-    Alternatively, running
-    \ecinput{examps/parts/tactics/generalize/3-1.ec}{}{}{}{}
-    produces
-    \ecinput{examps/parts/tactics/generalize/3-1.1.ec}{}{}{}{}
+    \begin{itemize}
+    \item When $\pi$ is an assumption from the context, it's moved
+      back into the conclusion, using universal quantification or an
+      implication, as appropriate. If one assumption depends on
+      another, one can't generalize the later without also
+      generalizing the former.
+
+      For example, if the current goal is
+      \ecinput{examps/parts/tactics/generalize/2-1.0.ec}{}{}{}{} then
+      running \ecinput{examps/parts/tactics/generalize/2-1.ec}{}{}{}{}
+      produces
+      \ecinput{examps/parts/tactics/generalize/2-1.1.ec}{}{}{}{} In
+      this example, one can't generalize \ec{x} without also
+      generalizing \ec{eq_xy}.
+
+    \item $\pi$ may also be a subformula or subterm of the goal, or
+      \ec{_}, which stands for the whole goal, possibly prefixed by an
+      occurrence selector. This replaces the formula or subterm with a
+      universally quantified identifier of the approprate type.
+
+      For example, if the current goal is
+      \ecinput{examps/parts/tactics/generalize/1-1.0.ec}{}{}{}{} then
+      running \ecinput{examps/parts/tactics/generalize/1-1.ec}{}{}{}{}
+      produces
+      \ecinput{examps/parts/tactics/generalize/1-1.1.ec}{}{}{}{}
+      Alternatively, running
+      \ecinput{examps/parts/tactics/generalize/3-1.ec}{}{}{}{}
+      produces
+      \ecinput{examps/parts/tactics/generalize/3-1.1.ec}{}{}{}{}
+    \end{itemize}
   \end{tsyntax}
 \end{tactic}
 
@@ -546,6 +556,13 @@ a composite tactic, which may then combined with other tactics.
   \paragraph{Remark.} Sequencing groups to the left, so that
     \ec{$\tau_1$; $\;\tau_2$; $\;\tau_3$} means
     \ec{($\tau_1$; $\;\tau_2$); $\;\tau_3$}.
+  \end{tsyntax}
+\end{tactic}
+
+\begin{tactic}[$\tau_1$; \[$\;\tau'_1$ | $\;\cdots$ | $\;\tau'_n$\]]{sequence with branching}
+  \begin{tsyntax}[empty]{}
+    Run $\tau_1$, which must generate exactly $n$ subgoals, $G_1,\ldots,G_n$.
+    Then apply $\tau'_i$ to $G_i$, for all $i$.
   \end{tsyntax}
 \end{tactic}
 
