@@ -72,6 +72,16 @@ hoare[if (x %% 3 = 1) {...} : x %% 3 = n ==> x %% 3 = n %% 2 + 1]
 \end{easycrypt}
 Statement judgements can't be directly input by the user.
 
+We use the term \emph{program} to refer to \emph{either} a procedure
+appearing in a \prhl, \phl or \hl judgement, \emph{or} a statement
+list appearing in a \prhl, \phl or \hl statement judgement. In the
+case of \prhl (statement) judgements, we speak of the \emph{left} and
+\emph{right} programs, also using \emph{program 1} for the left
+program, and \emph{program 2} for the right one. We will only speak of
+a program's \emph{length} when it's a statement list we are referring
+to. By the \emph{empty} program, we mean the statement list with no
+statements.
+
 When the proof of a lemma is begun, the proof engine starts out with
 a single goal, consisting of the lemma's statement. E.g.,
 the lemma
