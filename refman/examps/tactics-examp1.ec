@@ -8,11 +8,11 @@ module M = {
   }
 }.
 
-lemma L (n : int) :
-  n = 1 \/ n = 2 =>
-  hoare[M.f : x %% 3 = n ==> res %% 3 = (n %% 2) + 1].
+lemma L (x : int) :
+  x = 1 \/ x = 2 =>
+  hoare[M.f : x %% 3 = x ==> res %% 3 = (x %% 2) + 1].
 proof.
-dump "tactics-examp1-1" (move=> zor1_n).
+dump "tactics-examp1-1" (move=> zor1_x).
 dump "tactics-examp1-2" (proc).
 dump "tactics-examp1-3" (if).
   (* if branch *)

@@ -1,11 +1,11 @@
 Type variables: <none>
 
-n : int
-zor1_n: n = 1 \/ n = 2
+x : int
+zor1_x: x = 1 \/ x = 2
 #\hrulefill\hspace*{.5cm}#
 Context : M.f
 
-pre = x %% 3 = n /\ x %% 3 = 1
+pre = x %% 3 = x /\ x %% 3 = 1
 
 
-post = (x + 4) %% 3 = n %% 2 + 1
+post = (x + 4) %% 3 = x %% 2 + 1

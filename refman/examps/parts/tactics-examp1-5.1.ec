@@ -1,6 +1,6 @@
 Type variables: <none>
 
-n : int
-zor1_n: n = 1 \/ n = 2
+x : int
+zor1_x: x = 1 \/ x = 2
 #\hrulefill\hspace*{.5cm}#
-forall &hr, x{hr} %% 3 = n /\ x{hr} %% 3 = 1 => (x{hr} + 4) %% 3 = n %% 2 + 1
+forall &hr, x %% 3 = x /\ x{hr} %% 3 = 1 => (x{hr} + 4) %% 3 = x %% 2 + 1

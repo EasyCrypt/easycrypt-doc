@@ -1,5 +1,5 @@
 Type variables: <none>
 
-n : int
+x : int
 #\hrulefill\hspace*{.5cm}#
-n = 1 \/ n = 2 => hoare[ M.f : x %% 3 = n ==> res %% 3 = n %% 2 + 1]
+x = 1 \/ x = 2 => hoare[ M.f : x %% 3 = x ==> res %% 3 = x %% 2 + 1]
