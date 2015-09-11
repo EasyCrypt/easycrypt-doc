@@ -1,17 +1,33 @@
 % --------------------------------------------------------------------
 \begin{tactic}{seq}
-  \begin{tsyntax}{seq $\ n_1\ n_2$: R}
-  Relational sequence rule.
+  \begin{tsyntax}{seq $\;n_1$ $\;n_2$ : $\;R$}
+    \prhl sequence rule. If $n_1$ and $n_2$ are natural numbers and
+    the goal's conclusion is a \prhl statement judgement with
+    precondition $P$, postcondition $Q$ and such that the lengths of
+    the first and second programs are no more than $n_1$ and $n_2$,
+    respectively, then reduce the goal to two subgoals:
+    \begin{itemize}
+    \item A first goal whose conclusion has precondition $P$,
+      postcondition $R$, first program consisting of the first $n_1$
+      statements of the original goal's first program, and second
+      program consisting of the first $n_2$ statements of the original
+      goal's second program.
 
-  \paragraph{Examples:}\strut
-  
-  \begin{cmathpar}
-  \texample[\prhl{}]
-    {\ec{seq $\ \left|c_1\right|\ \left|c_2\right|$: R}}
-    {\pRHL{P}{c_1}{c_2}{R} \\
-     \pRHL{R}{c_1'}{c_2'}{Q}}
-    {\pRHL{P}{c_1;c_1'}{c_2;c_2'}{Q}}
-  \end{cmathpar}
+    \item A second goal whose conclusion has precondition $R$,
+      postcondition $Q$, first program consisting of all but the first
+      $n_1$ statements of the original goal's first program, and
+      second program consisting of all but the first $n_2$ statements
+      of the original goal's second program.
+    \end{itemize}
+
+  \bigskip
+  For example, if the current goal is
+  \ecinput{../examps/parts/tactics/seq/1-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/seq/1-1.ec}{}{}{}{}
+  produces the goals
+  \ecinput{../examps/parts/tactics/seq/1-1.1.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/seq/1-1.2.ec}{}{}{}{}
   \end{tsyntax}
 
   \begin{tsyntax}{seq $\ n$: R}

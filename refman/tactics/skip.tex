@@ -1,30 +1,22 @@
 % --------------------------------------------------------------------
 \begin{tactic}{skip}
-  \begin{tsyntax}{skip} Hoare logic rules for empty statement.
+  \begin{tsyntax}[empty]{skip} If the goal's conclusion is a statement
+    judgement whose program (\hl or \phl) or programs (\prhl) are
+    empty, reduce it to the goal whose conclusion is the ambient logic
+    formula \ec{$P$ => $\;Q$}, where $P$ is the original
+    conclusion's precondition, and $Q$ is its postcondition.
 
-  \paragraph{Examples:}\strut
+  \bigskip
+  For example, if the current goal is
+  \ecinput{../examps/parts/tactics/skip/1-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/skip/1-1.ec}{}{}{}{}
+  produces the goal
+  \ecinput{../examps/parts/tactics/skip/1-1.1.ec}{}{}{}{}
 
-  \begin{cmathpar}
-  \texample[\hl{}]
-    {\ec{skip}}
-    {P \Rightarrow Q}
-    {\pRHL{P}{\Skip}{\Skip}{Q}}
-
-  \texample[\phl{}]
-    {\ec{skip}}
-    {P \Rightarrow Q}
-    {\pHL{P'}{\Skip}{Q'}{\diamond}{1}}
-
-  \texample[\hl{}]
-    {\ec{skip}}
-    {P \Rightarrow Q}
-    {\HL{P}{\Skip}{Q}}
-  \end{cmathpar}
-
-  \textbf{Note:} Note that the \phl rule forces the bound of the goal
-  to be 1. If you end up with an empty program and a bound other than
-  1, you might want to use \rtactic{hoare} or \rtactic{conseq}. If
-  neither of these work, you should probably have used \rtactic{seq}
-  or \rtactic{phoare split} earlier on in your proof.
+%  \textbf{Note:} Note that the \phl rule forces the bound of the goal
+%  to be 1. If you end up with an empty program and a bound other than
+%  1, you might want to use \rtactic{hoare} or \rtactic{conseq}. If
+%  neither of these work, you should probably have used \rtactic{seq}
+%  or \rtactic{phoare split} earlier on in your proof.
   \end{tsyntax}
 \end{tactic}

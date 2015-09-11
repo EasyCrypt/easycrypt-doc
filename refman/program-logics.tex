@@ -25,23 +25,12 @@ We discuss these five classes in turn.
 \subsection{Tactics for Reasoning about Programs}
 \label{subsec:reasoningprograms}
 
-Unless specified, the following program logic tactics operate on a
-program's last statement. Although we describe these tactics as if
-they operated on single statements, their practical implementation
-automatically and implicitly applies tactic \rtactic{seq} to deal with
-context when necessary.
-
-For simple proofs, it is often enough to simply apply the program
-tactic corresponding to the last statement in the program and let
-\ec{smt} deal with the residual program-free formula, once the program
-has been consumed.
-
 Most of the program reasoning tactics discussed in this subsection
-have two modes when used on \prhl proof obligations. Their default
-mode is to operate on both programs at once. When a side is specified
-(using \ec{<tactic>\{1\}} or \ec{<tactic>\{2\}}), a one-sided variant
-is used. Apart from the \rtactic{if} tactic, the one-sided variant is
-in fact a combination of the \phl tactic and \rtactic{conseq}.
+have two modes when used on goals whose conclusions are \prhl
+statement judgements.  Their default mode is to operate on both
+programs at once. When a side is specified (using \ec{$\tau$\{1\}} or
+\ec{$\tau$\{2\}}), a one-sided variant is used, with 1 refering to the
+left program, and 2 to the right one.
 
 \medskip
 
