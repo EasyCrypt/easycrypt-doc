@@ -281,7 +281,7 @@ one can say
 \begin{easycrypt}{}{}
 search f.
 search (+).
-search (+) (-).  (* search for axioms/lemmas involving both operators *)
+search (+) (-).  (* axioms/lemmas involving both operators *)
 \end{easycrypt}
 (Infix operators must be parenthesized.)
 
@@ -1348,11 +1348,10 @@ pred P1 : int.
 pred P2 : int & (int * bool).
 pred P3 : int & (int * bool) & (real -> int).
 \end{easycrypt}
-Then, \ec{P0}, \ec{P1}, \ec{P2} and \ec{P3} are extended expressions
+\ec{P0}, \ec{P1}, \ec{P2} and \ec{P3} are extended expressions
 of types \ec{bool}, \ec{int -> bool}, \ec{int -> int * bool -> bool}
 and \ec{int -> int * bool -> (real -> int) -> bool}, respectively.
-The parentheses around \ec{(int * bool)} and \ec{(real -> int)} are
-mandatory.
+The parentheses are mandatory in \ec{(int * bool)} and \ec{(real -> int)}.
 Thus, if $e_1$, $e_2$ and $e_3$ are extended expressions of types
 \ec{int}, \ec{int * bool} and \ec{real -> int}, respectively, then
 \ec{P0}, \ecn{P1 $\,e_1$}, \ecn{P2 $\,e_1$ $\,e_2$} and \ecn{P3
