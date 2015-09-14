@@ -1,13 +1,41 @@
 % --------------------------------------------------------------------
 \begin{tactic}{proc}
   \begin{tsyntax}{proc}
-  Derive a specification for a \emph{concrete} procedure from a
-  specification on its code.
+    Turn a goal whose conclusion is a \prhl (resp., \phl) judgement
+    involving concrete procedures (resp., a concrete procedure)
+    into one whose conclusion is a \prhl (resp., \phl) statement
+    judgement by replacing the \emph{concrete} procedures (resp.,
+    procedure) by their (resp., its) bodies (resp., body).
+
+  \bigskip
+  For example, if the current goal is
+  \ecinput{../examps/parts/tactics/proc/1-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/proc/1-1.ec}{}{}{}{}
+  produces the goal
+  \ecinput{../examps/parts/tactics/proc/1-1.1.ec}{}{}{}{}
   \end{tsyntax}
 
-  \begin{tsyntax}{proc I}
-  Derive a specification for an \emph{abstract} procedure from an
-  invariant on the oracles it may query.
+  \begin{tsyntax}{proc $\;I$}
+    Reduce a goal whose conclusion is a \prhl (resp., \phl) judgement
+    involving an abstract procedure to \prhl (resp., \phl) judgements
+    on the oracles the procedure may query.
+
+  \bigskip
+  For example, given the declarations
+  \ecinput{examps/tactics/proc/2.ec}{}{3-20}{}
+  if the current goal is
+  \ecinput{../examps/parts/tactics/proc/2-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/proc/2-1.ec}{}{}{}{}
+  produces the goals
+  \ecinput{../examps/parts/tactics/proc/2-1.1.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/proc/2-1.2.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/proc/2-1.3.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/proc/2-1.4.ec}{}{}{}{}
+  The tactic would fail without the module restriction \ec{T\{Or\}} on
+  \ec{M}, as then \ec{M} could directly manipulate \ec{Or.x}.
   \end{tsyntax}
 
   \begin{tsyntax}{proc B I}

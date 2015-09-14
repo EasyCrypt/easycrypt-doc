@@ -1,10 +1,10 @@
 % --------------------------------------------------------------------
 \begin{tactic}{seq}
   \begin{tsyntax}{seq $\;n_1$ $\;n_2$ : $\;R$}
-    \prhl sequence rule. If $n_1$ and $n_2$ are natural numbers and
-    the goal's conclusion is a \prhl statement judgement with
-    precondition $P$, postcondition $Q$ and such that the lengths of
-    the first and second programs are no more than $n_1$ and $n_2$,
+    \textbf{\prhl sequence rule.} If $n_1$ and $n_2$ are natural
+    numbers and the goal's conclusion is a \prhl statement judgement
+    with precondition $P$, postcondition $Q$ and such that the lengths
+    of the first and second programs are at least $n_1$ and $n_2$,
     respectively, then reduce the goal to two subgoals:
     \begin{itemize}
     \item A first goal whose conclusion has precondition $P$,
@@ -30,55 +30,67 @@
   \ecinput{../examps/parts/tactics/seq/1-1.2.ec}{}{}{}{}
   \end{tsyntax}
 
-  \begin{tsyntax}{seq $\ n$: R}
-  Non-relational possibilistic sequence rule.
+  \begin{tsyntax}{seq $\;n$ : $\;R$}
+  \textbf{\phl sequence rule.} If $n$ is a natural
+    number and the goal's conclusion is a \phl statement judgement
+    with precondition $P$, postcondition $Q$ and such that the length
+    of the program is at least $n$, then reduce the goal to two subgoals:
+    \begin{itemize}
+    \item A first goal whose conclusion has precondition $P$,
+      postcondition $R$, and program consisting of the first $n$
+      statements of the original goal's program.
 
-  \paragraph{Examples:}\strut
+    \item A second goal whose conclusion has precondition $R$,
+      postcondition $Q$, and program consisting of all but the first
+      $n$ statements of the original goal's program.
+    \end{itemize}
 
-  \begin{cmathpar}
-  \texample[\hl{}]
-    {\ec{seq $\ \left|c\right|$: R}}
-    {\HL{P}{c}{R} \\ \HL{R}{c'}{Q}}
-    {\HL{P}{c;c'}{Q}}
-  \end{cmathpar}
+  \bigskip
+  For example, if the current goal is
+  \ecinput{../examps/parts/tactics/seq/2-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/seq/2-1.ec}{}{}{}{}
+  produces the goals
+  \ecinput{../examps/parts/tactics/seq/2-1.1.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/seq/2-1.2.ec}{}{}{}{}
   \end{tsyntax}
 
-  \begin{tsyntax}{seq $\ n$: R $\ \delta_1\ \delta_2\ \delta_3\ \delta_4$ I}
-  Non-relational probabilistic sequence rule. Argument \ec{I} is
-  optional (and defaults to $\mathsf{true}$). When one of
-  $(\delta_1,\delta_2)$ (resp. $(\delta_3,\delta_4)$) is 0, the other
-  can be replaced with a wildcard \ec{_}, and the corresponding goal
-  is not generated, as it is not relevant to the proof. When none of
-  the $\delta$s are given, the following default values are used:
-  $\delta_1 = 1$, $\delta_2 = \delta$, $\delta_3 = 0$.
-
-  \paragraph{Examples:}\strut
-  
-  \begin{cmathpar}
-  \texample[\phl{}]
-    {\ec{seq $\ \left|c\right|$: R $\ \delta_1$ $\ \delta_2$ $\ \delta_3$ $\ \delta_4$ I}}
-    {\HL{P}{c}{I} \\
-     \pHL{P}{c}{R}{\diamond}{\delta_1}  \\
-     \pHL{R \wedge I}{c'}{Q}{\diamond}{\delta_2} \\
-     \pHL{P}{c}{\neg R}{\diamond}{\delta_3} \\
-     \pHL{\neg R \wedge I}{c'}{Q}{\diamond}{\delta_4} \\
-     \delta_1 \delta_2 + \delta_3 \delta_4 \diamond \delta}
-    {\pHL{P}{c;c'}{Q}{\diamond}{\delta}}
-  \end{cmathpar}
-
-  \begin{cmathpar}
-  \texample[\phl{}]
-    {\ec{seq $\ \left|c\right|$: R $\ \delta_1$ $\ \delta_2\ \_\ 0$}}
-    {\HL{P}{c}{\mathsf{true}} \\
-     \pHL{P}{c}{R}{\diamond}{\delta_1} \\\\
-     \pHL{R \wedge I}{c'}{Q}{\diamond}{\delta_2} \\
-     \pHL{\neg R \wedge I}{c'}{Q}{\diamond}{0} \\
-     \delta_1 \delta_2 \diamond \delta}
-    {\pHL{P}{c;c'}{Q}{\diamond}{\delta}}
-  \end{cmathpar}
-
-  \textbf{Note:} Since most tactics implicitly apply the \rtactic{seq}
-  rule, most \phl tactics take optional final arguments corresponding
-  to the $\delta$s and \ec{I}.
-  \end{tsyntax}
+%  \begin{tsyntax}{seq $\ n$: R $\ \delta_1\ \delta_2\ \delta_3\ \delta_4$ I}
+%  Non-relational probabilistic sequence rule. Argument \ec{I} is
+%  optional (and defaults to $\mathsf{true}$). When one of
+%  $(\delta_1,\delta_2)$ (resp. $(\delta_3,\delta_4)$) is 0, the other
+%  can be replaced with a wildcard \ec{_}, and the corresponding goal
+%  is not generated, as it is not relevant to the proof. When none of
+%  the $\delta$s are given, the following default values are used:
+%  $\delta_1 = 1$, $\delta_2 = \delta$, $\delta_3 = 0$.
+%
+%  \paragraph{Examples:}\strut
+%  
+%  \begin{cmathpar}
+%  \texample[\phl{}]
+%    {\ec{seq $\ \left|c\right|$: R $\ \delta_1$ $\ \delta_2$ $\ \delta_3$ $\ \delta_4$ I}}
+%    {\HL{P}{c}{I} \\
+%     \pHL{P}{c}{R}{\diamond}{\delta_1}  \\
+%     \pHL{R \wedge I}{c'}{Q}{\diamond}{\delta_2} \\
+%     \pHL{P}{c}{\neg R}{\diamond}{\delta_3} \\
+%     \pHL{\neg R \wedge I}{c'}{Q}{\diamond}{\delta_4} \\
+%     \delta_1 \delta_2 + \delta_3 \delta_4 \diamond \delta}
+%    {\pHL{P}{c;c'}{Q}{\diamond}{\delta}}
+%  \end{cmathpar}
+%
+%  \begin{cmathpar}
+%  \texample[\phl{}]
+%    {\ec{seq $\ \left|c\right|$: R $\ \delta_1$ $\ \delta_2\ \_\ 0$}}
+%    {\HL{P}{c}{\mathsf{true}} \\
+%     \pHL{P}{c}{R}{\diamond}{\delta_1} \\\\
+%     \pHL{R \wedge I}{c'}{Q}{\diamond}{\delta_2} \\
+%     \pHL{\neg R \wedge I}{c'}{Q}{\diamond}{0} \\
+%     \delta_1 \delta_2 \diamond \delta}
+%    {\pHL{P}{c;c'}{Q}{\diamond}{\delta}}
+%  \end{cmathpar}
+%
+%  \textbf{Note:} Since most tactics implicitly apply the \rtactic{seq}
+%  rule, most \phl tactics take optional final arguments corresponding
+%  to the $\delta$s and \ec{I}.
+%  \end{tsyntax}
 \end{tactic}
