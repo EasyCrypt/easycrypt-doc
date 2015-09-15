@@ -22,7 +22,7 @@
 
   \bigskip
   For example, given the declarations
-  \ecinput{examps/tactics/proc/2.ec}{}{3-20}{}
+  \ecinput{examps/tactics/proc/2.ec}{}{3-23}{}
   if the current goal is
   \ecinput{../examps/parts/tactics/proc/2-1.0.ec}{}{}{}{} then
   running \ecinput{../examps/parts/tactics/proc/2-1.ec}{}{}{}{}
@@ -38,26 +38,76 @@
   \ec{M}, as then \ec{M} could directly manipulate \ec{Or.x}.
   \end{tsyntax}
 
-  \begin{tsyntax}{proc B I}
-  Derive a specification for an \emph{abstract} procedure from an
-  ``upto-failure'' invariant on the oracles it may query. The failure
-  event \ec{B} is evaluated in the right memory. The left oracles
-  must be lossless once the bad event occurs. The right oracles must
-  guarantee the stability of the failure event with probability 1.
+  \begin{tsyntax}{proc $\;B$ $\;I$}
+    Like \ec{proc $\;I$}, but just for \prhl judgements and uses
+    ``upto-bad'' (upto-failure) reasoning, where the ``bad'' (failure)
+    event, $B$, is evaluated in the second program's memory.  The
+    invariant $I$ only holds up to the point when failure occurs. The
+    abstract procedure must be lossless, modulo the losslessness of
+    the oracles it calls.  The oracles used by the abstract procedure
+    in the first program must be lossless once the bad event
+    occurs. The oracles used by the abstract procedure in the second
+    program must guarantee the stability of the failure event with
+    probability 1.
+
+  \bigskip
+  For example, suppose we have the following declarations
+  \ecinput{examps/tactics/proc/3.ec}{}{3-51}{}
+  Then, if the current goal is
+  \ecinput{../examps/parts/tactics/proc/3-1.0.ec}{}{}{}{}
+  running \ecinput{../examps/parts/tactics/proc/3-1.ec}{}{}{}{}
+  produces the goals
+  \ecinput{../examps/parts/tactics/proc/3-1.1.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/proc/3-1.2.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/proc/3-1.3.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/proc/3-1.4.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/proc/3-1.5.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/proc/3-1.6.ec}{}{}{}{}
   \end{tsyntax}
 
-  \begin{tsyntax}{proc B I I'}
-  Similar to \ec{proc B I}, with an additional invariant once the bad
-  event occurs. This is particularly useful when additional facts
-  about the state need to be known to prove the losslessness and
-  stability conditions.
+  \begin{tsyntax}{proc $\;B$ $\;I$ $\;J$}
+    Like \ec{proc $\;B$ $\;I$}, but where the extra invariant, $J$,
+    holds \emph{after} failure has occurred.
+
+  \bigskip
+  For example, given the declarations of the \ec{proc $\;B$ $\;I$} example,
+  if the current goal is
+  \ecinput{../examps/parts/tactics/proc/3-2.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/proc/3-2.ec}{}{}{}{}
+  produces the goals
+  \ecinput{../examps/parts/tactics/proc/3-2.1.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/proc/3-2.2.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/proc/3-2.3.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/proc/3-2.4.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/proc/3-2.5.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/proc/3-2.6.ec}{}{}{}{}
   \end{tsyntax}
 
   \begin{tsyntax}{proc*}
-  Derive a specification on procedures from a specification on a
-  program whose code consists in a call to that procedure. This tactic
-  is particularly useful in combination with \rtactic{inline} when
-  faced with a \prhl judgment where one of the procedures is concrete
-  and the other is abstract.
+    Reduce a \prhl (resp., \phl) judgement to a \prhl (resp., \phl)
+    statement judgement involving calls (resp., a call) to the
+    procedures (resp., procedure).
+
+  \bigskip
+  For example, if the current goal is
+  \ecinput{../examps/parts/tactics/proc/4-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/proc/4-1.ec}{}{}{}{}
+  produces the goal
+  \ecinput{../examps/parts/tactics/proc/4-1.1.ec}{}{}{}{}
+
+  \paragraph{Remark.}
+  This tactic is particularly useful in combination with
+  \rtactic{inline} when faced with a \prhl judgment where one of the
+  procedures is concrete and the other is abstract.
   \end{tsyntax}
 \end{tactic}

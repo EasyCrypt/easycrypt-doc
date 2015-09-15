@@ -7,6 +7,9 @@ module type OR = {
 
 module Or : OR = {
   var x : int
+  proc init() : unit = {
+    x <- 0;
+  }
   proc f1() : unit = {
     x <- x + 2;
   }
@@ -16,7 +19,7 @@ module Or : OR = {
 }.
 
 module type T(O : OR) = {
-  proc g(y : int) : int
+  proc g(y : int) : int {O.f1 O.f2}
 }.
 
 lemma X (M <: T{Or}) :
