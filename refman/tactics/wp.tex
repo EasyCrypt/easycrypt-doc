@@ -1,20 +1,30 @@
 % --------------------------------------------------------------------
 \begin{tactic}{wp}
   \begin{tsyntax}{wp}
-  Computes the weakest precondition of a straightline deterministic
-  suffix of the program(s) that implies the current
-  postcondition. \ec{wp} also consumes deterministic \ec{if}
-  statements (when both branches are deterministic straightline code
-  without procedure calls).
+    If the goal's conclusion is a \prhl, \phl or \hl statement
+    judgement, consume the longest suffix(es) of the conclusion's
+    program(s) consisting entirely of statements built-up from
+    ordinary assignments (not random assignments or procedure call
+    assignments) and \ec{if} statements, replacing the conclusion's
+    postcondition by the weakest precondition $R$ such that the
+    statement judgement consisting of $R$, the consumed suffix(es)
+    and the conclusion's original postcondition holds.
+
+    \bigskip For example, if the current goal is
+    \ecinput{../examps/parts/tactics/wp/1-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/wp/1-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/wp/1-1.1.ec}{}{}{}{}
   \end{tsyntax}
 
-  \begin{tsyntax}{wp $\ n_1$ $\ n_2$}
-  In \prhl, let \ec{wp} consume \emph{exactly} $n_1$ statements of
-  the left program and $n_2$ statements of the right program.
+  \begin{tsyntax}{wp $\;n_1$ $\;n_2$}
+    In \prhl, let \ec{wp} consume \emph{exactly} $n_1$ statements of
+    the first program and $n_2$ statements of the second
+    program. Fails if this isn't possible.
   \end{tsyntax}
 
-  \begin{tsyntax}{wp $\ n$}
-  In \phl and \hl, let \ec{wp} consume \emph{exactly} $n$ statements
-  of the program.
+  \begin{tsyntax}{wp $\;n$}
+    In \phl and \hl, let \ec{wp} consume \emph{exactly} $n$ statements
+    of the program. Fails if this isn't possible.
   \end{tsyntax}
 \end{tactic}

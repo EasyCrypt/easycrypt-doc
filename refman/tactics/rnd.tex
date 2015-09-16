@@ -1,22 +1,50 @@
 % --------------------------------------------------------------------
 \begin{tactic}{rnd}
-  \begin{tsyntax}{rnd | rnd f | rnd f f$^{-1}$}
-  In \prhl, compute the probabilistic weakest precondition of two
-  random samplings whose results are equally distributed, by
-  exhibiting a probability-preserving bijection between the two
-  distributions. When \ec{f$^{-1}$} is \ec{f}, it can be
-  omitted. When \ec{f} is the identity, both \ec{f} and
-  \ec{f$^{-1}$} can be omitted.
-  \end{tsyntax}
+  \begin{tsyntax}{rnd | rnd $\;f$ | rnd $\;f$ $\;g$} If the conclusion
+    is a \prhl statement judgement whose programs end with random
+    assignments \ec{$x_1\!$ <$\$$ $\;d_1$} and \ec{$x_2\!$ <$\$$
+      $\;d_2$}, and $f$ and $g$ are functions between the types of
+    $x_1$ and $x_2$, then consume those random assignments, replacing
+    the conclusion's postcondition by the probabilistic weakest
+    precondition of the random assignments wrt.\ $f$ and $g$.  The new
+    postcondition checks that:
+    \begin{itemize}
+    \item $f$ and $g$ are an isomorphism between the distributions
+      $d_1$ and $d_2$;
 
-  \begin{tsyntax}{rnd | rnd E}
-  In \phl, compute the probabilistic weakest precondition of a random
-  sampling with respect to event \ec{E}. When \ec{E} is not
-  specified, it is inferred from the current postcondition.
+    \item for all elements $u$ in the support of $d_1$, the result
+      of substituting $u$ and $f\,u$ for \ec{$x_1$\{1\}} and
+      \ec{$x_2$\{2\}} in the conclusion's original postcondition
+      holds.
+    \end{itemize}
+    When $g$ is $f$, it can be omitted. When $f$ is the identity, it
+    can be omitted.
+
+    \bigskip For example, if the current goal is
+    \ecinput{../examps/parts/tactics/rnd/2-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/rnd/2-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/rnd/2-1.1.ec}{}{}{}{}
+    Note that if one uses the other isomorphism between \ec{\{0,1\}} and
+    \ec{[2..3]} the generated subgoal will be false.
   \end{tsyntax}
 
   \begin{tsyntax}{rnd}
-  In \hl, compute the possibilistic weakest precondition of a random
-  sampling operation.
+    If the conclusion is a \phl statement judgement whose program ends
+    with a random assignment, then consume that random assignment,
+    replacing the conclusion's postcondition by the possibilistic
+    weakest precondition of the random assignment.
+
+    \bigskip For example, if the current goal is
+    \ecinput{../examps/parts/tactics/rnd/1-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/rnd/1-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/rnd/1-1.1.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{rnd | rnd $\;E$}
+    In \phl, compute the probabilistic weakest precondition of a
+    random sampling with respect to event $E$. When $E$ is not
+    specified, it is inferred from the current postcondition.
   \end{tsyntax}
 \end{tactic}
