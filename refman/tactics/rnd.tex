@@ -29,6 +29,27 @@
     \ec{[2..3]} the generated subgoal will be false.
   \end{tsyntax}
 
+  \begin{tsyntax}{rnd\{1\} | rnd\{2\}}
+    If the conclusion is a \prhl statement judgement whose designated
+    program (1 or 2) ends with a random assignment 
+    \ec{$x\!$ <$\$$ $\;d$}, then consume that random assignment,
+    replacing the conclusion's postcondition with a check that:
+    \begin{itemize}
+    \item the weight of $d$ is $1$ (so the random assignment can't fail);
+
+    \item for all elements $u$ in the support of $d$, the result
+      of substituting $u$ for \ec{$x$\{$i$\}}---where $i$ is the
+      selected side---in the conclusion's original
+      postcondition holds.
+    \end{itemize}
+
+    \bigskip For example, if the current goal is
+    \ecinput{../examps/parts/tactics/rnd/3-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/rnd/3-1.ec}{}{}{}{}
+    produces the (false!) goal
+    \ecinput{../examps/parts/tactics/rnd/3-1.1.ec}{}{}{}{}
+  \end{tsyntax}
+
   \begin{tsyntax}{rnd}
     If the conclusion is a \phl statement judgement whose program ends
     with a random assignment, then consume that random assignment,
