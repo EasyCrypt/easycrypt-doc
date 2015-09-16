@@ -1,13 +1,78 @@
 % --------------------------------------------------------------------
 \begin{tactic}{if}
   \begin{tsyntax}{if}
-  Operates on the \emph{first} statement (instead of the last one). If
-  the first statement in the program is
-  %%
-  \ec{if (b) \{ $c_1$ \} else \{ $c_2$ \}},
-  %%
-  applying tactic \ec{if} is equivalent to
-  \ec{case b; [rcondt 1=> //= | rcondf 1=> //=]}
-  (see \rtactic[case-pl]{case}, \rtactic{rcondt}, \rtactic{rcondf}).
+  If the goal's conclusion is a \prhl statement judgement whose programs
+  both \emph{begin} with \ec{if} statements, reduce the goal to
+  three subgoals:
+  \begin{itemize}
+  \item One whose conclusion is the ambient logic formula asserting that
+    the equivalence of the boolean expressions of the \ec{if} statements
+    in their respective memories holds given that the statement judgement's
+    precondition holds in those memories.
+
+  \item One in which the \ec{if} statements have been replaced by
+    their ``then'' parts, and where the assertion of the truth of
+    the first \ec{if} statement's boolean expression in the first
+    program's memory has been added to the conclusion's precondition.
+
+  \item One in which the \ec{if} statements have been replaced by
+    their ``else'' parts, and where the assertion of the falsity of
+    the first \ec{if} statement's boolean expression in the first
+    program's memory has been added to the conclusion's precondition.
+  \end{itemize}
+
+  \bigskip
+  For example, if the current goal is
+  \ecinput{../examps/parts/tactics/if/1-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/if/1-1.ec}{}{}{}{}
+  produces the goals
+  \ecinput{../examps/parts/tactics/if/1-1.1.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/if/1-1.2.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/if/1-1.3.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{if\{1\} | if\{2\}}
+    If the goal's conclusion is a \prhl judgement in which the first
+    statement of the specified program is an \ec{if} statement,
+    then reduce the goal to two subgoals:
+    \begin{itemize}
+    \item One where the \ec{if} statement has been replaced by its
+      ``then'' part, and the precondition has been augmented by the
+      assertion that the \ec{if} statement's boolean expression is true
+      in the specified program's memory.
+
+    \item One where the \ec{if} statement has been replaced by its
+      ``else'' part, and the precondition has been augmented by the
+      assertion that the \ec{if} statement's boolean expression is false
+      in the specified program's memory.
+    \end{itemize}
+
+    For example, if the current goal is
+    \ecinput{../examps/parts/tactics/if/2-1.0.ec}{}{}{}{} then running
+    \ecinput{../examps/parts/tactics/if/2-1.ec}{}{}{}{} produces the
+    goals \ecinput{../examps/parts/tactics/if/2-1.1.ec}{}{}{}{} and
+    \ecinput{../examps/parts/tactics/if/2-1.2.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{if}
+    If the goal's conclusion is an \hl judgement whose first statement
+    is an \ec{if} statement, then reduce the goal to two subgoals:
+    \begin{itemize}
+    \item One where the \ec{if} statement has been replaced by its
+      ``then'' part, and the precondition has been augmented by the
+      assertion that the \ec{if} statement's boolean expression is true.
+
+    \item One where the \ec{if} statement has been replaced by its
+      ``else'' part, and the precondition has been augmented by the
+      assertion that the \ec{if} statement's boolean expression is false.
+    \end{itemize}
+
+    For example, if the current goal is
+    \ecinput{../examps/parts/tactics/if/3-1.0.ec}{}{}{}{} then running
+    \ecinput{../examps/parts/tactics/if/3-1.ec}{}{}{}{} produces the
+    goals \ecinput{../examps/parts/tactics/if/3-1.1.ec}{}{}{}{} and
+    \ecinput{../examps/parts/tactics/if/3-1.2.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}
