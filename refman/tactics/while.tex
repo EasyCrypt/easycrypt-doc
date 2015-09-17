@@ -1,6 +1,8 @@
 % --------------------------------------------------------------------
 \begin{tactic}{while}
   \begin{tsyntax}{while $\;I$}
+  \prhl version...
+
   In \prhl and \hl, as well as upper-bounding \phl judgments, performs
   a weakest precondition computation over a loop using \ec{I} as
   invariant. This generates two subgoals: one explaining that \ec{I}
@@ -18,13 +20,21 @@
   \ecinput{../examps/parts/tactics/while/1-1.2.ec}{}{}{}{}
   \end{tsyntax}
 
+  \begin{tsyntax}{while\{1\} $\;I$ $\;v$ | while\{2\} $\;I$ $\;v$}
+  One-sided \prhl ...
+
+  \bigskip
+  For example, if the current goal is
+  \ecinput{../examps/parts/tactics/while/3-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/while/3-1.ec}{}{}{}{}
+  produces the goals
+  \ecinput{../examps/parts/tactics/while/3-1.1.ec}{}{}{}{}
+  and
+  \ecinput{../examps/parts/tactics/while/3-1.2.ec}{}{}{}{}
+  \end{tsyntax}
+
   \begin{tsyntax}{while $\;I$}
-  In \prhl and \hl, as well as upper-bounding \phl judgments, performs
-  a weakest precondition computation over a loop using \ec{I} as
-  invariant. This generates two subgoals: one explaining that \ec{I}
-  is a valid loop invariant, and the other explaining that the
-  invariant is initially true and that it is sufficient to establish
-  the current postcondition.
+  \hl version....
 
   \bigskip
   For example, if the current goal is
@@ -37,6 +47,8 @@
   \end{tsyntax}
 
   \begin{tsyntax}{while $\;I$ $\;v$}
+  \phl version...
+
   Where \ec{v} is an integer-valued expression. In \phl, performs a
   weakest precondition computation over a loop, using \ec{I} as
   invariant and \ec{v} as a decreasing variant to prove

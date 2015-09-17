@@ -1,11 +1,12 @@
 Type variables: <none>
 
+m : int
 #\hrulefill\hspace*{.5cm}#
 Context : M.f
 
-pre = (i <= n /\ x + i = n) /\ i < n
+pre = (0 <= i <= n /\ x <= i * i) /\ i < n
 
-(1)  i <- i + 1               
-(2)  x <- x - 1               
+(1)  x <- x + (i + 1)         
+(2)  i <- i + 1               
 
-post = i <= n /\ x + i = n
+post = 0 <= i <= n /\ x <= i * i
