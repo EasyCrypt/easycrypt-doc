@@ -1,16 +1,43 @@
 % --------------------------------------------------------------------
 \begin{tactic}{while}
   \begin{tsyntax}{while $\;I$}
-  \prhl version...
+    Here $I$ is an \emph{invariant} (formula), which may reference
+    variables of the two programs, interpreted in their memories.  If
+    the goal's conclusion is a \prhl statement judgement whose
+    programs both end with \ec{while} statements, reduce the goal to
+    two subgoals whose conclusions are \prhl statement judgements:
+    \begin{itemize}
+    \item One whose first and second programs are the bodies of the
+      first and second while statements, whose precondition is the
+      conjunction of $I$ and the while statements' boolean expressions (the
+      first of which is interpreted in memory \ec{&1}, and the second
+      of which is interpreted in \ec{&2}) and whose postcondition is
+      the conjunction of $I$ and the assertion that the while statements'
+      boolean expressions (interpreted in the appropriate memories)
+      are equivalent.
 
-  In \prhl and \hl, as well as upper-bounding \phl judgments, performs
-  a weakest precondition computation over a loop using \ec{I} as
-  invariant. This generates two subgoals: one explaining that \ec{I}
-  is a valid loop invariant, and the other explaining that the
-  invariant is initially true and that it is sufficient to establish
-  the current postcondition.
+    \item One whose precondition is the original goal's precondition,
+      whose first and second programs are all the results of removing
+      the while statements from the two programs, and whose postcondition is
+      the conjunction of:
+      \begin{itemize}
+      \item the conjunction of $I$ and the assertion that the while statements'
+        boolean expressions are equivalent; and
 
-  \bigskip
+      \item the assertion that, for all values of the variables
+        \emph{modified} by the while statements, if the while statements'
+        boolean expressions don't hold, but $I$ holds, then the
+        original goal's postcondition holds (in $I$, the while statements'
+        boolean expressions, and the postcondition, variables modified
+        by the while statements are replaced by universally quantified
+        identifiers; otherwise, the boolean expressions are
+        interpreted in the program's respective memories, and the
+        memory references of $I$ and the postcondition are
+        maintained).
+      \end{itemize}
+    \end{itemize}
+
+  \medskip
   For example, if the current goal is
   \ecinput{../examps/parts/tactics/while/1-1.0.ec}{}{}{}{} then
   running \ecinput{../examps/parts/tactics/while/1-1.ec}{}{}{}{}
@@ -21,7 +48,43 @@
   \end{tsyntax}
 
   \begin{tsyntax}{while\{1\} $\;I$ $\;v$ | while\{2\} $\;I$ $\;v$}
-  One-sided \prhl ...
+    Here $I$ is an \emph{invariant} (formula) and $v$ is a
+    \emph{variant} integer expression, both of which may reference
+    variables of the two programs, interpreted in their memories.  If
+    the goal's conclusion is a \prhl statement judgement whose
+    designated program (1 or 2) ends with a \ec{while} statement,
+    reduce the goal to two subgoals;
+    \begin{itemize}
+    \item One whose conclusion is a \phl statement judgement, saying that
+      running the body of the while statement in a memory in which
+      $I$ holds and the while statement's boolean expression is true
+      is guaranteed to result in termination in a memory in which
+      $I$ holds and in which the value of the variant expression $v$
+      has decreased by at least $1$. (More precisely, the \phl statement
+      judgment is universally quantified by the memory of the non-designated
+      program and the initial value of $v$. References to the variables
+      of the nondesignated program in $I$ and $v$ are interpreted in this
+      memory; reference to the variables of the designed program have
+      their memory references removed.)
+
+    \item One whose conclusion is a \prhl statement judgement whose
+      precondition is the original goal's precondition, whose
+      designated program is the result of removing the while statement
+      from the original designated program, whose other program is
+      unchanged, and whose postcondition is the conjunction of $I$ and
+      the assertion that, for all values of the variables modified by
+      the while statement, that the conjunction of the following
+      formulas holds:
+      \begin{itemize}
+      \item the assertion that, if $I$ holds, but the variant
+        expression $v$ is not positive, then the while statement's
+        boolean expression is false;
+
+      \item the assertion that, if the while statement's boolean expression
+        doesn't hold, but $I$ holds, then the original goal's postcondition
+        holds.
+      \end{itemize}
+    \end{itemize}
 
   \bigskip
   For example, if the current goal is
@@ -34,7 +97,32 @@
   \end{tsyntax}
 
   \begin{tsyntax}{while $\;I$}
-  \hl version....
+    Here $I$ is an \emph{invariant} (formula), which may reference
+    variables of the program.  If the goal's conclusion is an \hl
+    statement judgement ending with a \ec{while} statement, reduce the
+    goal to two subgoals whose conclusions are \hl statement
+    judgements:
+    \begin{itemize}
+    \item One whose program is the body of the while statement, whose
+      precondition is the conjunction of $I$ and the while statement's
+      boolean expression, and whose postcondition is $I$.
+
+    \item One whose precondition is the original goal's precondition,
+      whose program is the result of removing the while statement from
+      the original program, and whose postcondition is the conjunction
+      of:
+      \begin{itemize}
+      \item $I$; and
+
+      \item the assertion that, for all values of the variables
+        \emph{modified} by the while statement, if the while statement's boolean
+        expression doesn't hold, but $I$ holds, then the original
+        goal's postcondition holds (in $I$, the while statement's boolean
+        expression, and the postcondition, variables modified by the
+        while statement are replaced by universally quantified
+        identifiers).
+      \end{itemize}
+    \end{itemize}
 
   \bigskip
   For example, if the current goal is
@@ -49,13 +137,13 @@
   \begin{tsyntax}{while $\;I$ $\;v$}
   \phl version...
 
-  Where \ec{v} is an integer-valued expression. In \phl, performs a
-  weakest precondition computation over a loop, using \ec{I} as
-  invariant and \ec{v} as a decreasing variant to prove
-  termination. In addition to the two invariant-related subgoals (see
-  above), two subgoals regarding the variant are generated; one
-  requiring that the variant be less than 0 exactly when the loop
-  condition is false, and the other requiring that the variant
-  decreases strictly.
+%  Where \ec{v} is an integer-valued expression. In \phl, performs a
+%  weakest precondition computation over a loop, using \ec{I} as
+%  invariant and \ec{v} as a decreasing variant to prove
+%  termination. In addition to the two invariant-related subgoals (see
+%  above), two subgoals regarding the variant are generated; one
+%  requiring that the variant be less than 0 exactly when the loop
+%  condition is false, and the other requiring that the variant
+%  decreases strictly.
   \end{tsyntax}
 \end{tactic}
