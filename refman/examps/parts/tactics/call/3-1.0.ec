@@ -5,8 +5,8 @@ Adv: T{Or}
 &1 (left ) : M(Adv).h
 &2 (right) : N(Adv).h
 
-pre = ={glob Adv} /\ Or.x{1} %% 2 = Or.x{2} %% 2
+pre = ={y, glob Adv} /\ Or.x{1} %% 2 = 0 /\ Or.x{2} %% 2 = 0
 
-z <@ Adv(Or).g()           (1)  z <@ Adv(Or).g()         
+Adv(Or).g()                (1)  Adv(Or).g()              
 
-post = ={z}
+post = Or.x{1} %% 2 = 0 /\ Or.x{2} %% 2 = 0

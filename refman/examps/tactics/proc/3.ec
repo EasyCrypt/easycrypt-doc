@@ -36,7 +36,7 @@ module Or2 : OR = {
 }.
 
 module type ADV(O : OR) = {
-  proc * f() : bool {O.qry}
+  proc * f() : bool
 }.
 
 lemma X (Adv <: ADV{Or1, Or2}) :

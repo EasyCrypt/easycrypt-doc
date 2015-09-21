@@ -20,15 +20,15 @@ module Or : OR = {
 }.
 
 module type T(O : OR) = {
-  proc g(y : int) : int {O.f1 O.f2}
+  proc g() : unit {O.f1 O.f2}
 }.
 
 lemma X (M <: T{Or}) :
   equiv[M(Or).g ~ M(Or).g :
-        ={y, glob M} /\ Or.x{1} %% 2 = Or.x{2} %% 2 ==>
-        ={res} /\ Or.x{1} %% 2 = Or.x{2} %% 2].
+        ={glob M} /\ Or.x{1} %% 2 = 0 /\ Or.x{2} %% 2 = 0 ==>
+        Or.x{1} %% 2 = 0 /\ Or.x{2} %% 2 = 0].
 proof.
-dump "2-1" (proc (Or.x{1} %% 2 = Or.x{2} %% 2)).
+dump "2-1" (proc (Or.x{1} %% 2 = 0 /\ Or.x{2} %% 2 = 0)).
 trivial.
 trivial.
 proc; auto; smt.

@@ -20,36 +20,33 @@ module Or : OR = {
 }.
 
 module type T(O : OR) = {
-  proc g() : int {O.f1 O.f2}
+  proc g() : unit {O.f1 O.f2}
 }.
 
 module M(A : T) = {
-  proc h(y : int) : int = {
-    var z : int;
+  proc h(y : int) : unit = {
     Or.init(y * 2);
-    z <@ A(Or).g();
-    return z;
+    A(Or).g();
   }
 }.
 
 module N(Adv : T) = {
-  proc h(y : int) : int = {
+  proc h(y : int) : unit = {
     var z : int;
     Or.init(y * 4);
-    z <@ Adv(Or).g();
-    return z;
+    Adv(Or).g();
   }
 }.
 
 lemma X (Adv <: T{Or}) :
   equiv[M(Adv).h ~ N(Adv).h :
         ={y, glob Adv} ==>
-        ={res}].
+        Or.x{1} %% 2 = 0 /\ Or.x{2} %% 2 = 0].
 proof.
 proc.
-seq 1 1 : (={glob Adv} /\ Or.x{1} %% 2 = Or.x{2} %% 2).
+seq 1 1 : (={y, glob Adv} /\ Or.x{1} %% 2 = 0 /\ Or.x{2} %% 2 = 0).
   inline *; auto; smt.
-dump "3-1" 67 (call (_ : Or.x{1} %% 2 = Or.x{2} %% 2)).
+dump "3-1" 67 (call (_ : Or.x{1} %% 2 = 0 /\ Or.x{2} %% 2 = 0)).
 proc; auto; smt.
 proc; auto; smt.
 skip; smt.

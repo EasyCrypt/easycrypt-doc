@@ -2,8 +2,8 @@ Type variables: <none>
 
 M : T{Or}
 #\hrulefill\hspace*{.5cm}#
-pre = ={y, glob M} /\ Or.x{1} %% 2 = Or.x{2} %% 2
+pre = ={glob M} /\ Or.x{1} %% 2 = 0 /\ Or.x{2} %% 2 = 0
 
     M(Or).g ~ M(Or).g
 
-post = ={res} /\ Or.x{1} %% 2 = Or.x{2} %% 2
+post = Or.x{1} %% 2 = 0 /\ Or.x{2} %% 2 = 0
