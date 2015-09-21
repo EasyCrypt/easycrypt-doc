@@ -2,9 +2,10 @@
 \begin{tactic}{proc}
   \begin{tsyntax}{proc}
     Turn a goal whose conclusion is a \prhl, \phl or \hl judgement
-    involving \emph{concrete} procedure(s) into one whose conclusion is
-    a statement judgement by replacing the concrete procedure(s)
-    by their body/ies.
+    involving \emph{concrete} procedure(s) into one whose conclusion
+    is a statement judgement by replacing the concrete procedure(s) by
+    their body/ies. Assertions about \ec{res}/\ec{res\{$i$\}} are turned
+    into ones about the value(s) returned by the procedure(s).
 
   \bigskip
   For example, if the current goal is
@@ -15,9 +16,12 @@
   \end{tsyntax}
 
   \begin{tsyntax}{proc $\;I$}
-    Reduce a goal whose conclusion is a \prhl (resp., \phl) judgement
-    involving an \emph{abstract} procedure to \prhl (resp., \phl)
-    judgements on the oracles the procedure may query.
+    Reduce a goal whose conclusion is a \prhl (resp., \hl) judgement
+    involving an \emph{abstract} procedure to goals whose conclusions
+    are \prhl (resp., \hl) judgements on the oracles the procedure may
+    query, plus goals with ambient logic conclusions checking the
+    original judgement's pre- and postconditions allow such
+    a reduction.
 
   \bigskip
   For example, given the declarations
@@ -40,14 +44,17 @@
   \begin{tsyntax}{proc $\;B$ $\;I$}
     Like \ec{proc $\;I$}, but just for \prhl judgements and uses
     ``upto-bad'' (upto-failure) reasoning, where the ``bad'' (failure)
-    event, $B$, is evaluated in the second program's memory.  The
-    invariant $I$ only holds up to the point when failure occurs. The
-    abstract procedure must be lossless, modulo the losslessness of
-    the oracles it calls.  The oracles used by the abstract procedure
-    in the first program must be lossless once the bad event
-    occurs. The oracles used by the abstract procedure in the second
-    program must guarantee the stability of the failure event with
-    probability 1.
+    event, $B$, is evaluated in the second program's memory, and the
+    invariant $I$ only holds up to the point when failure occurs.  In
+    addition to subgoals whose conclusions are \prhl judgments
+    involving the oracles the abstract procedure may query, subgoals
+    are generated that check that: the original judgement's pre- and
+    postconditions support the reduction; the abstract procedure is
+    lossless, assuming the losslessness of the oracles it may query;
+    the oracles used by the abstract procedure in the first program
+    are lossless once the bad event occurs; and the oracles used by
+    the abstract procedure in the second program guarantee the
+    stability of the failure event with probability 1.
 
   \bigskip
   For example, suppose we have the following declarations
