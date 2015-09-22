@@ -39,6 +39,8 @@
   \ecinput{../examps/parts/tactics/proc/2-1.4.ec}{}{}{}{}
   The tactic would fail without the module restriction \ec{T\{Or\}} on
   \ec{M}, as then \ec{M} could directly manipulate \ec{Or.x}.
+  It would also fail if, in the declaration of the module type \ec{T},
+  \ec{g} were given access to \ec{O.f3}.
   \end{tsyntax}
 
   \begin{tsyntax}{proc $\;B$ $\;I$}
