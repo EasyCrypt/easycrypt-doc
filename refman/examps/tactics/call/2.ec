@@ -30,9 +30,9 @@ lemma X :
   equiv[M.g ~ N.g : u{1} %% 2 = u{2} %% 2 ==> ={res}].
 proof.
 proc.
-sp 0 1; exists* N.x{2}; elim*=> x_2.
+sp 0 1; exists* N.x{2}; elim*=> x2.
 dump "2-1" 67
-  (call{1} (_ : M.x %% 2 = x_2 %% 2 ==> M.x %% 2 = x_2 %% 2)).
+  (call{1} (_ : M.x %% 2 = x2 %% 2 ==> M.x %% 2 = x2 %% 2)).
 proc.
 auto; smt.
 auto; smt.
@@ -42,7 +42,7 @@ lemma Y :
   equiv[M.g ~ N.g : u{1} %% 2 = u{2} %% 2 ==> ={res}].
 proof.
 proc.
-sp 0 1; exists* N.x{2}; elim*=> x_2.
-dump "2-2" 67 (call{1} (M_f x_2)).
+sp 0 1; exists* N.x{2}; elim*=> x2.
+dump "2-2" 67 (call{1} (M_f x2)).
 auto; smt.
 qed.

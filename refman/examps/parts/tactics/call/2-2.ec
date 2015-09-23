@@ -1,1 +1,1 @@
-call{1} (M_f x_2).
+call{1} (M_f x2).

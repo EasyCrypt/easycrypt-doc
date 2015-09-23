@@ -76,8 +76,7 @@ lemma X (Adv <: ADV{Or1, Or2}) :
 proof.
 move=> ll_Adv_f.
 proc.
-seq 1 1 :
-  (Or1.qry{1} = Or2.qry{2} /\ Or1.queried{1} = Or2.queried{2}).
+seq 1 1 : (Or1.qry{1} = Or2.qry{2}).
   inline *; wp; rnd{1}; rnd; skip; smt.
 dump "4-1" 67 (call (_ : Or2.queried, (Or1.qry{1} = Or2.qry{2}))).
 proc; if {1}; auto; smt.

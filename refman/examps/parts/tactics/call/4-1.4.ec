@@ -7,7 +7,7 @@ ll_Adv_f: forall (O <: OR{Adv}),
 &1 (left ) : M(Adv).h
 &2 (right) : N(Adv).h
 
-pre = Or1.qry{1} = Or2.qry{2} /\ Or1.queried{1} = Or2.queried{2}
+pre = Or1.qry{1} = Or2.qry{2}
 
 
 post =
