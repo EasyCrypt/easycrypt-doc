@@ -16,16 +16,24 @@
   \end{tsyntax}
 
   \begin{tsyntax}{proc $\;I$}
-    Reduce a goal whose conclusion is a \prhl (resp., \hl) judgement
-    involving the same \emph{abstract} procedure (but perhaps using
-    different implementations of its oracles) to goals whose
-    conclusions are \prhl (resp., \hl) judgements on those oracles
-    (their preconditions and postconditions assume/assert $I$; in
-    the \prhl case, the preconditions also assume the equality of the
-    oracles' parameters, and their postconditions also assert the
-    equality of the oracles' results), plus goals with ambient logic
+    Reduce a goal whose conclusion is a \prhl judgement involving the
+    same \emph{abstract} procedure (but perhaps using different
+    implementations of its oracles) (resp., an \hl judgement involving
+    an abstract proceure) to goals whose conclusions are \prhl (resp.,
+    \hl) judgements on those oracles, plus goals with ambient logic
     conclusions checking the original judgement's pre- and
-    postconditions allow such a reduction.
+    postconditions allow such a reduction (the preconditions
+    \emph{must} assume $I$ and, in the \prhl case, the equality of the
+    abstract procedure's parameter(s) and the global variables of the
+    module in which the procedure is contained (except in the case
+    when the module's type specifies that the abstract procedure
+    initializes its global variables; the postconditions \emph{may}
+    assume $I$ and, in the \prhl case, the equality of the results of
+    the procedure call(s) and the values of the global variables). The
+    generated \prhl/\hl subgoals have pre- and postconditions
+    assuming/asserting $I$; in the \prhl case, the preconditions also
+    assume the equality of the oracles' parameters, and their
+    postconditions also assert the equality of the oracles' results).
 
   \bigskip
   For example, given the declarations

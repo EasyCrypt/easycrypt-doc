@@ -1,32 +1,36 @@
 % --------------------------------------------------------------------
 \begin{tactic}{call}
   \begin{tsyntax}{call (_ : $\;P$ ==> $\;Q$)}
-    If the goal's conclusion is a \prhl or \hl statement judgement
-    whose program(s) end(s) with (a) procedure call(s) or (a) procedure
-    call assignment(s), then generate two subgoals:
+    If the goal's conclusion is a \prhl statement judgement whose
+    programs end with procedure calls or procedure call assignments
+    (resp., an \hl statement judgement whose program ends with a
+    procedure call or procedure call assignment), then generate two
+    subgoals:
   \begin{itemize}
-  \item One whose conclusion is a judgement of the same kind whose
-    precondition is $P$, whose procedure(s) are/is the procedure(s)
-    being called, and whose postcondition is $Q$.
+  \item One whose conclusion is a \prhl judgement (resp., \hl
+    judgement) whose precondition is $P$, whose procedures are the
+    procedures being called (resp., procedure is the procedure being
+    called), and whose postcondition is $Q$.
 
-  \item One whose conclusion is a statement judgement of the same
-    kind whose precondition is the original goal's precondition,
-    whose program(s) are/is the result of removing the procedure
-    call(s) from the program(s), and whose postcondition is the
-    conjunction of
+  \item One whose conclusion is a \prhl statement judgement (resp.,
+    \hl statement judgement) whose precondition is the original goal's
+    precondition, whose programs are (resp., program is) the result of
+    removing the procedure calls (resp., call) from the programs
+    (resp., program), and whose postcondition is the conjunction of
     \begin{itemize}
-    \item the result of replacing the procedure's/procedures'
+    \item the result of replacing the procedures' (resp., procedure's)
       parameter(s) by their actual argument(s) in $P$; and
 
     \item the assertion that, for all values of the global variable(s)
-      modified by the procedure(s) and the result(s) of the procedure
-      call(s), if $Q$ holds (where these quantified identifiers have
-      been substituted for the modified variables and procedure
-      results), then the original goal's postcondition holds (where
-      the modified global variables and occurrences of the variable(s)
-      (if any) to which the result(s) of the call(s) of the
-      procedure(s) are/is assigned have been replaced by the
-      appropriate quantified identifiers).
+      modified by the procedures (resp., procedure) and the results
+      (resp., result) of the procedure calls (resp., procedure call),
+      if $Q$ holds (where these quantified identifiers have been
+      substituted for the modified variables and procedure results),
+      then the original goal's postcondition holds (where the modified
+      global variables and occurrences of the variables (resp.,
+      variable) (if any) to which the results of the procedure calls
+      are (resp., result of the procedure call is) assigned have been
+      replaced by the appropriate quantified identifiers).
     \end{itemize}
   \end{itemize}
 
@@ -110,9 +114,10 @@
   \end{tsyntax}
 
   \begin{tsyntax}{call (_ : $\;I$)}
-    If the conclusion is a \prhl or \hl statement judgement whose
-    program(s) end(s) with (a) call(s) of (a) \emph{concrete}
-    procedure(s), then use the specification argument to \ec{call}
+    If the conclusion is a \prhl statement judgement whose programs
+    end with calls to \emph{concrete} procedures (resp., an \hl
+    statement judgement whose program ends with a call to a concrete
+    procedure), then use the specification argument to \ec{call}
     generated from the \emph{invariant} $I$, and automatically apply
     \ec{proc} to its first subgoal.  In the \prhl case, its
     precondition will assume equality of the procedures' parameters,
@@ -133,21 +138,19 @@
   \end{tsyntax}
 
   \begin{tsyntax}{call (_ : $\;I$)}
-    If the conclusion is a \prhl or \hl statement judgement whose
-    program(s) end(s) with (a) call(s) of the same \emph{abstract}
-    procedure, then use the specification argument to \ec{call}
-    generated from the \emph{invariant} $I$, and automatically apply
-    \ec{proc $\;I$} to its first subgoal, pruning the first two
-    subgoals the application generates, because their conclusions
-    consist of ambient logic formulas that are true by construction,
-    and pruning the next goal (showing the losslessness of the abstract
-    procedure given the losslessness of the abstract oracles it uses), if
-    trivial suffices to solve it.
-    In the \prhl case, its precondition will assume equality of the
-    procedure's parameters and of the global variables of the module
-    containing the procedure, and its postcondition will assume
-    equality of the results of the procedure calls and of the global
-    variables of the containing module.
+    If the conclusion is a \prhl statement judgement whose programs
+    end with calls of the same \emph{abstract} procedure (resp., an
+    \hl statement judgement whose program ends with a call to an
+    abstract procedure), then use the specification argument to
+    \ec{call} generated from the \emph{invariant} $I$, and
+    automatically apply \ec{proc $\;I$} to its first subgoal, pruning
+    the first two subgoals the application generates, because their
+    conclusions consist of ambient logic formulas that are true by
+    construction.  In the \prhl case, its precondition will assume
+    equality of the procedure's parameters and of the global variables
+    of the module containing the procedure, and its postcondition will
+    assume equality of the results of the procedure calls and of the
+    global variables of the containing module.
 
     \medskip
     For example, given the declarations
@@ -198,13 +201,16 @@
     end with calls of the same \emph{abstract} procedure, then use the
     specification argument to \ec{call} generated from the \emph{bad
       event} $B$ and \emph{invariants} $I$ and $J$, and automatically
-    apply \ec{proc $\;B$ $\;I$ $\;J$} to its first subgoal, pruning the
-    first two subgoals the application generates, because their
+    apply \ec{proc $\;B$ $\;I$ $\;J$} to its first subgoal, pruning
+    the first two subgoals the application generates, because their
     conclusions consist of ambient logic formulas that are true by
-    construction.  The specification's precondition will assume
-    equality of the procedure's parameters and of the global variables
-    of the module containing the procedure as well as $I$, and its
-    postcondition will assert
+    construction, and pruning the next goal (showing the losslessness
+    of the abstract procedure given the losslessness of the abstract
+    oracles it uses), if trivial suffices to solve it.  The
+    specification's precondition will assume equality of the
+    procedure's parameters and of the global variables of the module
+    containing the procedure as well as $I$, and its postcondition
+    will assert
     \begin{itemize}
     \item $I$ and the equality of the results of the procedure calls
       and of the global variables of the containing module---if $B$
