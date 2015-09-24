@@ -139,7 +139,10 @@
     generated from the \emph{invariant} $I$, and automatically apply
     \ec{proc $\;I$} to its first subgoal, pruning the first two
     subgoals the application generates, because their conclusions
-    consist of ambient logic formulas that are true by construction.
+    consist of ambient logic formulas that are true by construction,
+    and pruning the next goal (showing the losslessness of the abstract
+    procedure given the losslessness of the abstract oracles it uses), if
+    trivial suffices to solve it.
     In the \prhl case, its precondition will assume equality of the
     procedure's parameters and of the global variables of the module
     containing the procedure, and its postcondition will assume
@@ -165,7 +168,10 @@
       event} $B$ and \emph{invariant} $I$, and automatically apply
     \ec{proc $\;B$ $\;I$} to its first subgoal, pruning the first two
     subgoals the application generates, because their conclusions
-    consist of ambient logic formulas that are true by construction.
+    consist of ambient logic formulas that are true by construction,
+    and pruning the next goal (showing the losslessness of the abstract
+    procedure given the losslessness of the abstract oracles it uses), if
+    trivial suffices to solve it.
     The specification's precondition will assume equality of the
     procedure's parameters and of the global variables of the module
     containing the procedure as well as $I$, and its postcondition
