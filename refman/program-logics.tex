@@ -22,17 +22,14 @@ logic tactics:
 \end{enumerate}
 We discuss these five classes in turn.
 
+Some of the program reasoning tactics have two modes when used on
+goals whose conclusions are \prhl statement judgements.  Their default
+mode is to operate on both programs at once. When a side is specified
+(using \ec{$\tau$\{1\}} or \ec{$\tau$\{2\}}), a one-sided variant is
+used, with 1 referring to the left program, and 2 to the right one.
+
 \subsection{Tactics for Reasoning about Programs}
 \label{subsec:reasoningprograms}
-
-Some of the program reasoning tactics discussed in this subsection
-have two modes when used on goals whose conclusions are \prhl
-statement judgements.  Their default mode is to operate on both
-programs at once. When a side is specified (using \ec{$\tau$\{1\}} or
-\ec{$\tau$\{2\}}), a one-sided variant is used, with 1 referring to the
-left program, and 2 to the right one.
-
-\medskip
 
 \input{tactics/proc.tex}
 \input{tactics/skip.tex}
@@ -46,6 +43,11 @@ left program, and 2 to the right one.
 
 \subsection{Tactics for Transforming Programs}
 \label{subsec:transformingprograms}
+
+Unless otherwise specified, the tactics of this subsection only apply
+to goals whose conclusions are \prhl, \phl or \hl statement
+judgements, reducing such a goal to a single subgoal in which only the
+program(s) of those statement judgements have changed.
 
 \input{tactics/swap.tex}
 \input{tactics/inline.tex}

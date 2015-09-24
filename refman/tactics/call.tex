@@ -1,5 +1,11 @@
 % --------------------------------------------------------------------
 \begin{tactic}{call}
+  When describing the variants of this tactic, we ony consider
+  procedure call assignments whose left-hand sides consist of single
+  identifiers.  The generalization to multiple assignment, when values
+  of tuple types are returned, is straightforward.
+
+  \bigskip
   \begin{tsyntax}{call (_ : $\;P$ ==> $\;Q$)}
     If the goal's conclusion is a \prhl statement judgement whose
     programs end with procedure calls or procedure call assignments

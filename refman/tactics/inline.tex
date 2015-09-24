@@ -1,6 +1,46 @@
 % --------------------------------------------------------------------
 \begin{tactic}{inline}
-  \begin{tsyntax}[empty]{inline}
-  \fix{Missing description of inline}.
+  \begin{tsyntax}{inline $\;M_1$.$p_1$ $\;\cdots$ $\;M_n$.$p_n$}
+    Inline the selected \emph{concrete} procedures in both programs,
+    with \prhl, and in the program, with \hl and \phl, until no more
+    inlining of these procedures is possible.
+
+    To inline a procedure call, the procedure's parameters are
+    assigned the values of their arguments (fresh parameter
+    identifiers are used, as necessary, to avoid naming
+    conflicts). This is followed by the body of the procedure. Finally,
+    the procedure's return value is assigned to the identifiers (if
+    any) to which the procedure call's result is assigned.
   \end{tsyntax}
+
+  \begin{tsyntax}{inline\{1\} $\;M_1$.$p_1$ $\;\cdots$ $\;M_n$.$p_n$ | inline\{2\} $\;M_1$.$p_1$ $\;\cdots$ $\;M_n$.$p_n$}
+    Do the inlining in just the first or second program, in the \prhl case.
+  \end{tsyntax}
+
+  \begin{tsyntax}{inline* | inline\{1\}* | inline\{2\}*}
+    Inline all concrete procedures, continuing until no more inlining
+    is possible.
+  \end{tsyntax}
+
+  \bigskip
+  For example, given the declarations
+  \ecinput{examps/tactics/inline/1.ec}{}{3-18}{}
+  if the current goal is
+  \ecinput{../examps/parts/tactics/inline/1-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/inline/1-1.ec}{}{}{}{}
+  produces the goal
+  \ecinput{../examps/parts/tactics/inline/1-1.1.ec}{}{}{}{}
+  From which running
+  \ecinput{../examps/parts/tactics/inline/1-2.ec}{}{}{}{}
+  produces the goal
+  \ecinput{../examps/parts/tactics/inline/1-2.1.ec}{}{}{}{}
+  From which running
+  \ecinput{../examps/parts/tactics/inline/1-3.ec}{}{}{}{}
+  produces the goal
+  \ecinput{../examps/parts/tactics/inline/1-3.1.ec}{}{}{}{}
+  And, if the current goal is
+  \ecinput{../examps/parts/tactics/inline/2-1.0.ec}{}{}{}{} then
+  running \ecinput{../examps/parts/tactics/inline/2-1.ec}{}{}{}{}
+  produces the goal
+  \ecinput{../examps/parts/tactics/inline/2-1.1.ec}{}{}{}{}
 \end{tactic}

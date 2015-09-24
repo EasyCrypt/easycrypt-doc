@@ -1,5 +1,11 @@
 % --------------------------------------------------------------------
 \begin{tactic}{rnd}
+  When describing the variants of this tactic, we ony consider random
+  assignments whose left-hand sides consist of single identifiers.
+  The generalization to multiple assignment, when distributions over
+  tuple types are sampled, is straightforward.
+
+  \bigskip
   \begin{tsyntax}{rnd | rnd $\;f$ | rnd $\;f$ $\;g$} If the conclusion
     is a \prhl statement judgement whose programs end with random
     assignments \ec{$x_1\!$ <$\$$ $\;d_1$} and \ec{$x_2\!$ <$\$$
