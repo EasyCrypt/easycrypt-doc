@@ -19,9 +19,13 @@
     Reduce a goal whose conclusion is a \prhl (resp., \hl) judgement
     involving the same \emph{abstract} procedure (but perhaps using
     different implementations of its oracles) to goals whose
-    conclusions are \prhl (resp., \hl) judgements on those oracles,
-    plus goals with ambient logic conclusions checking the original
-    judgement's pre- and postconditions allow such a reduction.
+    conclusions are \prhl (resp., \hl) judgements on those oracles
+    (their preconditions and postconditions assume/assert $I$; in
+    the \prhl case, the preconditions also assume the equality of the
+    oracles' parameters, and their postconditions also assert the
+    equality of the oracles' results), plus goals with ambient logic
+    conclusions checking the original judgement's pre- and
+    postconditions allow such a reduction.
 
   \bigskip
   For example, given the declarations
@@ -50,12 +54,10 @@
     and the invariant $I$ only holds up to the point when failure
     occurs.  In addition to subgoals whose conclusions are \prhl
     judgments involving the oracles the abstract procedure may query
-    (their preconditions assume $I$ and the equality of the abstract
-    procedure's arguments and the global variables of the module in
-    which it's declared as well as that $B$ is false; their
-    postconditions assert $I$ and the equality of the abstract
-    procedure's results and of the global variables of the containing
-    module---but only when $B$ does not hold), subgoals are generated
+    (their preconditions assume $I$ and the equality of oracles'
+    parameters, as well as that $B$ is false; their
+    postconditions assert $I$ and the equality of the oracles'
+    results---but only when $B$ does not hold), subgoals are generated
     that check that: the original judgement's pre- and postconditions
     support the reduction; the abstract procedure is lossless,
     assuming the losslessness of the oracles it may query; the oracles
@@ -88,13 +90,11 @@
     Like \ec{proc $\;B$ $\;I$}, but where the extra invariant, $J$,
     holds \emph{after} failure has occurred.  In the \prhl subgoals
     involving oracles called by the abstract procedure: the
-    preconditions assume $I$ and the equality of the abstract
-    procedure's arguments and the global variables of the module in
-    which it's declared, as well as that $B$ is false; and the
-    postconditions assert
+    preconditions assume $I$ and the equality of the oracles'
+    parameters, as well as that $B$ is
+    false; and the postconditions assert
     \begin{itemize}
-    \item $I$ and the equality of the abstract procedure's results and
-      of the global variables of the containing module---when $B$ does
+    \item $I$ and the equality of the oracles' results---when $B$ does
       not hold; and
 
     \item $J$---when $B$ does hold.
