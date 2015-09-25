@@ -21,40 +21,40 @@
       Subsection~\ref{subsec:introgen}.
 
     \item If $\pi$ is a proof-term with conclusion $f_1=f_2$, then
-      \ec{rewrite} searches for the first subterm of the goal matching
-      $f_1$ and resulting in the full instantiation of the pattern.
-      It then replaces, after instantiation of the pattern, all the
-      occurrences of $f_1$ by $f_2$ in the goal, and creates
-      new subgoals for the instantiations of the assuptions of $p$.
-      If no subterms of the goal match $f_1$ or if the pattern
-      cannot be fully instantiated by matching, the tactic fails.  The
-      tactic works the same if the pattern ends by \ec{$f_1\!$ <=> $\;f_2$}. If
-      the direction indicator \ec{-} is given, \ec{rewrite} works in
-      the reverse direction, searching for a match of $f_2$ and then
+      \ec{rewrite} searches for the first subterm of the goal's
+      conclusion matching $f_1$ and resulting in the full
+      instantiation of the pattern.  It then replaces, after
+      instantiation of the pattern, all the occurrences of $f_1$ by
+      $f_2$ in the goal's conclusion, and creates new subgoals for the
+      instantiations of the assuptions of $p$.  If no subterms of the
+      goal's conclusion match $f_1$ or if the pattern cannot be fully
+      instantiated by matching, the tactic fails.  The tactic works
+      the same if the pattern ends by \ec{$f_1\!$ <=> $\;f_2$}. If the
+      direction indicator \ec{-} is given, \ec{rewrite} works in the
+      reverse direction, searching for a match of $f_2$ and then
       replacing all occurrences of $f_2$ by $f_1$.
 
     \item If $\pi$ is a \ec{/}-prefixed pattern of the form
       $o\,p_1\,\cdots\,p_n$, with $o$ a defined symbol, then
-      \ec{rewrite} searches for the first subterm of the goal matching
-      $o\,p_1\,\cdots\,p_n$ and resulting in the full instantiation of
-      the pattern. It then replaces, after instantiation of the
-      pattern, all the occurrences of $o\,p_1\,\cdots\,p_n$ by the
-      $\beta\delta$ head-normal form of $o\,p_1\,\cdots\,p_n$, where
-      the $\delta$-reduction is restricted to subterms headed by the
-      symbol $o$. If no subterms of the goal match
-      $o\,p_1\,\cdots\,p_n$
-      or if the pattern cannot be fully instantiated by matching, the
-      tactic fails. If the direction indicator \ec{-} is given,
-      \ec{rewrite} works in the reverse direction, searching for a
-      match of the $\beta\delta_o$
-      head-normal of $o\,p_1\,\cdots\,p_n$
-      and then replacing all occurrences of this head-normal form with
+      \ec{rewrite} searches for the first subterm of the goal's
+      conclusion matching $o\,p_1\,\cdots\,p_n$ and resulting in the
+      full instantiation of the pattern. It then replaces, after
+      instantiation of the pattern, all the occurrences of
+      $o\,p_1\,\cdots\,p_n$ by the $\beta\delta$ head-normal form of
+      $o\,p_1\,\cdots\,p_n$, where the $\delta$-reduction is
+      restricted to subterms headed by the symbol $o$. If no subterms
+      of the goal's conclusion match $o\,p_1\,\cdots\,p_n$ or if the
+      pattern cannot be fully instantiated by matching, the tactic
+      fails. If the direction indicator \ec{-} is given, \ec{rewrite}
+      works in the reverse direction, searching for a match of the
+      $\beta\delta_o$ head-normal of $o\,p_1\,\cdots\,p_n$ and then
+      replacing all occurrences of this head-normal form with
       $o\,p_1\,\cdots\,p_n$.
     \end{itemize}
     
     \smallskip
     The occurrence selector restricts which occurrences of the
-    matching pattern are replaced in the goal---see
+    matching pattern are replaced in the goal's conclusion---see
     Subsection~\ref{subsec:occsels}.
 
     Repetition markers allow the repetition of the same rewriting. For

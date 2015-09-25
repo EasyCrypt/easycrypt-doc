@@ -1,12 +1,12 @@
 % --------------------------------------------------------------------
 \begin{tactic}{congr}
   \begin{tsyntax}[empty]{congr}
-    Replace a goal of the form
+    Replace a goal whose conclusion has the form
     $f\,t_1\,\cdots\,t_n = f\,u_1\,\cdots\,u_n$, where $f$ is an
-    assumption identifier or operator, with the subgoals $t_i = u_i$
-    for all $i$.  Subgoals solvable by \ec{reflexivity} are
-    automatically closed. Also works when the operator is used in
-    infix form.
+    assumption identifier or operator, with subgoals having
+    conclusions $t_i = u_i$ for all $i$.  Subgoals solvable by
+    \ec{reflexivity} are automatically closed. Also works when the
+    operator is used in infix form.
 
   For example, if the current goal is
   \ecinput{../examps/parts/tactics/congr/1-1.0.ec}{}{}{}{} then

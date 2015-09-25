@@ -1,11 +1,12 @@
 % --------------------------------------------------------------------
 \begin{tactic}[pose $\;x\!$ := $\;\pi$]{pose}
   \begin{tsyntax}[empty]{pose}
-  Search for the first subterm $t$ of the goal matching $\pi$ and
-  leading to the full instantiation of the pattern. Then introduce,
-  after instantiation, the local definition \ec{$x\!$ := $\;t$} and abstract
-  all occurrences of $t$ in the goal as $x$. An occurence
-  selector can be used (see Subsection~\ref{subsec:occsels}).
+    Search for the first subterm $t$ of the goal's conclusion matching
+    $\pi$ and leading to the full instantiation of the pattern. Then
+    introduce to the goal's context, after instantiation, the local
+    definition \ec{$x\!$ := $\;t$}, and abstract all occurrences of $t$
+    in the goal's conclusion as $x$. An occurence selector can be used
+    (see Subsection~\ref{subsec:occsels}).
 
   For example, if the current goal is
   \ecinput{../examps/parts/tactics/pose/1-1.0.ec}{}{}{}{} then

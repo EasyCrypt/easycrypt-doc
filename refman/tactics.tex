@@ -56,17 +56,16 @@ Internally, \EasyCrypt's proof engine also works with \prhl, \phl and
 \hl judgments involving lists of statements rather than procedure
 names, which we'll call \emph{statement judgements}, below. For
 example, given this declaration
-\ecinput{examps/tactics-examp1.ec}{}{3-9}{}{}
-this is an \phl statement judgement:
-\ecinput{examps/parts/tactics-examp1-3.0.ec}{}{}{}{}
-The pre- and post-conditions of a statement judgement may refer to the
-parameters and local variables of the procedure that's the
-\emph{context} of the conclusion---\ec{M.f} in the preceding
-example. They may also refer to the memories \ec{&$1$} and \ec{&$2$}
-in the case of \prhl statement judgements.
-When a statement judgement appears anywhere other than as the conclusion of
-a goal, the pretty printer renders it in abbreviated linear syntax.
-E.g., the preceding goal is rendered as
+\ecinput{examps/tactics-examp1.ec}{}{3-9}{}{} this is an \phl
+statement judgement:
+\ecinput{examps/parts/tactics-examp1-3.0.ec}{}{}{}{} The pre- and
+post-conditions of a statement judgement may refer to the parameters
+and local variables of the \emph{procedure context} of the
+conclusion---\ec{M.f} in the preceding example. They may also refer
+to the memories \ec{&$1$} and \ec{&$2$} in the case of \prhl statement
+judgements.  When a statement judgement appears anywhere other than as
+the conclusion of a goal, the pretty printer renders it in abbreviated
+linear syntax.  E.g., the preceding goal is rendered as
 \begin{easycrypt}{}{}
 hoare[if (x %% 3 = 1) {...} : x %% 3 = n ==> x %% 3 = n %% 2 + 1]
 \end{easycrypt}
@@ -115,6 +114,12 @@ and the list of goals is left unchanged.
 A lemma's proof may be saved, using the step \ec{qed}, when the list
 of goals becomes empty. And this must be done before anything else may
 be done.
+
+\paragraph{Remark.}
+In the descriptions of \EasyCrypt's tactics given in the following two
+sections, unless otherwise specified, you should assume that the
+subgoals to which a tactic reduces a goal have the same contexts as
+that original goal.
 
 % Ambient Logic Section
 \input{ambient-logic}

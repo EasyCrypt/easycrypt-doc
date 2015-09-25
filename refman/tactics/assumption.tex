@@ -1,12 +1,14 @@
 % --------------------------------------------------------------------
 \begin{tactic}{assumption}
   \begin{tsyntax}[empty]{assumption}
-  Search in the context for a hypothesis that is convertible to the goal
-  and apply. Fail if none can be found.
+    Search in the context for a hypothesis that is convertible to the
+    goal's conclusion, solving the goal if one is found. Fail if none
+    can be found.
 
-  For example, if the current goal is
-  \ecinput{../examps/parts/tactics/assumption/1-1.0.ec}{}{}{}{} then
-  running \ecinput{../examps/parts/tactics/assumption/1-1.ec}{}{}{}{}
-  solves the goal.
+    For example, if the current goal is
+    \ecinput{../examps/parts/tactics/assumption/1-1.0.ec}{}{}{}{} then
+    running
+    \ecinput{../examps/parts/tactics/assumption/1-1.ec}{}{}{}{} solves
+    the goal.
   \end{tsyntax}
 \end{tactic}

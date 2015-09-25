@@ -1,9 +1,10 @@
 \begin{tactic}[have $\;\iota$: $\;\phi$]{have}
   \begin{tsyntax}[empty]{have}
-    Logical cut. Generate two subgoals: one for the cut formula
-    $\phi$, and one for \ec{$\phi$ => $\;\psi$} where $\psi$ is the
-    current goal's conclusion. Moreover, the introduction pattern
-    \ec{$\iota$} is applied to the second subgoal.
+    Logical cut. Generate two subgoals: one whose conclusion is the
+    cut formula $\phi$, and one with conclusion \ec{$\phi$ =>
+      $\;\psi$} where $\psi$ is the current goal's
+    conclusion. Moreover, the introduction pattern \ec{$\iota$} is
+    applied to the second subgoal.
 
   For example, if the current goal is
   \ecinput{../examps/parts/tactics/have/1-1.0.ec}{}{}{}{} then
