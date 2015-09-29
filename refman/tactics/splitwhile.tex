@@ -1,6 +1,36 @@
 % --------------------------------------------------------------------
 \begin{tactic}{splitwhile}
-  \begin{tsyntax}[empty]{splitwhile}
-  \fix{Missing description of splitwhile}.
+  \begin{tsyntax}{splitwhile $\;n$ : $\;e$}
+    If the goal's conclusion is an \hl statement judgement whose $n$th
+    statement is a \ec{while} statement and $e$ is a well-typed
+    boolean expression in the \ec{while} statement's context, then
+    insert before the \ec{while} statement a copy of the \ec{while}
+    statement in which $e$ is added as a conjunct of the statement's
+    boolean expression.
+
+    \medskip For example, if the current goal is
+    \ecinput{../examps/parts/tactics/splitwhile/1-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/splitwhile/1-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/splitwhile/1-1.1.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{splitwhile\{1\} $\;n$ : $\;e$ | splitwhile\{2\} $\;n$ : $\;e$}
+    If the goal's conclusion is a \prhl statement judgement where the
+    $n$th statement of the designated program is a \ec{while}
+    statement and $e$ is a well-typed boolean expression in the
+    \ec{while} statement's context, then insert before the \ec{while}
+    statement a copy of the \ec{while} statement in which $e$ is added
+    as a conjunct of the statement's boolean expression.
+
+    \medskip For example, if the current goal is
+    \ecinput{../examps/parts/tactics/splitwhile/1-2.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/splitwhile/1-2.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/splitwhile/1-2.1.ec}{}{}{}{}
+    from which
+    running \ecinput{../examps/parts/tactics/splitwhile/1-3.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/splitwhile/1-3.1.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}
