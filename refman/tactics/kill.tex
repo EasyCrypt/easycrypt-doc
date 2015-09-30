@@ -2,11 +2,11 @@
 \begin{tactic}{kill}
   \begin{tsyntax}{kill $\;n$ ! $\;m$}
     Fails unless $n\geq 1$ and $m\geq 0$.  If the goal's conclusion is
-    an \hl statement judgement in which the statement block from
-    position $n$ to $n + m - 1$ is well-defined (when $m = 0$, this
-    block is empty), and the variables written by this statement
-    block aren't used in the judgement's postcondition or read by the
-    rest of the program, then reduce the goal to two subgoals.
+    an \hl statement judgement whose program has a statement block
+    from position $n$ to $n + m - 1$ (when $m = 0$, this block is
+    empty), and the variables written by this statement block aren't
+    used in the judgement's postcondition or read by the rest of the
+    program, then reduce the goal to two subgoals.
     \begin{itemize}
     \item One whose conclusion is a \phl statement judgement whose pre-
        and postconditions are \ec{true}, whose program is the

@@ -1,6 +1,42 @@
 % --------------------------------------------------------------------
 \begin{tactic}{cfold}
-  \begin{tsyntax}[empty]{cfold}
-  \fix{Missing description of cfold}.
+  \begin{tsyntax}{cfold $\;n$ ! $\;m$}
+    Fails unless $n\geq 1$ and $m\geq 0$.  If the goal's conclusion is
+    an \hl statement judgement in which statement $n$ of the
+    judgement's program is an ordinary assignment statement in which
+    constant values are assigned to local identifiers, and the
+    following statement block of length $m$ does not write any of
+    those identifiers, then replace all occurrences of the assigned
+    identifiers in that statement block by the constants assigned to
+    them, and move the assignment statement to after the modified
+    statement block.
+
+    \medskip For example, if the current goal is
+    \ecinput{../examps/parts/tactics/cfold/1-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/cfold/1-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/cfold/1-1.1.ec}{}{}{}{}
+    from which
+    running \ecinput{../examps/parts/tactics/cfold/1-2.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/cfold/1-2.1.ec}{}{}{}{}
+    from which
+    running \ecinput{../examps/parts/tactics/cfold/1-3.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/cfold/1-3.1.ec}{}{}{}{}
+    from which
+    running \ecinput{../examps/parts/tactics/cfold/1-4.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/cfold/1-4.1.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{cfold\{1\} $\;n$ ! $\;m$ | cfold\{2\} $\;n$ ! $\;m$}
+    Like the \hl version, but operating on the designed program of
+    a \prhl judgement's conclusion.
+  \end{tsyntax}
+
+  \begin{tsyntax}{cfold\{1\} $\;n$ | cfold\{2\} $\;n$}
+    Like the general cases, but where $m$ is set so as to be the
+    number of statements after the assignment statement.
   \end{tsyntax}
 \end{tactic}
