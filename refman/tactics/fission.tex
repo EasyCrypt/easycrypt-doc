@@ -1,6 +1,63 @@
 % --------------------------------------------------------------------
 \begin{tactic}{fission}
-  \begin{tsyntax}[empty]{fission}
-  \fix{Missing description of fission}.
+  \begin{tsyntax}{fission $\;c$!$l$ @ $\;m$, $\;n$}
+    \hl statement judgement version.  Fails unless $0\leq l$ and
+    $0\leq m\leq n$ and the $c$th statement of the program is a
+    \ec{while} statement, and there are at least $l$ statements right
+    before the \ec{while} statement, at its level, and the body of the
+    \ec{while} statement has at least $n$ statements.
+
+    Let
+    \begin{itemize}
+    \item $s_1$ be the $l$ statements before the \ec{while} statement
+      at position $c$;
+
+    \item $e$ be the boolean expression of the \ec{while} statement;
+
+    \item $s_2$ be the first $m$ statements of the body of the
+      \ec{while} statement;
+
+    \item $s_3$ be the next $n - m$ statements of the body of the
+      \ec{while} statement;
+
+    \item $s_4$ be the rest of the body of the \ec{while} statement.
+    \end{itemize}
+    Fails unless:
+    \begin{itemize}
+    \item $e$ doesn't reference the variables written by $s_2$ and $s_3$;
+
+    \item $s_1$ and $s_4$ don't read or write the variables written by
+      $s_2$ and $s_3$;
+
+    \item $s_2$ and $s_3$ don't write the variables written by $s_1$
+      and $s_4$;
+
+    \item $s_2$ and $s_3$ don't read or write the variables written by
+      the other.
+    \end{itemize}
+    The tactic replaces
+\begin{easycrypt}{}{}
+#$s_1$# while (#$e$#) { #$s_2$# #$s_3$# #$s_4$# }
+\end{easycrypt}
+    by
+\begin{easycrypt}{}{}
+#$s_1$# while (#$e$#) { #$s_2$# #$s_4$# }
+#$s_1$# while (#$e$#) { #$s_3$# #$s_4$# }
+\end{easycrypt}
+
+    \medskip For example, if the current goal is
+    \ecinput{../examps/parts/tactics/fission/1-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/fission/1-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/fission/1-1.1.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{fission $\;c$ @ $\;m$, $\;n$}
+    Equivalent to \ec{fission $\;c$!1 @ $\;m$, $\;n$}.
+  \end{tsyntax}
+
+  \begin{tsyntax}{fission\{1\} $\;\cdots$ | fission\{2\} $\;\cdots$}
+    The \prhl versions of the above variants, working on the
+    designated program.
   \end{tsyntax}
 \end{tactic}

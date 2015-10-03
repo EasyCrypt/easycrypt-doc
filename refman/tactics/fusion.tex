@@ -1,6 +1,58 @@
 % --------------------------------------------------------------------
 \begin{tactic}{fusion}
-  \begin{tsyntax}[empty]{fusion}
-  \fix{Missing description of fusion}.
+  \begin{tsyntax}{fusion $\;c$!$l$ @ $\;m$, $\;n$}
+    \hl statement judgement version.  Fails unless $0\leq l$ and
+    $0\leq m$ and $0\leq n$ and the $c$th statement of the program
+    is a \ec{while} statement, and there are at least $l$ statements right
+    before the \ec{while} statement, at its level,
+    and the part of the program beginning from the $l$ statements
+    before the while loop may be uniquely matched against
+\begin{easycrypt}{}{}
+#$s_1$# while (#$e$#) { #$s_2$# #$s_4$# }
+#$s_1$# while (#$e$#) { #$s_3$# #$s_4$# }
+\end{easycrypt}
+    where:
+    \begin{itemize}
+    \item $s_1$ has length $l$;
+
+    \item $s_2$ has length $m$;
+
+    \item $s_3$ has length $n$;
+
+    \item $e$ doesn't reference the variables written by $s_2$ and $s_3$;
+
+    \item $s_1$ and $s_4$ don't read or write the variables written by
+      $s_2$ and $s_3$;
+
+    \item $s_2$ and $s_3$ don't write the variables written by $s_1$
+      and $s_4$;
+
+    \item $s_2$ and $s_3$ don't read or write the variables written by
+      the other.
+    \end{itemize}
+    The tactic replaces
+\begin{easycrypt}{}{}
+#$s_1$# while (#$e$#) { #$s_2$# #$s_4$# }
+#$s_1$# while (#$e$#) { #$s_3$# #$s_4$# }
+\end{easycrypt}
+by
+\begin{easycrypt}{}{}
+#$s_1$# while (#$e$#) { #$s_2$# #$s_3$# #$s_4$# }
+\end{easycrypt}
+
+    \medskip For example, if the current goal is
+    \ecinput{../examps/parts/tactics/fusion/1-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/fusion/1-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/fusion/1-1.1.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{fusion $\;c$ @ $\;m$, $\;n$}
+    Equivalent to \ec{fusion $\;c$!1 @ $\;m$, $\;n$}.
+  \end{tsyntax}
+
+  \begin{tsyntax}{fusion\{1\} $\;\cdots$ | fusion\{2\} $\;\cdots$}
+    The \prhl versions of the above variants, working on the
+    designated program.
   \end{tsyntax}
 \end{tactic}

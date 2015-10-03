@@ -1,7 +1,7 @@
 % --------------------------------------------------------------------
 \begin{tactic}{splitwhile}
-  \begin{tsyntax}{splitwhile $\;n$ : $\;e$}
-    If the goal's conclusion is an \hl statement judgement whose $n$th
+  \begin{tsyntax}{splitwhile $\;c$ : $\;e$}
+    If the goal's conclusion is an \hl statement judgement whose $c$th
     statement is a \ec{while} statement and $e$ is a well-typed
     boolean expression in the \ec{while} statement's context, then
     insert before the \ec{while} statement a copy of the \ec{while}
@@ -15,9 +15,9 @@
     \ecinput{../examps/parts/tactics/splitwhile/1-1.1.ec}{}{}{}{}
   \end{tsyntax}
 
-  \begin{tsyntax}{splitwhile\{1\} $\;n$ : $\;e$ | splitwhile\{2\} $\;n$ : $\;e$}
+  \begin{tsyntax}{splitwhile\{1\} $\;c$ : $\;e$ | splitwhile\{2\} $\;c$ : $\;e$}
     If the goal's conclusion is a \prhl statement judgement where the
-    $n$th statement of the designated program is a \ec{while}
+    $c$th statement of the designated program is a \ec{while}
     statement and $e$ is a well-typed boolean expression in the
     \ec{while} statement's context, then insert before the \ec{while}
     statement a copy of the \ec{while} statement in which $e$ is added

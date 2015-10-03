@@ -1,8 +1,8 @@
 % --------------------------------------------------------------------
 \begin{tactic}{cfold}
-  \begin{tsyntax}{cfold $\;n$ ! $\;m$}
+  \begin{tsyntax}{cfold $\;c$ ! $\;m$}
     Fails unless $n\geq 1$ and $m\geq 0$.  If the goal's conclusion is
-    an \hl statement judgement in which statement $n$ of the
+    an \hl statement judgement in which statement $c$ of the
     judgement's program is an ordinary assignment statement in which
     constant values are assigned to local identifiers, and the
     following statement block of length $m$ does not write any of
@@ -30,12 +30,12 @@
     \ecinput{../examps/parts/tactics/cfold/1-4.1.ec}{}{}{}{}
   \end{tsyntax}
 
-  \begin{tsyntax}{cfold\{1\} $\;n$ ! $\;m$ | cfold\{2\} $\;n$ ! $\;m$}
+  \begin{tsyntax}{cfold\{1\} $\;c$ ! $\;m$ | cfold\{2\} $\;c$ ! $\;m$}
     Like the \hl version, but operating on the designed program of
     a \prhl judgement's conclusion.
   \end{tsyntax}
 
-  \begin{tsyntax}{cfold\{1\} $\;n$ | cfold\{2\} $\;n$}
+  \begin{tsyntax}{cfold\{1\} $\;c$ | cfold\{2\} $\;c$}
     Like the general cases, but where $m$ is set so as to be the
     number of statements after the assignment statement.
   \end{tsyntax}

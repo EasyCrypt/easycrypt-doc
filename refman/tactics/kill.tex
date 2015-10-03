@@ -1,12 +1,12 @@
 % --------------------------------------------------------------------
 \begin{tactic}{kill}
-  \begin{tsyntax}{kill $\;n$ ! $\;m$}
+  \begin{tsyntax}{kill $\;c$ ! $\;m$}
     Fails unless $n\geq 1$ and $m\geq 0$.  If the goal's conclusion is
     an \hl statement judgement whose program has a statement block
-    from position $n$ to $n + m - 1$ (when $m = 0$, this block is
-    empty), and the variables written by this statement block aren't
-    used in the judgement's postcondition or read by the rest of the
-    program, then reduce the goal to two subgoals.
+    starting at position $c$ and having length $m$ (when $m = 0$, this
+    block is empty), and the variables written by this statement block
+    aren't used in the judgement's postcondition or read by the rest
+    of the program, then reduce the goal to two subgoals.
     \begin{itemize}
     \item One whose conclusion is a \phl statement judgement whose pre-
        and postconditions are \ec{true}, whose program is the
@@ -25,7 +25,7 @@
     \ecinput{../examps/parts/tactics/kill/1-1.2.ec}{}{}{}{}
   \end{tsyntax}
 
-  \begin{tsyntax}{kill\{1\} $\;n$ ! $\;m$ | kill\{2\} $\;n$ ! $\;m$}
+  \begin{tsyntax}{kill\{1\} $\;c$ ! $\;m$ | kill\{2\} $\;c$ ! $\;m$}
     Like the \hl case but for \prhl judgements, where the statement
     block to be killed is in the designated program.
 
@@ -38,12 +38,13 @@
     \ecinput{../examps/parts/tactics/kill/1-2.2.ec}{}{}{}{}
   \end{tsyntax}
 
-  \begin{tsyntax}{kill $\;n$ | kill\{1\} $\;n$ | kill\{2\} $\;n$}
+  \begin{tsyntax}{kill $\;c$ | kill\{1\} $\;c$ | kill\{2\} $\;c$}
     Like the general cases, but with $m = 1$.
   \end{tsyntax}
 
-  \begin{tsyntax}{kill $\;n$ ! * | kill\{1\} $\;n$ ! * | kill\{2\} $\;n$ ! *}
+  \begin{tsyntax}{kill $\;c$ ! * | kill\{1\} $\;c$ ! * | kill\{2\} $\;c$ ! *}
     Like the general cases, but with $m$ set so that the statement
-    block to be killed is the rest of the (designated) program.
+    block to be killed is the rest of the current level of the
+    (designated) program.
   \end{tsyntax}
 \end{tactic}

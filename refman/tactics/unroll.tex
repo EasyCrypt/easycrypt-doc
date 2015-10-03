@@ -1,7 +1,7 @@
 % --------------------------------------------------------------------
 \begin{tactic}{unroll}
-  \begin{tsyntax}{unroll $\;n$}
-    If the goal's conclusion is an \hl statement judgement whose $n$th
+  \begin{tsyntax}{unroll $\;c$}
+    If the goal's conclusion is an \hl statement judgement whose $c$th
     statement is a \ec{while} statement, then insert before that
     statement an \ec{if} statement whose boolean expression is the
     \ec{while} statement's boolean expression, whose \ec{then} part is
@@ -13,11 +13,16 @@
     running \ecinput{../examps/parts/tactics/unroll/1-1.ec}{}{}{}{}
     produces the goal
     \ecinput{../examps/parts/tactics/unroll/1-1.1.ec}{}{}{}{}
+    And, if the current goal is
+    \ecinput{../examps/parts/tactics/unroll/2-1.0.ec}{}{}{}{} then
+    running \ecinput{../examps/parts/tactics/unroll/2-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{../examps/parts/tactics/unroll/2-1.1.ec}{}{}{}{}
   \end{tsyntax}
 
-  \begin{tsyntax}{unroll\{1\} $\;n$ | unroll\{2\} $\;n$}
+  \begin{tsyntax}{unroll\{1\} $\;c$ | unroll\{2\} $\;c$}
     If the goal's conclusion is an \prhl statement judgement where the
-    $n$th statement of the designated program is a \ec{while}
+    $c$th statement of the designated program is a \ec{while}
     statement, then insert before that statement an \ec{if} statement
     whose boolean expression is the \ec{while} statement's boolean
     expression, whose \ec{then} part is the \ec{while} statements's

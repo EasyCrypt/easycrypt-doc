@@ -49,6 +49,12 @@ to goals whose conclusions are \prhl, \phl or \hl statement
 judgements, reducing such a goal to a single subgoal in which only the
 program(s) of those statement judgements have changed.
 
+Many of these tactics take \emph{code positions} consisting of a
+sequence of positive numerals separated by dots.  E.g., \ec{2.1.3}
+says to go to the statement 2 of the program, then to substatement 1
+of it, then to sub-substatement 3 of it. We use the variable $c$ to
+range over code positions.
+
 \input{tactics/swap.tex}
 \input{tactics/inline.tex}
 \input{tactics/rcondt.tex}
