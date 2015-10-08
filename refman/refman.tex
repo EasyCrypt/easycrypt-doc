@@ -12,16 +12,14 @@
 \author{}
 
 % --------------------------------------------------------------------
-\PassOptionsToPackage{bookmarks=false}{hyperref}
-\PassOptionsToPackage{pdfusetitle=true}{hyperref}
+\usepackage[draft,silent,targetlayout=plain,layout=inline]{fixme}
+\newcommand{\fix}[1]{\fxnote{#1}}
 
-\usepackage{hyperref}
-\hypersetup{bookmarksopen=true,
-            bookmarksdepth=2,
-            colorlinks=true,
-            linkcolor=blue,
-            citecolor=blue,
-            urlcolor=blue}
+% --------------------------------------------------------------------
+\usepackage[makeindex]{imakeidx}
+
+\makeindex
+\makeindex[name=tactics,title={Index of Tactics}]
 
 % --------------------------------------------------------------------
 \usepackage[utf8]{inputenc}
@@ -43,12 +41,16 @@
 \input{prelude}
 
 % --------------------------------------------------------------------
-\usepackage{multind}
-\makeindex{easycrypt}
-\makeindex{ambient}
-\makeindex{hoare}
-\makeindex{phl}
-\makeindex{prhl}
+\PassOptionsToPackage{bookmarks=false}{hyperref}
+\PassOptionsToPackage{pdfusetitle=true}{hyperref}
+
+\usepackage{hyperref}
+\hypersetup{bookmarksopen=true,
+            bookmarksdepth=2,
+            colorlinks=true,
+            linkcolor=blue,
+            citecolor=blue,
+            urlcolor=blue}
 
 % --------------------------------------------------------------------
 % \includeonly{specifications}
@@ -80,15 +82,10 @@
 \bibliographystyle{alpha}
 \bibliography{references}
 
-%\part{Language Reference}
-
 \cleardoublepage
 \addcontentsline{toc}{part}{Index}
-\printindex{easycrypt}{General Index}
-\printindex{ambient}{Index of Ambient Logic Tactics}
-\printindex{hoare}{Index of Possibilistic Hoare Logic Tactics}
-\printindex{phl}{Index of Probabilistic Hoare Logic Tactics}
-\printindex{prhl}{Index of Probabilistic Relational Hoare Logic Tactics}
+\printindex
+\printindex[tactics]
 
 \clearpage
 \listoffixmes
