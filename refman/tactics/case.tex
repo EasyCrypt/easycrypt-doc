@@ -5,12 +5,12 @@
     in the goal's conclusion.
 
     For example, if the current goal is
-    \ecinput{../examps/parts/tactics/case/1-1.0.ec}{}{}{}{} then
-    running \ecinput{../examps/parts/tactics/case/1-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/1-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/case/1-1.ec}{}{}{}{}
     produces the goals
-    \ecinput{../examps/parts/tactics/case/1-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/1-1.1.ec}{}{}{}{}
     and
-    \ecinput{../examps/parts/tactics/case/1-1.2.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/1-1.2.ec}{}{}{}{}
   \end{tsyntax}
 
   \begin{tsyntax}{case}
@@ -22,47 +22,47 @@
     \begin{itemize}
     \item (\textbf{conjunction})
     For example, if the current goal is
-    \ecinput{../examps/parts/tactics/case/2-1.0.ec}{}{}{}{} then
-    running \ecinput{../examps/parts/tactics/case/2-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/2-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/case/2-1.ec}{}{}{}{}
     produces the goal
-    \ecinput{../examps/parts/tactics/case/2-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/2-1.1.ec}{}{}{}{}
     \ec{&&} works identically.
 
     \item (\textbf{disjunction})
     For example, if the current goal is
-    \ecinput{../examps/parts/tactics/case/3-1.0.ec}{}{}{}{} then
-    running \ecinput{../examps/parts/tactics/case/3-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/3-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/case/3-1.ec}{}{}{}{}
     produces the goals
-    \ecinput{../examps/parts/tactics/case/3-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/3-1.1.ec}{}{}{}{}
     and
-    \ecinput{../examps/parts/tactics/case/3-1.2.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/3-1.2.ec}{}{}{}{}
     \ec{||} works identically.
 
     \item (\textbf{existential})
     For example, if the current goal is
-    \ecinput{../examps/parts/tactics/case/4-1.0.ec}{}{}{}{} then
-    running \ecinput{../examps/parts/tactics/case/4-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/4-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/case/4-1.ec}{}{}{}{}
     produces the goal
-    \ecinput{../examps/parts/tactics/case/4-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/4-1.1.ec}{}{}{}{}
 
     \item (\textbf{unit}) Substitutes \ec{tt} for the assumption in
       the remainder of the conclusion.
 
     \item (\textbf{bool})
     For example, if the current goal is
-    \ecinput{../examps/parts/tactics/case/5-1.0.ec}{}{}{}{} then
-    running \ecinput{../examps/parts/tactics/case/5-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/5-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/case/5-1.ec}{}{}{}{}
     produces the goals
-    \ecinput{../examps/parts/tactics/case/5-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/5-1.1.ec}{}{}{}{}
     and
-    \ecinput{../examps/parts/tactics/case/5-1.2.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/5-1.2.ec}{}{}{}{}
 
     \item (\textbf{product type})
     For example, if the current goal is
-    \ecinput{../examps/parts/tactics/case/6-1.0.ec}{}{}{}{} then
-    running \ecinput{../examps/parts/tactics/case/6-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/6-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/case/6-1.ec}{}{}{}{}
     produces the goal
-    \ecinput{../examps/parts/tactics/case/6-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/6-1.1.ec}{}{}{}{}
 
     \item (\textbf{inductive datatype})
     Consider the inductive datatype declaration:
@@ -70,12 +70,12 @@
 type tree = [Leaf | Node of bool & tree & tree].
 \end{easycrypt}
     Then, if the current goal is
-    \ecinput{../examps/parts/tactics/case/7-1.0.ec}{}{}{}{} then
-    running \ecinput{../examps/parts/tactics/case/7-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/7-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/case/7-1.ec}{}{}{}{}
     produces the goals
-    \ecinput{../examps/parts/tactics/case/7-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/7-1.1.ec}{}{}{}{}
     and
-    \ecinput{../examps/parts/tactics/case/7-1.2.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/case/7-1.2.ec}{}{}{}{}
     \end{itemize}
   \end{tsyntax}
 \end{tactic}
