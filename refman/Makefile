@@ -20,7 +20,7 @@ endif
 
 LATEXMK += -interaction=$(ITMODE) $(EXTRAMK)
 
-export TEXINPUTS := ../common:${TEXINPUTS}
+export TEXINPUTS := ../common:.:${TEXINPUTS}
 
 # --------------------------------------------------------------------
 .PHONY: all links force scratch clean purge __force__
