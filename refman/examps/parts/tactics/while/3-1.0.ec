@@ -4,7 +4,7 @@ Type variables: <none>
 &1 (left ) : M.f
 &2 (right) : N.f
 
-pre = ={n} /\ n{1} >= 0
+pre = ={n} /\ 0 <= n{1}
 
 x <- 0                     (1--)                           
 i <- 0                     (2--)                           

@@ -19,7 +19,7 @@ module N = {
 }.
 
 lemma X :
-  equiv[M.f ~ N.f : ={n} /\ n{1} >= 0 ==> res{1} <= res{2}].
+  equiv[M.f ~ N.f : ={n} /\ 0 <= n{1} ==> res{1} <= res{2}].
 proof.
 proc.
 dump "3-1" 67 (while{1} (0 <= i{1} <= n{1} /\ x{1} <= i{1} * i{1}) (n{1} - i{1})).

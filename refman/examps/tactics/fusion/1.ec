@@ -16,7 +16,7 @@ module M = {
   }
 }.
 
-lemma X : hoare[M.f : n > 0 ==> res > 0].
+lemma X : hoare[M.f : 0 < n ==> 0 < res].
 proof.
 proc.
 fission 5!2 @ 2, 4.

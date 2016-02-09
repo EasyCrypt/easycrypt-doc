@@ -4,7 +4,7 @@ m : int
 #\hrulefill\hspace*{.5cm}#
 Context : M.f
 
-pre = m = n /\ n >= 0
+pre = m = n /\ 0 <= n
 
 (1)  x <- 0                   
 (2)  i <- 0                   

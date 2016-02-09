@@ -1,4 +1,4 @@
-require import Bool Int.
+require import Bool Int IntDiv.
 
 module M = {
   var x : int

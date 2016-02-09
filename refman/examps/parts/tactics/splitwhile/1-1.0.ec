@@ -12,4 +12,4 @@ pre = true
 (3.2)    x <- x + 1             
 (3--)  }                        
 
-post = z >= 0
+post = 0 <= z

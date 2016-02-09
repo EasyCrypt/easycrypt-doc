@@ -3,7 +3,7 @@ Type variables: <none>
 #\hrulefill\hspace*{.5cm}#
 Context : M.f
 
-pre = n > 0
+pre = 0 < n
 
 (1--)  x <- 0                   
 (2--)  y <- 0                   
@@ -24,4 +24,4 @@ pre = n > 0
 (8.4)    j <- j + 2             
 (8--)  }                        
 
-post = x + y > 0
+post = 0 < x + y

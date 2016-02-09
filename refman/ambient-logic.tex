@@ -114,7 +114,6 @@ introduction patterns, which are defined in Figure~\ref{fig:intropat}.
   \begin{tabular}{rcl>{\bf}l}
     $\iota$ & ::=
       & {$b$} & name \\
-      && {\ec{$b\,$!}} & rename \\
       && {\ec{_}} & no name \\
       && {\ec{+}} & auto revert \\
       && {\ec{?}} & find name \\
@@ -294,11 +293,6 @@ disappear and some of the goals to be simplified.
     \ecinput{examps/parts/tactics/introduction/2-1.ec}{}{}{}{}
     produces
     \ecinput{examps/parts/tactics/introduction/2-1.1.ec}{}{}{}{}
-    Or we can use the \ec{!} pattern suffix to specify our
-    own base assumption names: running
-    \ecinput{examps/parts/tactics/introduction/3-1.ec}{}{}{}{}
-    produces
-    \ecinput{examps/parts/tactics/introduction/3-1.1.ec}{}{}{}{}
 
     To see how the \ec{->} rewriting pattern works, suppose
     the current goal is

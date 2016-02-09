@@ -14,7 +14,7 @@ module N = {
   proc g(n m : int, b : bool) : bool = {
     if (b) M.f();
     M.x <- M.x + x + n - m;
-    return M.x > 0;
+    return 0 < M.x;
   }
 
   proc h = M.f

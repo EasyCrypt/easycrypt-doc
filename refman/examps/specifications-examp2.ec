@@ -1,4 +1,4 @@
-require import Bool Int Distr.
+require import Bool Int DInterval.
 
 module N = {
   proc loop() : int = {
@@ -16,5 +16,3 @@ module N = {
     return y;
   }
 }.
-
-

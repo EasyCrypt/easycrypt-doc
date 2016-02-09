@@ -4,7 +4,7 @@ module M = {
   proc f(x : int, y : int) : int = {
     var z : int;
     z <- 0;
-    while (x > 0) {
+    while (0 < x) {
       z <- z + 1;
       x <- x - 1;
     }

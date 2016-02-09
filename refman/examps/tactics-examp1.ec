@@ -1,16 +1,16 @@
-require import Int Bool.
+require import Bool Int IntDiv.
 
 module M = {
-  proc f(x : int) = {
-    if (x %% 3 = 1) x = x + 4;
-    else x = x + 2;
-    return x;
+  proc f(y : int) = {
+    if (y %% 3 = 1) y <- y + 4;
+    else y <- y + 2;
+    return y;
   }
 }.
 
 lemma L (x : int) :
   x = 1 \/ x = 2 =>
-  hoare[M.f : x %% 3 = x ==> res %% 3 = (x %% 2) + 1].
+  hoare[M.f : y %% 3 = x ==> res %% 3 = (x %% 2) + 1].
 proof.
 dump "tactics-examp1-1" (move=> zor1_x).
 dump "tactics-examp1-2" (proc).

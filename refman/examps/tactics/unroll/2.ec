@@ -3,7 +3,7 @@ require import Bool Int.
 module M = {
   proc f(y : int) : int = {
     var x : int;
-    if (y >= 0) {
+    if (0 <= y) {
       x <- 0;
       while (x <> y) {
         x = x + 1;
@@ -13,7 +13,7 @@ module M = {
   }
 }.
 
-lemma X : hoare[M.f : true ==> res >= 0].
+lemma X : hoare[M.f : true ==> 0 <= res].
 proof.
 proc.
 dump "2-1" (unroll 1.2).

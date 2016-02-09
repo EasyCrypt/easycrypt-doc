@@ -1,4 +1,4 @@
-require import Int Bool Distr.
+require import Int Bool DInterval.
 
 module M = {
   proc f() : int = {

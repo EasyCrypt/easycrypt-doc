@@ -53,4 +53,58 @@
   and
   \ecinput{examps/parts/tactics/rcondf/1-2.2.ec}{}{}{}{}
   \end{tsyntax}
+
+  \begin{tsyntax}{rcondf $\;n$}
+    If the goal's conclusion is an \hl statement judgement whose $n$th
+    statement is a \ec{while} statement, reduce the goal to two
+    subgoals.
+    \begin{itemize}
+    \item One whose concludion is an \hl statement judgement whose
+      precondition is the original goal's precondition, program is the
+      first $n-1$ statements of the original goal's program, and
+      postcondition is the negation of the boolean expression of the
+      \ec{while} statement.
+   
+    \item One whose conclusion is an \hl statement judgement that's
+      the same as that of the original goal except that the \ec{while}
+      statement has been removed.
+    \end{itemize}
+
+    \medskip For example, if the current goal is
+    \ecinput{examps/parts/tactics/rcondf/2-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/rcondf/2-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/rcondf/2-1.1.ec}{}{}{}{} and
+    \ecinput{examps/parts/tactics/rcondf/2-1.2.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{rcondf\{1\} $\;n$ | rcondf\{2\} $\;n$}
+    If the goal's conclusion is a \prhl statement judgement where the
+    $n$th statement of the designated program is a \ec{while} statement,
+    reduce the goal to two subgoals.
+    \begin{itemize}
+    \item One whose conclusion is an \hl statement judgement whose
+      precondition is the original goal's precondition, program is the
+      first $n-1$ statements of the original goal's designated
+      program, and postcondition is the negation of the boolean
+      expression of the \ec{while} statement. Actually, the \hl
+      statement judgement is universally quantified by a memory of the
+      non-designated program, and references in the precondition to
+      variables of the non-designated program are interpreted in that
+      memory.
+   
+    \item One whose conclusion is a \prhl statement judgement that's
+      the same as that of the original goal except that the \ec{while}
+      statement has been removed.
+    \end{itemize}
+
+  \medskip
+  For example, if the current goal is
+  \ecinput{examps/parts/tactics/rcondf/2-2.0.ec}{}{}{}{} then
+  running \ecinput{examps/parts/tactics/rcondf/2-2.ec}{}{}{}{}
+  produces the goals
+  \ecinput{examps/parts/tactics/rcondf/2-2.1.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/rcondf/2-2.2.ec}{}{}{}{}
+  \end{tsyntax}
 \end{tactic}

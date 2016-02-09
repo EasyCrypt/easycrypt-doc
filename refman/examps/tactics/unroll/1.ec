@@ -12,12 +12,12 @@ module M = {
   }
 }.
 
-lemma X : hoare[M.f : true ==> res >= 0].
+lemma X : hoare[M.f : true ==> 0 <= res].
 proof.
 proc.
 dump "1-1" (unroll 3).
 sp.
-while (x >= 0 /\ z >= 0).
+while (0 <= x /\ 0 <= z).
 auto; smt.
 skip; smt.
 qed.

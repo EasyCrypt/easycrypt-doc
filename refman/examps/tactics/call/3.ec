@@ -1,4 +1,4 @@
-require import Int.
+require import Int IntDiv.
 
 module type OR = {
   proc init(i : int) : unit

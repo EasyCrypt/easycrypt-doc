@@ -18,7 +18,7 @@ module Or = {
   }
 
   proc guess(guess : int) : unit = {
-    if (tris > 0) {
+    if (0 < tris) {
       guessed <- guessed \/ (guess = sec);
       tris <- tris - 1;
     }

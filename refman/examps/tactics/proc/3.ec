@@ -1,4 +1,4 @@
-require import Int Distr.
+require import Int Distr DInterval.
 
 module type OR = {
   proc qry(x : int) : int

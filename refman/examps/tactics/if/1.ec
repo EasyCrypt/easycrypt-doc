@@ -3,7 +3,7 @@ require import Bool Int.
 module M = {
   proc f(x : int, y : int) : int = {
     var z : int;
-    if (x > y) {
+    if (y < x) {
       z <- x - y;
     } else {
       z <- y - x;
@@ -27,7 +27,7 @@ module N = {
 
 lemma X :
   equiv[M.f ~ N.f :
-    ={x,y} ==> res{1} >= 0 /\ res{1} = 2 * (res{2} - 1)].
+    ={x, y} ==> 0 <= res{1} /\ res{1} = 2 * (res{2} - 1)].
 proof.
 proc.
 simplify.

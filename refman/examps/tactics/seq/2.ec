@@ -1,4 +1,4 @@
-require import Int.
+require import Int IntDiv.
 
 module M = {
   proc f(x : int) : int = {

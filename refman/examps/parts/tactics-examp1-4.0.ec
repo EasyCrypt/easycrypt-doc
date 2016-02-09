@@ -5,8 +5,8 @@ zor1_x: x = 1 \/ x = 2
 #\hrulefill\hspace*{.5cm}#
 Context : M.f
 
-pre = x %% 3 = x /\ x %% 3 = 1
+pre = y %% 3 = x /\ y %% 3 = 1
 
-(1)  x <- x + 4               
+(1)  y <- y + 4               
 
-post = x %% 3 = x %% 2 + 1
+post = y %% 3 = x %% 2 + 1

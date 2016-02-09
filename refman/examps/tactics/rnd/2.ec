@@ -1,4 +1,4 @@
-require import Int Bool Distr.
+require import Int Bool DBool DInterval.
 
 module M = {
   proc h() : bool = {

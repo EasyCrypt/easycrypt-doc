@@ -1,9 +1,9 @@
-(* Load (require) the theory of the booleans and import its symbols,
-   into the environment. The Bool theory defines, among other symbols,
-   the exclusive-or operator (^^) and the uniform distribution on
-   booleans ({0,1}) *)
+(* Load (require) the theories Bool and DBool, and import their
+   definitions and lemmas into the environment. Bool defines the
+   exclusive-or operator (^^), and DBool defines the uniform
+   distribution on the booleans ({0,1}). *)
 
-require import Bool.
+require import Bool DBool.
 
 (* G1.f() yields a randomly chosen boolean *)
 

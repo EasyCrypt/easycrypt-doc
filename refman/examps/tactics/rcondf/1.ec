@@ -1,4 +1,4 @@
-require import Bool.
+require import Bool DBool.
 
 module M = {
   proc f() : bool = {

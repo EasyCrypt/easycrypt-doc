@@ -1,4 +1,4 @@
-require import Bool Int Distr.
+require import Bool Int IntDiv DInterval.
 
 module type OR = {
   proc init(secret tries : int) : unit
@@ -18,7 +18,7 @@ module Or : OR = {
   }
 
   proc guess(guess : int) : unit = {
-    if (tris > 0) {
+    if (0 < tris) {
       guessed <- guessed \/ (guess = sec);
       tris <- tris - 1;
     }
@@ -46,7 +46,7 @@ module SimpAdv(O : OR) : ADV(O) = {
 
   proc doGuessing() : unit = {
     var x : int;
-    while (tries > 0) {
+    while (0 < tries) {
       x <$ [range.`1 .. range.`2];
       O.guess(x);
       tries <- tries - 1;
@@ -68,7 +68,7 @@ module Game(Adv : ADV) : GAME = {
     if (high - low < 10)
       advWon <- false;
     else {
-      tries <- (high - low + 1) /% 10;  (* /% is integer division *)
+      tries <- (high - low + 1) %/ 10;  (* /% is integer division *)
       secret <$ [low .. high];
       Or.init(secret, tries);
       A.doGuessing();
