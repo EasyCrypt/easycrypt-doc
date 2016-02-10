@@ -1,14 +1,19 @@
 % --------------------------------------------------------------------
 \begin{tactic}{symmetry}
   \begin{tsyntax}{symmetry}
-  In \prhl, swaps the two programs, transforming the pre and
-  postconditions by swapping the memories they refer to.
+    If the goal's conclusion is a \prhl (statement) judgement, swap
+    the two programs, transforming the pre- and postconditions by
+    swapping the memories they refer to.
 
-  \begin{cmathpar}
-    \texample[\prhl{}]
-      {\ec{symmetry}}
-      {\pRHL{P\inv}{c_2}{c_1}{Q\inv}}
-      {\pRHL{P}{c_1}{c_2}{Q}}
-  \end{cmathpar}
+    \medskip For example, if the current goal is
+    \ecinput{examps/parts/tactics/symmetry/1-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/symmetry/1-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/symmetry/1-1.1.ec}{}{}{}{}
+    And, if the current goal is
+    \ecinput{examps/parts/tactics/symmetry/1-2.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/symmetry/1-2.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/symmetry/1-2.1.ec}{}{}{}{}.
   \end{tsyntax}
 \end{tactic}
