@@ -1,45 +1,116 @@
 % --------------------------------------------------------------------
 \begin{tactic}{transitivity}
-  \begin{tsyntax}{transitivity c ($P_1$ ==> $\ Q_1$) ($P_2$ ==> $\ Q_2$)}
-  In \prhl, applies the transitivity of program equivalence using the
-  specified program and specifications. When the goal is a judgment on
-  procedures, \ec{c} should be a procedure. When the goal is a
-  judgment on statements, \ec{c} should be a statement, and the
-  tactic then takes a side argument, used to decide the procedure
-  context under which local variables from \ec{c} are evaluated.
+  \begin{tsyntax}{transitivity $\;N$.$r$ ($P_1$ ==> $\ Q_1$) ($P_2$ ==> $\ Q_2$)}
+    Reduces a goal whose conclusion is a \prhl judgement
+    (\emph{not} statement judgement)
+    \begin{center}
+      \ec{equiv[$M_1$.$p_1$ ~ $\;M_2$.$p_2$ : $\;P$ ==> $\;Q$]}
+    \end{center}
+    to goals whose conclusions are
+    \begin{itemize}
+    \item \ec{equiv[$M_1$.$p_1$ ~ $\;N$.$r$ : $\;P_1$ ==> $\;Q_1$]} and
+    \item \ec{equiv[$N$.$r$ ~ $\;M_2$.$p_2$ : $\;P_2$ ==> $\;Q_2$]},
+    \end{itemize}
+    preceded by two auxiliary goals. The tactic fails if the $P_i$ and
+    $Q_i$ aren't compatible with these left and right programs.  The
+    conclusion of the first auxiliary goal checks that $P$ implies the
+    conjunction of $P_1$ and $P_2$, where each corresponding pair of
+    \ec{&2} memory references in $P_1$ and \ec{&1} reference in $P_2$
+    is existentially quantified.  And the conclusion of the second
+    auxilary goal checks that the conjuction of $Q_1$ and $Q_2$ implies
+    $Q$, where each corresponding pair of \ec{&2} references in $Q_1$
+    and \ec{&1} references in $Q_2$ are universally quantified.
 
-  \paragraph{Examples:}\strut
+  \medskip For example, consider the modules
+  \ecinput{examps/tactics/transitivity/1.ec}{}{6-30}{}
+  If the current goal is
+  \ecinput{examps/parts/tactics/transitivity/1-1.0.ec}{}{}{}{} then
+  running \ecinput{examps/parts/tactics/transitivity/1-1.ec}{}{}{}{}
+  produces the four goals
+  \ecinput{examps/parts/tactics/transitivity/1-1.1.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/transitivity/1-1.2.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/transitivity/1-1.3.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/transitivity/1-1.4.ec}{}{}{}{}
+  \end{tsyntax}
 
-  \begin{cmathpar}
-  \texample[\prhl{}]{\ec{transitivity f ($P_1$ ==> $\ Q_1$) ($P_2$ ==> $\ Q_2$)}}
-    {\forall \mem{m_1}\ \mem{m_2}.\, \mem{m_1} \rel{P} \mem{m_2} \Rightarrow
-        \exists \mem{m}.\, \mem{m_1} \rel{P_1} \mem{m}
-                           \wedge \mem{m} \rel{P_2} \mem{m_2} \\
-     \forall \mem{m_1}\ \mem{m}\ \mem{m_2}.\,
-        \mem{m_1} \rel{Q_1} \mem{m} \Rightarrow
-        \mem{m}   \rel{Q_2} \mem{m_2} \Rightarrow
-        \mem{m_1} \rel{Q}   \mem{m_2} \\
-     \pRHL{P_1}{f_1}{f}{Q_1} \\
-     \pRHL{P_2}{f}{f_2}{Q_2}}
-    {\pRHL{P}{f_1}{f_2}{Q}}
+  \begin{tsyntax}{transitivity\{$i$\} \{$s$\} ($P_1$ ==> $\ Q_1$) ($P_2$ ==> $\ Q_2$)}
+    
+    Reduces a goal whose conclusion is a \prhl \emph{statement}
+    judgement with precondition $P$, postcondition $Q$, left program
+    (statement sequence) $s_1$ and right program $s_2$ to goals whose
+    conclusions are \prhl statement judgements:
+    \begin{itemize}
+    \item \ec{equiv[$s_1$ ~ $\;s$ : $\;P_1$ ==> $\;Q_1$]} and
+    \item \ec{equiv[$s$ ~ $\;s_2$ : $\;P_2$ ==> $\;Q_2$]},
+    \end{itemize}
+    preceded by two auxiliary goals. If the side $i=1$, then the
+    statement sequence $s$ may only use variables and unqualified
+    procedures of the left program; when $i=2$, it may only use
+    variables and unqualified procedures of the right program. The
+    tactic fails if the $P_i$ and $Q_i$ aren't compatible with these
+    left and right programs.  The conclusion of the first auxiliary
+    goal checks that $P$ implies the conjunction of $P_1$ and $P_2$,
+    where each corresponding pair of \ec{&2} memory references in
+    $P_1$ and \ec{&1} reference in $P_2$ is existentially quantified.
+    And the conclusion of the second auxilary goal checks that the
+    conjuction of $Q_1$ and $Q_2$ implies $Q$, where each
+    corresponding pair of \ec{&2} references in $Q_1$ and \ec{&1}
+    references in $Q_2$ are universally quantified.
 
-  \texample[\prhl{}]
-    {\ec{transitivity \{1\} \{ s \} ($P_1$ ==> $\ Q_1$) ($P_2$ ==> $\ Q_2$)}}
-    {\forall \mem{m_1}\ \mem{m_2}.\, \mem{m_1} \rel{P} \mem{m_2} \Rightarrow
-        \exists \mem{m}.\, \mem{m_1} \rel{P_1} \mem{m}
-                           \wedge \mem{m} \rel{P_2} \mem{m_2} \\
-     \forall \mem{m_1}\ \mem{m}\ \mem{m_2}.\,
-        \mem{m_1} \rel{Q_1} \mem{m} \Rightarrow
-        \mem{m}   \rel{Q_2} \mem{m_2} \Rightarrow
-        \mem{m_1} \rel{Q}   \mem{m_2} \\
-     \pRHL{P_1}{s_1}{s}{Q_1} \\
-     \pRHL{P_2}{s}{s_2}{Q_2}}
-    {\pRHL{P}{s_1}{s_2}{Q}}
-  \end{cmathpar}
-
-  \textbf{Note:} In practice, the existential quantification over
-  memory $\mem{m}$ in the first generated subgoal is replaced with an
-  existential quantification over the program variables appearing in $P$,
-  $P_1$, or $P_2$.
+  \medskip Consider the modules \ec{M}, \ec{N} and \ec{R} of the
+  preceding case.  If the current goal is
+  \ecinput{examps/parts/tactics/transitivity/1-2.0.ec}{}{}{}{} then
+  running \ecinput{examps/parts/tactics/transitivity/1-2.ec}{}{}{}{}
+  produces the four goals
+  \ecinput{examps/parts/tactics/transitivity/1-2.1.ec}{}{}{}{} and
+  \ecinput{examps/parts/tactics/transitivity/1-2.2.ec}{}{}{}{} and
+  \ecinput{examps/parts/tactics/transitivity/1-2.3.ec}{}{}{}{} and
+  \ecinput{examps/parts/tactics/transitivity/1-2.4.ec}{}{}{}{} And, if
+  the current goal is
+  \ecinput{examps/parts/tactics/transitivity/1-3.0.ec}{}{}{}{} then
+  running \ecinput{examps/parts/tactics/transitivity/1-3.ec}{}{}{}{}
+  produces the four goals
+  \ecinput{examps/parts/tactics/transitivity/1-3.1.ec}{}{}{}{} and
+  \ecinput{examps/parts/tactics/transitivity/1-3.2.ec}{}{}{}{} and
+  \ecinput{examps/parts/tactics/transitivity/1-3.3.ec}{}{}{}{} and
+  \ecinput{examps/parts/tactics/transitivity/1-3.4.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}
+
+%%  \paragraph{Examples:}\strut
+%%
+%%  \begin{cmathpar}
+%%  \texample[\prhl{}]{\ec{transitivity f ($P_1$ ==> $\ Q_1$) ($P_2$ ==> $\ Q_2$)}}
+%%    {\forall \mem{m_1}\ \mem{m_2}.\, \mem{m_1} \rel{P} \mem{m_2} \Rightarrow
+%%        \exists \mem{m}.\, \mem{m_1} \rel{P_1} \mem{m}
+%%                           \wedge \mem{m} \rel{P_2} \mem{m_2} \\
+%%     \forall \mem{m_1}\ \mem{m}\ \mem{m_2}.\,
+%%        \mem{m_1} \rel{Q_1} \mem{m} \Rightarrow
+%%        \mem{m}   \rel{Q_2} \mem{m_2} \Rightarrow
+%%        \mem{m_1} \rel{Q}   \mem{m_2} \\
+%%     \pRHL{P_1}{f_1}{f}{Q_1} \\
+%%     \pRHL{P_2}{f}{f_2}{Q_2}}
+%%    {\pRHL{P}{f_1}{f_2}{Q}}
+%%
+%%  \texample[\prhl{}]
+%%    {\ec{transitivity \{1\} \{ s \} ($P_1$ ==> $\ Q_1$) ($P_2$ ==> $\ Q_2$)}}
+%%    {\forall \mem{m_1}\ \mem{m_2}.\, \mem{m_1} \rel{P} \mem{m_2} \Rightarrow
+%%        \exists \mem{m}.\, \mem{m_1} \rel{P_1} \mem{m}
+%%                           \wedge \mem{m} \rel{P_2} \mem{m_2} \\
+%%     \forall \mem{m_1}\ \mem{m}\ \mem{m_2}.\,
+%%        \mem{m_1} \rel{Q_1} \mem{m} \Rightarrow
+%%        \mem{m}   \rel{Q_2} \mem{m_2} \Rightarrow
+%%        \mem{m_1} \rel{Q}   \mem{m_2} \\
+%%     \pRHL{P_1}{s_1}{s}{Q_1} \\
+%%     \pRHL{P_2}{s}{s_2}{Q_2}}
+%%    {\pRHL{P}{s_1}{s_2}{Q}}
+%%  \end{cmathpar}
+%%
+%%  \textbf{Note:} In practice, the existential quantification over
+%%  memory $\mem{m}$ in the first generated subgoal is replaced with an
+%%  existential quantification over the program variables appearing in $P$,
+%%  $P_1$, or $P_2$.
+%%  \end{tsyntax}

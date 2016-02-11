@@ -8,25 +8,21 @@ module M = {
     var i, x : int;
     i <- 0; x <- 0;
     while (i < n) {
-      x <- x + m;
-      i <- i + 1;
+      x <- x + m; i <- i + 1;
     }
     return x;
   }
 }.
-
 module N = {
   proc g(n : int, m : int) : int = {
     var j, y : int;
     j <- 0; y <- 0;
     while (j < n) {
-      y <- y + m;
-      j <- j + 1;
+      y <- y + m; j <- j + 1;
     }
     return y;
   }
 }.
-
 module R = {
   proc h(n : int, m : int) : int = {
     return n * m;
@@ -35,7 +31,7 @@ module R = {
 
 lemma X :
   equiv[M.f ~ N.g :
-        0 <= n{1} /\ 0 <= n{2} /\ n{1} = m{2} /\ m{1} = n{2} ==> ={res}].
+        0 <= n{1} /\ 0 <= n{2} /\ (n * m){1} = (n * m){2} ==> ={res}].
 proof.
 dump "1-1" 67
   (transitivity
@@ -56,13 +52,14 @@ qed.
 
 lemma Y1 :
   equiv[M.f ~ N.g :
-        0 <= n{1} /\ 0 <= n{2} /\ n{1} = m{2} /\ m{1} = n{2} ==> ={res}].
+        0 <= n{1} /\ 0 <= n{2} /\ (n * m){1} = (n * m){2} ==> ={res}].
 proof.
 proc; sp=> /=.
 dump "1-2" 67
   (transitivity{1}
      {x <- n * m;}
-     (0 <= n{1} /\ i{1} = 0 /\ x{1} = 0 /\ (n * m){1} = (n * m){2} ==> ={x})
+     (0 <= n{1} /\ i{1} = 0 /\ x{1} = 0 /\ (n * m){1} = (n * m){2} ==>
+      ={x})
      (0 <= n{2} /\ j{2} = 0 /\ y{2} = 0 /\ (n * m){1} = (n * m){2} ==>
       x{1} = y{2})).
 smt.
@@ -77,7 +74,7 @@ qed.
 
 lemma L2 :
   equiv[M.f ~ N.g :
-        0 <= n{1} /\ 0 <= n{2} /\ n{1} = m{2} /\ m{1} = n{2} ==> ={res}].
+        0 <= n{1} /\ 0 <= n{2} /\ (n * m){1} = (n * m){2} ==> ={res}].
 proof.
 proc; sp=> /=.
 dump "1-3" 67
@@ -85,7 +82,8 @@ dump "1-3" 67
      {y <- n * m;}
      (0 <= n{1} /\ i{1} = 0 /\ x{1} = 0 /\ (n * m){1} = (n * m){2} ==>
       x{1} = y{2})
-     (0 <= n{2} /\ j{2} = 0 /\ y{2} = 0 /\ (n * m){1} = (n * m){2} ==> ={y})).
+     (0 <= n{2} /\ j{2} = 0 /\ y{2} = 0 /\ (n * m){1} = (n * m){2} ==>
+      ={y})).
 smt.
 trivial.
 while{1}
