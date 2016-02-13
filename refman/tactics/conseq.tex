@@ -1,107 +1,281 @@
 % --------------------------------------------------------------------
 \begin{tactic}{conseq}
-  \begin{tsyntax}{conseq (_: P ==> Q) | conseq (_: P ==> Q: $\delta$)}
-  Prove a program logic judgment by weakening a stronger result
-  (\emph{rule of consequence}). Any one of the specification places
-  can be filled with a wildcard (\ec{_}) to keep its current value and
-  trivially discharge the corresponding subgoal.
+  \begin{tsyntax}{conseq (_ : $\;P$ ==> $\;Q$)}
 
-  \paragraph{Examples:}\strut
-  
-  \begin{cmathpar}
-  \texample[\prhl{}]
-    {\ec{conseq (_: P ==> Q)}}
-    {P' \Rightarrow P \\ Q \Rightarrow Q' \\ \pRHL{P}{c}{c'}{Q}}
-    {\pRHL{P'}{c}{c'}{Q'}}
+    If the goal's conclusion is a \prhl or \hl judgement or statement
+    judgement, weaken the conclusion's precondition to $P$, and
+    strengthen its postcondition to $Q$, generating initial auxilary
+    subgoals checking that this reduction is sound. Fails if $P$ and
+    $Q$ aren't compatible with the judgement type. The conclusion of
+    the first auxiliary subgoal checks that the precondition $P'$ of
+    the original goal's conclusion implies $P$. The conclusion of the
+    second auxiliary subgoal checks that $Q$ implies the postcondition
+    $Q'$ of the original goal's conclusion, except that any memory
+    references to variables that may be modified by the conclusion's
+    program(s) are universally quantified in $Q$ and $Q'$, and $P$ is
+    also included as an assumption.
 
-  \texample[\phl{}]
-    {\ec{conseq (_: P ==> Q: $\;\delta$)}}
-    {P' \Rightarrow \delta \mathrel{\diamond} \delta' \\
-     P' \Rightarrow P \\
-     Q \mathrel{\diamond^\uparrow} Q' \\
-     \pHL{P}{c}{Q}{\diamond}{\delta}}
-    {\pHL{P'}{c}{Q'}{\diamond}{\delta'}}
+    $P$ or $Q$ may be replaced by \ec{_}, in which case the pre- or
+    postcondition is left unchanged. When a pre- or postcondition is
+    unchanged, the corresponding auxilary subgoal isn't generated (as
+    its proof would be trivial). When the goal's conclusion is a
+    judgement (not a statement judgement), a proof term whose
+    conclusion is a judgement on the procedure(s) of the original
+    goals's conclusion may be supplied as the argument to \ec{conseq},
+    in which case $P$ and $Q$ are taken to be the pre- and
+    postconditions of this judgement, and only the auxilary subgoals
+    are generated.
 
-  \texample[\hl{}]
-    {\ec{conseq (_: P ==> Q)}}
-    {P' \Rightarrow P \\ Q \Rightarrow Q' \\ \HL{P}{c}{Q}}
-    {\HL{P'}{c}{Q'}}
-  \end{cmathpar}
+    \medskip For example, if the current goal is
+    \ecinput{examps/parts/tactics/conseq/1-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/conseq/1-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/conseq/1-1.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/1-1.2.ec}{}{}{}{}
+    Continuing from the last of these goals,
+    running \ecinput{examps/parts/tactics/conseq/1-2.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/conseq/1-2.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/1-2.2.ec}{}{}{}{}
+    Continuing from the last of these goals,
+    running \ecinput{examps/parts/tactics/conseq/1-3.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/conseq/1-3.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/1-3.2.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/1-3.3.ec}{}{}{}{}
 
-  \textbf{Note:} The \phl variant can also be used to strengthen the
-  relation $\diamond$ into an equality by forcing the equality into
-  the specification. For example, the following is a valid application
-  of \ec{conseq}.
+    \medskip If the current goal is
+    \ecinput{examps/parts/tactics/conseq/1-4.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/conseq/1-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/conseq/1-4.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/1-4.2.ec}{}{}{}{}
+    Continuing from the last of these goals,
+    running \ecinput{examps/parts/tactics/conseq/1-5.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/conseq/1-5.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/1-5.2.ec}{}{}{}{}
+    Continuing from the last of these goals,
+    running \ecinput{examps/parts/tactics/conseq/1-6.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/conseq/1-6.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/1-6.2.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/1-6.3.ec}{}{}{}{}
 
-  \begin{cmathpar}
-  \texample[\phl{}]
-    {\ec{conseq (_: P ==> Q: =$\;\delta$)}}
-    {P' \Rightarrow \delta \mathrel{=} \delta' \\
-     P' \Rightarrow P \\
-     Q \mathrel{\Leftrightarrow} Q' \
-     \pHL{P}{c}{Q}{=}{\delta}}
-    {\pHL{P'}{c}{Q'}{\leq}{\delta'}}
-  \end{cmathpar}  
+    Given lemma
+    \ecinput{examps/tactics/conseq/1.ec}{}{66-69}{}
+    if the current goal is
+    \ecinput{examps/parts/tactics/conseq/1-7.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/conseq/1-7.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/conseq/1-7.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/1-7.2.ec}{}{}{}{}
+
+    \medskip If the current goal is
+    \ecinput{examps/parts/tactics/conseq/1-8.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/conseq/1-8.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/conseq/1-8.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/1-8.2.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/1-8.3.ec}{}{}{}{}
+    If the current goal is
+    \ecinput{examps/parts/tactics/conseq/1-9.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/conseq/1-9.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/conseq/1-9.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/1-9.2.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/1-9.3.ec}{}{}{}{}
+
+    Given lemma
+    \ecinput{examps/tactics/conseq/1.ec}{}{102-103}{}
+    if the current goal is
+    \ecinput{examps/parts/tactics/conseq/1-10.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/conseq/1-10.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/conseq/1-10.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/1-10.2.ec}{}{}{}{}
   \end{tsyntax}
 
-  \begin{tsyntax}{conseq H}
-  Only applies to judgments on procedures. Same as \ec{conseq} with a
-  specification, but the specification to use is inferred from the
-  lemma \ec{H} provided. Raises an error if the lemma does not refer
-  to the expected procedure(s). All variants of \ec{conseq} may take
-  lemmas in place of explicit specifications with the same effect, in
-  which case they must be applied to judgments on procedures.
-  \end{tsyntax}
+  \begin{tsyntax}{conseq (_ : $\;P$ ==> $\;Q$) (_ : $\;P_1$ ==>
+      $\;Q_1$) (_ : $\;P_2$ ==> $\;Q_2$)}
 
-  \begin{tsyntax}{conseq*}
-  Same as \ec{conseq}, but the subgoal corresponding to the
-  postcondition is refined by a ``may modify'' analysis. All variants
-  of \ec{conseq} can be refined using the \ec{*}, with the same
-  effect.
-  \end{tsyntax}
+    This form only applies to \prhl judgements and statement
+    judgements, reducing the goal's conclusion to
+    \begin{itemize}
+    \item an \hl (statement) judgement for the left program with
+      precondition $P_1$ and postcondition $Q_1$;
 
-  \begin{tsyntax}{conseq <prhl> <hl> <hl>}
-  Combine relational and non-relational specifications to prove a
-  relational specification. Either one of the Hoare logic
-  specifications can be replaced with a wildcard.
+    \item an \hl (statement) judgement for the right program with
+      precondition $P_2$ and postcondition $Q_2$; and
 
-  \paragraph{Examples:}\strut
+    \item a \prhl (statement) judgement whose precondition is $P$,
+      postcondition is $Q$, and programs are as in the original
+      judgement;
 
-  \begin{cmathpar}
-  \texample[\prhl{}]
-    {\ec{conseq (_: P ==> Q) (_: P$_1$ ==> Q$_1$) (_: P$_2$ ==> Q$_2$)}}
-    {P' \Rightarrow P \wedge \inmem{P_1}{1} \wedge \inmem{P_2}{2} \\
-     Q \wedge \inmem{Q_1}{1} \wedge \inmem{Q_2}{2} \Rightarrow Q' \\
-     \HL{P_1}{c_1}{Q_1} \\
-     \HL{P_2}{c_2}{Q_2} \\
-     \pRHL{P}{c_1}{c_2}{Q}}
-    {\pRHL{P'}{c_1}{c_2}{Q'}}
-  \end{cmathpar}
-  \end{tsyntax}
+    \end{itemize}
+    As before, auxiliary goals are generated whose conclusions
+    check the validity of the reduction: that the original
+    conclusion's precondition $P'$ implies the conjunction of
+    $P$, $P_1$ and $P_2$; and that the conjunction of
+    $Q$, $Q_1$ and $Q_2$ implies the original conclusion's
+    postcondition $Q'$. One of the \hl specifications may be
+    replaced by \ec{_}, which is equivalent to
+    \ec{conseq (_ : true ==> true)}. And in the case of
+    a \prhl judgement (not a statement judgement), proof
+    terms may be used as the arguments to \ec{conseq}.
 
-  \begin{tsyntax}{conseq <prhl> <phl> | conseq <prhl> _ <phl>}
-  Strengthen a relational specification where one of the programs is
-  empty into a non-relational specification about the non-empty
-  program. Fails if the program expected to be empty is not. For
-  uniformity and simplicity of use, this variant also allows the user
-  to strengthen the \prhl judgment before abstracting its relational
-  aspects. The general rule below can be understood more clearly when
-  $P = P'$ and $Q = Q'$.
+    \medskip For example, if the current goal is
+    \ecinput{examps/parts/tactics/conseq/2-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/conseq/2-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/conseq/2-1.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/2-1.2.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/2-1.3.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/2-1.4.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/2-1.5.ec}{}{}{}{}
+    If the current goal is
+    \ecinput{examps/parts/tactics/conseq/2-2.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/conseq/2-2.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/conseq/2-2.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/2-2.2.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/2-2.3.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/2-2.4.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/2-2.5.ec}{}{}{}{}
 
-  \paragraph{Examples:}\strut
-
-  \begin{cmathpar}
-  \texample[\prhl{}]
-    {\ec{conseq (_: P ==> Q) (_: P$_1$ ==> Q$_1$: =1\%r)}}
-    {P' \Rightarrow P   \\ Q   \Rightarrow Q' \\
-     P  \Rightarrow P_1 \\ Q_1 \Rightarrow Q  \\
-     \pHL{P_1}{c}{Q_1}{=}{1}}
-    {\pRHL{P'}{c}{\Skip}{Q'}}
-
-  \texample[\prhl{}]
-    {\ec{conseq (_: _ ==> _) _ (_: P$_2$ ==> Q$_2$: =1\%r)}}
-    {P \Rightarrow P_2 \\ Q_2 \Rightarrow Q \\ \pHL{P_2}{c}{Q_2}{=}{1}}
-    {\pRHL{P}{\Skip}{c}{Q}}
-  \end{cmathpar}
+    And given lemmas
+    \ecinput{examps/tactics/conseq/2.ec}{}{60-60}{}
+    and
+    \ecinput{examps/tactics/conseq/2.ec}{}{63-63}{}
+    and
+    \ecinput{examps/tactics/conseq/2.ec}{}{66-66}{}
+    if the current goal is
+    \ecinput{examps/parts/tactics/conseq/2-3.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/conseq/2-3.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/conseq/2-3.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/conseq/2-3.2.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}
+
+%%  \paragraph{Examples:}\strut
+%%  
+%%  \begin{cmathpar}
+%%  \texample[\prhl{}]
+%%    {\ec{conseq (_: P ==> Q)}}
+%%    {P' \Rightarrow P \\ Q \Rightarrow Q' \\ \pRHL{P}{c}{c'}{Q}}
+%%    {\pRHL{P'}{c}{c'}{Q'}}
+%%
+%%  \texample[\phl{}]
+%%    {\ec{conseq (_: P ==> Q: $\;\delta$)}}
+%%    {P' \Rightarrow \delta \mathrel{\diamond} \delta' \\
+%%     P' \Rightarrow P \\
+%%     Q \mathrel{\diamond^\uparrow} Q' \\
+%%     \pHL{P}{c}{Q}{\diamond}{\delta}}
+%%    {\pHL{P'}{c}{Q'}{\diamond}{\delta'}}
+%%
+%%  \texample[\hl{}]
+%%    {\ec{conseq (_: P ==> Q)}}
+%%    {P' \Rightarrow P \\ Q \Rightarrow Q' \\ \HL{P}{c}{Q}}
+%%    {\HL{P'}{c}{Q'}}
+%%  \end{cmathpar}
+%%
+%%  \textbf{Note:} The \phl variant can also be used to strengthen the
+%%  relation $\diamond$ into an equality by forcing the equality into
+%%  the specification. For example, the following is a valid application
+%%  of \ec{conseq}.
+%%
+%%  \begin{cmathpar}
+%%  \texample[\phl{}]
+%%    {\ec{conseq (_: P ==> Q: =$\;\delta$)}}
+%%    {P' \Rightarrow \delta \mathrel{=} \delta' \\
+%%     P' \Rightarrow P \\
+%%     Q \mathrel{\Leftrightarrow} Q' \
+%%     \pHL{P}{c}{Q}{=}{\delta}}
+%%    {\pHL{P'}{c}{Q'}{\leq}{\delta'}}
+%%  \end{cmathpar}  
+%%  \end{tsyntax}
+%%
+%%  \begin{tsyntax}{conseq H}
+%%  Only applies to judgments on procedures. Same as \ec{conseq} with a
+%%  specification, but the specification to use is inferred from the
+%%  lemma \ec{H} provided. Raises an error if the lemma does not refer
+%%  to the expected procedure(s). All variants of \ec{conseq} may take
+%%  lemmas in place of explicit specifications with the same effect, in
+%%  which case they must be applied to judgments on procedures.
+%%  \end{tsyntax}
+%%
+%%  \begin{tsyntax}{conseq*}
+%%  Same as \ec{conseq}, but the subgoal corresponding to the
+%%  postcondition is refined by a ``may modify'' analysis. All variants
+%%  of \ec{conseq} can be refined using the \ec{*}, with the same
+%%  effect.
+%%  \end{tsyntax}
+%%
+%%  \begin{tsyntax}{conseq <prhl> <hl> <hl>}
+%%  Combine relational and non-relational specifications to prove a
+%%  relational specification. Either one of the Hoare logic
+%%  specifications can be replaced with a wildcard.
+%%
+%%  \paragraph{Examples:}\strut
+%%
+%%  \begin{cmathpar}
+%%  \texample[\prhl{}]
+%%    {\ec{conseq (_: P ==> Q) (_: P$_1$ ==> Q$_1$) (_: P$_2$ ==> Q$_2$)}}
+%%    {P' \Rightarrow P \wedge \inmem{P_1}{1} \wedge \inmem{P_2}{2} \\
+%%     Q \wedge \inmem{Q_1}{1} \wedge \inmem{Q_2}{2} \Rightarrow Q' \\
+%%     \HL{P_1}{c_1}{Q_1} \\
+%%     \HL{P_2}{c_2}{Q_2} \\
+%%     \pRHL{P}{c_1}{c_2}{Q}}
+%%    {\pRHL{P'}{c_1}{c_2}{Q'}}
+%%  \end{cmathpar}
+%%  \end{tsyntax}
+%%
+%%  \begin{tsyntax}{conseq <prhl> <phl> | conseq <prhl> _ <phl>}
+%%  Strengthen a relational specification where one of the programs is
+%%  empty into a non-relational specification about the non-empty
+%%  program. Fails if the program expected to be empty is not. For
+%%  uniformity and simplicity of use, this variant also allows the user
+%%  to strengthen the \prhl judgment before abstracting its relational
+%%  aspects. The general rule below can be understood more clearly when
+%%  $P = P'$ and $Q = Q'$.
+%%
+%%  \paragraph{Examples:}\strut
+%%
+%%  \begin{cmathpar}
+%%  \texample[\prhl{}]
+%%    {\ec{conseq (_: P ==> Q) (_: P$_1$ ==> Q$_1$: =1\%r)}}
+%%    {P' \Rightarrow P   \\ Q   \Rightarrow Q' \\
+%%     P  \Rightarrow P_1 \\ Q_1 \Rightarrow Q  \\
+%%     \pHL{P_1}{c}{Q_1}{=}{1}}
+%%    {\pRHL{P'}{c}{\Skip}{Q'}}
+%%
+%%  \texample[\prhl{}]
+%%    {\ec{conseq (_: _ ==> _) _ (_: P$_2$ ==> Q$_2$: =1\%r)}}
+%%    {P \Rightarrow P_2 \\ Q_2 \Rightarrow Q \\ \pHL{P_2}{c}{Q_2}{=}{1}}
+%%    {\pRHL{P}{\Skip}{c}{Q}}
+%%  \end{cmathpar}
+%%  \end{tsyntax}
