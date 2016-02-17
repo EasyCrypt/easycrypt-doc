@@ -1,29 +1,30 @@
 % --------------------------------------------------------------------
 \begin{tactic}[case]{case-pl}
-  \begin{tsyntax}{case e}
-  Split the current \prhl, \phl or \hl goal by doing a case analysis
-  in the precondition.
+  \begin{tsyntax}{case $\;e$}
+    If the goal's conclusion is a \prhl, \hl or \phl \emph{statement}
+    judgement and $e$ is well-typed in the goal's context, split the
+    goal into two goals:
+    \begin{itemize}
+    \item a first goal in which $e$ is added as a conjunct to the
+      conclusion's precondition; and
 
-  \paragraph{Examples:}\strut
+    \item a second goal in which $!e$ is added as a conjunct to the
+      conclusion's precondition.
+    \end{itemize}
 
-  \begin{cmathpar}
-    \texample[\prhl{}]
-      {\ec{case C}}
-      {\pRHL{P \wedge C}{c_1}{c_2}{Q} \\
-       \pRHL{P \wedge \neg C}{c_1}{c_2}{Q}}
-      {\pRHL{P}{c_1}{c_2}{Q}}
-
-    \texample[\phl{}]
-      {\ec{case C}}
-      {\pHL{P \wedge C}{c}{Q}{\diamond}{\delta} \\
-       \pHL{P \wedge \neg C}{c}{Q}{\diamond}{\delta}}
-      {\pHL{P}{c}{Q}{\diamond}{\delta}}
-
-    \texample[\hl{}]
-      {\ec{case C}}
-      {\HL{P \wedge C}{c}{Q} \\
-       \HL{P \wedge \neg C}{c}{Q}}
-      {\HL{P}{c}{Q}}
-  \end{cmathpar}
+    \medskip For example, if the current goal is
+    \ecinput{examps/parts/tactics/case_pl/1-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/case_pl/1-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/case_pl/1-1.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/case_pl/1-1.2.ec}{}{}{}{}
+    And if the current goal is
+    \ecinput{examps/parts/tactics/case_pl/2-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/case_pl/2-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/case_pl/2-1.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/case_pl/2-1.2.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}

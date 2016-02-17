@@ -1,8 +1,9 @@
 % --------------------------------------------------------------------
 \begin{tactic}[case $\;\phi$ | case]{case}
   \begin{tsyntax}{case $\;\phi$}
-    Do an excluded-middle case analysis on $\phi$, substituting $\phi$
-    in the goal's conclusion.
+    Assuming the goal's conclusion is \emph{not} a statement
+    judgement, do an excluded-middle case analysis on $\phi$,
+    substituting $\phi$ in the goal's conclusion.
 
     For example, if the current goal is
     \ecinput{examps/parts/tactics/case/1-1.0.ec}{}{}{}{} then
