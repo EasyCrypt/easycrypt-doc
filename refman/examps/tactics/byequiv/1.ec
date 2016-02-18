@@ -10,11 +10,11 @@ module M = {
 }.
 
 lemma L1 (y1 y2 : int) &m1 &m2 :
-  M.x{m1} = M.x{m2} => (*y1 = y2 =>*)
+  M.x{m1} = M.x{m2} => y1 = y2 =>
   Pr[M.f(y1) @ &m1 : res = 0] =
-  Pr[M.f(y1) @ &m2 : res = 0].
+  Pr[M.f(y2) @ &m2 : res = 0].
 proof.
-move=> x_eq (*y_eq*).
+move=> x_eq y_eq.
 dump "1-1" (byequiv (_ : ={M.x, y} ==> ={res})).
 proc; auto.
 trivial.

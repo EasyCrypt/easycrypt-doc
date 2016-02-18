@@ -25,10 +25,7 @@ lemma L1 &m :
   Pr[N.f() @ &m : N.bad].  
 proof.
 dump "4-1"
-  (byequiv
-     (_ : true ==>
-          M.bad{1} = N.bad{2} /\ (! N.bad{2} => ={res})) :
-     M.bad).
+  (byequiv (_ : true ==> M.bad{1} = N.bad{2} /\ (! N.bad{2} => ={res})) : M.bad).
 proc; auto; smt.
 trivial.
 smt.

@@ -1,84 +1,244 @@
 % --------------------------------------------------------------------
 \begin{tactic}{byequiv}
+  \begin{tsyntax}{byequiv (_ : $\;P$ ==> $\;Q$)}
+    If the goal's conclusion has the form
+    \begin{center}
+      \ec{Pr[$M_1$.$p_1$($a_{1,1}$, $\ldots$, $a_{1,n_1}$) @ &$m_1$ : $\;E_1$] =
+          Pr[$M_2$.$p_2$($a_{2,1}$, $\ldots$, $a_{2,n_2}$) @ &$m_2$ : $\;E_2$]},
+    \end{center}
+    reduce the goal to three subgoals:
+    \begin{itemize}
+    \item One with conclusion
+          \ec{equiv[$M_1$.$p_1$ ~ $\;M_2$.$p_2$ : $\;P$ ==> $\;Q$]};
 
-  \begin{tsyntax}{byequiv [option]? <spec>}
-  Derives a probability relation from a \prhl judgement on the
-  procedures involved. \ec{<spec>} can include wildcards when the
-  tactic should infer the pre or postcondition. In addition,
-  \ec{<spec>} can be extended with a failure event to infer precise
-  applications of the Fundamental Lemma.
+    \item One whose conclusion says that $P$ holds, where
+      references to memories \ec{&1} and \ec{&2} have been replaced
+      by \ec{&$m_1$} and \ec{&$m_2$}, respectively, and references
+      to the formal parameters of \ec{$M_1$.$p_1$} and
+      \ec{$M_2$.$p_2$} have been replaced by their arguments;
 
-  \textbf{Options:} By default, (\ec{eq} option) specification
-  inference attempts to infer a conjunction of equalities sufficient
-  to imply the desired relation. Passing the \ec{-eq} option
-  overrides this behaviour, instead using the trivial relation on
-  events.
+    \item One whose conclusion says that $Q$ implies that
+      \ec{$E_1$\{1\} <=> $\;E_2$\{2\}}.
+    \end{itemize}
 
-  \paragraph{Examples:}\strut
+    The argument to \ec{byequiv} may be replaced by a proof term for
+    \ec{equiv[$M_1$.$p_1$ ~ $\;M_2$.$p_2$ : $\;P$ ==> $\;Q$]}, in which
+    case the first subgoal isn't generated.
+    Furthermore, either or both of $P$ and $Q$ may be replaced by
+    \ec{_}, asking that the pre- or postcondition be inferred.
+    Supplying no argument to \ec{equiv} is the same as replacing
+    both $P$ and $Q$ by \ec{_}. By default, inference of $Q$ attempts
+    to infer a conjuction of equalities implying   
+    \ec{$E_1$\{1\} <=> $\;E_2$\{2\}}. Passing the \ec{[-eq]} option to
+    \ec{conseq} takes $Q$ to \emph{be} \ec{$E_1$\{1\} <=> $\;E_2$\{2\}}.
 
-  \begin{cmathpar}
-    \texample
-      {\ec{byequiv (_: P ==> Q)}}
-      {\pRHL{P}{f_1}{f_2}{Q} \\\\
-       {m_1[\Arg\mapsto\vec{a}_1]} \rel{P} {m_2[\Arg\mapsto\vec{a}_2]} \\
-       Q \Rightarrow E_1\{1\}  \Leftrightarrow E_2\{2\}}
-      {\PR{f_1}{\vec{a}_1}{\mem{m_1}}{E_1} = \PR{f_2}{\vec{a}_2}{m_2}{E_2}}
-  \end{cmathpar}
+    \medskip
+    \emph{The other variants of the tactic behave similarly with
+    regards to the use of proof terms and specification inference.}
 
-  \begin{cmathpar}
-    \texample
-      {\ec{byequiv (_: P ==> Q)}}
-      {\pRHL{P}{f_1}{f_2}{Q} \\\\
-       {m_1[\Arg\mapsto\vec{a}_1]} \rel{P} {m_2[\Arg\mapsto\vec{a}_2]} \\
-       Q \Rightarrow E_1\{1\}  \Rightarrow E_2\{2\}}
-      {\PR{f_1}{\vec{a}_1}{\mem{m_1}}{E_1} \leq \PR{f_2}{\vec{a}_2}{m_2}{E_2}}
-  \end{cmathpar}
+    \medskip For example, consider the module
+    \ecinput{examps/tactics/byequiv/1.ec}{}{3-10}{}
+    If the current goal is
+    \ecinput{examps/parts/tactics/byequiv/1-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/byequiv/1-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/byequiv/1-1.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/byequiv/1-1.2.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/byequiv/1-1.3.ec}{}{}{}{}
+    Given the lemma
+    \ecinput{examps/tactics/byequiv/1.ec}{}{24-24}{}
+    if the current goal is
+    \ecinput{examps/parts/tactics/byequiv/1-2.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/byequiv/1-2.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/byequiv/1-2.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/byequiv/1-2.2.ec}{}{}{}{}
+    And, if the current goal is
+    \ecinput{examps/parts/tactics/byequiv/1-3.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/byequiv/1-3.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/byequiv/1-3.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/byequiv/1-3.2.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/byequiv/1-3.3.ec}{}{}{}{}
+  \end{tsyntax}
 
-  \begin{cmathpar}
-    \texample
-      {\ec{byequiv (_: P ==> Q)}}
-      {\pRHL{P}{f_1}{f_2}{Q} \\\\
-       {m_1[\Arg\mapsto\vec{a}_1]} \rel{P} {m_2[\Arg\mapsto\vec{a}_2]} \\
-       Q \Rightarrow E_2\{2\}  \Rightarrow E_1\{1\}}
-      {\PR{f_1}{\vec{a}_1}{\mem{m_1}}{E_1} \geq \PR{f_2}{\vec{a}_2}{m_2}{E_2}}
-  \end{cmathpar}
+  \begin{tsyntax}{byequiv (_ : $\;P$ ==> $\;Q$)}
+    If the goal's conclusion has the form
+    \begin{center}
+      \ec{Pr[$M_1$.$p_1$($a_{1,1}$, $\ldots$, $a_{1,n_1}$) @ &$m_1$ : $\;E_1$] <=
+          Pr[$M_2$.$p_2$($a_{2,1}$, $\ldots$, $a_{2,n_2}$) @ &$m_2$ : $\;E_2$]},
+    \end{center}
+    then \ec{conseq} behaves the same as in the first variant
+    except that the conclusion of the third subgoal says that $Q$
+    implies \ec{$E_1$\{1\} => $\;E_2$\{2\}}.
 
-  \begin{cmathpar}
-    \texample
-      {\ec{byequiv (_: P ==> Q)}}
-      {\pRHL{P}{f_1}{f_2}{Q} \\
-       {m_1[\Arg\mapsto\vec{a}_1]} \rel{P} {m_2[\Arg\mapsto\vec{a}_2]} \\
-       Q \Rightarrow \neg B_2\{2\} \Rightarrow E_1\{1\}  \Rightarrow E_2\{2\}}
-      {\PR{f_1}{\vec{a}_1}{\mem{m_1}}{E_1}
-       \leq \PR{f_2}{\vec{a}_2}{m_2}{E_2}
-          + \PR{f_2}{\vec{a}_2}{m_2}{B_2}}
-  \end{cmathpar}
+    \medskip For example, if the current goal is
+    \ecinput{examps/parts/tactics/byequiv/2-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/byequiv/2-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/byequiv/2-1.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/byequiv/2-1.2.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/byequiv/2-1.3.ec}{}{}{}{}
+    And, if the current goal is
+    \ecinput{examps/parts/tactics/byequiv/2-2.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/byequiv/2-2.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/byequiv/2-2.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/byequiv/2-2.2.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/byequiv/2-2.3.ec}{}{}{}{}
+  \end{tsyntax}
 
-  \begin{cmathpar}
-    \texample
-      {\ec{byequiv (_: P ==> Q) : B$_1$}}
-      {\pRHL{P}{f_1}{f_2}{Q} \\
-       {m_1[\Arg\mapsto\vec{a}_1]} \rel{P} {m_2[\Arg\mapsto\vec{a}_2]} \\
-       Q \Rightarrow
-         (B_1\{1\} \Leftrightarrow B_2\{2\})
-         \wedge (\neg B_2\{2\} \Rightarrow E_1\{1\} \Leftrightarrow E_2\{2\})}
-      {| \PR{f_1}{\vec{a}_1}{\mem{m_1}}{E_1} - \PR{f_2}{\vec{a}_2}{m_2}{E_2} |
-       \leq \PR{f_2}{\vec{a}_2}{m_2}{B_2}}
-  \end{cmathpar}
+  \begin{tsyntax}{byequiv (_ : $\;P$ ==> $\;Q$)}
+    If the goal's conclusion has the form
+    \begin{center}
+      \ec{Pr[$M_1$.$p_1$($a_{1,1}$, $\ldots$, $a_{1,n_1}$) @ &$m_1$ : $\;E_1$] <=} \\
+      \ec{Pr[$M_2$.$p_2$($a_{2,1}$, $\ldots$, $a_{2,n_2}$) @ &$m_2$ : $\;E_2$] +
+          Pr[$M_2$.$p_2$($a_{2,1}$, $\ldots$, $a_{2,n_2}$) @ &$m_2$ : $\;B_2$]},
+    \end{center}
+    then \ec{conseq} behaves the same as in the first variant
+    except that the conclusion of the third subgoal says that $Q$
+    implies \ec{!$B_2$\{2\} => $\;E_1$\{1\} => $\;E_2$\{2\}}.
 
-  \begin{cmathpar}
-    \texample
-      {\ec{byequiv [-eq] (_: P ==> _)}}
-      {\pRHL{P}{f_1}{f_2}{E_1\{1\} \Leftrightarrow E_2\{2\}} \\
-       {m_1[\Arg\mapsto\vec{a}_1]} \rel{P} {m_2[\Arg\mapsto\vec{a}_2]}}
-      {\PR{f_1}{\vec{a}_1}{\mem{m_1}}{E_1} = \PR{f_2}{\vec{a}_2}{m_2}{E_2}}
-  \end{cmathpar}
- \end{tsyntax}
+    \medskip For example, if the current goal is
+    \ecinput{examps/parts/tactics/byequiv/3-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/byequiv/3-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/byequiv/3-1.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/byequiv/3-1.2.ec}{}{}{}{}
+    \fixme{Why is the second subgoal pruned? (Compare with first and
+    second variants, where the corresponding subgoal isn't pruned.)}
+    And, if the current goal is
+    \ecinput{examps/parts/tactics/byequiv/3-2.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/byequiv/3-2.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/byequiv/3-2.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/byequiv/3-2.2.ec}{}{}{}{}
+    \fixme{Why is the second subgoal pruned?}
+  \end{tsyntax}
 
-  \begin{tsyntax}{byequiv <lemma>}
-  Same as \ec{byequiv <spec>}, but the specification to use
-  is inferred from the lemma provided. Raises an error if the lemma
-  does not refer to the expected procedures. Inference options have no
-  effect in this setting.
+  \begin{tsyntax}{byequiv (_ : $\;P$ ==> $\;Q$) : $\;B_1$}
+    If the goal's conclusion has the form
+    \begin{center}
+      \ec{`| Pr[$M_1$.$p_1$($a_{1,1}$, $\ldots$, $a_{1,n_1}$) @ &$m_1$ : $\;E_1$] -
+          Pr[$M_2$.$p_2$($a_{2,1}$, $\ldots$, $a_{2,n_2}$) @ &$m_2$ : $\;E_2$] | <=} \\
+      \ec{Pr[$M_2$.$p_2$($a_{2,1}$, $\ldots$, $a_{2,n_2}$) @ &$m_2$ : $\;B_2$]},
+    \end{center}
+    then \ec{conseq} behaves the same as in the first variant
+    except that the conclusion of the third subgoal says that $Q$
+    implies
+    \begin{center}
+      \ec{($B_1$\{1\} <=> $\;B_2$\{2\}) /\\ ! $\;B_2$\{2\} => ($\;E_1$\{1\} <=> $\;E_2$\{2\})}
+    \end{center}
+
+    \medskip For example, if the current goal is
+    \ecinput{examps/parts/tactics/byequiv/4-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/byequiv/4-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/byequiv/4-1.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/byequiv/4-1.2.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/byequiv/4-1.3.ec}{}{}{}{}
+    Given the lemma
+    \ecinput{examps/tactics/byequiv/4.ec}{}{37-38}{}
+    if the current goal is
+    \ecinput{examps/parts/tactics/byequiv/4-2.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/byequiv/4-2.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/byequiv/4-2.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/byequiv/4-2.2.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}
+
+%%  \begin{tsyntax}{byequiv [option]? <spec>}
+%%  Derives a probability relation from a \prhl judgement on the
+%%  procedures involved. \ec{<spec>} can include wildcards when the
+%%  tactic should infer the pre or postcondition. In addition,
+%%  \ec{<spec>} can be extended with a failure event to infer precise
+%%  applications of the Fundamental Lemma.
+%%
+%%  \textbf{Options:} By default, (\ec{eq} option) specification
+%%  inference attempts to infer a conjunction of equalities sufficient
+%%  to imply the desired relation. Passing the \ec{-eq} option
+%%  overrides this behaviour, instead using the trivial relation on
+%%  events.
+%%
+%%  \paragraph{Examples:}\strut
+%%
+%%  \begin{cmathpar}
+%%    \texample
+%%      {\ec{byequiv (_: P ==> Q)}}
+%%      {\pRHL{P}{f_1}{f_2}{Q} \\\\
+%%       {m_1[\Arg\mapsto\vec{a}_1]} \rel{P} {m_2[\Arg\mapsto\vec{a}_2]} \\
+%%       Q \Rightarrow E_1\{1\}  \Leftrightarrow E_2\{2\}}
+%%      {\PR{f_1}{\vec{a}_1}{\mem{m_1}}{E_1} = \PR{f_2}{\vec{a}_2}{m_2}{E_2}}
+%%  \end{cmathpar}
+%%
+%%  \begin{cmathpar}
+%%    \texample
+%%      {\ec{byequiv (_: P ==> Q)}}
+%%      {\pRHL{P}{f_1}{f_2}{Q} \\\\
+%%       {m_1[\Arg\mapsto\vec{a}_1]} \rel{P} {m_2[\Arg\mapsto\vec{a}_2]} \\
+%%       Q \Rightarrow E_1\{1\}  \Rightarrow E_2\{2\}}
+%%      {\PR{f_1}{\vec{a}_1}{\mem{m_1}}{E_1} \leq \PR{f_2}{\vec{a}_2}{m_2}{E_2}}
+%%  \end{cmathpar}
+%%
+%%  \begin{cmathpar}
+%%    \texample
+%%      {\ec{byequiv (_: P ==> Q)}}
+%%      {\pRHL{P}{f_1}{f_2}{Q} \\\\
+%%       {m_1[\Arg\mapsto\vec{a}_1]} \rel{P} {m_2[\Arg\mapsto\vec{a}_2]} \\
+%%       Q \Rightarrow E_2\{2\}  \Rightarrow E_1\{1\}}
+%%      {\PR{f_1}{\vec{a}_1}{\mem{m_1}}{E_1} \geq \PR{f_2}{\vec{a}_2}{m_2}{E_2}}
+%%  \end{cmathpar}
+%%
+%%  \begin{cmathpar}
+%%    \texample
+%%      {\ec{byequiv (_: P ==> Q)}}
+%%      {\pRHL{P}{f_1}{f_2}{Q} \\
+%%       {m_1[\Arg\mapsto\vec{a}_1]} \rel{P} {m_2[\Arg\mapsto\vec{a}_2]} \\
+%%       Q \Rightarrow \neg B_2\{2\} \Rightarrow E_1\{1\}  \Rightarrow E_2\{2\}}
+%%      {\PR{f_1}{\vec{a}_1}{\mem{m_1}}{E_1}
+%%       \leq \PR{f_2}{\vec{a}_2}{m_2}{E_2}
+%%          + \PR{f_2}{\vec{a}_2}{m_2}{B_2}}
+%%  \end{cmathpar}
+%%
+%%  \begin{cmathpar}
+%%    \texample
+%%      {\ec{byequiv (_: P ==> Q) : B$_1$}}
+%%      {\pRHL{P}{f_1}{f_2}{Q} \\
+%%       {m_1[\Arg\mapsto\vec{a}_1]} \rel{P} {m_2[\Arg\mapsto\vec{a}_2]} \\
+%%       Q \Rightarrow
+%%         (B_1\{1\} \Leftrightarrow B_2\{2\})
+%%         \wedge (\neg B_2\{2\} \Rightarrow E_1\{1\} \Leftrightarrow E_2\{2\})}
+%%      {| \PR{f_1}{\vec{a}_1}{\mem{m_1}}{E_1} - \PR{f_2}{\vec{a}_2}{m_2}{E_2} |
+%%       \leq \PR{f_2}{\vec{a}_2}{m_2}{B_2}}
+%%  \end{cmathpar}
+%%
+%%  \begin{cmathpar}
+%%    \texample
+%%      {\ec{byequiv [-eq] (_: P ==> _)}}
+%%      {\pRHL{P}{f_1}{f_2}{E_1\{1\} \Leftrightarrow E_2\{2\}} \\
+%%       {m_1[\Arg\mapsto\vec{a}_1]} \rel{P} {m_2[\Arg\mapsto\vec{a}_2]}}
+%%      {\PR{f_1}{\vec{a}_1}{\mem{m_1}}{E_1} = \PR{f_2}{\vec{a}_2}{m_2}{E_2}}
+%%  \end{cmathpar}
+%% \end{tsyntax}
+%%
+%%  \begin{tsyntax}{byequiv <lemma>}
+%%  Same as \ec{byequiv <spec>}, but the specification to use
+%%  is inferred from the lemma provided. Raises an error if the lemma
+%%  does not refer to the expected procedures. Inference options have no
+%%  effect in this setting.
+%%  \end{tsyntax}
