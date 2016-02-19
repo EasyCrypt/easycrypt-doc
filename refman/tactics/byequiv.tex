@@ -26,11 +26,11 @@
     case the first subgoal isn't generated.
     Furthermore, either or both of $P$ and $Q$ may be replaced by
     \ec{_}, asking that the pre- or postcondition be inferred.
-    Supplying no argument to \ec{equiv} is the same as replacing
+    Supplying no argument to \ec{byequiv} is the same as replacing
     both $P$ and $Q$ by \ec{_}. By default, inference of $Q$ attempts
     to infer a conjuction of equalities implying   
     \ec{$E_1$\{1\} <=> $\;E_2$\{2\}}. Passing the \ec{[-eq]} option to
-    \ec{conseq} takes $Q$ to \emph{be} \ec{$E_1$\{1\} <=> $\;E_2$\{2\}}.
+    \ec{byequiv} takes $Q$ to \emph{be} \ec{$E_1$\{1\} <=> $\;E_2$\{2\}}.
 
     \medskip
     \emph{The other variants of the tactic behave similarly with
@@ -73,7 +73,7 @@
       \ec{Pr[$M_1$.$p_1$($a_{1,1}$, $\ldots$, $a_{1,n_1}$) @ &$m_1$ : $\;E_1$] <=
           Pr[$M_2$.$p_2$($a_{2,1}$, $\ldots$, $a_{2,n_2}$) @ &$m_2$ : $\;E_2$]},
     \end{center}
-    then \ec{conseq} behaves the same as in the first variant
+    then \ec{byequiv} behaves the same as in the first variant
     except that the conclusion of the third subgoal says that $Q$
     implies \ec{$E_1$\{1\} => $\;E_2$\{2\}}.
 
@@ -104,7 +104,7 @@
       \ec{Pr[$M_2$.$p_2$($a_{2,1}$, $\ldots$, $a_{2,n_2}$) @ &$m_2$ : $\;E_2$] +
           Pr[$M_2$.$p_2$($a_{2,1}$, $\ldots$, $a_{2,n_2}$) @ &$m_2$ : $\;B_2$]},
     \end{center}
-    then \ec{conseq} behaves the same as in the first variant
+    then \ec{byequiv} behaves the same as in the first variant
     except that the conclusion of the third subgoal says that $Q$
     implies \ec{!$B_2$\{2\} => $\;E_1$\{1\} => $\;E_2$\{2\}}.
 
@@ -134,7 +134,7 @@
           Pr[$M_2$.$p_2$($a_{2,1}$, $\ldots$, $a_{2,n_2}$) @ &$m_2$ : $\;E_2$] | <=} \\
       \ec{Pr[$M_2$.$p_2$($a_{2,1}$, $\ldots$, $a_{2,n_2}$) @ &$m_2$ : $\;B_2$]},
     \end{center}
-    then \ec{conseq} behaves the same as in the first variant
+    then \ec{byequiv} behaves the same as in the first variant
     except that the conclusion of the third subgoal says that $Q$
     implies
     \begin{center}
