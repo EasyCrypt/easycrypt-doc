@@ -1,38 +1,96 @@
 % --------------------------------------------------------------------
 \begin{tactic}{bypr}
+  \begin{tsyntax}{bypr $\;e_1$ $\;e_2$}
+    If the goal's conclusion has the form
+    \begin{center}
+      \ec{equiv[$M$.$p$ ~ $\;N$.$q$ : $\;P$ ==> $\;Q$]},
+    \end{center}
+    and the $e_i$ are expressions of the same type possibily
+    involving memories \ec{&1} and \ec{&2} for \ec{$M$.$p$} and
+    \ec{$N$.$q$}, respectively, then reduce the goal to two subgoals:
+    \begin{itemize}
+    \item One whose conclusion says that for all memories \ec{&1}
+      and \ec{&2} for \ec{$M$.$p$} and \ec{$N$.$q$}, if $e_1 = e_2$,
+      then $Q$ holds; and
+
+    \item One whose conclusion says that, for all memories \ec{&1} and
+      \ec{&2} for \ec{$M$.$p$} and \ec{$N$.$q$} and values $a$ of the
+      common type of the $e_i$, if $P$ holds, then the probability of
+      running \ec{$M$.$p$} in memory \ec{&1} and with arguments
+      consisting of the values of its formal parameters in \ec{&1} and
+      terminating in a memory in which the value of $e_1$ (replacing
+      references to \ec{&1} with reference to this memory) is $a$ is
+      the same as the probability of running \ec{$N$.$q$} in memory
+      \ec{&2} and with arguments consisting of the values of its
+      formal parameters in \ec{&2} and terminating in a memory in
+      which the value of $e_2$ (replacing references to \ec{&2} with
+      reference to this memory) is $a$.
+    \end{itemize}
+
+    \medskip For example, consider the modules
+    \ecinput{examps/tactics/bypr/1.ec}{}{3-20}{}
+    If the current goal is
+    \ecinput{examps/parts/tactics/bypr/1-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/bypr/1-1.ec}{}{}{}{}
+    produces the goals
+    \ecinput{examps/parts/tactics/bypr/1-1.1.ec}{}{}{}{}
+    and
+    \ecinput{examps/parts/tactics/bypr/1-1.2.ec}{}{}{}{}
+  \end{tsyntax}
+
   \begin{tsyntax}{bypr}
-  Derives a program judgment from a probability relation or an exact
-  probability. Only applies to judgments on procedures.
+    If the goal's conclusion has the form
+    \begin{center}
+      \ec{hoare[$M$.$p$ : $\;P$ ==> $\;Q$]},
+    \end{center}
+    then reduce the goal to one whose conclusion says that, for all
+    memories \ec{&m} for \ec{$M$.$p$} such that \ec{$P$\{$m$\}} holds,
+    the probability of running \ec{$M$.$p$} in memory \ec{&$m$} and
+    with arguments consisting of the values of its formal parameters
+    in \ec{&$m$} and terminating in a memory satisfying \ec{!$Q$} is $0$.
 
-  \paragraph{Examples:}\strut
-  
-  \begin{cmathpar}
-    \texample[\prhl{}]
-      {\ec{bypr (r$_1$) (r$_2$)}}
-      {\forall \mem{m_1}, \mem{m_2}, a.\,
-          r_1 = a \Rightarrow
-          r_2 = a \Rightarrow
-          {\mem{m_1}} \rel{Q} {\mem{m_2}} \\
-       \forall \vec{a}_1, \vec{a}_2, \mem{m_1}, \mem{m_2}, a.\,
-         {\mem{m_1}[\Arg\mapsto\vec{a}_1]} \rel{P} {\mem{m_2}[\Arg\mapsto\vec{a}_2]} \Rightarrow \\
-         \PR{f_1}{\vec{a}_1}{\mem{m_1}}{a = r_1} = \PR{f_2}{\vec{a}_2}{\mem{m_2}}{a = r_2}}
-      {\pRHL{P}{f_1}{f_2}{Q}}
-  \end{cmathpar}
-
-  \begin{cmathpar}
-    \texample[\phl{}]
-      {\ec{bypr}}
-      {\forall \mem{m}, \vec{a}.\, P\ m[\Arg\mapsto\vec{a}] \Rightarrow
-          \PR{f}{\vec{a}}{m}{E} \mathrel{\diamond} \delta}
-      {\pHL{P}{f}{E}{\diamond}{\delta}}
-  \end{cmathpar}
-
-  \begin{cmathpar}
-    \texample[\hl{}]
-      {\ec{bypr}}
-      {\forall \mem{m}, \vec{a}.\, P\ m[\Arg\mapsto\vec{a}] \Rightarrow
-          \PR{f}{\vec{a}}{m}{\neg E} \mathop{=}0\%r}
-      {\HL{P}{f}{E}}
-  \end{cmathpar}
+    \medskip For example, consider the module
+    \ecinput{examps/tactics/bypr/2.ec}{}{3-10}{}
+    If the current goal is
+    \ecinput{examps/parts/tactics/bypr/2-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/bypr/2-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/bypr/2-1.1.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}
+
+%%  Derives a program judgment from a probability relation or an exact
+%%  probability. Only applies to judgments on procedures.
+%%
+%%  \paragraph{Examples:}\strut
+%%  
+%%  \begin{cmathpar}
+%%    \texample[\prhl{}]
+%%      {\ec{bypr (r$_1$) (r$_2$)}}
+%%      {\forall \mem{m_1}, \mem{m_2}, a.\,
+%%          r_1 = a \Rightarrow
+%%          r_2 = a \Rightarrow
+%%          {\mem{m_1}} \rel{Q} {\mem{m_2}} \\
+%%       \forall \vec{a}_1, \vec{a}_2, \mem{m_1}, \mem{m_2}, a.\,
+%%         {\mem{m_1}[\Arg\mapsto\vec{a}_1]} \rel{P} {\mem{m_2}[\Arg\mapsto\vec{a}_2]} \Rightarrow \\
+%%         \PR{f_1}{\vec{a}_1}{\mem{m_1}}{a = r_1} = \PR{f_2}{\vec{a}_2}{\mem{m_2}}{a = r_2}}
+%%      {\pRHL{P}{f_1}{f_2}{Q}}
+%%  \end{cmathpar}
+%%
+%%  \begin{cmathpar}
+%%    \texample[\phl{}]
+%%      {\ec{bypr}}
+%%      {\forall \mem{m}, \vec{a}.\, P\ m[\Arg\mapsto\vec{a}] \Rightarrow
+%%          \PR{f}{\vec{a}}{m}{E} \mathrel{\diamond} \delta}
+%%      {\pHL{P}{f}{E}{\diamond}{\delta}}
+%%  \end{cmathpar}
+%%
+%%  \begin{cmathpar}
+%%    \texample[\hl{}]
+%%      {\ec{bypr}}
+%%      {\forall \mem{m}, \vec{a}.\, P\ m[\Arg\mapsto\vec{a}] \Rightarrow
+%%          \PR{f}{\vec{a}}{m}{\neg E} \mathop{=}0\%r}
+%%      {\HL{P}{f}{E}}
+%%  \end{cmathpar}
+%%  \end{tsyntax}
+%%\end{tactic}
