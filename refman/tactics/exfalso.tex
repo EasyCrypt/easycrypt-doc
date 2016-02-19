@@ -5,23 +5,41 @@
   \rtactic{hoare} and \rtactic{bypr} to strengthen the precondition
   into $\mathsf{false}$ and discharge the resulting trivial goal.
 
-  \paragraph{Examples:}\strut
-  
-  \begin{cmathpar}
-  \texample[\prhl{}]
-    {\ec{exfalso}}
-    {P \Rightarrow \mathsf{false}}
-    {\pRHL{P}{c}{c'}{Q}}
-
-  \texample[\phl{}]
-    {\ec{exfalso}}
-    {P \Rightarrow \mathsf{false}}
-    {\pHL{P}{c}{Q}{\diamond}{\delta}}
-
-  \texample[\hl{}]
-    {\ec{exfalso}}
-    {P \Rightarrow \mathsf{false}}
-    {\HL{P}{c}{Q}}
-  \end{cmathpar}
+  For example, if the current goal is
+  \ecinput{examps/parts/tactics/exfalso/1-1.0.ec}{}{}{}{} then
+  running \ecinput{examps/parts/tactics/exfalso/1-1.ec}{}{}{}{}
+  produces the goals
+  \ecinput{examps/parts/tactics/exfalso/1-1.1.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/exfalso/1-1.2.ec}{}{}{}{}
+  The first of these goals is solved by
+  running \ecinput{examps/parts/tactics/exfalso/1-2.ec}{}{}{}{}
+  And running \ecinput{examps/parts/tactics/exfalso/1-3.ec}{}{}{}{}
+  reduces the second of these goals to
+  \ecinput{examps/parts/tactics/exfalso/1-3.1.ec}{}{}{}{}
+  which \ec{smt} solves.
   \end{tsyntax}
+
+  \fixme{Perhaps need other examples?}
 \end{tactic}
+
+%%  \paragraph{Examples:}\strut
+%%  
+%%  \begin{cmathpar}
+%%  \texample[\prhl{}]
+%%    {\ec{exfalso}}
+%%    {P \Rightarrow \mathsf{false}}
+%%    {\pRHL{P}{c}{c'}{Q}}
+%%
+%%  \texample[\phl{}]
+%%    {\ec{exfalso}}
+%%    {P \Rightarrow \mathsf{false}}
+%%    {\pHL{P}{c}{Q}{\diamond}{\delta}}
+%%
+%%  \texample[\hl{}]
+%%    {\ec{exfalso}}
+%%    {P \Rightarrow \mathsf{false}}
+%%    {\HL{P}{c}{Q}}
+%%  \end{cmathpar}
+%%  \end{tsyntax}
+%%\end{tactic}
