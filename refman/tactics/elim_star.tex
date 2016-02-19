@@ -1,25 +1,73 @@
 % --------------------------------------------------------------------
 \begin{tactic}{elim*}
   \begin{tsyntax}[empty]{elim*}
-  Destruct existential quantifications at the head of a
-  precondition. Such existential quantifications may be introduced by
-  \rtactic{sp} or \rtactic{exists*}.
+     If the goal's conclusion is a \prhl, \hl or \phl judgement or
+     statement judgement whose precondition has the form
+     \begin{center}
+       \ec{exists ($x_1$ $\;\ldots$ $\;x_n$), $\;P$},
+     \end{center}
+    then remove the existential quantification from the precondition,
+    and universally quantify the judgement or statement judgement
+    by the $x_i$.
 
-  \paragraph{Examples:}\strut
+    Such existential quantifications may be introduced by \rtactic{sp}
+    or \rtactic{exists*}.
 
-  \begin{cmathpar}
-  \texample[\prhl{}]{\ec{elim*}}%%
-    {\forall x.\, \pRHL{x = \inmem{M.x}{1} \wedge P}{c_1}{c_2}{Q}}%%
-    {\pRHL{\exists x, x = \inmem{M.x}{1} \wedge P}{c_1}{c_2}{Q}}
+    \medskip For example, if the current goal is
+    \ecinput{examps/parts/tactics/elim-star/1-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/elim-star/1-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/elim-star/1-1.1.ec}{}{}{}{}
+    If the current goal is
+    \ecinput{examps/parts/tactics/elim-star/1-2.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/elim-star/1-2.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/elim-star/1-2.1.ec}{}{}{}{}
+    If the current goal is
+    \ecinput{examps/parts/tactics/elim-star/1-3.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/elim-star/1-3.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/elim-star/1-3.1.ec}{}{}{}{}
+    If the current goal is
+    \ecinput{examps/parts/tactics/elim-star/1-4.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/elim-star/1-4.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/elim-star/1-4.1.ec}{}{}{}{}
 
-  \texample[\phl{}]{\ec{elim*}}%%
-    {\forall x.\, \pHL{x = M.x \wedge P}{c}{Q}{\diamond}{\delta}}%%
-    {\pHL{\exists x, x = M.x \wedge P}{c}{Q}{\diamond}{\delta}}
-
-  \texample[\hl{}]{\ec{elim*}}%%
-    {\forall x.\, \HL{x = M.x \wedge P}{c}{Q}}%%
-    {\HL{\exists x, x = M.x \wedge P}{c}{Q}}  
-  \end{cmathpar}
-
+    \medskip As a more realistic example, consider the module
+    \ecinput{examps/tactics/elim-star/2.ec}{}{3-12}{}
+    and lemma
+    \ecinput{examps/tactics/elim-star/2.ec}{}{14-14}{}
+    If the current goal is
+    \ecinput{examps/parts/tactics/elim-star/2-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/elim-star/2-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/elim-star/2-1.1.ec}{}{}{}{}
+    from which
+    running \ecinput{examps/parts/tactics/elim-star/2-2.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/elim-star/2-2.1.ec}{}{}{}{}
+    from which
+    running \ecinput{examps/parts/tactics/elim-star/2-3.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/elim-star/2-3.1.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}
+
+%%  \paragraph{Examples:}\strut
+%%
+%%  \begin{cmathpar}
+%%  \texample[\prhl{}]{\ec{elim*}}%%
+%%    {\forall x.\, \pRHL{x = \inmem{M.x}{1} \wedge P}{c_1}{c_2}{Q}}%%
+%%    {\pRHL{\exists x, x = \inmem{M.x}{1} \wedge P}{c_1}{c_2}{Q}}
+%%
+%%  \texample[\phl{}]{\ec{elim*}}%%
+%%    {\forall x.\, \pHL{x = M.x \wedge P}{c}{Q}{\diamond}{\delta}}%%
+%%    {\pHL{\exists x, x = M.x \wedge P}{c}{Q}{\diamond}{\delta}}
+%%
+%%  \texample[\hl{}]{\ec{elim*}}%%
+%%    {\forall x.\, \HL{x = M.x \wedge P}{c}{Q}}%%
+%%    {\HL{\exists x, x = M.x \wedge P}{c}{Q}}  
+%%  \end{cmathpar}
+%%
+%%  \end{tsyntax}

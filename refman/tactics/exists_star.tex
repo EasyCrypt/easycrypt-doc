@@ -1,32 +1,69 @@
 % --------------------------------------------------------------------
 \begin{tactic}{exists*}
-  \begin{tsyntax}[empty]{elim*}
-  Introduce an existential quantification over the value of a program
-  variable in the initial memory. This is particularly useful when
-  dealing with a procedure call using a lemma that refers to initial
-  values of arguments or state (using \rtactic{call}). Several program
-  variables can be treated simultaneously by providing them in a
-  comma-separated list.
+  \begin{tsyntax}{exists* $\;e_1$, $\;\ldots$, $\;e_n$}
+    If the goal's conclusion is a \prhl, \hl or \phl judgment or
+    statement judgements and the $e_i$ are well-typed expressions
+    typically involving program variables (in the \prhl case,
+    the expressions will refer to memories \ec{&1} and \ec{&2}),
+    then change the conclusion's precondition $P$ to
+    \begin{center}
+      \ec{exists ($x_1$ $\;\ldots$ $\;x_n$),
+          $\;x_1$ = $\;e_2$ /\\ $\;\ldots$ /\\ $\;x_n$ = $\;e_n$ /\\ $\;P$}.
+    \end{center}
 
-  \paragraph{Examples:}\strut
+    The tactic can be used in conjunction with \rtactic{elim*} when
+    handling a procedure call using a lemma that refers to initial
+    values of program variables. See \rtactic{elim*} for an example
+    of this.
 
-  \begin{cmathpar}
-  \texample[\prhl{}]{\ec{exists* M.x\{1\}}}%%
-    {\pRHL{\exists x, x = \inmem{M.x}{1} \wedge P}{c_1}{c_2}{Q}}%%
-    {\pRHL{P}{c_1}{c_2}{Q}}
-
-  \texample[\prhl{}]{\ec{exists* M.x\{1\}, M.x\{2\}}}%%
-    {\pRHL{\exists x_1\ x_2, x1 = \inmem{M.x}{1} \wedge \inmem{M.x}{2} \wedge P}{c_1}{c_2}{Q}}%%
-    {\pRHL{P}{c_1}{c_2}{Q}}
-
-  \texample[\phl{}]{\ec{exists* M.x}}%%
-    {\pHL{\exists x, x = M.x \wedge P}{c}{Q}{\diamond}{\delta}}%%
-    {\pHL{P}{c}{Q}{\diamond}{\delta}}
-
-  \texample[\hl{}]{\ec{exists* M.x}}%%
-    {\HL{\exists x, x = M.x \wedge P}{c}{Q}}%%
-    {\HL{P}{c}{Q}}
-  \end{cmathpar}
-
+    \medskip For example, if the current goal is
+    \ecinput{examps/parts/tactics/exists-star/1-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/exists-star/1-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/exists-star/1-1.1.ec}{}{}{}{}
+    If the current goal is
+    \ecinput{examps/parts/tactics/exists-star/1-2.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/exists-star/1-2.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/exists-star/1-2.1.ec}{}{}{}{}
+    If the current goal is
+    \ecinput{examps/parts/tactics/exists-star/1-3.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/exists-star/1-3.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/exists-star/1-3.1.ec}{}{}{}{}
+    If the current goal is
+    \ecinput{examps/parts/tactics/exists-star/1-4.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/exists-star/1-4.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/exists-star/1-4.1.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}
+
+%%  Introduce an existential quantification over the value of a program
+%%  variable in the initial memory. This is particularly useful when
+%%  dealing with a procedure call using a lemma that refers to initial
+%%  values of arguments or state (using \rtactic{call}). Several program
+%%  variables can be treated simultaneously by providing them in a
+%%  comma-separated list.
+%%
+%%  \paragraph{Examples:}\strut
+%%
+%%  \begin{cmathpar}
+%%  \texample[\prhl{}]{\ec{exists* M.x\{1\}}}%%
+%%    {\pRHL{\exists x, x = \inmem{M.x}{1} \wedge P}{c_1}{c_2}{Q}}%%
+%%    {\pRHL{P}{c_1}{c_2}{Q}}
+%%
+%%  \texample[\prhl{}]{\ec{exists* M.x\{1\}, M.x\{2\}}}%%
+%%    {\pRHL{\exists x_1\ x_2, x1 = \inmem{M.x}{1} \wedge \inmem{M.x}{2} \wedge P}{c_1}{c_2}{Q}}%%
+%%    {\pRHL{P}{c_1}{c_2}{Q}}
+%%
+%%  \texample[\phl{}]{\ec{exists* M.x}}%%
+%%    {\pHL{\exists x, x = M.x \wedge P}{c}{Q}{\diamond}{\delta}}%%
+%%    {\pHL{P}{c}{Q}{\diamond}{\delta}}
+%%
+%%  \texample[\hl{}]{\ec{exists* M.x}}%%
+%%    {\HL{\exists x, x = M.x \wedge P}{c}{Q}}%%
+%%    {\HL{P}{c}{Q}}
+%%  \end{cmathpar}
+%%
+%%  \end{tsyntax}
