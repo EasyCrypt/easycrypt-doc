@@ -1091,6 +1091,11 @@ module X : A, B = {
   proc g() : unit = { y <- y + 1; }
 }.
 \end{easycrypt}
+When declaring a module alias, one may ask \EasyCrypt to check that
+the module matches a module type, as in:
+\begin{easycrypt}{}{}
+module X' : A, B = X.
+\end{easycrypt}
 
 Suppose we want to declare a cryptographic game using our guessing
 oracle, parameterized by an adversary with access to the \ec{guess}
@@ -1147,19 +1152,25 @@ The full Guessing Game example is contained in Listing~\ref{list:fullguessing}.
 \ecinput{examps/specifications-examp5.ec}{Full
   Guessing Game Example} {}{list:fullguessing}
 \ec{SimpAdv} is a simple implementation of an adversary.
-The inclusion of the constraint \ec{ADV(O)} in \ec{SimpAdv}'s declaration
+The inclusion of the constraint \ec{SimpAdv : ADV} in \ec{SimpAdv}'s declaration
 \begin{easycrypt}{}{}
-module SimpAdv(O : OR) : ADV(O) = #\ldots#
+module (SimpAdv : ADV) (O : OR) = #\ldots#
 \end{easycrypt}
-makes \EasyCrypt check that: its implementation of \ec{chooseRange}
-doesn't use \ec{O} at all; its implementation of \ec{doGuessing}
-doesn't use any of \ec{O}'s procedures other than \ec{guess}; and
-that \ec{chooseRange} initializes \ec{SimpAdv}'s global variables.
-Its \ec{chooseRange} procedure chooses the range of \ec{1} to \ec{100},
-and initializes global variables recording this range and the
-number of guesses it will make (see the code of \ec{Game} to see
-why \ec{10} is a sensible choice). The \ec{doGuessing} procedure
-makes \ec{10} random guesses.
+makes \EasyCrypt check that \ec{SimpAdv} implements the module type
+\ec{ADV}: its implementation of \ec{chooseRange} doesn't use \ec{O} at
+all; its implementation of \ec{doGuessing} doesn't use any of \ec{O}'s
+procedures other than \ec{guess}; and that \ec{chooseRange}
+initializes \ec{SimpAdv}'s global variables.  Its \ec{chooseRange}
+procedure chooses the range of \ec{1} to \ec{100}, and initializes
+global variables recording this range and the number of guesses it
+will make (see the code of \ec{Game} to see why \ec{10} is a sensible
+choice). The \ec{doGuessing} procedure makes \ec{10} random guesses.
+It would be legal for the parameter \ec{O} in \ec{SimpAdv}'s
+definition to be constrained to match a module type \ec{T} providing
+a proper subset of \ec{OR}'s procedures, but that would further limit
+what procedures of \ec{O} \ec{SimpAdv}'s procedures
+could call. On the other hand, it would be illegal for \ec{T} to
+provide procedures not in \ec{OR}.
 
 Despite \ec{SimpAdv} being a parameterized module, to refer to one
 of its global variables from another module one ignores the parameter,

@@ -34,7 +34,7 @@ module type ADV(O : OR) = {
   proc doGuessing() : unit {O.guess}
 }.
 
-module SimpAdv(O : OR) : ADV(O) = {
+module (SimpAdv : ADV) (O : OR) = {
   var range : int * int
   var tries : int
 
@@ -78,4 +78,4 @@ module Game(Adv : ADV) : GAME = {
   }
 }.
 
-module SimpGame = Game(SimpAdv).
+module SimpGame : GAME = Game(SimpAdv).
