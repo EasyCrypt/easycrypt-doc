@@ -1,6 +1,27 @@
 % --------------------------------------------------------------------
 \begin{tactic}{auto}
   \begin{tsyntax}[empty]{auto}
-  \fix{Missing description of auto}.
+    If the current goal is a \prhl, \hl or \phl statement judgement,
+    uses various program logic tactics in an attempt to reduce the
+    goal to a simpler one. Never fails, but may fail to make any
+    progress.
+
+    \fixme{Need better description of when the tactic is applicable and
+           how the tactic works!}
+
+    \medskip For example, if the current goal is
+    \ecinput{examps/parts/tactics/auto/1-1.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/auto/1-1.ec}{}{}{}{}
+    produces the goal
+    \ecinput{examps/parts/tactics/auto/1-1.1.ec}{}{}{}{}
+    which \ec{progress; smt} is able to solve.
+    If the current goal is
+    \ecinput{examps/parts/tactics/auto/1-2.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/auto/1-2.ec}{}{}{}{}
+    produce a single goal, which \ec{smt} is able to solve.
+    And, if the current goal is
+    \ecinput{examps/parts/tactics/auto/1-3.0.ec}{}{}{}{} then
+    running \ecinput{examps/parts/tactics/auto/1-3.ec}{}{}{}{}
+    produce a single goal, which \ec{smt} is able to solve.
   \end{tsyntax}
 \end{tactic}
