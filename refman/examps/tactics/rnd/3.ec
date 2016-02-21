@@ -1,4 +1,4 @@
-require import Bool DBool.
+require import Bool DBool NewDistr.
 
 module M = {
   proc f() : bool = {

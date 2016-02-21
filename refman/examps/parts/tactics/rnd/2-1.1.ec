@@ -11,12 +11,11 @@ pre = y{2} = n
 
 post =
   (forall (xR : int),
-     (in_supp xR [2..3])%Distr => xR = if xR = 3 then 3 else 2) &&
+     in_supp xR [2..3] => xR = if xR = 3 then 3 else 2) &&
   (forall (xR : int),
-     (in_supp xR [2..3])%Distr =>
-     (mu_x [2..3] xR)%Distr = (mu_x {0,1} (xR = 3))%Distr) &&
+     in_supp xR [2..3] => mu_x [2..3] xR = mu_x {0,1} (xR = 3)) &&
   forall (xL : bool),
-    (in_supp xL {0,1})%Distr =>
-    (in_supp (if xL then 3 else 2) [2..3])%Distr &&
+    in_supp xL {0,1} =>
+    in_supp (if xL then 3 else 2) [2..3] &&
     xL = ((if xL then 3 else 2) = 3) &&
     (xL <=> (if xL then 3 else 2) + y{2} = n + 2)

@@ -9,5 +9,4 @@ pre = true
                            (1)  x <$ {0,1}               
 
 post =
-  (weight {0,1})%Distr = 1%r &&
-  forall (x0 : bool), (in_supp x0 {0,1})%Distr => x0 = x{2}
+  weight {0,1} = 1%r && forall (x0 : bool), in_supp x0 {0,1} => x0 = x{2}
