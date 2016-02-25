@@ -76,10 +76,9 @@ module G(Adv : ADV) = {
 }.
 
 lemma G_FEL (Adv <: ADV{Or}) &m :
-  Pr[G(Adv).main() @ &m : size Or.gens <= n /\ Or.won] <=
-  (n * (n - 1))%r / (2 * upp)%r.
+  Pr[G(Adv).main() @ &m : Or.won] <= (n * (n - 1))%r / (2 * upp)%r.
 proof.
-dump "1-1" 67 
+dump "1-1" 67
   (fel
      1
      (size Or.gens)
@@ -87,10 +86,11 @@ dump "1-1" 67
      n
      Or.won
      [Or.gen : (size Or.gens < n);
-      Or.add : (size Or.gens < n /\ 1 <= x <= upp)]).
+      Or.add : (size Or.gens < n /\ 1 <= x <= upp)]
+     (size Or.gens <= n)).
 rewrite -mulr_suml sumidE 1:ge0_n /#.
 trivial.
-inline Or.init; auto.
+inline Or.init; auto; smt.
 proc; if.
   wp; rnd (fun y => mem Or.gens y); skip; progress.
   rewrite mu_dinter max_ler; first smt ml=0 w=(ge1_upp).
@@ -106,18 +106,4 @@ proc; wp;
   [smt ml=0 w=(size_ge0 ge1_upp) | hoare; auto].
 move=> c; proc; rcondt 1; [auto | auto; smt].
 move=> b c; proc; rcondf 1; [auto | auto; smt].
-qed.
-
-lemma G_UB (Adv <: ADV{Or}) &m :
-  Pr[G(Adv).main() @ &m : Or.won] <= (n * (n - 1))%r / (2 * upp)%r.
-proof.
-have -> : 
-  Pr[G(Adv).main() @ &m : Or.won] =
-  Pr[G(Adv).main() @ &m : size Or.gens <= n /\ Or.won].
-  byequiv=> //; proc; inline Or.init; sp.
-  call (_ : ={Or.won, Or.gens} /\ size Or.gens{1} <= n).
-  proc; if=> //; auto; smt.
-  proc; if=> //; auto; smt.
-  auto; smt.
-apply/(G_FEL Adv &m).
 qed.

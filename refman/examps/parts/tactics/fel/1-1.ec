@@ -5,4 +5,5 @@ fel
      n
      Or.won
      [Or.gen : (size Or.gens < n);
-      Or.add : (size Or.gens < n /\ 1 <= x <= upp)].
+      Or.add : (size Or.gens < n /\ 1 <= x <= upp)]
+     (size Or.gens <= n).
