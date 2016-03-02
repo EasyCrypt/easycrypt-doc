@@ -1,7 +1,212 @@
 % --------------------------------------------------------------------
 \begin{tactic}{eager}
-  \begin{tsyntax}[empty]{eager}
-  \fix{Missing description of eager}.
-  \fix{Missing descriptions for all eager <tactic> variants}.
+  \ec{eager} is a family of tactics for proving \prhl \emph{statement}
+  judgements of the form
+  \begin{center}
+    \ec{equiv[$s_1$ $\;t_1$ ~ $\;t_2$ $\;s_2$ : $\;P$ ==> $\;Q$]},
+  \end{center}
+  where the pre- and postconditions $P$ and $Q$ are conjunctions of
+  equalities between program variables, and the statement sequences
+  $s_i$ only read and write global variables.  Here $s_1$ is in the
+  ``eager'' position, and its replacement, $s_2$, is in the ``lazy''
+  position. Some of the tactics work with \emph{eager judgements} of
+  the form
+  \begin{center}
+    \ec{eager[$s_1$, $\;M$.$p$ ~ $\;N$.$q$, $\;s_2$ : $\;P$ ==> $\;Q$]},
+  \end{center}
+  where, again, the $s_i$ only involve global variables, but where
+  $P$ and $Q$ may talk about the parameters and results of
+  \ec{$M$.$p$} and \ec{$N$.$q$} in the usual way.
+
+  \medskip The context of our examples is the following \EasyCrypt
+  script involving variable incrementation oracles \ec{Or1} and
+  \ec{Or2}, which only differ in that \ec{Or2} keeps a ``transcript''
+  of its operation.
+  \ecinput{examps/tactics/eager/1-nodumps.ec}{}{5-200}{}
+
+  \begin{tsyntax}{eager proc}
+  Turn a goal whose conclusion is an eager judgement into one
+  whose conclusion is a \prhl statement judgement in which
+  the eager judgement's procedures have been replaced by their
+  bodies.
+  \medskip
+  For example, if the current goal is
+  \ecinput{examps/parts/tactics/eager/1-1.0.ec}{}{}{}{} then
+  running \ecinput{examps/parts/tactics/eager/1-1.ec}{}{}{}{}
+  produces the goal
+  \ecinput{examps/parts/tactics/eager/1-1.1.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{proc*}
+  Turn a goal whose conclusion is an eager judgement into one
+  whose conclusion is a \prhl statement judgement in which
+  the eager judgement's procedures are called, as opposed to
+  being inlined.
+  \medskip
+  For example, if the current goal is
+  \ecinput{examps/parts/tactics/eager/1-2.0.ec}{}{}{}{} then
+  running \ecinput{examps/parts/tactics/eager/1-2.ec}{}{}{}{}
+  produces the goal
+  \ecinput{examps/parts/tactics/eager/1-2.1.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{eager call $\;p$}
+    Here $p$ is a proof term for an eager judgement. If the goal's
+    conclusion is a \prhl statement judgement whose programs' suffixes
+    match the left and right sides of the eager judgment, then consume
+    those suffixes.
+
+  \medskip
+  For example, if the current goal is
+  \ecinput{examps/parts/tactics/eager/1-4.0.ec}{}{}{}{} then
+  running \ecinput{examps/parts/tactics/eager/1-4.ec}{}{}{}{}
+  (see the statement of \ec{eager_incr}, above)
+  produces the goal
+  \ecinput{examps/parts/tactics/eager/1-4.1.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{eager seq $\;n_1$ $\;n_2$ ($H$ : $\;s_1$ ~ $\;s_2$ :
+    $\;A$ ==> $\;B$) : $\;C$}
+
+   Here, the goal's conclusion must be a \prhl statement
+  judgement whose left and right programs begin and end with $s_1$ and
+  $s_2$, respectively. A first subgoal is generated whose conclusion
+  is the specified \prhl statement judgement, which is made available
+  as $H$ for the subsequent subgoals's use.  The $n_1$ and $n_2$ must
+  be natural numbers saying how many statements from the part of the
+  first program following $s_1$ and from the beginning of the second
+  program to put together with the $s_i$ in a second \prhl statement
+  judgement subgoal. The remaining statements are put together with
+  the $s_i$ in a third \prhl statement judgement subgoal. And there is
+  a final subgoal whose conclusion is a \prhl statement judgment whose
+  left and right sides are those remaining statements of the second
+  program only.
+
+  \medskip
+  For example, if the current goal is
+  \ecinput{examps/parts/tactics/eager/1-3.0.ec}{}{}{}{} then
+  running \ecinput{examps/parts/tactics/eager/1-3.ec}{}{}{}{}
+  produces the goals
+  \ecinput{examps/parts/tactics/eager/1-3.1.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-3.2.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-3.3.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-3.4.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{eager if}
+    If the goal's conclusion is a \prhl statement judgement whose left
+    program consists of $s_1$ followed by a conditional, and whose
+    right program consists of a conditional followed by $s_2$, reduce
+    the goal to two subgoals using the $s_i$ together with the ``then''
+    and ``else'' parts of the conditionals, along with auxiliary subgoals
+    verifying that---even after running $s_1$---the conditionals'
+    boolean expressions are equivalent.
+
+  \medskip
+  For example, if the current goal is
+  \ecinput{examps/parts/tactics/eager/1-6.0.ec}{}{}{}{} then
+  running \ecinput{examps/parts/tactics/eager/1-6.ec}{}{}{}{}
+  produces the goals
+  \ecinput{examps/parts/tactics/eager/1-6.1.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-6.2.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-6.3.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-6.4.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{eager while ($H$ : $\;s_1$ ~ $\;s_2$ :
+    $\;A$ ==> $\;B$)}
+  Like \ec{eager if}, but working with while loops instead of
+  conditionals and featuring an explicit, named \prhl statement
+  judgement involving the $s_i$, available as $H$ to the subgoals.
+  The subgoal involving the bodies of the while loops uses $B$ as its
+  invariant. There is also a subgoal whose conclusion is a \prhl
+  statement judgement both of whose sides are the body of the second
+  program's while loop.
+
+  \medskip
+  For example, if the current goal is
+  \ecinput{examps/parts/tactics/eager/1-5.0.ec}{}{}{}{} then
+  running \ecinput{examps/parts/tactics/eager/1-5.ec}{}{}{}{}
+  produces the goals
+  \ecinput{examps/parts/tactics/eager/1-5.1.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-5.2.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-5.3.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-5.4.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{eager proc ($H$ : $\;s_1$ ~ $\;s_2$ :
+    $\;A$ ==> $\;B$) $\;C$ | eager $\;H$ $\;C$}
+  This is the form of \ec{eager proc} that applies when the procedures
+  \ec{$M$.$p$} and \ec{$N$.$q$} are abstract.  The second variant is
+  where the specified \prhl statement judgement has already been
+  introduced by another \ec{eager} tactic. There must be a module
+  restriction saying that the abstract procedures can't directly
+  interfere with the global variables on which the $s_i$
+  depend. Subgoals are generated for each pair of ``oracles'' the
+  abstract procedures are capable of calling, i.e., for each of the
+  procedures that may read/write the global variables used by the
+  $s_i$.
+
+  \medskip
+  For example, if the current goal is
+  \ecinput{examps/parts/tactics/eager/1-7.0.ec}{}{}{}{} then
+  running \ecinput{examps/parts/tactics/eager/1-7.ec}{}{}{}{}
+  produces the goals
+  \ecinput{examps/parts/tactics/eager/1-7.1.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-7.2.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-7.3.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-7.4.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-7.5.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-7.6.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-7.7.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-7.8.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-7.9.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-7.10.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-7.11.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-7.12.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-7.13.ec}{}{}{}{}
+  \end{tsyntax}
+
+  \begin{tsyntax}{eager ($H$ : $\;s_1$ ~ $\;s_2$ :
+    $\;A$ ==> $\;B$) : $\;C$}
+   Reduces a goal whose conclusion is a \prhl statement judgement of
+   the form
+  \begin{center}
+    \ec{equiv[$s_1$ $\;t_1$ ~ $\;t_2$ $\;s_2$ : $\;P$ ==> $\;Q$]},
+  \end{center}
+  to an eager judgement, along with a subgoal for the specified
+  \prhl statement judgement $H$, plus an auxiliary goal.
+
+  \medskip
+  For example, if the current goal is
+  \ecinput{examps/parts/tactics/eager/1-8.0.ec}{}{}{}{} then
+  running \ecinput{examps/parts/tactics/eager/1-8.ec}{}{}{}{}
+  produces the goals
+  \ecinput{examps/parts/tactics/eager/1-8.1.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-8.2.ec}{}{}{}{}
+  and
+  \ecinput{examps/parts/tactics/eager/1-8.3.ec}{}{}{}{}
   \end{tsyntax}
 \end{tactic}

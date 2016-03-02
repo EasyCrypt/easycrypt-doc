@@ -1,3 +1,5 @@
+(* should be same as 1.ec, but no dumps *)
+
 require import Bool Int List.
 
 module type OR = {
@@ -48,7 +50,7 @@ lemma eager_incr :
   eager[Or1.incr_x();, Or1.incr_y ~ Or2.incr_y, Or2.incr_x(); :
         ={x, y}(Or1, Or2) ==> ={x, y}(Or1, Or2)].
 proof.
-dump "1-1" 67 (eager proc).
+eager proc.
 inline *; auto.
 qed.
 
@@ -57,7 +59,7 @@ lemma eager_incr_x :
         Or2.incr_x, Or2.incr_y(); Or2.incr_x(); :
         ={x, y, b}(Or1, Or2) ==> ={x, y, b}(Or1, Or2)].
 proof.
-dump "1-2" 67 (proc*).
+proc*.
 inline*; auto.
 qed.
 
@@ -75,12 +77,11 @@ lemma eager_incr_xy :
         ={x, y, b}(Or1, Or2) ==> ={x, y, b}(Or1, Or2)].
 proof.
 eager proc.
-dump "1-3" 67
-  (eager seq 1 1 (incr : Or1.incr_x(); Or1.incr_y(); ~
-                        Or2.incr_y(); Or2.incr_x(); :
-                        ={x, y}(Or1, Or2) ==> ={x, y}(Or1, Or2)) :
-                (={x, y, b}(Or1, Or2))).
-dump "1-4" 67 (eager call eager_incr).
+eager seq 1 1 (incr : Or1.incr_x(); Or1.incr_y(); ~
+                      Or2.incr_y(); Or2.incr_x(); :
+                      ={x, y}(Or1, Or2) ==> ={x, y}(Or1, Or2)) :
+              (={x, y, b}(Or1, Or2)).
+eager call eager_incr.
 auto.
 eager call eager_incr_x; first auto.
 eager call eager_incr_y; first auto.
@@ -111,15 +112,14 @@ lemma eager_loop :
 proof.
 eager proc.
 swap{2} 2 2; wp.
-dump "1-5" 67
-  (eager while (incr : Or1.incr_x(); Or1.incr_y(); ~
-                       Or2.incr_y(); Or2.incr_x(); :
-                       ={n} /\ ={x, y, b}(Or1, Or2) ==>
-                       ={n} /\ ={x, y, b}(Or1, Or2))).
+eager while (incr : Or1.incr_x(); Or1.incr_y(); ~
+                    Or2.incr_y(); Or2.incr_x(); :
+                    ={n} /\ ={x, y, b}(Or1, Or2) ==>
+                    ={n} /\ ={x, y, b}(Or1, Or2)).
 eager call eager_incr; first auto.
 trivial.
 swap{2} 2 2; wp.
-dump "1-6" (eager if).
+eager if.
 trivial.
 move=> &m b'; inline*; auto.
 eager call eager_incr_x; first auto.
@@ -153,11 +153,10 @@ lemma eager_adv (Adv <: ADV{Or1, Or2}) :
         Adv(Or2).main, Or2.incr_y(); Or2.incr_x(); :
         ={x, y, b}(Or1, Or2) ==> ={res} /\ ={x, y}(Or1, Or2)].
 proof.
-dump "1-7" 67
-  (eager proc (incr : Or1.incr_x(); Or1.incr_y(); ~
-                      Or2.incr_y(); Or2.incr_x(); :
-                      ={x, y}(Or1, Or2) ==> ={x, y}(Or1, Or2))
-              (={x, y, b}(Or1, Or2))).
+eager proc (incr : Or1.incr_x(); Or1.incr_y(); ~
+                   Or2.incr_y(); Or2.incr_x(); :
+                   ={x, y}(Or1, Or2) ==> ={x, y}(Or1, Or2))
+           (={x, y, b}(Or1, Or2)).
 eager call eager_incr; first auto.
 trivial.
 trivial.
@@ -188,11 +187,10 @@ lemma G_Adv' (Adv <: ADV{Or1, Or2}) :
 proof.
 proc.
 seq 1 1 : (={x, y, b}(Or1, Or2)); first inline*; auto.
-dump "1-8" 67
-  (eager (incr : Or1.incr_x(); Or1.incr_y(); ~
-                 Or2.incr_y(); Or2.incr_x(); :
-                 ={x, y}(Or1, Or2) ==> ={x, y}(Or1, Or2)) :
-         (={x, y, b}(Or1, Or2))).
+eager (incr : Or1.incr_x(); Or1.incr_y(); ~
+              Or2.incr_y(); Or2.incr_x(); :
+              ={x, y}(Or1, Or2) ==> ={x, y}(Or1, Or2)) :
+      (={x, y, b}(Or1, Or2)).
 eager call eager_incr; first auto.
 auto.
 eager proc incr (={x, y, b}(Or1, Or2));
