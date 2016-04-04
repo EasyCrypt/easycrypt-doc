@@ -36,9 +36,6 @@ _build/
 ## Emacs files
 *~
 
-## Emacs AUCTeX files
-auto/
-
 ## Auxiliary and intermediate files from other packages:
 
 # algorithms
