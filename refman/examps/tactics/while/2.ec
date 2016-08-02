@@ -16,7 +16,7 @@ lemma X (m : int) :
   hoare[M.f : m = n /\ 0 <= n ==> res <= m * m].
 proof.
 proc.
-dump "2-1" 67 (while{1} (0 <= i <= n /\ x <= i * i)).
+dump "2-1" 67 (while (0 <= i <= n /\ x <= i * i)).
 auto; smt.
 auto; smt.
 qed.

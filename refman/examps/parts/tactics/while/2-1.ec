@@ -1,1 +1,1 @@
-while{1} (0 <= i <= n /\ x <= i * i).
+while (0 <= i <= n /\ x <= i * i).
