@@ -91,6 +91,11 @@ dump "1-1" 67
 rewrite -mulr_suml sumidE 1:ge0_n /#.
 trivial.
 inline Or.init; auto; smt.
+proc; wp;
+  conseq (_ : _ ==> _ : 0%r);
+  [smt ml=0 w=(size_ge0 ge1_upp) | hoare; auto].
+move=> c; proc; rcondt 1; [auto | auto; smt].
+move=> b c; proc; rcondf 1; [auto | auto; smt].
 proc; if.
   wp; rnd (fun y => mem Or.gens y); skip; progress.
   rewrite mu_dinter max_ler; first smt ml=0 w=(ge1_upp).
@@ -101,9 +106,4 @@ proc; if.
   conseq (_ : _ ==> _ : 0%r); [smt ml=0 w=(size_ge0 ge1_upp) | hoare; auto].
 move=> c; proc; rcondt 1; [auto | auto; smt].
 move=> b c; proc; rcondf 1; auto.
-proc; wp;
-  conseq (_ : _ ==> _ : 0%r);
-  [smt ml=0 w=(size_ge0 ge1_upp) | hoare; auto].
-move=> c; proc; rcondt 1; [auto | auto; smt].
-move=> b c; proc; rcondf 1; [auto | auto; smt].
 qed.

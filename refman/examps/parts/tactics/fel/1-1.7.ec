@@ -6,9 +6,9 @@ Adv: ADV{Or}
 pre =
   (((0 <= size Or.gens /\ size Or.gens < n) /\ !Or.won) /\
    size Or.gens <= n) /\
-  size Or.gens < n /\ 1 <= x <= upp
+  size Or.gens < n
 
-    Or.add
+    Or.gen
     [<=] size Or.gens%r * (1%r / upp%r)
 
 post = Or.won

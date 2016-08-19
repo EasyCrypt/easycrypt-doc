@@ -5,7 +5,7 @@ Adv: ADV{Or}
 #\hrulefill\hspace*{.5cm}#
 Context : G(Adv).main
 
-pre = tt = tt /\ Or.won = Or.won{m} /\ Or.gens = Or.gens{m}
+pre = tt = tt /\ Or.gens = Or.gens{m} /\ Or.won = Or.won{m}
 
 (1)  Or.init()                
 
