@@ -7,4 +7,4 @@ pre = true
 
 (1)  y <- 2                   
 
-post = forall (x0 : int), in_supp x0 [1..10] => 3 <= x0 + y <= 12
+post = forall (x0 : int), x0 \in [1..10] => 3 <= x0 + y <= 12

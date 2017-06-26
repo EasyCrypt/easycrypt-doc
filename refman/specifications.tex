@@ -312,10 +312,10 @@ It is worth noting that \EasyCrypt's types must be inhabited --- i.e. nonempty.
      && {\ec{_}} & anonymous type variable\\
      && {\ec{(tau)}} & parenthesized type\\
      && {\ec{tau -> sigma}} & function type\\
-     && {\ec{(tau_1 * ... * tau_n)}} & tuple type\\
+     && {\ec{(tau__1 * ... * tau__n)}} & tuple type\\
      && {\ec{tyname}} & named type\\
      && {\ec{tau tyname}} & applied type constructor\\
-     && {\ec{(tau_1, $\;\ldots$, tau_n) tyname}} & \emph{ibid.}\\
+     && {\ec{(tau__1, $\;\ldots$, tau__n) tyname}} & \emph{ibid.}\\
   \end{tabular}
   \end{center}
 
@@ -367,13 +367,13 @@ so that \ec{int -> bool -> real} and \ec{int -> (bool -> real)}
 denotes the same type.
 
 \paragraph{Tuple (product) types}
-The type expression \ec{tau_1 * ... * tau_n} denotes the
+The type expression \ec{tau__1 * ... * tau__n} denotes the
 type of $n$-tuples whose elements are resp. of type $\tau_i$. This
 includes the type of pairs as well as the type of tuples of $3$ elements
 or more.
 %
-Note that \ec{tau_1 * (tau_2 * tau_3)}, \ec{(tau_1 * tau_2) * tau_3} and
-\ec{tau_1 * tau_2 * tau_3} are all distinct types. The first two
+Note that \ec{tau__1 * (tau__2 * tau__3)}, \ec{(tau__1 * tau__2) * tau__3} and
+\ec{tau__1 * tau__2 * tau__3} are all distinct types. The first two
 are pair types, whereas the last one is the type of $3$-tuples.
 
 \paragraph{Type variables}

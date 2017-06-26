@@ -98,7 +98,7 @@ move=> c; proc; rcondt 1; [auto | auto; smt].
 move=> b c; proc; rcondf 1; [auto | auto; smt].
 proc; if.
   wp; rnd (fun y => mem Or.gens y); skip; progress.
-  rewrite mu_dinter max_ler; first smt ml=0 w=(ge1_upp).
+  rewrite dinterE max_ler; first smt ml=0 w=(ge1_upp).
   rewrite -addzA /= ler_pmul2r; first smt ml=0 w=(ge1_upp).
   rewrite size_filter le_fromint
           (count_mem_size Or.gens{hr} (range 1 (upp + 1))) range_uniq.

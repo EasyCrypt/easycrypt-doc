@@ -11,11 +11,11 @@ pre = y{2} = n
 
 post =
   (forall (xR : int),
-     in_supp xR [2..3] => xR = if xR = 3 then 3 else 2) &&
+     xR \in [2..3] => xR = if xR = 3 then 3 else 2) &&
   (forall (xR : int),
-     in_supp xR [2..3] => mu_x [2..3] xR = mu_x {0,1} (xR = 3)) &&
+     xR \in [2..3] => mu1 [2..3] xR = mu1 {0,1} (xR = 3)) &&
   forall (xL : bool),
-    in_supp xL {0,1} =>
-    in_supp (if xL then 3 else 2) [2..3] &&
+    xL \in {0,1} =>
+    ((if xL then 3 else 2) \in [2..3]) &&
     xL = ((if xL then 3 else 2) = 3) &&
     (xL <=> (if xL then 3 else 2) + y{2} = n + 2)

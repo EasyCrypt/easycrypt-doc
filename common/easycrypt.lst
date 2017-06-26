@@ -59,11 +59,14 @@
   literate=
     {tau}{$\tau$}1
     {sigma}{$\sigma$}1
-    {_1}{${}_{\!1}$}1
-    {_2}{${}_{\!2}$}1
-    {_3}{${}_{\!3}$}1
-    {_n}{${}_{\!n}$}1
-    {_p}{${}_{\!p}$}1
+% note double "_" below
+% in actual EasyCrypt examples, do not use __
+% in specifications, these are rendered as subscripts
+    {__1}{${}_{\!1}$}1
+    {__2}{${}_{\!2}$}1
+    {__3}{${}_{\!3}$}1
+    {__n}{${}_{\!n}$}1
+    {__p}{${}_{\!p}$}1
     {,,,}{$\mathrel{\ldots}$}1
     {...}{$\mathrel{\cdots}$}1
     {->}{$\drarrow$}1

@@ -1,4 +1,4 @@
-require import Int DInterval Real List.
+require import Int IntExtra DInterval Real RealExtra List.
 
 module M = {
   var x : int
@@ -16,7 +16,7 @@ proof.
 move=> range x_eq.
 dump "1-1" (byphoare (_ : M.x + 1 = y /\ x' = M.x ==> x' = res)).
 proc; rnd; skip; progress.
-  rewrite (mu_dinter M.x{hr} (M.x{hr} + 1)).
+  rewrite (dinterE M.x{hr} (M.x{hr} + 1)).
   have -> : max 0 (M.x{hr} + 1 - M.x{hr} + 1) = 2 by smt.
   have -> : range M.x{hr} (M.x{hr} + 1 + 1) = [M.x{hr}; M.x{hr} + 1] by smt.
   smt.
@@ -28,7 +28,7 @@ lemma M_f (x' : int) :
   phoare[M.f : M.x + 1 = y /\ x' = M.x ==> x' = res] = (1%r / 2%r).
 proof.
 proc; rnd; skip; progress.
-  rewrite (mu_dinter M.x{hr} (M.x{hr} + 1)).
+  rewrite (dinterE M.x{hr} (M.x{hr} + 1)).
   have -> : max 0 (M.x{hr} + 1 - M.x{hr} + 1) = 2 by smt.
   have -> : range M.x{hr} (M.x{hr} + 1 + 1) = [M.x{hr}; M.x{hr} + 1] by smt.
   smt.

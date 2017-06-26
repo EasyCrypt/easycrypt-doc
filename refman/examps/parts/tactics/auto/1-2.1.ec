@@ -4,5 +4,5 @@ Type variables: <none>
 forall &hr,
   1 <= y{hr} < x{hr} =>
   forall (z1 : int),
-    in_supp z1 [x{hr}..y{hr}] =>
-    forall (z2 : int), in_supp z2 [x{hr} - 1..y{hr} + 1] => 0 <= z1 + z2
+    z1 \in [x{hr}..y{hr}] =>
+    forall (z2 : int), z2 \in [x{hr} - 1..y{hr} + 1] => 0 <= z1 + z2
