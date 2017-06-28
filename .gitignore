@@ -1,4 +1,5 @@
 _build/
+auto/
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
