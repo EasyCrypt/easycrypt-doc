@@ -3,7 +3,7 @@
 # --------------------------------------------------------------------
 .PHONY: all clean __force__
 
-LATEXMK := latexmk -bibtex -output-directory=_build -diagnostics
+LATEXMK := latexmk -bibtex -output-directory=_build -silent
 LATEXMK += -latex="latex --shell-escape %O %S"
 LATEXMK += -pdflatex="pdflatex --shell-escape %O %S"
 LATEXMK += -synctex=1
