@@ -3,12 +3,13 @@
 
 import sys, os
 
-sys.path.insert(0, os.path.realpath(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.realpath( \
+    os.path.join(os.path.dirname(__file__), 'extensions')))
 
 # -- General configuration ------------------------------------------------
 
 needs_sphinx   = '1.6'
-extensions     = ['sphinx.ext.todo', 'sphinx.ext.mathjax']
+extensions     = ['sphinx.ext.todo', 'sphinx.ext.mathjax', 'inlinemath']
 templates_path = ['_templates']
 source_suffix  = '.rst'
 master_doc     = 'index'

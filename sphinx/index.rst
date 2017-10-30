@@ -10,6 +10,7 @@ Welcome to EasyCrypt's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+$\overline{\alpha}_i = \sum_{j < i} \alpha_j$
 
 
 Indices and tables

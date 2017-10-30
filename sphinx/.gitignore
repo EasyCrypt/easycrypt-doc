@@ -1,2 +1,5 @@
 /_build/
 /.python-version
+*.pyc
+*.pyo
+__pycache__
