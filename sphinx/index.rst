@@ -1,8 +1,3 @@
-.. EasyCrypt documentation master file, created by
-   sphinx-quickstart on Thu Oct 26 15:26:26 2017.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to EasyCrypt's documentation!
 =====================================
 
@@ -12,6 +7,15 @@ Welcome to EasyCrypt's documentation!
 
 $\overline{\alpha}_i = \sum_{j < i} \alpha_j$
 
+.. code-block:: easycrypt
+
+    module M = {
+      proc f() = {
+      }
+    }.
+
+    lemma L : false.
+    proof. try admit; first case; by move. qed.
 
 Indices and tables
 ==================

@@ -1,15 +1,20 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# --------------------------------------------------------------------
 import sys, os
 
-sys.path.insert(0, os.path.realpath( \
-    os.path.join(os.path.dirname(__file__), 'extensions')))
+ROOT = os.path.realpath(os.path.dirname(__file__))
 
-# -- General configuration ------------------------------------------------
+sys.path.insert(0, os.path.join(ROOT, '_extensions'))
+
+# --------------------------------------------------------------------
+import eclexer
+
+# -- General configuration -------------------------------------------
 
 needs_sphinx   = '1.6'
-extensions     = ['sphinx.ext.todo', 'sphinx.ext.mathjax', 'inlinemath']
+extensions     = ['sphinx.ext.todo', 'sphinx.ext.mathjax', 'inlinemath', 'eclexer']
 templates_path = ['_templates']
 source_suffix  = '.rst'
 master_doc     = 'index'
@@ -26,12 +31,13 @@ pygments_style     = 'sphinx'
 todo_include_todos = True
 
 
-# -- Options for HTML output ----------------------------------------------
+# -- Options for HTML output -----------------------------------------
 
-html_theme       = 'sphinx_rtd_theme'
+html_theme       = '_theme'
 html_static_path = ['_static']
+html_theme_path  = [ROOT]
 
-# -- Options for LaTeX output ---------------------------------------------
+# -- Options for LaTeX output ----------------------------------------
 
 latex_elements = dict(
      papersize    = 'a4paper'
