@@ -14,7 +14,7 @@ import eclexer
 # -- General configuration -------------------------------------------
 
 needs_sphinx   = '1.6'
-extensions     = ['sphinx.ext.todo', 'sphinx.ext.mathjax', 'inlinemath', 'eclexer']
+extensions     = ['sphinx.ext.todo', 'sphinx.ext.mathjax', 'inlinemath', 'eclexer', 'inlinehg']
 templates_path = ['_templates']
 source_suffix  = '.rst'
 master_doc     = 'index'

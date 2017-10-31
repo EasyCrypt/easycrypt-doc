@@ -1,9 +1,9 @@
 @import url("css/theme.css");
 
-.k-ByTac     { color: #ff0000; }
-.k-Dangerous { color: #ff0000; font-style: italic; }
-.k-Global    { color: #cc00cc; }
-.k-Internal  { color: #000000; }
-.k-Prog      { color: #cc00cc; }
-.k-Tactic    { color: #000080; }
-.k-Tactical  { color: #cc00cc; }
+.keyword.bytac    , .k-ByTac     { color: #ff0000; }
+.keyword.dangerous, .k-Dangerous { color: #ff0000; font-style: italic; }
+.keyword.global   , .k-Global    { color: #cc00cc; }
+.keyword.internal , .k-Internal  { color: #000000; }
+.keyword.prog     , .k-Prog      { color: #cc00cc; }
+.keyword.tactic   , .k-Tactic    { color: #000080; }
+.keyword.tactical , .k-Tactical  { color: #cc00cc; }
