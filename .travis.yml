@@ -20,4 +20,5 @@ script:
   docker run -v $PWD:/home/ci/easycrypt-doc easycryptpa/ec-doc-box sh -c "
   git clone easycrypt-doc easycrypt-doc.dev &&
   make -C easycrypt-doc.dev/refman &&
+  make -C easycrypt-doc.dev/sphinx html &&
   curl --digest -u ${DAV_USER}:${DAV_PASSWORD} -sT easycrypt-doc.dev/refman/refman.pdf https://www.easycrypt.info/documentation/refman.pdf"
