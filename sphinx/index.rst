@@ -7,6 +7,7 @@ EasyCrypt Reference Manual
    :caption: Contents:
 
    started
+   specifications
    sandbox
 
 Indices and tables

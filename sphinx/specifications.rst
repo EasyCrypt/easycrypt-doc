@@ -1,0 +1,1799 @@
+.. -*- rst -*-
+
+.. chap:specifications:
+
+.. include:: prelude.rhst
+
+Specifications
+====================================================================
+
+In this chapter, we present |EasyCrypt|'s language for writing
+cryptographic specifications.  We start by presenting its typed
+expression language, go on to consider its module language for
+expressing cryptographic games, and conclude by presenting its ambient
+logic |---| which includes judgments of the |hl|, |phl| and |prhl|
+logics.
+
+|EasyCrypt| has a typed expression language based on the polymorphic
+typed lambda calculus. Expressions are guaranteed to terminate,
+although their values may be under-specified.  Its type system has:
+
+- several pre-defined base types;
+- product (tuple) and record types;
+- user-defined abbreviations for types and parameterized types; and
+- user-defined concrete datatypes (like lists and trees).
+
+In its expression language:
+
+- one may use operators imported from the |EasyCrypt| library, e.g.,
+  for the pre-defined base types;
+- user-defined operators may be defined, including by
+  structural recursion on concrete datatypes.
+
+For each type, there is a type of probability distributions over that
+type.
+
+|EasyCrypt|'s modules consist of typed global variables and procedures.
+The body of a procedure consists of local variable declarations followed
+by a sequence of statements:
+
+- ordinary assignments;
+- random assignments, assigning values chosen from distributions to
+  variables;
+- procedure calls, whose results are assigned to variables;
+- conditional (if-then-else) statements;
+- while loops; and
+- return statements (which may only appear at the end of
+  procedures).
+
+A module's procedures modules may refer to the global variables of
+previously declared modules. Modules may be parameterized by abstract
+modules, which may be used to model adversaries; and modules
+types---or interfaces---may be formalized, describing modules with at
+least certain specified typed procedures.
+
+|EasyCrypt| has four logics: a probabilistic, relational Hoare logic
+(|prhl|), relating pairs of procedures; a probabilistic Hoare logic
+(|phl|) allowing one to carry out proofs about the probability of a
+procedure's execution resulting in a postcondition holding; an
+ordinary (possibilistic) Hoare logic (|hl|); and an ambient
+higher-order logic for proving general mathematical facts, as well as
+for connecting judgments from the other logics
+
+Proofs are carried out using tactics, which is the focus of
+Chapter~\ref{chap:tactics}.  |EasyCrypt| also has ways (theories and
+sections) of structuring specifications and proofs, which will be
+described in Chapter~\ref{chap:structuring}. In
+Chapter~\ref{chap:library}, we'll survey the |EasyCrypt| Library,
+which consists of numerous theories, defining mathematical structures
+(like groups, rings and fields), data structures (like finite sets and
+maps), and cryptographic constructions (like random oracles and
+different forms of encryption).
+
+Lexical Categories
+--------------------------------------------------------------------
+
+\label{sec:lexical}
+
+|EasyCrypt|'s language has a number of lexical categories:
+
+:Keywords: |EasyCrypt| has the following *keywords*: ``admit``,
+  ``algebra``, ``alias``, ``apply``, ``as``, ``assert``,
+  ``assumption``, ``auto``, ``axiom``, ``axiomatized``, ``beta``,
+  ``by``, ``byequiv``, ``byphoare``, ``bypr``, ``call``, ``case``,
+  ``cfold``, ``change``, ``class``, ``clear``, ``clone``, ``congr``,
+  ``conseq``, ``const``, ``cut``, ``declare``, ``delta``, ``do``,
+  ``done``, ``eager``, ``elif``, ``elim``, ``else``, ``end``,
+  ``equiv``, ``exact``, ``exfalso``, ``exists``, ``expect``,
+  ``export``, ``fel``, ``fieldeq``, ``first``, ``fission``,
+  ``forall``, ``fun``, ``fusion``, ``generalize``, ``glob``, ``goal``,
+  ``have``, ``hint``, ``hoare``, ``hypothesis``, ``idtac``, ``if``,
+  ``import``, ``in``, ``inline``, ``instance``, ``intros``, ``iota``,
+  ``islossless``, ``kill``, ``last``, ``left``, ``lemma``, ``let``,
+  ``local``, ``logic``, ``modpath``, ``module``, ``move``,
+  ``nolocals``, ``nosmt``, ``of``, ``op``, ``phoare``, ``pose``,
+  ``Pr``, ``pr_bounded``, ``pred``, ``print``, ``proc``, ``progress``,
+  ``proof``, ``prover``, ``qed``, ``rcondf``, ``rcondt``, ``realize``,
+  ``reflexivity``, ``require``, ``res``, ``return``, ``rewrite``,
+  ``right``, ``ringeq``, ``rnd``, ``rwnormal``, ``search``,
+  ``section``, ``seq``, ``sim``, ``simplify``, ``skip``, ``smt``,
+  ``sp``, ``split``, ``splitwhile``, ``strict``, ``subst``, ``swap``,
+  ``symmetry``, ``then``, ``theory``, ``timeout``, ``Top``,
+  ``transitivity``, ``trivial``, ``try``, ``type``, ``unroll``,
+  ``var``, ``while``, ``why3``, ``with``, ``wp`` and ``zeta``.
+
+:Identifiers: An *identifier* is a sequence of letters, digits,
+  underscores (``_``) and apostrophes (``'``) that begins with a
+  letter or underscore, and isn't equal to an underscore or a keyword
+  other than ``expect``, ``first``, ``last``, ``left``, ``right`` or
+  ``strict``.
+
+:Operator names: An *operator name* is an identifier, a binary
+  operator name, a unary operator name, or a mixfix operator name.
+
+:Binary operator names: A *binary operator name* is
+
+  - a nonempty sequence of equal signs (\ec{=}), less than signs
+  (\ec{<}), greater than signs (\ec{>}), forward slashes (\ec{/}),
+  backward slashes (\ec{\\}), plus signs (\ec{+}), minus signs
+  (\ec{-}), times signs (\ec{*}), vertical bars (\ec{\|}), colons
+  (\ec{:}), ampersands (\ec{&}), up arrows (\ec{^}) and percent signs
+  (\ec{\%}); or
+
+  - a backtick mark (\ec{`}), followed by a nonempty sequence of one
+  of these characters, followed by a backtick mark; or
+
+  - a backward slash followed by a nonempty sequence of letters,
+  digits, underscores and apostrophes.
+
+  A binary operator name is an *infix operator name* iff it is
+  surrounded by backticks, or begins with a backslash, or:
+
+  - it is neither ``<<`` nor ``>>``; and
+
+  - it doesn't contain a colon, unless it is a sequence of colons of
+  length at least two; and \item it doesn't contain ``=>``, except
+  if it is ``=>``; and \item it doesn't contain ``|``, except if
+  it is ``||``; and \item it doesn't contain ``/``, except if it
+  is ``/``, ``/\\``, or a sequence of slashes of length at
+  least 3.
+
+  The precedence hierarchy for infix operators is (from lowest to highest):
+
+  .. csv-table:: Operators Precedences
+     :header: "Operator", "Associativity"
+     :delim: ;
+
+     "``=>``";                                                                  "right-associative"
+     "``<=>``";                                                                 "|---|"
+     "``||``, ``\\/``";                                                         "right-associative"
+     "``=``, ``<>``";                                                           "|---|"
+     "``<``, ``>``, ``<=``, ``>=``";                                            "left-associative"
+     "``+``, ``-``";                                                            "left-associative"
+     "``*``, any nonempty combination of ``/`` and ``\%`` (other than ``//``)"; "left-associative"
+     "all other infix operators except sequences of colons";                    "left-associative"
+     "sequences of colons of length at least two";                              "right-associative"
+
+\item \textbf{Unary operator names}. A \emph{unary operator name} is a
+  negation sign (\ec{!}), a nonempty sequence of plus signs (\ec{+}),
+  a nonempty sequence of minus signs (\ec{-}), or a backward slash
+  followed by a nonempty sequence of letters, digits, underscores and
+  apostrophes.  A \emph{prefix operator name} is any unary operator
+  name not consisting of either two more plus signs or two or more
+  minus signs.
+
+\item \textbf{Mixfix operator names}. A \emph{mixfix operator name} is
+  of the following sequences of characters: \ec{`|_|}, \ec{[]},
+  \ec{_.[_]} or \ec{_.[_<-_]}.  (We'll see below how they may be used
+  in mixfix form.)
+
+\item \textbf{Record projections}. A \emph{record projection} is an
+  identifier.
+
+\item \textbf{Constructor names}. A \emph{constructor name} is an identifier
+  or a symbolic operator name.
+
+\item \textbf{Type variables}. A \emph{type variable} consists of an
+  apostrophe followed by a sequence of letters, digits, underscores
+  and apostrophes that begins with a lowercase letter or underscore,
+  and isn't equal to an underscore.
+
+\item \textbf{Type or type operator names}. A \emph{type or type
+  operator name} is an identifier.
+
+\item \textbf{Variable names}. A \emph{variable} name is an identifier
+  that doesn't begin with an uppercase letter.
+
+\item \textbf{Procedure names}. A \emph{procedure} name is an identifier
+  that doesn't begin with an uppercase letter.
+
+\item \textbf{Module names}. A \emph{module name} is an identifier that
+  begins with an uppercase letter.
+
+\item \textbf{Module type names}. A \emph{module type name} is an
+  identifier that begins with an uppercase letter.
+
+\item \textbf{Memory identifiers}. A \emph{memory identifier} consists
+  an ampersand followed by either a nonempty sequence of digits or an
+  identifier whose initial character isn't an upper case letter.
+\end{itemize}
+
+\section{Script Structure, Printing and Searching}
+
+An |EasyCrypt| script consists of a sequence of \emph{steps},
+terminated by dots (\ec{.}). Steps may:
+\begin{itemize}
+\item declare types and type constructors;
+
+\item declare operators and predicates;
+
+\item declare modules or module types;
+
+\item state axioms or lemmas;
+
+\item apply tactics;
+
+\item require (make available) theories;
+
+\item print types, operators, predicates, modules, module types,
+  axioms and lemmas;
+
+\item search for lemmas involving operators.
+\end{itemize}
+
+To print an entity, one may say:
+\begin{easycrypt}{}{}
+print type t.
+print op f.
+print pred p.
+print module Foo.
+print module type FOO.
+print axiom foo.
+print lemma goo.
+\end{easycrypt}
+The entity kind may be omitted, in which case all entities with the
+given name are printed. \ec{print op} and \ec{print pred} may be used
+interchangeably, and may be applied to record field projections and
+datatype constructors, as well as to operators and predicates---all of which
+share the same name space.
+\ec{print axiom} and \ec{print lemma} are also interchangeable---axioms
+and lemmas share the same name space.
+
+To search for axioms and lemmas involving all of a list of operators,
+one can say
+\begin{easycrypt}{}{}
+search f.
+search (+).
+search (+) (-).  (* axioms/lemmas involving both operators *)
+\end{easycrypt}
+(Infix operators must be parenthesized.)
+
+Declared/stated entities may refer to previously declared/stated entities,
+but not to themselves or later ones (with the exception of recursively
+declared operators on datatypes, and to references to a module's own
+global variables).
+
+\section{Expressions Language}
+
+\subsection{Type Expressions}
+
+|EasyCrypt|'s \emph{type expressions} are built from \emph{type variables},
+\emph{type constructors} (or \emph{named types}) function types and
+tuple (product) types. Type constructors include built-in types and
+user-defined types, such as \emph{record} types and \emph{datatypes}
+(or \emph{variant types}). The syntax of type expressions is given
+in Figure~\ref{fig:tyexpr}, whereas the precedence and associativity
+of type operators are given in Figure~\ref{fig:typrec}.
+
+It is worth noting that |EasyCrypt|'s types must be inhabited --- i.e. nonempty.
+
+\begin{figure}
+  \begin{center}
+  \begin{tabular}{rcl>{\bf}l}
+    $\tau, \sigma$ & ::=
+      & {\ec{tyvar}} & type variable\\
+     && {\ec{_}} & anonymous type variable\\
+     && {\ec{(tau)}} & parenthesized type\\
+     && {\ec{tau -> sigma}} & function type\\
+     && {\ec{(tau__1 * ... * tau__n)}} & tuple type\\
+     && {\ec{tyname}} & named type\\
+     && {\ec{tau tyname}} & applied type constructor\\
+     && {\ec{(tau__1, $\;\ldots$, tau__n) tyname}} & \emph{ibid.}\\
+  \end{tabular}
+  \end{center}
+
+  \caption{\label{fig:tyexpr} |EasyCrypt|'s type expressions}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+  
+  \begin{tabular}{lll}
+               & \textbf{Operator} & \textbf{Associativity}\\
+     \hline
+               & \emph{type constructor application} & ---\\
+     {\ec{*}}  & tuple constructor & ---\\
+     {\ec{->}} & function type & right\\[1em]
+     
+     \multicolumn{3}{@{}l}{\emph{constructions with higher precedences come first}}
+  \end{tabular}
+  \end{center}
+  
+  \caption{\label{fig:typrec} Type operators precedence and associativity}
+\end{figure}
+
+\paragraph{Built-in types}
+
+|EasyCrypt| comes with built-in types for booleans (\ec{bool}),
+integers (\ec{int}) and reals (\ec{real}), along with the
+singleton type \ec{unit} that is inhabited by the single
+element \ec{tt} (or \ec{()}).
+
+In addition, to every type $t$ is associated the type \ec{$t\;$distr}
+of \emph{(real) discrete sub-distribution}. A discrete sub-distribution
+over a type $t$ is fully defined by its mass function, i.e. by a
+non-negative function from $t$ to $\mathbb{R}$ s.t. $\sum_x f(x) \le 1$
+--- implying that $f$ has a discrete support. When the sum is equal to $1$,
+we say that we have a \emph{distribution}.
+%
+Note that \ec{distr} is not a proper type on its own, but a
+\emph{type constructor}, i.e. a function from types to types.
+A proper type is obtained by \emph{applying} \ec{distr} to an
+actual type, as in \ec{int distr} or \ec{bool distr}. See the
+paragraph on type constructors for more information.
+
+\paragraph{Function types}
+The type expression \ec{tau -> sigma} denotes the type of
+\emph{total functions} mapping elements of type $\tau$ to
+elements of type $\sigma$. Note that \ec{->} associates to the right,
+so that \ec{int -> bool -> real} and \ec{int -> (bool -> real)}
+denotes the same type.
+
+\paragraph{Tuple (product) types}
+The type expression \ec{tau__1 * ... * tau__n} denotes the
+type of $n$-tuples whose elements are resp. of type $\tau_i$. This
+includes the type of pairs as well as the type of tuples of $3$ elements
+or more.
+%
+Note that \ec{tau__1 * (tau__2 * tau__3)}, \ec{(tau__1 * tau__2) * tau__3} and
+\ec{tau__1 * tau__2 * tau__3} are all distinct types. The first two
+are pair types, whereas the last one is the type of $3$-tuples.
+
+\paragraph{Type variables}
+Type variables represent unknown types or type parameters. For example,
+the type \ec{'a * 'a} is the type the of pair whose elements
+are of unknown type \ec{'a}. Type variables may be used in type declarations
+(Section~\ref{subsec:tydecl}) to define type constructors or in
+operators/predicates declarations (Section~\ref{subsec:expressions}) to define
+polymorphic operators/predicates. The special type variable \ec{_}
+(underscore) represents a type variable whose name is not specified.
+
+\paragraph{Type constructors}
+
+Type constructors are not type expressions per se, but functions from
+types to types. As seen in the built-in section, \ec{distr} is such
+a type constructor: when applied to the type $\tau$, it gives the
+type \ec{tau distr} of sub-distributions over $\tau$. Note that the
+application is in \emph{postfix} form. One other common type constructors
+is the one \ec{list} of polymorphic list, the type expression
+\ec{tau list} denoting the type of lists whose elements are of type $\tau$.
+
+Type constructors may depend on several type arguments, i.e. may be
+of arity strictly greater than $1$. In that case,
+the type application is curried. For example, the type of finite map
+\ec{(tau, sigma) map} (whose keys are of type $\tau$ and values of
+type $\sigma$) is constructed from the type constructor \ec{map} of
+arity $2$.
+
+By abuse of notations, named types (as \ec{bool} or \ec{int}) can be seen
+as type constructors with no arguments.
+
+\paragraph{Datatypes and record types}
+
+There are no expressions for describing datatypes and record types. Indeed,
+those are always named and must be defined and named before use. See
+Section~\ref{subsec:tydecl} for how to define variant and record types.
+
+\subsection{Type Declarations}
+\label{subsec:tydecl}
+
+Record types may be declared like this:
+\begin{easycrypt}{}{}
+type t = { x : int; y : bool; }.
+type u = { y : real; yy : int; yyy : real; }.
+\end{easycrypt}
+Here \ec{t} is the type of records with field projections \ec{x} of
+type \ec{int}, and \ec{y} of type \ec{bool}. The order of projections
+is irrelevant.  Different record types can't use overlapping
+projections, and record projections must be disjoint from operators
+(see below). Records may have any non-zero number of fields; values of
+type \ec{u} are record with three fields. We may also define record
+type operators, as in:
+\begin{easycrypt}{}{}
+type 'a t = { x : 'a; f : 'a -> 'a; }.
+type ('a, 'b) u = { f : 'a -> 'b; x : 'a; }.
+\end{easycrypt}
+Then, a value $v$ of type \ec{int t} would have fields \ec{x} and
+\ec{f} of types \ec{int} and \ec{int -> int}, respectively; and
+a value $v$ of type \ec{(int, bool) u} would have fields \ec{x} and
+\ec{f} with types \ec{int} and \ec{int -> bool}, respectively.
+
+Datatypes and datatype operators may be declared like this:
+\begin{easycrypt}{}{}
+type enum = [ First | Second | Third ].
+type either_int_bool = [ First of int | Second of bool ].
+type ('a, 'b) either = [ First of 'a | Second of 'b ].
+type intlist = [
+  | Nil
+  | Cons of (int * intlist) ].
+type 'a list = [
+  | Nil
+  | Cons of 'a & 'a list ].
+\end{easycrypt}
+Here, \ec{First}, \ec{Second}, \ec{Third}, \ec{Nil} and \ec{Cons} are
+constructors, and must be distinct from all operators, record
+projections and other constructors.  \ec{enum} is an enumerated type
+with the three elements \ec{First}, \ec{Second} and \ec{Third}. The
+elements of \ec{either_int_bool} consist of \ec{First} applied to an
+integer, or \ec{Second} applied to a boolean, and the datatype
+operator \ec{either} is simply its generalization to arbitrary types
+\ec{'a} and \ec{'b}.  \ec{intlist} is an inductive datatype: its
+elements are \ec{Nil} and the results of applying \ec{Cons} to a pairs
+of the form $(x, \mathit{ys})$, where $x$ is an integer and
+$\mathit{ys}$ is a previously constructed \ec{intlist}.  Note that a
+vertical bar (\ec{|}) is permitted before the first constructor of a
+datatype. Finally, \ec{list} is the generalization of \ec{intlist} to
+lists over an arbitrary type \ec{'a}, but with a twist. The use of
+\ec{&} means that \ec{Cons} is ``curried'': instead of applying
+\ec{Cons} to a pair $(x, \mathit{ys})$, one gives it \ec{$x$ : 'a} and
+\ec{$\mathit{ys}$ : 'a list} one at a time, as in \ec{Cons$\,x\,$
+  $\,\mathit{ys}$}.  Unsurprisingly, more than one occurrence of
+\ec{&} is allowed in a constructor's definition. E.g., here is the
+datatype for binary trees whose leaves and internal nodes are labeled
+by integers:
+\begin{easycrypt}{}{}
+type tree = [
+  | Leaf of int
+  | Cons of tree & int & tree
+].
+\end{easycrypt}
+\ec{Cons $\,\mathit{tr}_1\,$ $x\,$ $\mathit{tr}_2$} will be the tree
+constructed from an integer $x$ and trees $\mathit{tr}_1$ and
+$\mathit{tr}_2$.
+|EasyCrypt| must be able to convince itself that a datatype is
+nonempty, most commonly because it has at least one constructor
+taking no arguments, or only arguments not involving the datatype.
+
+Types and type operators that are simply abbreviations for pre-existing
+types may be declared, as in:
+\begin{easycrypt}{}{}
+type t = int * bool.
+type ('a, b) arr = 'a -> 'b.
+\end{easycrypt}
+Then, e.g., \ec{(int, bool) arr} is the same type as \ec{int -> bool}.
+
+Finally, abstract types and type operators may be declared, as in:
+\begin{easycrypt}{}{}
+type t.
+type ('a, b) u.
+type t, ('a, b) u.
+\end{easycrypt}
+We'll see later how such types and type operators may be used.
+
+\subsection{Expressions and Operator Declarations}
+\label{subsec:expressions}
+
+We'll now survey |EasyCrypt|'s typed expressions. Anonymous functions
+are written
+\begin{center}
+\ec{fun ($x$ : $\,t_1$) => $\;e$},  
+\end{center}
+where $x$ is an identifier,
+$t_1$ is a type, and $e$ is an expression---probably involving $x$.
+If $e$ has type $t_2$ under the assumption that $x$ has type $t_1$,
+then the anonymous function will have type \ec{$t_1$ -> $\;\,t_2$}.
+Function application is written using juxtapositioning, so that if
+$e_1$ has type \ec{$t_1$ -> $\;\,t_2$}, and $e_2$ has type $t_1$, then
+$e_1\,e_2$ has type $t_2$. Function application associates to the
+left, and anonymous functions extend as far to the right as possible.
+|EasyCrypt| infers the types of the bound variables of anonymous function
+when it can. Nested anonymous functions may be abbreviated by
+collecting all their bound variables together. E.g., consider the
+expression
+\begin{easycrypt}{}{}
+(fun (x : int) => fun (y : int) => fun (z : bool) => y) 0 1 false
+\end{easycrypt}
+which evaluates to \ec{1}. It may be abbreviated to
+\begin{easycrypt}{}{}
+(fun (x y : int, z : bool) => y) 0 1 false
+\end{easycrypt}
+or
+\begin{easycrypt}{}{}
+(fun (x : int) (y : int) (z : bool) => y) 0 1 false
+\end{easycrypt}
+or (letting |EasyCrypt| carry out type inference)
+\begin{easycrypt}{}{}
+(fun x y z => y) 0 1 false
+\end{easycrypt}
+In the type inference, only the type of \ec{y} is determined, but
+that's acceptable.
+
+|EasyCrypt| has let expressions
+\begin{center}
+  \ec{let $\;x$ : t = $\;e$ in $\;e'$}
+\end{center}
+which are equivalent to
+\begin{center}
+  \ec{(fun $\;x$ : t => $\;e'$) $e$}
+\end{center}
+As with anonymous expressions, the types of their bound variables may
+often be omitted, letting |EasyCrypt| infer them.
+
+An operator may be declared by specifying its type and giving the
+expression to be evaluated. E.g.,
+\begin{easycrypt}{}{}
+op x : int = 3.
+op f : int -> bool -> int = fun (x : int) (y : bool) => x.
+op g : bool -> int = f 1.
+op y : int = g true.
+op z = f 1 true.
+\end{easycrypt}
+Here \ec{f} is a curried function---it takes its arguments one
+at a time. Hence \ec{y} and \ec{z} have the same value: \ec{1}.
+As illustrated by the declaration of \ec{z}, one may omit the
+operator's type when it can be inferred from its expression.
+The declaration of \ec{f} may be abbreviated to
+\begin{easycrypt}{}{}
+op f (x : int) (y : bool) = x.
+\end{easycrypt}
+or
+\begin{easycrypt}{}{}
+op f (x : int, y : bool) = x.
+\end{easycrypt}
+
+\emph{Polymorphic} operators may be declared, as in
+\begin{easycrypt}{}{}
+op g ['a, 'b] : 'a -> 'b -> 'a = fun (x : 'a, y : 'b) => x.
+\end{easycrypt}
+or
+\begin{easycrypt}{}{}
+op g ['a, 'b] (x : 'a, y : 'b) = x.
+\end{easycrypt}
+or
+\begin{easycrypt}{}{}
+op g (x : 'a, y : 'b) = x.
+\end{easycrypt}
+Here \ec{g} has all the types formed
+by substituting types for the types variable \ec{'a} and \ec{'b}
+in \ec{'a -> 'b -> 'a}. This allows us to use \ec{g} at different
+types
+\begin{easycrypt}{}{}
+op a = g true 0.
+op b = g 0 false.
+\end{easycrypt}
+making \ec{a} and \ec{b} evaluate to \ec{true} and \ec{0}, respectively.
+
+\emph{Abstract} operators may be declared, i.e., ones whose values
+are unspecified. E.g., we can declare
+\begin{easycrypt}{}{}
+op x : int.
+op f : int -> int.
+op g ['a, 'b] : 'a -> 'b -> 'a.
+\end{easycrypt}
+Equivalently, \ec{f} and \ec{g} may be declared like this:
+\begin{easycrypt}{}{}
+op f (x : int) : int.
+op g ['a, 'b] (x : 'a, y : 'b) : 'a.
+\end{easycrypt}
+One may declare multiple abstract operators of the same type:
+\begin{easycrypt}{}{}
+op f, g : int -> int.
+op g, h ['a, 'b] : 'a -> 'b -> 'a.
+\end{easycrypt}
+We'll see later how abstract operators may be used.
+
+Binary operators may be declared and used with infix notation (as long
+as they are infix operators). One parenthesizes a binary operator when
+declaring it and using it in non-infix form (i.e., as a value).  If
+$\mathit{io}$ is an infix operator and $e_1,e_2$ are expressions, then
+$e_1\mathbin{\mathit{io}}e_2$ is translated to \ec{($\mathit{io}$)
+  $\,e_1$ $\,e_2$}, whenever the latter expression is
+well-typed. E.g., if we declare
+\begin{easycrypt}{}{}
+op (--) ['a, 'b] (x : 'a) (y : 'b) = x.
+op x : int = (--) 0 true.
+op x' : int = 0 -- true.
+op y : bool = (--) true 0.
+op y' : bool = true -- 0.
+\end{easycrypt}
+then \ec{x} and \ec{x'} evaluate to \ec{0}, and
+\ec{y} and \ec{y'} evaluate to \ec{true}.
+
+Unary operators may be declared and used with prefix notation
+(as long as they are prefix operators).
+One (square) brackets a unary operator when
+declaring it and using it in non-prefix form (i.e., as a value).
+If $\mathit{po}$ is
+a prefix operator and $e$ is an expression, then
+$\mathit{po}\,e$ is translated to
+\ec{[$\mathit{po}$] $\,e$}, whenever the latter
+expression is well-typed. E.g., if we declare
+\begin{easycrypt}{}{}
+op x : int.
+op f : int -> int.
+op [!] : int -> int.
+op y : int = ! f x.
+op y' : int = [!](f x).
+\end{easycrypt}
+then \ec{y} and \ec{y'} both evaluate to the result of applying the
+abstract operator \ec{!} of type \ec{int -> int} to the result of
+applying the abstract operator \ec{f} of type \ec{int -> int} to the
+abstract value \ec{x} of type \ec{int}.  Function application has
+higher precedence than prefix operators, which have higher precedence
+than infix operators, prefix operators group to the right, and infix
+operators have the associativities and relative precedences that were
+detailed in Section~\ref{sec:lexical}.
+
+The four mixfix operators may be declared and used as follows. They
+are (double) quoted when being declared or used in non-mixfix form
+(i.e., as values).
+\begin{itemize}
+\item (\ec{[]})\quad \ec{[]} is translated to \ec{\"[]\"}. E.g.,
+  if we declare
+\begin{easycrypt}{}{}
+op "[]" : int = 3.
+op x : int = [].
+\end{easycrypt}
+then \ec{x} will evaluate to \ec{3}.
+
+\item (\ec{`|_|})\quad If $e$ is an expression, then \ec{`|$e$|} is
+  translated to \ec{\"`|_|\" $\,e$}, as long as the latter expression
+  is well-typed.  E.g., if we declare
+\begin{easycrypt}{}{}
+op "`|_|" : int -> bool.
+op x : bool = "`|_|" 3.
+op y : bool = `|3|.
+\end{easycrypt}
+then \ec{y} will evaluate to the same value as \ec{x}.
+
+\item (\ec{_.[_]})\quad If $e_1,e_2$ are expressions, then
+    \ec{$e_1$.[$e_2$]} is translated to \ec{\"_.[_]\" $\,e_1$
+      $\,e_2$}, whenever the latter expression is well-typed. E.g., if
+    we declare
+\begin{easycrypt}{}{}
+op "_.[_]" : int -> int -> bool.
+op x : bool = "_.[_]" 3 4.
+op y : bool = 3.[4].
+\end{easycrypt}
+then \ec{y} will evaluate to the same value as \ec{x}.
+
+\item (\ec{_.[_<-_]})\quad If $e_1,e_2,e_3$ are expressions,
+    \ec{$e_1$.[$e_2$ <- $\,e_3$]} is translated to \ec{\"_.[_<-_]\"
+      $\,e_1$ $\,e_2$ $\,e_3$}, whenever the latter expression is
+    well-typed. E.g., if we declare
+\begin{easycrypt}{}{}
+op "_.[_<-_]" : int -> int -> int -> bool.
+op x : bool = "_.[_<-_]" 3 4 5.
+op y : bool = 3.[4 <- 5].
+\end{easycrypt}
+then \ec{y} will evaluate to the same value as \ec{x}.
+\end{itemize}
+In addition, if $e_1,\ldots,e_n$ are expressions then
+\begin{center}
+\ec{[$e_1$; $\;\ldots\,$; $\,e_n$]}  
+\qquad is translated to \qquad
+\ec{$e_1$ :: $\;\ldots$ :: $\;e_n$ :: []}
+\end{center}
+whenever the latter expression is well-typed.
+The initial argument of \ec{\"_.[_]\"} and \ec{\"_.[_<-_]\"} have
+higher precedence than even function application. E.g., one
+can't omit the parentheses in
+\begin{easycrypt}{}{}
+op f : int -> int.
+op y : bool = (f 3).[4].
+op z : bool = (f 3).[4 <- 5].
+\end{easycrypt}
+
+Some operators are built-in to |EasyCrypt|, automatically understood
+by its ambient logic:
+\begin{easycrypt}{}{}
+op (=) ['a]: 'a -> 'a -> bool.
+
+op [!] : bool -> bool.
+op (||) : bool -> bool -> bool.
+op (\/) : bool -> bool -> bool.
+op (&&) : bool -> bool -> bool.
+op (/\) : bool -> bool -> bool.
+op (=>) : bool -> bool -> bool.
+op (<=>) : bool -> bool -> bool.
+
+op mu : 'a distr -> ('a -> bool) -> real.
+\end{easycrypt}
+The operator \ec{=} is equality. On the booleans, we have negation
+\ec{!}, two forms of disjunction (\ec{\\/} and \ec{||}) and conjunction
+(\ec{/\\} and \ec{&&}), implication (\ec{=>}) and if-and-only-if
+(\ec{<=>}).  The two disjunctions (respectively, conjunctions) are
+semantically equivalent, but are treated differently by |EasyCrypt|
+proof engine. The associativities and precedences of the infix
+operators were given in Section~\ref{sec:lexical}, and (as a prefix
+operator) \ec{!} has higher precedence than all of them. The
+expression \ec{$e_1$ <> $\;e_2$} is treated as \ec{!($e_1$ =
+  $\;e_2$)}. \ec{<>} is not an operator, but it has the precedence and
+non-associative status of Section~\ref{sec:lexical}.
+The intended meaning of \ec{mu $\,d$ $\,p$} is the probability that
+randomly choosing a value of the given type from the sub-distribution
+$d$ will satisfy the function $p$ (in the sense of causing it to return
+\ec{true}).
+
+If $e$ is an expression of type \ec{int}, then
+\ec{$e$\%r} is the corresponding real. \ec{$\_$\%r} has higher precedence
+than even function application.
+
+If $e_1$ is an expression of type \ec{bool} and $e_2,e_3$ are expressions
+of some type $t$, then the \emph{conditional expression}
+\begin{center}
+  \ec{$e_1$ ? $\;e_2$ : $\;e_3$}  
+\end{center}
+evaluates to $e_2$, if $e_1$ evaluates to \ec{true}, and evaluates to
+$e_3$, if $e_1$ evaluates to \ec{false}.  Conditionals may also be
+written using if-then-else notation:
+\begin{center}
+  \ec{if $\;e_1$ then $\;e_2$ else $\;e_3$}
+\end{center}
+E.g., if we write
+\begin{easycrypt}{}{}
+op x : int = (3 < 4) ? 4 + 7 : (9 - 1).
+\end{easycrypt}
+then \ec{x} evaluates to \ec{11}. The conditional expression's
+precedence at its first argument is lower than function
+application, but higher than the prefix operators; its second argument
+needn't be parenthesized; and the precedence at its third argument is
+lower than the prefix operators, but higher than the infix operators.
+
+For the built-in types \ec{bool}, \ec{int} and \ec{real}, and the type
+operator \ec{distr}, the |EasyCrypt| Library (see
+Chapter~\ref{chap:library}) provides corresponding theories, \ec{Bool},
+\ec{Int}, \ec{Real} and \ec{Distr}. These theories provide various
+operations, axioms, etc.  To make use of a theory, one must
+``require'' it.  E.g.,
+\begin{easycrypt}{}{}
+require Bool Int Real Distr.
+\end{easycrypt}
+will make the theories just mentioned available. This
+would allow us to write, e.g.,
+\begin{easycrypt}{}{}
+op x = Int.(+) 3 4.
+\end{easycrypt}
+making \ec{x} evaluate to \ec{7}. But to be able to use \ec{+}
+and the other operators provided by \ec{Int}
+in infix form and without qualification (specifying which theory to
+find them in), we need to import \ec{Int}. If we do
+\begin{easycrypt}{}{}
+import Bool Int Real.
+op x : int = 3 + 4 - 7 * 2.
+op y : real = 5%r * 3%r / 2%r.
+op z : bool = x%r >= y.
+\end{easycrypt}
+we'll end up with \ec{z} evaluating to \ec{false}.
+One may combine requiring and importing in one step:
+\begin{easycrypt}{}{}
+require import Bool Int Real Distr.
+\end{easycrypt}
+We'll cover theories and their usage in detail in
+Chapter~\ref{chap:structuring}.
+
+Requiring the theory \ec{Bool} makes available the value \ec{\{0,1\}}
+of type \ec{bool distr}, which is the uniform distribution on
+the booleans. (No whitespace is allowed in the name for this distribution,
+and the \ec{0} must come before the \ec{1}.)
+Requiring the theory \ec{Distr} make available syntax for the uniform
+distribution of integers from a finite range. If $e_1$ and $e_2$
+are expressions of type \ec{int} denoting $n_1$ and $n_2$, respectively,
+then \ec{[$e_1$..$e_2$]} is the value of type \ec{int distr}
+that is the uniform distribution on the set of
+all integers that are greater-than-or-equal to $n_1$ and less-than-or-equal-to
+$n_2$---unless $n_1>n_2$, in which case it is the sub-distribution assigning
+probability $0$ to all integers.
+
+Values of product (tuple) and record types are constructed and
+destructed as follows:
+\begin{easycrypt}{}{}
+op x : int * int * bool = (3, 4, true).
+op b : bool = x .` 3.
+type t = { u : int; v : bool; }.
+op y : t = {| v = false; u = 10; |}.
+op a : bool = y .` v.
+\end{easycrypt}
+Then, \ec{b} evaluates to \ec{true}, and \ec{a} evaluates to \ec{false}.
+Note the field order in the declaration of \ec{y} was allowed to be
+a permutation of that of the record type \ec{t}.
+
+When we declare a datatype, its constructors are available to
+us as values. E.g, if we declare
+\begin{easycrypt}{}{}
+type ('a, 'b) either = [Fst of 'a | Snd of 'b].
+op x : (int, bool) either = Fst 10.
+op y : int -> (int, bool) either = Fst.
+op z : (int, bool) either = y 10.
+\end{easycrypt}
+then \ec{z} evaluates to the same result as \ec{x}.
+
+We can declare operators using pattern matching on the constructors
+of datatypes. E.g., continuing the previous example, we can
+declare and use an operator \ec{fst} by:
+\begin{easycrypt}{}{}
+op fst ['a, 'b] (def : 'a) (ei : ('a, 'b) either) : 'a =
+  with ei = Fst a => a
+  with ei = Snd b => def.
+op l1 : (int, bool) either = Fst 10.
+op l2 : (int, bool) either = Snd true.
+op m1 : int = fst (-1) l1.
+op m2 : int = fst (-1) l2.
+\end{easycrypt}
+Here, \ec{m1} will evaluate to \ec{10}, whereas \ec{m2} will
+evaluate to \ec{-1}.
+Such operator declarations may be recursive, as long as |EasyCrypt|
+can determine that the recursion is well-founded. E.g., here is one
+way of declaring an operator \ec{length} that computes the length
+of a list:
+\begin{easycrypt}{}{}
+type 'a list = [Nil | Cons of 'a & 'a list].
+op len ['a] (acc : int, xs : 'a list) : int =
+  with xs = Nil => acc
+  with xs = Cons y ys => len (acc + 1) ys.
+op length ['a] (xs : 'a list) = len 0 xs.
+op xs = Cons 0 (Cons 1 (Cons 2 Nil)).
+op n : int = length xs.
+\end{easycrypt}
+Then \ec{n} will evaluate to \ec{3}.
+
+\section{Module System}
+
+\subsection{Modules}
+
+|EasyCrypt|'s modules consist of typed global variables and procedures,
+which have different name spaces.
+Listing~\ref{list:simpmod} contains the definition of a simple module,
+\ec{M}, which exemplifies much of the module language.
+\ecinput{examps/specifications-examp1.ec}{Simple
+  Module}{}{list:simpmod}
+\ec{M} has one \emph{global variable}---\ec{x}---which is used by the
+\emph{procedures} of \ec{M}---\ec{init}, \ec{incr}, \ec{get} and
+\ec{main}. Global variables must be declared before the procedures
+that use them.
+
+The procedure \ec{init} (``initialize'') has a \emph{parameter} (or
+\emph{argument}) \ec{bnd} (``bound'') of type \ec{int}.  \ec{init}
+uses a \emph{random assignment} to assign to \ec{x} an integer chosen
+uniformly from the integers whose absolute values are at most
+\ec{bnd}.  The return type of \ec{init} is \ec{unit}, whose only
+element is \ec{tt}; this is implicitly returned by \ec{init} upon
+exit.
+
+The procedure \ec{incr} (``increment''), increments the value of
+\ec{x} by its parameter \ec{n}. The procedure \ec{get} takes no
+parameters, but simply returns the value of \ec{x}, using
+a \emph{return statement}---which is only allowed as the
+final statement of a procedure.
+
+And the \ec{main} procedures takes no parameters, and returns a boolean
+that's computed as follows:
+\begin{itemize}
+\item It declares a local variable, \ec{n}, of type \ec{int}---local
+  in the sense that other procedures can't access or affect it.
+
+\item It uses a \emph{procedure call} to call the procedure \ec{init}
+  with a bound of \ec{100}, causing \ec{x} to be initialized to an
+  integer between \ec{-100} and \ec{100}.
+
+\item It calls \ec{incr} twice, with \ec{10} and then \ec{-50}.
+
+\item It uses a \emph{procedure call assignment} to call the procedure
+  \ec{get} with no arguments, and assign \ec{get}'s return value to \ec{n}.
+
+\item It evaluates the boolean expression \ec{n < 0}, and returns
+  the value of this expression as its boolean result.
+\end{itemize}
+
+|EasyCrypt| tries to infer the return types of procedures and the
+types of parameters and local variables. E.g., our example module
+could be written \ecinput{examps/specifications-examp1a.ec}{Simple
+  Module with Type Inference}{3-25}{SimpModInfer} As we've seen, each
+declaration or statement of a procedure is terminated with a
+semicolon.  One may combine multiple local variable declarations, as
+in:
+\begin{easycrypt}{}{}
+var x, y, z : int;
+var u, v;
+var x, y, z : int = 10;
+var x, y, z = 10;
+\end{easycrypt}
+Procedure parameters are variables; they may be modified during the
+execution of their procedures.  A procedure's parameters and local
+variables must be distinct variable names.  The three kinds of
+assignment statements differ according to their allowed right-hand
+sides (rhs):
+\begin{itemize}
+\item The rhs of a random assignment must be a single
+  (sub-)distribution. When choosing from a proper sub-distribution,
+  the random assignment may fail, causing the procedure call that
+  invoked it to fail to terminate.
+
+\item The rhs of an ordinary assignment may be an arbitrary expression
+  (which doesn't include use of procedures).
+
+\item the rhs of a procedure call assignment must be a single procedure
+  call.  
+\end{itemize}
+If the rhs of an assignment produces a tuple value, its left-hand side
+may use pattern matching, as in
+\begin{easycrypt}{}{}
+(x, y, z) <- #\ldots#;
+\end{easycrypt}
+in the case where $\ldots$ produces a triple.
+
+The two remaining kinds of statements are illustrated in
+Listing~\ref{list:condwhileexamp}: \emph{conditionals} and \emph{while
+  loops}.
+\ecinput{examps/specifications-examp2.ec}{Conditionals
+  and While Loops} {}{list:condwhileexamp}
+\ec{N} has a single procedure,
+\ec{loop}, which begins by initializing a local variable \ec{y} to
+\ec{0}. It then enters a while loop, which continues executing until
+(which may never happen) \ec{y} becomes \ec{10} or more. At each
+iteration of the while loop, an integer between \ec{1} and \ec{10} is
+randomly chosen and assigned to the local variable \ec{z}. The
+conditional is used to behave differently depending upon whether the
+value of \ec{z} is less-than-or-equal-to \ec{5} or not.
+\begin{itemize}
+\item When the answer is ``yes'', \ec{y} is decremented by \ec{z}.
+
+\item When the answer is ``no'', \ec{y} is incremented by \ec{z - 5}.
+\end{itemize}
+Once (if) the while loop is exited---which means \ec{y} is now \ec{10}
+or more---the procedure returns \ec{y}'s value as its return value.
+
+When the body of a while loop, or the then or else part of a conditional,
+has a single statement, the curly braces may be omitted. E.g., the
+conditional of the preceding example could be written:
+\begin{easycrypt}{}{}
+if (z <= 5) y <- y - z;
+else y <- y + (z - 5);
+\end{easycrypt}
+And when the else part of a conditional is empty (consists of
+\ec{\{\}}), it may be omitted, as in:
+\begin{easycrypt}{}{}
+if (z <= 5) y <- y - z;
+\end{easycrypt}
+
+As illustrated in Listing~\ref{list:usingothermoduleexamp}, modules may
+access the global variables, and call the procedures, of previously
+declared modules.
+\ecinput{examps/specifications-examp3.ec}{One
+  Module Using Another Module} {}{list:usingothermoduleexamp} Procedure
+\ec{g} of \ec{N} both accesses the global variable \ec{x} of module
+\ec{M} (\ec{M.x}), and calls \ec{M}'s procedure, \ec{f} (\ec{M.f}).
+The parameter list of \ec{g} could equivalently be written:
+\begin{easycrypt}{}{}
+n : int, m : int, b : bool  
+\end{easycrypt}
+A module may refer to its own global variables using its own module
+name, allowing us to write
+\begin{easycrypt}{}{}
+proc f() : unit = {
+  M.x <- M.x + 1;
+}
+\end{easycrypt}
+for the definition of procedure \ec{M.f}.  The procedure \ec{h} of
+\ec{N} is an alias for procedure \ec{M.f}: calling it is equivalent to
+directly calling \ec{M.f}.
+One declare a module name to be an alias for a module, as in
+\begin{easycrypt}{}{}
+module L = N.
+\end{easycrypt}
+
+A procedure call is carried out in the context of a \emph{memory}
+recording the values of all global variables of all declared modules.
+So all global variables are---by definition---initialized. On the
+other hand, the local variables of a procedure start out as arbitrary
+values of their types.  This is modeled in |EasyCrypt|'s program logics
+by our not knowing anything about them. For example, the probability
+of \ec{X.f()}
+\begin{easycrypt}{}{}
+module X = {
+  proc f() : bool = {
+    var b : bool;
+    return b;
+  }
+}.
+\end{easycrypt}
+returning \ec{true} is undefined---we can't prove anything about it.
+On the other hand, just because a local variable isn't initialized
+before use doesn't mean the result of its use will be indeterminate,
+as illustrated by the procedure \ec{Y.f}, which always returns \ec{0}:
+\begin{easycrypt}{}{}
+module Y = {
+  proc f() : int = {
+    var x : int;
+    return x - x;
+  }
+}.
+\end{easycrypt}
+
+\subsection{Module Types}
+
+|EasyCrypt|'s \emph{module types} specify the types of a set of
+procedures.  E.g., consider the module type \ec{OR} :
+\ecinput{examps/specifications-examp4.ec}{} {3-7}{} \ec{OR} describes
+minimum expectations for a ``guessing oracle''---that it provide at
+least procedures with the specified types.  The order of the
+procedures in a module type is irrelevant. In a procedure's type, one
+may combine multiple parameters of the same type, as in:
+\begin{easycrypt}{}{}
+proc init(secret tries : int) : unit
+\end{easycrypt}
+The names of procedure parameters used in module types
+are purely for documentation purposes; one may elide them instead
+using underscores, writing, e.g.,
+\begin{easycrypt}{}{}
+proc init(_ : int, _ : int) : unit
+\end{easycrypt}
+Note that module types say nothing about the global variables a module
+should have. Modules types have a different name space than modules.
+
+Listing~\ref{list:guessormodule} contains an example guessing oracle
+implementation.  \ecinput{examps/specifications-examp4.ec}{Guessing
+  Oracle Module} {9-30}{list:guessormodule} Its \ec{init} procedure stores
+the supplied secret in the global variable \ec{sec}, initializes the
+allowed number of guesses in the global variable \ec{tris}, and
+initializes the \ec{guessed} global variable to record that the secret
+hasn't yet been guessed.  If more allowed tries remain, the \ec{guess}
+procedure updates \ec{guessed} to take into account the supplied
+guess, and decrements the allowed number of tries; otherwise, it does
+nothing.  And its \ec{guessed} procedure returns the value of
+\ec{guessed}, indicating whether the secret has been successfully
+guessed, so far.
+\ec{Or} \emph{satisfies} the specification of the
+module type \ec{OR}, and we can ask |EasyCrypt| to check this by
+supplying that module type when declaring \ec{Or}, as in
+Listing~\ref{list:guessormodulecheck}.
+\ecinput{examps/specifications-examp5.ec}{Guessing Oracle Module with
+  Module Type Check}{9-30}{list:guessormodulecheck}
+Supplying a module type \emph{doesn't} change the result of a module
+declaration. E.g., if we had omitted \ec{guessed} from the module type
+\ec{OR}, the module \ec{Or} would still have had the procedure
+\ec{guessed}. Furthermore, when declaring a module, we can ask
+|EasyCrypt| to check whether it satisfies multiple module types, as
+in:
+\begin{easycrypt}{}{}
+module type A = { proc f() : unit }.
+module type B = { proc g() : unit }.
+module X : A, B = {
+  var x, y : int
+  proc f() : unit = { x <- x + 1; }
+  proc g() : unit = { y <- y + 1; }
+}.
+\end{easycrypt}
+When declaring a module alias, one may ask |EasyCrypt| to check that
+the module matches a module type, as in:
+\begin{easycrypt}{}{}
+module X' : A, B = X.
+\end{easycrypt}
+
+Suppose we want to declare a cryptographic game using our guessing
+oracle, parameterized by an adversary with access to the \ec{guess}
+procedure of the oracle, and which provides two procedures---one
+for choosing the range in which the guessing game will operate, and
+one for doing the guessing.  We'd like to write something like:
+\begin{easycrypt}{}{}
+module type GAME = {
+  proc main() : bool
+}.
+
+module Game(Adv : ADV) : GAME = {
+  module A = Adv(Or)
+  proc main() : bool = { #\ldots# }
+}.
+\end{easycrypt}
+Thus, the module type \ec{ADV} for adversaries must be parameterized
+by an implementation of \ec{OR}. Given the adversary procedures we have
+in mind, the syntax for this is
+\begin{easycrypt}{}{}
+module type ADV(O : OR) = {
+  proc chooseRange() : int * int
+  proc doGuessing() : unit
+}.
+\end{easycrypt}
+But this declaration would give the adversary access to all of \ec{O}'s
+procedures, which isn't what we want. Instead, we can write
+\begin{easycrypt}{}{}
+module type ADV(O : OR) = {
+  proc chooseRange() : int * int {}
+  proc doGuessing() : unit {O.guess}
+}.
+\end{easycrypt}
+meaning that \ec{chooseRange} has no access to the oracle, and
+\ec{doGuessing} may only call its \ec{guess} procedure. Using
+this notation, our original attempt would have to be written
+\begin{easycrypt}{}{}
+module type ADV(O : OR) = {
+  proc chooseRange() : int * int {O.init O.guess O.guessed}
+  proc doGuessing() : unit {O.init O.guess O.guessed}
+}
+\end{easycrypt}
+Finally, we can specify that \ec{chooseRange} must initialize
+all of the adversary's global variables (if any) by using a
+star annotation:
+\begin{easycrypt}{}{}
+module type ADV(O : OR) = {
+  proc * chooseRange() : int * int {}
+  proc doGuessing() : unit {O.guess}
+}.
+\end{easycrypt}
+
+The full Guessing Game example is contained in Listing~\ref{list:fullguessing}.
+\ecinput{examps/specifications-examp5.ec}{Full
+  Guessing Game Example} {}{list:fullguessing}
+\ec{SimpAdv} is a simple implementation of an adversary.
+The inclusion of the constraint \ec{SimpAdv : ADV} in \ec{SimpAdv}'s declaration
+\begin{easycrypt}{}{}
+module (SimpAdv : ADV) (O : OR) = #\ldots#
+\end{easycrypt}
+makes |EasyCrypt| check that \ec{SimpAdv} implements the module type
+\ec{ADV}: its implementation of \ec{chooseRange} doesn't use \ec{O} at
+all; its implementation of \ec{doGuessing} doesn't use any of \ec{O}'s
+procedures other than \ec{guess}; and that \ec{chooseRange}
+initializes \ec{SimpAdv}'s global variables.  Its \ec{chooseRange}
+procedure chooses the range of \ec{1} to \ec{100}, and initializes
+global variables recording this range and the number of guesses it
+will make (see the code of \ec{Game} to see why \ec{10} is a sensible
+choice). The \ec{doGuessing} procedure makes \ec{10} random guesses.
+It would be legal for the parameter \ec{O} in \ec{SimpAdv}'s
+definition to be constrained to match a module type \ec{T} providing
+a proper subset of \ec{OR}'s procedures, but that would further limit
+what procedures of \ec{O} \ec{SimpAdv}'s procedures
+could call. On the other hand, it would be illegal for \ec{T} to
+provide procedures not in \ec{OR}.
+
+Despite \ec{SimpAdv} being a parameterized module, to refer to one
+of its global variables from another module one ignores the parameter,
+saying, e.g.,
+\begin{easycrypt}{}{}
+module X = {
+  proc f() : int = {
+    return SimpAdv.tries;
+  }
+}.
+\end{easycrypt}
+On the other hand, to call one of \ec{SimpAdv}'s procedures, one needs
+to specify which oracle parameter it will use, as in:
+\begin{easycrypt}{}{}
+module X = {
+  proc f() : unit = {
+    SimpAdv(Or).doGuessing();
+  }
+}.
+\end{easycrypt}
+
+The module \ec{Game} gives its adversary parameter, \ec{Adv}, the
+concrete guessing oracle \ec{Or}, calling the resulting module \ec{A}. Its
+main function then uses \ec{Or} and \ec{A} to run the game.
+\begin{itemize}
+\item It calls \ec{A}'s \ec{chooseRange} procedure to get the adversary's
+  choice of guessing range. If the range doesn't have at least ten elements,
+  it returns \ec{false} without doing anything else---the adversary
+  has supplied a range that's too small.
+
+\item Otherwise, it uses \ec{Or.init} to initialize the guessing
+  oracle with a secret that's randomly chosen from the range, plus a
+  number of allowed guesses that's one tenth of the range's size.
+
+\item It then calls \ec{A.doGuessing}, allowing the adversary to
+  attempt the guess the secret.
+
+\item Finally, it calls \ec{Or.guessed} to learn whether the
+  adversary has guessed the secret, returning this boolean
+  value as its result.
+\end{itemize}
+
+Finally, the declaration
+\begin{easycrypt}{}{}
+module SimpGame = Game(SimpAdv).
+\end{easycrypt}
+declares \ec{SimpGame} to be the specialization of \ec{Game} to
+our simple adversary, \ec{SimpAdv}. When processing this declaration,
+|EasyCrypt|'s type checker verifies that \ec{SimpAdv} satisfies
+the specification \ec{ADV}.
+The reader might be wondering what---if anything---prevents us writing
+a version of \ec{SimpAdv} that directly accesses/calls the global
+variables and procedures of \ec{Or} (or of \ec{Game}, were \ec{SimpAdv}
+declared after it), violating our understanding of the adversary's
+power. The answer is that |EasyCrypt|'s type checker isn't in a position
+to do this. Instead, we'll see in the next section how such
+constraints are modeled using |EasyCrypt|'s logic.
+
+\subsection{Global Variables}
+\label{subsec:globalvariables}
+
+The set of all \emph{global variables of} a module $M$ is the
+union of
+\begin{itemize}
+\item the set of global variables that are declared in $M$; and
+
+\item the set of all that global variables declared in other modules
+  such that the variables \emph{could} be read or written by a series
+  of procedure calls beginning with a call of one of $M$'s
+  procedures. By ``could'' we mean the read/write analysis assumes the
+  execution of both branches of conditionals, the execution of while
+  loop bodies, and the terminal of while loops.
+\end{itemize}
+To print the global variables of a module $M$, one runs:
+\begin{easycrypt}{}{}
+print glob #$M$#.
+\end{easycrypt}
+
+For example, suppose we make these declarations:
+\begin{easycrypt}{}{}
+module Y1 = {
+  var y, z : int
+  proc f() : unit = { y <- 0; }
+  proc g() : unit = { }
+}.
+module Y2 = {
+  var y : int
+  proc f() : unit = { Y1.f(); }
+}.
+module Y3 = {
+  var y : int
+  proc f() : unit = { Y1.g(); }
+}.
+module type X = {
+  proc f() : unit
+}.
+module Z(X : X) = {
+  var y : int
+  proc f() : unit = { X.f(); }
+}.
+\end{easycrypt}
+Then: the set of global variables of \ec{Y1} consists of \ec{Y1.y} and
+\ec{Y1.z}; the set of global variables of \ec{Y2} consists of
+\ec{Y1.y} and \ec{Y2.y}; the set of global variables of \ec{Y3}
+consists of \ec{Y3.y}; the set of global variables of \ec{Z} consists
+of \ec{Z.y}; and the set of global variables of \ec{Z(Y1)} consists of
+\ec{Z.y} and \ec{Y1.y}. In the case of \ec{Z}, because its parameter
+\ec{X} is abstract, no global variables are obtained from \ec{X}.
+
+For every module $M$, there is a corresponding type, \ec{glob $\,M$},
+where a value of type \ec{glob $\,M$} is a tuple consisting of
+a value for each of the global variables of $M$. Nothing can be done with
+values of such types other than compare them for equality.
+
+\section{Logics}
+
+\subsection{Formulas}
+
+The \emph{formulas} of |EasyCrypt|'s ambient logic are formed by
+adding to |EasyCrypt|'s expressions
+\begin{itemize}
+\item universal and existential quantification,
+
+\item application of built-in and user-defined predicates,
+
+\item probability expressions and lossless assertions, and
+
+\item |hl|, |phl| and |prhl| judgments,
+\end{itemize}
+and identifying the formulas with the extended expressions of type
+\ec{bool}.
+This means we automatically have all boolean operators as operators on
+formulas, with their normal precedences and associativities, including
+negation
+\begin{easycrypt}{}{}
+op [!] : bool -> bool.
+\end{easycrypt}
+the two semantically equivalent disjunctions
+\begin{easycrypt}{}{}
+op (||) : bool -> bool -> bool.
+op (\/) : bool -> bool -> bool.
+\end{easycrypt}
+the two semantically equivalent conjunctions
+\begin{easycrypt}{}{}
+op (&&) : bool -> bool -> bool.
+op (/\) : bool -> bool -> bool.
+\end{easycrypt}
+implication
+\begin{easycrypt}{}{}
+op (=>) : bool -> bool -> bool.
+\end{easycrypt}
+and if-and-only-if
+\begin{easycrypt}{}{}
+op (<=>) : bool -> bool -> bool.
+\end{easycrypt}
+
+The quantifiers' bound identifiers are typed, although |EasyCrypt|
+will attempt to infer their types if they are omitted. Universal and
+existential quantification are written as
+\begin{easycrypt}{}{}
+forall (#$x$# : #$t$#), #$\,\phi$#
+\end{easycrypt}
+and
+\begin{easycrypt}{}{}
+exists (#$x$# : #$t$#), #$\,\phi$#
+\end{easycrypt}
+respectively, where the formula $\phi$ typically involves the
+identifier $x$ of type $t$. We can abbreviate nested universal or
+existential quantification in the style of nested anonymous functions,
+writing, e.g.,
+\begin{easycrypt}{}{}
+forall (x : int, y : int, z : bool), #\ldots#
+forall (x y : int, z : bool), #\ldots#
+forall (x y : int) (z : bool), #\ldots#
+exists (x : int, y : int, z : bool), #\ldots#
+exists (x y : int, z : bool), #\ldots#
+exists (x y : int) (z : bool), #\ldots#
+\end{easycrypt}
+Quantification extends as far to the right as possible, i.e.,
+has lower precedence than the binary operations on formulas.
+
+Abstract \emph{predicates} may be defined as in:
+\begin{easycrypt}{}{}
+pred P0.
+pred P1 : int.
+pred P2 : int & (int * bool).
+pred P3 : int & (int * bool) & (real -> int).
+\end{easycrypt}
+\ec{P0}, \ec{P1}, \ec{P2} and \ec{P3} are extended expressions
+of types \ec{bool}, \ec{int -> bool}, \ec{int -> int * bool -> bool}
+and \ec{int -> int * bool -> (real -> int) -> bool}, respectively.
+The parentheses are mandatory in \ec{(int * bool)} and \ec{(real -> int)}.
+Thus, if $e_1$, $e_2$ and $e_3$ are extended expressions of types
+\ec{int}, \ec{int * bool} and \ec{real -> int}, respectively, then
+\ec{P0}, ``P1 $\,e_1$``, ``P2 $\,e_1$ $\,e_2$`` and ``P3
+  $\,e_1$ $\,e_2$ $\,e_3$`` are formulas.
+
+Concrete predicates are defined in a way that is similar to how
+operators are declared.  E.g., if we declare
+\begin{easycrypt}{}{}
+pred Q (x y : int, z : bool) = x = y /\ z.
+\end{easycrypt}
+or
+\begin{easycrypt}{}{}
+pred Q (x : int) (y : int) (z : bool) = x = y /\ z.
+\end{easycrypt}
+then \ec{Q} is an extended expression of type
+\begin{easycrypt}{}{}
+int -> int -> bool -> bool
+\end{easycrypt}
+meaning that, e.g.,
+\begin{easycrypt}{}{}
+(fun (b : bool -> bool) => b true) (Q 3 4)
+\end{easycrypt}
+is a formula.
+And here is how polymorphic predicates may be defined:
+\begin{easycrypt}{}{}
+pred R ['a, 'b] : ('a, 'a * 'b).
+pred R' ['a, 'b] (x : 'a, y : 'a * 'b) = (y.`1 = x).
+\end{easycrypt}
+
+Extended expressions also include program memories, although there
+isn't a type of memories, and anonymous functions and operators can't
+take memories as inputs.  If \ec{&$m$} is a memory and $x$ is a
+program variable that's in \ec{&$m$}'s domain, then \ec{x\{$m$\}} is
+the extended expression for the value of $x$ in \ec{&$m$}.
+Quantification over memories is allowed:
+\begin{easycrypt}{}{}
+forall &#$m$#, #$\phi$#
+\end{easycrypt}
+Here, \ec{&$m$} ranges over all memories with domains equal to the
+set of all variables declared as global in currently declared modules.
+E.g., suppose we have declared:
+\begin{easycrypt}{}{}
+module X = { var x : int }.
+module Y = { var y : int }.
+\end{easycrypt}
+Then, this is a (true) formula:
+\begin{easycrypt}{}{}
+forall &m, X.x{m} < Y.y{m} => X.x{m} + 1 <= Y.y{m}
+\end{easycrypt}
+
+|EasyCrypt|'s logics can introduce memories whose domains include not
+just the global variables of modules but also:
+\begin{itemize}
+\item the local variables and parameters of
+  procedures; and
+
+\item \ec{res}, whose value in a memory resulting from running a
+  procedure will record the result (return value) of the procedure.
+\end{itemize}
+There is no way for the user to introduce such memories directly.  We
+can't do anything with memories other than look up the values of
+variables in them. In particular, formulas can't test or assert the
+equality of memories.
+
+If $M$ is a module and \ec{&$m$} is a memory, then \ec{(glob
+  $\,M$)\{$m$\}} is the value of type \ec{glob $\,M$} consisting of the
+tuple whose components are the values of all the global variables of
+$M$ in \ec{&$m$}.  (See Subsection~\ref{subsec:globalvariables} for the
+definition of the set of all global variables of a module.)
+
+For convenience, we have the following derived syntax for formulas: If
+$\phi$ is a formula and \ec{&$m$} is a memory, then \ec{$\phi$\{$m$\}}
+means the formula in which every subterm $u$ of $\phi$ consisting of a
+variable or \ec{res} or \ec{glob $\,M$}, for a module
+$M$, is replaced by \ec{$u$\{$m$\}}.  For example,
+\begin{easycrypt}{}{}
+(Y1.y = Y1.z => Y1.z = Y1.y){m}
+\end{easycrypt}
+expands to
+\begin{easycrypt}{}{}
+Y1.y{m} = Y1.z{m} => Y1.z{m} = Y1.y{m}
+\end{easycrypt}
+The parentheses are necessary, because \ec{$\_$\{$m$\}} has
+higher precedence than even function application.
+We say that \ec{&$m$} satisfies $\phi$ iff \ec{$\phi$\{$m$\}} holds.
+
+Extended expressions also include modules, although there isn't a type
+of modules, and anonymous functions and operators can't take modules
+as inputs.  Quantification over modules is allowed. If $T$ is a module
+type, and $M$ is a module name, then
+\begin{easycrypt}{}{}
+forall (#$M$# <: #$T$#), #$\phi$#
+\end{easycrypt}
+means
+\begin{center}
+ for all modules $M$ satisfying $T$, $\phi$ holds.
+\end{center}
+Formulas can't talk about module equality.
+
+There is also a variant form of module quantification of the
+the form
+\begin{easycrypt}{}{}
+forall (#$M$# <: #$T$#{#$N_1$#,#\ldots#,#$N_l$#}), #$\phi$#
+\end{easycrypt}
+where $N_1,\ldots,N_l$ are modules, for $l\geq 1$. Its meaning is
+\begin{center}
+  for all modules $M$ satisfying $T$ whose sets of global
+  variables\\are disjoint from the sets of global variables of the
+  $N_i$, $\phi$ holds.
+\end{center}
+
+Finally, |EasyCrypt|'s ambient logic has probability expressions, |hl|,
+|phl| and |prhl| judgments, and lossless assertions:
+\begin{itemize}
+\item (\textbf{Probability Expressions})\quad A \emph{probability expression}
+  has the form
+  \begin{center}
+    \ec{Pr[$M$.$p$($e_1$,$\,\ldots$,$\,e_n$) @ &$m$ : $\,\phi$]}
+  \end{center}
+where:
+\begin{itemize}
+\item $p$ is a procedure of module $M$ that takes $n$ arguments, whose
+types agree with the types of the $e_i$;
+
+\item \ec{&$m$} is a memory whose domain is the global variables
+  of all declared modules;
+
+\item the formula $\phi$ may involve the term \ec{res}, whose
+  type is \ec{$M$.$p$}'s return type, as well as global variables
+  of modules.
+\end{itemize}
+Occurrences in $\phi$ of bound identifiers (bound outside the
+probability expression) whose names conflict with parameters and local
+variables of \ec{$M$.$p$} will refer to the bound identifiers, not the
+parameters/local variables.
+
+The informal meaning of the probability expression is
+the probability that running \ec{$M$.$p$} with arguments
+$e_1$, \ldots, $e_n$, and initial memory \ec{&$m$} will terminate
+in a final memory satisfying $\phi$. To run \ec{$M$.$p$}:
+\begin{itemize}
+\item \ec{&$m$} is extended to map \ec{$M$.$p$}'s parameters to the
+ $e_i$, and to map the procedure's local variables to \emph{arbitrary}
+ initial values;
+
+\item the body of the procedure is run in this extended memory;
+
+\item if the procedure returns, its return value will be stored in
+  a component \ec{res} of the resulting memory, and the procedure's
+  parameters and local variables will be removed from that
+  memory.
+\end{itemize}
+If the procedure doesn't initialize its local variables before using
+them, the probability expression may be undefined.
+
+\item (|hl| Judgments)\quad A |hl| \emph{judgment} has the form
+  \begin{center}
+    \ec{hoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$]}
+  \end{center}
+where:
+\begin{itemize}
+\item $p$ is a procedure of module $M$;
+
+\item the formula $\phi$ may involve the global variables of declared
+  modules, as well as the parameters of \ec{$M$.$p$};
+
+\item the formula $\psi$ may involve the term \ec{res}, whose type is
+  \ec{$M$.$p$}'s return type, as well as the global variables of
+  declared modules.
+\end{itemize}
+Occurrences in $\phi$ and $\psi$ of bound identifiers (bound outside
+the judgment) whose names conflict with parameters and local
+variables of \ec{$M$.$p$} will refer to the bound identifiers, not the
+parameters/local variables.
+
+The informal meaning of the |hl| judgment is that, for all initial
+memories \ec{&$m$} satisfying $\phi$ and whose domains consist of the
+global variables of declared modules plus the parameters and local
+variables of \ec{$M$.$p$}, if running the body of \ec{$M$.$p$} in
+\ec{&$m$} results in termination with a memory, the restriction of that
+memory to \ec{res} and the global variables of declared modules
+satisfies $\psi$.
+
+\item (|phl| Judgments)\quad A |phl| \emph{judgment} has one of the forms
+  \begin{center}
+    \ec{phoare [$M$.$p$ : $\,\phi$ ==> $\,\psi$] < $\,e$} \\
+    \ec{phoare [$M$.$p$ : $\,\phi$ ==> $\,\psi$] = $\,e$} \\
+    \ec{phoare [$M$.$p$ : $\,\phi$ ==> $\,\psi$] > $\,e$}
+  \end{center}
+where:
+\begin{itemize}
+\item $p$ is a procedure of module $M$;
+
+\item the formula $\phi$ may involve the global variables of declared
+  modules, as well as the parameters of \ec{$M$.$p$};
+
+\item the formula $\psi$ may involve the term \ec{res}, whose type is
+  \ec{$M$.$p$}'s return type, as well as the global variables of
+  declared modules;
+
+\item $e$ is an expression of type \ec{real}.
+\end{itemize}
+Occurrences in $\phi$ and $\psi$ and of bound identifiers (bound
+outside the judgment) whose names conflict with parameters or local
+variables of \ec{$M$.$p$} will refer to the bound identifiers, not the
+parameters/local variables. \ec{e} will have to be parenthesized
+unless it is a constant or nullary operator.
+
+The informal meaning of the |phl| judgment is that, for all initial
+memories \ec{&$m$} satisfying $\phi$ and whose domains consist of the
+global variables of declared modules plus the parameters and local
+variables of \ec{$M$.$p$}, the probability that
+\begin{center}
+  running the body of \ec{$M$.$p$} in \ec{&$m$} results in
+  termination \\ with a memory whose restriction to \ec{res} and
+  the global \\ variables of declared modules satisfies $\psi$
+\end{center}
+has the indicated relation to the value of $e$.
+
+\item (|prhl| Judgments)\quad A |prhl| \emph{judgment} has the form
+  \begin{center}
+     \ec{equiv[$M$.$p$ ~ $\,N$.$q$ : $\,\phi$ ==> $\,\psi$]}
+  \end{center}
+where:
+\begin{itemize}
+\item $p$ is a procedure of module $M$, and $q$ is a procedure of module
+ $N$;
+
+\item the formula $\phi$ may involve the global variables of declared
+  modules, the parameters of \ec{$M$.$p$}, which must be interpreted
+  in memory \ec{&1} (e.g., \ec{x\{1\}}), and the parameters of
+  \ec{$N$.$q$}, which must be interpreted in memory \ec{&2};
+
+\item the formula $\psi$ may involve the global variables of declared
+  modules, \ec{res\{1\}}, which has the type of \ec{$M$.$p$}'s return type,
+  and \ec{res\{2\}}, which has the type of \ec{$N$.$q$}'s return type.
+\end{itemize}
+Occurrences in $\psi$ of bound identifiers (bound outside the
+judgment) whose names conflict with parameters and local variables of
+\ec{$M$.$p$} and \ec{$N$.$q$} will refer to the bound identifiers, not
+the parameters and local variables, even if they are enclosed in
+memory references (e.g., \ec{x\{1\}}). If \ec{&1} (resp., \ec{&2}) is
+a bound memory (outside the judgment), then all references to \ec{&1}
+(resp., \ec{&2}) in $\phi$ and $\psi$ are renamed to use a fresh
+memory.
+
+The informal meaning of the |prhl| judgment is that, for all initial
+memories \ec{&1} whose domains consist of the global variables of
+declared modules plus the parameters and local variables of
+\ec{$M$.$p$}, for all initial memories \ec{&2} whose domains consist
+of the global variables of declared modules plus the parameters and
+local variables of \ec{$N$.$q$}, if $\phi$ holds, then the
+sub-distributions on memories $\Pi_p$ and $\Pi_q$ obtained by running
+\ec{$M$.$p$} on \ec{&1}, storing $p$'s result in the component
+\ec{res} of the resulting memory, from which $p$'s parameters and
+local variables are removed, and running \ec{$N$.$q$} on \ec{&2},
+storing $q$'s result in the component \ec{res} of the resulting
+memory, from which $q$'s parameters and local variables are removed,
+satisfy $\psi$, in the following sense.  (The probability of a memory
+in $\Pi_p$ (resp., $\Pi_q$) is the probability that $p$ (resp., $q$)
+will terminate with that memory. $\Pi_p$ and $\Pi_q$ are
+\emph{sub}-distributions on memories because $p$ and $q$ may
+fail to terminate.)
+
+We say that $(\Pi_p, \Pi_q)$ \emph{satisfy} $\psi$ iff there is a
+function $f$ dividing the probability assigned to each memory
+\ec{&$m$} by $\Pi_p$ among the memories \ec{&$n$} related to it by
+$\psi$ (\ec{&$m$} and \ec{&$n$} are related according to $\psi$ iff
+$\psi$ holds when references to \ec{&1} are replaced by reference to
+\ec{&$m$}, and reference to \ec{&2} are replaced by reference to
+\ec{&$n$}) such that, for all memories \ec{&$n$}, the value assigned
+to \ec{&$n$} by $\Pi_q$ is the sum of all the probabilities
+distributed to \ec{&$n$} by $f$. (When $\psi$ is an
+equivalence like \ec{=\{res\}} (i.e., \ec{res\{1\} = res\{2\}}), this
+  is particularly easy to interpret.)
+
+\item (Lossless Assertions)\quad A \emph{lossless assertion} has the form
+  \begin{center}
+    \ec{islossless $\,M$.$p$}
+  \end{center}
+  and is simply an abbreviation for
+  \begin{center}
+    \ec{phoare [$M$.$p$ : true ==> true] = 1\%r}
+  \end{center}
+\end{itemize}
+
+For the purpose of giving some examples, consider these declarations:
+\begin{easycrypt}{}{}
+module G1 = {
+  proc f() : bool = {
+    var x : bool;
+    x <$ {0,1};
+    return x;
+  }
+}.
+
+module G2 = {
+  proc f() : bool = {
+    var x, y : bool;
+    x <$ {0,1}; y <$ {0,1};
+    return x ^^ y;  (* ^^ is exclusive or *)
+  }
+}.
+\end{easycrypt}
+Then:
+\begin{itemize}
+\item The expression
+\begin{easycrypt}{}{}
+Pr[G1.f() @ &m : res]
+\end{easycrypt}
+is the probability that \ec{G1.f()} returns \ec{true} when run
+in the memory \ec{&m}. (The memory is irrelevant, and the expression's
+value is \ec{1\%r / 2\%r}.)
+
+\item The |hl| judgement
+\begin{easycrypt}{}{}
+hoare[G2.f : true ==> !res]
+\end{easycrypt}
+says that, if \ec{G2.f()} halts (which we know it will), then
+its return value will be \ec{false}. (This judgement is \ec{false}.)
+
+\item The |phl| judgement
+\begin{easycrypt}{}{}
+phoare [G2.f : true ==> res] = (1%r / 2%r)
+\end{easycrypt}
+says that the probability of \ec{G2.f()} returning \ec{true} is
+\ec{1\%r / 2\%r}. (This judgement is \ec{true}.)
+
+\item The |prhl| judgement
+\begin{easycrypt}{}{}
+equiv[G1.f ~ G2.f : true ==> res]
+\end{easycrypt}
+says that \ec{G1.f()} and \ec{G2.f()} are equally likely to return
+\ec{true} as well as equally likely to return \ec{false}.
+(This judgement is \ec{true}.)
+
+\item The lossless assertion
+\begin{easycrypt}{}{}
+lossless G2.f    
+\end{easycrypt}
+says that \ec{G2.f()} always terminates, no matter what memory it's
+run in. (This judgement is \ec{true}.)
+\end{itemize}
+
+\subsection{Axioms and Lemmas}
+
+One states an \emph{axiom} or \emph{lemma} by giving a well-typed formula with
+no free identifiers, as in:
+\begin{easycrypt}{}{}
+axiom Sym : forall (x y : int), x = y => y = x.
+lemma Sym : forall (x y : int), x = y => y = x.
+\end{easycrypt}
+The difference between axioms and lemmas is that axioms are trusted
+by |EasyCrypt|, whereas lemmas must be proved, in the steps that
+follow. The \emph{proof} of a lemma has the form
+\begin{easycrypt}{}{}
+proof.
+#$\mathit{tactic}_1$#. #\ldots# #$\mathit{tactic}_n$#.
+qed.
+\end{easycrypt}
+Actually the \ec{proof} step is optional, but it's good style to include
+it. The steps of the proof consist of tactic applications; but
+\ec{print} and \ec{search} commands are also legal steps.
+The \ec{qed} step saves the lemma, making it available for reuse;
+it's only allowed when the proof is complete.
+If the name chosen for a lemma conflicts with an already stated
+axiom or lemma, one only finds this out upon running \ec{qed}, which
+will fail.
+When the proof for a lemma has a very simple form, the proof may be
+included as part of the lemma's statement:
+\begin{easycrypt}{}{}
+lemma #$\mathit{name}$# : #$\phi$# by [#$\mathit{tactic}$].
+\end{easycrypt}
+or
+\begin{easycrypt}{}{}
+lemma #$\mathit{name}$# : #$\phi$# by [].
+\end{easycrypt}
+In the first case, the proof consists of a single tactic; the meaning of
+\ec{by []} will be described in Chapter~\ref{chap:tactics}.
+
+One may also parameterize an axiom of lemma by the free identifiers of
+its formula, as in:
+\begin{easycrypt}{}{}
+lemma Sym (x : int) (y : int) : x = y => y = x.
+\end{easycrypt}
+or
+\begin{easycrypt}{}{}
+lemma Sym (x y : int) : x = y => y = x.
+\end{easycrypt}
+This version of \ec{Sym} has the same logical meaning as the previous
+one. But we'll see in Chapter~\ref{chap:tactics} why the
+parameterized form makes an axiom or lemma easier to apply.
+
+Polymorphic axioms and lemmas may be stated using a syntax reminiscent
+of the one for polymorphic operators:
+\begin{easycrypt}{}{}
+lemma Sym ['a] (x y : 'a) : x = y => y = x.
+lemma PairEq ['a, 'b] (x x' : 'a) (y y' : 'b) :
+  x = x' => y = y' => (x, y) = (x', y').
+\end{easycrypt}
+or
+\begin{easycrypt}{}{}
+lemma Sym (x y : 'a) : x = y => y = x.
+lemma PairEq (x x' : 'a) (y y' : 'b) :
+  x = x' => y = y' => (x, y) = (x', y').
+\end{easycrypt}
+
+We can axiomatize the meaning of abstract types, operators and relations.
+E.g., an abstract type of monoids may be axiomatized by:
+\begin{easycrypt}{}{}
+type monoid.
+op id : monoid.
+op (+) : monoid -> monoid -> monoid.
+axiom LeftIdentity (x : monoid) : id + x = x.
+axiom RightIdentity (x : monoid) : x + id = x.
+axiom Associative (x y z : monoid) : x + (y + z) = (x + y) + z.
+\end{easycrypt}
+Any proofs we do involving monoids will then apply to any valid
+instantiation of \ec{monoid}, \ec{id} and \ec{(+)}. In
+Chapter~\ref{chap:structuring}, we'll see how to carry out such instantiations
+using theory cloning.
+
+One must be careful with axioms, however, because it's easy to introduce
+inconsistencies, allowing one to prove false formulas. E.g., because
+all types must be nonempty in |EasyCrypt|, writing
+\begin{easycrypt}{}{}
+type t.
+axiom Empty : !(exists (x : t), true).
+\end{easycrypt}
+will allow us to prove \ec{false}.
+
+Axioms and lemmas may be parameterized by
+memories and modules. Consider the declarations:
+\begin{easycrypt}{}{}
+module type T = {
+  proc f() : unit
+}.
+module G(X : T) = {
+  var x : int
+  proc g() : unit = {
+    X.f();
+  }
+}.
+\end{easycrypt}
+Then lemma \ec{Lossless}
+\begin{easycrypt}{}{}
+lemma Lossless (X <: T) : islossless X.f => islossless G(X).g.
+\end{easycrypt}
+which is parameterized by an abstract module \ec{X} of module type
+\ec{T}, says that \ec{G(X).g} always terminates, no matter the memory
+it's run in, as long as this is true of \ec{X.f}.
+Lemma \ec{Invar}
+\begin{easycrypt}{}{}
+lemma Invar (X <: T{G}) (n : int) :
+  islossless X.f =>
+  phoare [G(X).g : G.x = n ==> G.x = n] = 1%r.
+\end{easycrypt}
+which is parameterized by an abstract module \ec{X} of module type
+\ec{T} that is guaranteed not to access or modify \ec{G.x}, and an
+integer \ec{n}, says that, assuming \ec{X.f} is lossless, if
+\ec{G(X).g()} is run in a memory giving \ec{G.x} the value \ec{n},
+then \ec{G(X).g()} is guaranteed to terminate in a memory in which
+\ec{G.x}'s value is still \ec{n}.  Finally lemma \ec{Invar'}
+\begin{easycrypt}{}{}
+lemma Invar' (X <: T{G}) (n : int) &m :
+  islossless X.f => G.x{m} = n =>
+  Pr[G(X).g() @ &m : G.x = n] = 1%r.
+\end{easycrypt}
+which has the parameters of \ec{Invar} plus a memory \ec{&m},
+says the same thing as \ec{Invar}, but using a probability
+expression rather than a |phl| judgement.
