@@ -114,17 +114,17 @@ Lexical Categories
 :Binary operator names: A *binary operator name* is
 
   - a nonempty sequence of equal signs (\ec{=}), less than signs
-  (\ec{<}), greater than signs (\ec{>}), forward slashes (\ec{/}),
-  backward slashes (\ec{\\}), plus signs (\ec{+}), minus signs
-  (\ec{-}), times signs (\ec{*}), vertical bars (\ec{\|}), colons
-  (\ec{:}), ampersands (\ec{&}), up arrows (\ec{^}) and percent signs
-  (\ec{\%}); or
+    (\ec{<}), greater than signs (\ec{>}), forward slashes (\ec{/}),
+    backward slashes (\ec{\\}), plus signs (\ec{+}), minus signs
+    (\ec{-}), times signs (\ec{*}), vertical bars (\ec{\|}), colons
+    (\ec{:}), ampersands (\ec{&}), up arrows (\ec{^}) and percent
+    signs (\ec{%}); or
 
   - a backtick mark (\ec{`}), followed by a nonempty sequence of one
-  of these characters, followed by a backtick mark; or
+    of these characters, followed by a backtick mark; or
 
   - a backward slash followed by a nonempty sequence of letters,
-  digits, underscores and apostrophes.
+    digits, underscores and apostrophes.
 
   A binary operator name is an *infix operator name* iff it is
   surrounded by backticks, or begins with a backslash, or:
@@ -132,11 +132,10 @@ Lexical Categories
   - it is neither ``<<`` nor ``>>``; and
 
   - it doesn't contain a colon, unless it is a sequence of colons of
-  length at least two; and \item it doesn't contain ``=>``, except
-  if it is ``=>``; and \item it doesn't contain ``|``, except if
-  it is ``||``; and \item it doesn't contain ``/``, except if it
-  is ``/``, ``/\\``, or a sequence of slashes of length at
-  least 3.
+    length at least two; and \item it doesn't contain ``=>``, except
+    if it is ``=>``; and \item it doesn't contain ``|``, except if it
+    is ``||``; and \item it doesn't contain ``/``, except if it is
+    ``/``, ``/\\``, or a sequence of slashes of length at least 3.
 
   The precedence hierarchy for infix operators is (from lowest to highest):
 
@@ -154,118 +153,114 @@ Lexical Categories
      "all other infix operators except sequences of colons";                    "left-associative"
      "sequences of colons of length at least two";                              "right-associative"
 
-\item \textbf{Unary operator names}. A \emph{unary operator name} is a
-  negation sign (\ec{!}), a nonempty sequence of plus signs (\ec{+}),
-  a nonempty sequence of minus signs (\ec{-}), or a backward slash
-  followed by a nonempty sequence of letters, digits, underscores and
-  apostrophes.  A \emph{prefix operator name} is any unary operator
-  name not consisting of either two more plus signs or two or more
-  minus signs.
+:Unary operator names: A *unary operator name* is a negation sign
+  (``!``), a nonempty sequence of plus signs (``+``), a nonempty
+  sequence of minus signs (``-``), or a backward slash followed by a
+  nonempty sequence of letters, digits, underscores and apostrophes.
+  A \emph{prefix operator name} is any unary operator name not
+  consisting of either two more plus signs or two or more minus signs.
 
-\item \textbf{Mixfix operator names}. A \emph{mixfix operator name} is
-  of the following sequences of characters: \ec{`|_|}, \ec{[]},
-  \ec{_.[_]} or \ec{_.[_<-_]}.  (We'll see below how they may be used
-  in mixfix form.)
+:Mixfix operator names: A *mixfix operator name* is of the following
+  sequences of characters: ``\`|_|``, ``[]``, ``_.[_]`` or
+  ``_.[_<-_]``.  (We'll see below how they may be used in mixfix
+  form.)
 
-\item \textbf{Record projections}. A \emph{record projection} is an
+:Record projections: A *record projection* is an identifier.
+
+:Constructor names: A *constructor name* is an identifier or a
+  symbolic operator name.
+
+:Type variables: A *type variable* consists of an apostrophe followed
+  by a sequence of letters, digits, underscores and apostrophes that
+  begins with a lowercase letter or underscore, and isn't equal to an
+  underscore.
+
+:Type or type operator names: A *type or type operator name* is an
   identifier.
 
-\item \textbf{Constructor names}. A \emph{constructor name} is an identifier
-  or a symbolic operator name.
+:Variable names: A *variable* name is an identifier that doesn't begin
+  with an uppercase letter.
 
-\item \textbf{Type variables}. A \emph{type variable} consists of an
-  apostrophe followed by a sequence of letters, digits, underscores
-  and apostrophes that begins with a lowercase letter or underscore,
-  and isn't equal to an underscore.
+:Procedure names: A *procedure* name is an identifier that doesn't
+  begin with an uppercase letter.
 
-\item \textbf{Type or type operator names}. A \emph{type or type
-  operator name} is an identifier.
+:Module names: A *module name* is an identifier that begins with an
+  uppercase letter.
 
-\item \textbf{Variable names}. A \emph{variable} name is an identifier
-  that doesn't begin with an uppercase letter.
+:Module type names: A *module type name* is an identifier that begins
+  with an uppercase letter.
 
-\item \textbf{Procedure names}. A \emph{procedure} name is an identifier
-  that doesn't begin with an uppercase letter.
+:Memory identifiers: A *memory identifier* consists an ampersand
+  followed by either a nonempty sequence of digits or an identifier
+  whose initial character isn't an upper case letter.
 
-\item \textbf{Module names}. A \emph{module name} is an identifier that
-  begins with an uppercase letter.
+Script Structure, Printing and Searching
+--------------------------------------------------------------------
 
-\item \textbf{Module type names}. A \emph{module type name} is an
-  identifier that begins with an uppercase letter.
+An |EasyCrypt| script consists of a sequence of *steps*, terminated by
+dots (``.``). Steps may:
 
-\item \textbf{Memory identifiers}. A \emph{memory identifier} consists
-  an ampersand followed by either a nonempty sequence of digits or an
-  identifier whose initial character isn't an upper case letter.
-\end{itemize}
-
-\section{Script Structure, Printing and Searching}
-
-An |EasyCrypt| script consists of a sequence of \emph{steps},
-terminated by dots (\ec{.}). Steps may:
-\begin{itemize}
-\item declare types and type constructors;
-
-\item declare operators and predicates;
-
-\item declare modules or module types;
-
-\item state axioms or lemmas;
-
-\item apply tactics;
-
-\item require (make available) theories;
-
-\item print types, operators, predicates, modules, module types,
-  axioms and lemmas;
-
-\item search for lemmas involving operators.
-\end{itemize}
+- declare types and type constructors;
+- declare operators and predicates;
+- declare modules or module types;
+- state axioms or lemmas;
+- apply tactics;
+- require (make available) theories;
+- print types, operators, predicates, modules, module types, axioms
+  and lemmas;
+- search for lemmas involving operators.
 
 To print an entity, one may say:
-\begin{easycrypt}{}{}
-print type t.
-print op f.
-print pred p.
-print module Foo.
-print module type FOO.
-print axiom foo.
-print lemma goo.
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   print type t.
+   print op f.
+   print pred p.
+   print module Foo.
+   print module type FOO.
+   print axiom foo.
+   print lemma goo.
+
 The entity kind may be omitted, in which case all entities with the
-given name are printed. \ec{print op} and \ec{print pred} may be used
-interchangeably, and may be applied to record field projections and
-datatype constructors, as well as to operators and predicates---all of which
-share the same name space.
-\ec{print axiom} and \ec{print lemma} are also interchangeable---axioms
+given name are printed. The commands ~print op~ and ~print pred~ may
+be used interchangeably, and may be applied to record field
+projections and datatype constructors, as well as to operators and
+predicates |---| all of which share the same name space. The commands
+~print axiom~ and ~print lemma~ are also interchangeable |---| axioms
 and lemmas share the same name space.
 
 To search for axioms and lemmas involving all of a list of operators,
-one can say
-\begin{easycrypt}{}{}
-search f.
-search (+).
-search (+) (-).  (* axioms/lemmas involving both operators *)
-\end{easycrypt}
-(Infix operators must be parenthesized.)
+one can say:
 
-Declared/stated entities may refer to previously declared/stated entities,
-but not to themselves or later ones (with the exception of recursively
-declared operators on datatypes, and to references to a module's own
-global variables).
+.. code-block:: easycrypt
 
-\section{Expressions Language}
+   search f.
+   search (+).
+   search (+) (-).  (* axioms/lemmas involving both operators *)
 
-\subsection{Type Expressions}
+(Note that infix operators must be parenthesized.) Declared/stated
+entities may refer to previously declared/stated entities, but not to
+themselves or later ones (with the exception of recursively declared
+operators on datatypes, and to references to a module's own global
+variables).
 
-|EasyCrypt|'s \emph{type expressions} are built from \emph{type variables},
+Expressions Language
+--------------------------------------------------------------------
+
+Type Expressions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+|EasyCrypt|'s *type expressions* are built from *type variables*,
 \emph{type constructors} (or \emph{named types}) function types and
 tuple (product) types. Type constructors include built-in types and
 user-defined types, such as \emph{record} types and \emph{datatypes}
-(or \emph{variant types}). The syntax of type expressions is given
-in Figure~\ref{fig:tyexpr}, whereas the precedence and associativity
-of type operators are given in Figure~\ref{fig:typrec}.
+(or \emph{variant types}). The syntax of type expressions is given in
+Figure~\ref{fig:tyexpr}, whereas the precedence and associativity of
+type operators are given in Figure~\ref{fig:typrec}.
 
-It is worth noting that |EasyCrypt|'s types must be inhabited --- i.e. nonempty.
+It is worth noting that |EasyCrypt|'s types must be inhabited ---
+i.e. nonempty.
 
 \begin{figure}
   \begin{center}
@@ -302,412 +297,469 @@ It is worth noting that |EasyCrypt|'s types must be inhabited --- i.e. nonempty.
   \caption{\label{fig:typrec} Type operators precedence and associativity}
 \end{figure}
 
-\paragraph{Built-in types}
+Built-in types
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-|EasyCrypt| comes with built-in types for booleans (\ec{bool}),
-integers (\ec{int}) and reals (\ec{real}), along with the
-singleton type \ec{unit} that is inhabited by the single
-element \ec{tt} (or \ec{()}).
+|EasyCrypt| comes with built-in types for booleans (``bool``),
+integers (``int``) and reals (``real``), along with the singleton type
+``unit`` that is inhabited by the single element ``tt`` (or ``()``).
 
-In addition, to every type $t$ is associated the type \ec{$t\;$distr}
-of \emph{(real) discrete sub-distribution}. A discrete sub-distribution
-over a type $t$ is fully defined by its mass function, i.e. by a
-non-negative function from $t$ to $\mathbb{R}$ s.t. $\sum_x f(x) \le 1$
---- implying that $f$ has a discrete support. When the sum is equal to $1$,
-we say that we have a \emph{distribution}.
-%
-Note that \ec{distr} is not a proper type on its own, but a
-\emph{type constructor}, i.e. a function from types to types.
-A proper type is obtained by \emph{applying} \ec{distr} to an
-actual type, as in \ec{int distr} or \ec{bool distr}. See the
-paragraph on type constructors for more information.
+In addition, to every type $t$ is associated the type ``t distr`` of
+\emph{discrete sub-distribution}. A discrete sub-distribution over a
+type $t$ is fully defined by its mass function, i.e. by a non-negative
+function from $t$ to $\mathbb{R}$ s.t. $\sum_x f(x) \le 1$ ---
+implying that $f$ has a discrete support. When the sum is equal to
+$1$, we say that we have a *(full) distribution*.  Note that ``distr``
+is not a proper type on its own, but a *type constructor*, i.e. a
+function from types to types.  A proper type is obtained by
+*applying* ``distr`` to an actual type, as in ``int distr``  or
+``bool distr``. See the paragraph on type constructors for more
+information.
 
-\paragraph{Function types}
-The type expression \ec{tau -> sigma} denotes the type of
-\emph{total functions} mapping elements of type $\tau$ to
-elements of type $\sigma$. Note that \ec{->} associates to the right,
-so that \ec{int -> bool -> real} and \ec{int -> (bool -> real)}
-denotes the same type.
+Function types
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+The type expression ``t -> u`` denotes the type of *total functions*
+mapping elements of type ``t`` to elements of type ``u``. Note that
+``->`` associates to the right, so that ``int -> bool -> real`` and
+``int -> (bool -> real)`` denotes the same type.
 
-\paragraph{Tuple (product) types}
-The type expression \ec{tau__1 * ... * tau__n} denotes the
-type of $n$-tuples whose elements are resp. of type $\tau_i$. This
-includes the type of pairs as well as the type of tuples of $3$ elements
-or more.
-%
-Note that \ec{tau__1 * (tau__2 * tau__3)}, \ec{(tau__1 * tau__2) * tau__3} and
-\ec{tau__1 * tau__2 * tau__3} are all distinct types. The first two
-are pair types, whereas the last one is the type of $3$-tuples.
+Tuple (product) types
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-\paragraph{Type variables}
-Type variables represent unknown types or type parameters. For example,
-the type \ec{'a * 'a} is the type the of pair whose elements
-are of unknown type \ec{'a}. Type variables may be used in type declarations
-(Section~\ref{subsec:tydecl}) to define type constructors or in
-operators/predicates declarations (Section~\ref{subsec:expressions}) to define
-polymorphic operators/predicates. The special type variable \ec{_}
-(underscore) represents a type variable whose name is not specified.
+The type expression ``t_1 * ... * t_n`` denotes the type of $n$-tuples
+whose elements are resp. of type ``t_i``. This includes the type of
+pairs as well as the type of tuples of $3$ elements or more.  Note
+that ``t_1 * (t_2 * t_3)``, ``(t_1 * t_2) * t_3`` and ``t_1 * t_2 *
+t_3`` are all distinct types. The first two are pair types, whereas
+the last one is the type of $3$-tuples.
 
-\paragraph{Type constructors}
+Type variables
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Type variables represent unknown types or type parameters. For
+example, the type ``'a * 'a`` is the type the of pair whose elements
+are of unknown type ``'a``. Type variables may be used in type
+declarations (Section~\ref{subsec:tydecl}) to define type constructors
+or in operators/predicates declarations
+(Section~\ref{subsec:expressions}) to define polymorphic
+operators/predicates. The special type variable ``_`` (underscore)
+represents a type variable whose name is not specified.
+
+Type constructors
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Type constructors are not type expressions per se, but functions from
-types to types. As seen in the built-in section, \ec{distr} is such
-a type constructor: when applied to the type $\tau$, it gives the
-type \ec{tau distr} of sub-distributions over $\tau$. Note that the
-application is in \emph{postfix} form. One other common type constructors
-is the one \ec{list} of polymorphic list, the type expression
-\ec{tau list} denoting the type of lists whose elements are of type $\tau$.
+types to types. As seen in the built-in section, ``distr`` is such a
+type constructor: when applied to the type ``t``, it gives the type
+``t distr`` of sub-distributions over ``t``. Note that the application
+is in *postfix* form. One other common type constructors is the one
+``list`` of polymorphic list, the type expression ``t list`` denoting
+the type of lists whose elements are of type ``t``.
 
-Type constructors may depend on several type arguments, i.e. may be
-of arity strictly greater than $1$. In that case,
-the type application is curried. For example, the type of finite map
-\ec{(tau, sigma) map} (whose keys are of type $\tau$ and values of
-type $\sigma$) is constructed from the type constructor \ec{map} of
-arity $2$.
+Type constructors may depend on several type arguments, i.e. may be of
+arity strictly greater than $1$. In that case, the type application is
+curried. For example, the type of finite map ``(t, u) map`` (whose
+keys are of type ``t`` and values of type ``u``) is constructed from
+the type constructor ``map`` of arity $2$.
 
-By abuse of notations, named types (as \ec{bool} or \ec{int}) can be seen
+By abuse of notations, named types (as ``bool`` or ``int``) can be seen
 as type constructors with no arguments.
 
-\paragraph{Datatypes and record types}
+Datatypes and record types
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-There are no expressions for describing datatypes and record types. Indeed,
-those are always named and must be defined and named before use. See
-Section~\ref{subsec:tydecl} for how to define variant and record types.
+There are no expressions for describing datatypes and record
+types. Indeed, those are always named and must be defined and named
+before use. See Section~\ref{subsec:tydecl} for how to define variant
+and record types.
 
-\subsection{Type Declarations}
+Type Declarations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 \label{subsec:tydecl}
 
 Record types may be declared like this:
-\begin{easycrypt}{}{}
-type t = { x : int; y : bool; }.
-type u = { y : real; yy : int; yyy : real; }.
-\end{easycrypt}
-Here \ec{t} is the type of records with field projections \ec{x} of
-type \ec{int}, and \ec{y} of type \ec{bool}. The order of projections
-is irrelevant.  Different record types can't use overlapping
-projections, and record projections must be disjoint from operators
-(see below). Records may have any non-zero number of fields; values of
-type \ec{u} are record with three fields. We may also define record
-type operators, as in:
-\begin{easycrypt}{}{}
-type 'a t = { x : 'a; f : 'a -> 'a; }.
-type ('a, 'b) u = { f : 'a -> 'b; x : 'a; }.
-\end{easycrypt}
-Then, a value $v$ of type \ec{int t} would have fields \ec{x} and
-\ec{f} of types \ec{int} and \ec{int -> int}, respectively; and
-a value $v$ of type \ec{(int, bool) u} would have fields \ec{x} and
-\ec{f} with types \ec{int} and \ec{int -> bool}, respectively.
+
+.. code-block:: easycrypt
+
+   type t = { x : int; y : bool; }.
+   type u = { y : real; yy : int; yyy : real; }.
+
+Here ``t`` is the type of records with field projections ``x`` of type
+``int``, and ``y`` of type ``bool``. The order of projections is
+irrelevant.  Different record types can't use overlapping projections,
+and record projections must be disjoint from operators (see
+below). Records may have any non-zero number of fields; values of type
+``u`` are record with three fields. We may also define record type
+operators, as in:
+
+.. code-block:: easycrypt
+
+   type 'a t = { x : 'a; f : 'a -> 'a; }.
+   type ('a, 'b) u = { f : 'a -> 'b; x : 'a; }.
+
+Then, a value of type ``int t`` would have fields ``x`` and ``f`` of
+types ``int`` and ``int -> int``, respectively; and a value of type
+``(int, bool) u`` would have fields ``x`` and ``f`` with types ``int``
+and ``int -> bool``, respectively.
 
 Datatypes and datatype operators may be declared like this:
-\begin{easycrypt}{}{}
-type enum = [ First | Second | Third ].
-type either_int_bool = [ First of int | Second of bool ].
-type ('a, 'b) either = [ First of 'a | Second of 'b ].
-type intlist = [
-  | Nil
-  | Cons of (int * intlist) ].
-type 'a list = [
-  | Nil
-  | Cons of 'a & 'a list ].
-\end{easycrypt}
-Here, \ec{First}, \ec{Second}, \ec{Third}, \ec{Nil} and \ec{Cons} are
-constructors, and must be distinct from all operators, record
-projections and other constructors.  \ec{enum} is an enumerated type
-with the three elements \ec{First}, \ec{Second} and \ec{Third}. The
-elements of \ec{either_int_bool} consist of \ec{First} applied to an
-integer, or \ec{Second} applied to a boolean, and the datatype
-operator \ec{either} is simply its generalization to arbitrary types
-\ec{'a} and \ec{'b}.  \ec{intlist} is an inductive datatype: its
-elements are \ec{Nil} and the results of applying \ec{Cons} to a pairs
-of the form $(x, \mathit{ys})$, where $x$ is an integer and
-$\mathit{ys}$ is a previously constructed \ec{intlist}.  Note that a
-vertical bar (\ec{|}) is permitted before the first constructor of a
-datatype. Finally, \ec{list} is the generalization of \ec{intlist} to
-lists over an arbitrary type \ec{'a}, but with a twist. The use of
-\ec{&} means that \ec{Cons} is ``curried'': instead of applying
-\ec{Cons} to a pair $(x, \mathit{ys})$, one gives it \ec{$x$ : 'a} and
-\ec{$\mathit{ys}$ : 'a list} one at a time, as in \ec{Cons$\,x\,$
-  $\,\mathit{ys}$}.  Unsurprisingly, more than one occurrence of
-\ec{&} is allowed in a constructor's definition. E.g., here is the
-datatype for binary trees whose leaves and internal nodes are labeled
-by integers:
-\begin{easycrypt}{}{}
-type tree = [
-  | Leaf of int
-  | Cons of tree & int & tree
-].
-\end{easycrypt}
-\ec{Cons $\,\mathit{tr}_1\,$ $x\,$ $\mathit{tr}_2$} will be the tree
-constructed from an integer $x$ and trees $\mathit{tr}_1$ and
-$\mathit{tr}_2$.
-|EasyCrypt| must be able to convince itself that a datatype is
-nonempty, most commonly because it has at least one constructor
-taking no arguments, or only arguments not involving the datatype.
 
-Types and type operators that are simply abbreviations for pre-existing
-types may be declared, as in:
-\begin{easycrypt}{}{}
-type t = int * bool.
-type ('a, b) arr = 'a -> 'b.
-\end{easycrypt}
-Then, e.g., \ec{(int, bool) arr} is the same type as \ec{int -> bool}.
+.. code-block:: easycrypt
+
+   type enum = [ First | Second | Third ].
+
+   type either_int_bool = [ First of int | Second of bool ].
+
+   type ('a, 'b) either = [ First of 'a | Second of 'b ].
+
+   type intlist = [
+     | Nil
+     | Cons of (int * intlist) ].
+
+   type 'a list = [
+     | Nil
+     | Cons of 'a & 'a list ].
+
+Here, ``First``, ``Second``, ``Third``, ``Nil`` and ``Cons`` are
+constructors, and must be distinct from all operators, record
+projections and other constructors.  The type ``enum`` is an
+enumerated type with the three elements ``First``, ``Second`` and
+``Third``. The elements of ``either_int_bool`` consist of ``First``
+applied to an integer, or ``Second`` applied to a boolean, and the
+datatype operator ``either`` is simply its generalization to arbitrary
+types ``'a`` and ``'b``.  The type ``intlist`` is an inductive
+datatype: its elements are ``Nil`` and the results of applying
+``Cons`` to a pairs of the form ``(x, ys)``, where ``x`` is an integer
+and ``ys`` is a previously constructed ``intlist``.  Note that a
+vertical bar (``\|``] is permitted before the first constructor of a
+datatype. Finally, the type ``list`` is the generalization of
+``intlist`` to lists over an arbitrary type ``'a``, but with a
+twist. The use of ``&`` means that ``Cons`` is *curried*: instead of
+applying ``Cons`` to a pair ``(x, ys)``, one gives it ``x : 'a`` and
+``ys : 'a list`` one at a time, as in ``Cons x ys``.  Unsurprisingly,
+more than one occurrence of ``&`` is allowed in a constructor's
+definition. E.g., here is the datatype for binary trees whose leaves
+and internal nodes are labeled by integers:
+
+
+.. code-block:: easycrypt
+
+   tree = [
+     | Leaf of int
+     | Node of tree & int & tree
+   ].
+
+The constructor ``Node t1 x t2`` represents the tree constructed from
+an integer ``x`` and the left/right trees ``t1`` and ``t2``.
+|EasyCrypt| must be able to convince itself that a datatype is
+nonempty, most commonly because it has at least one constructor taking
+no arguments, or only arguments not involving the datatype.
+
+Types and type operators that are simply abbreviations for
+pre-existing types may be declared, as in:
+
+.. code-block:: easycrypt
+
+   type t = int * bool.
+   type ('a, b) arr = 'a -> 'b.
+
+Then, e.g., ``(int, bool) arr`` is the same type as ``int -> bool``.
 
 Finally, abstract types and type operators may be declared, as in:
-\begin{easycrypt}{}{}
-type t.
-type ('a, b) u.
-type t, ('a, b) u.
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   type t.
+   type ('a, b) u.
+   type t, ('a, b) u.
+
 We'll see later how such types and type operators may be used.
 
-\subsection{Expressions and Operator Declarations}
+Expressions and Operator Declarations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 \label{subsec:expressions}
 
 We'll now survey |EasyCrypt|'s typed expressions. Anonymous functions
 are written
-\begin{center}
-\ec{fun ($x$ : $\,t_1$) => $\;e$},  
-\end{center}
-where $x$ is an identifier,
-$t_1$ is a type, and $e$ is an expression---probably involving $x$.
-If $e$ has type $t_2$ under the assumption that $x$ has type $t_1$,
-then the anonymous function will have type \ec{$t_1$ -> $\;\,t_2$}.
-Function application is written using juxtapositioning, so that if
-$e_1$ has type \ec{$t_1$ -> $\;\,t_2$}, and $e_2$ has type $t_1$, then
-$e_1\,e_2$ has type $t_2$. Function application associates to the
-left, and anonymous functions extend as far to the right as possible.
-|EasyCrypt| infers the types of the bound variables of anonymous function
-when it can. Nested anonymous functions may be abbreviated by
-collecting all their bound variables together. E.g., consider the
-expression
-\begin{easycrypt}{}{}
-(fun (x : int) => fun (y : int) => fun (z : bool) => y) 0 1 false
-\end{easycrypt}
-which evaluates to \ec{1}. It may be abbreviated to
-\begin{easycrypt}{}{}
-(fun (x y : int, z : bool) => y) 0 1 false
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   fun (x : t1) => e},  
+
+where ``x`` is an identifier, ``t1`` is a type and ``e`` is an
+expression |---| probably involving ``x``.  If ``e`` has type ``t2``
+under the assumption that ``x`` has type ``t1``, then the anonymous
+function will have type ``t1 -> t2``.  Function application is written
+using juxtapositioning, so that if ``e1`` has type ``t1 -> t2``, and
+``e2`` has type ``t1``, then ``e1 e2`` has type ``t2``. Function
+application associates to the left, and anonymous functions extend as
+far to the right as possible.  |EasyCrypt| infers the types of the
+bound variables of anonymous function when it can. Nested anonymous
+functions may be abbreviated by collecting all their bound variables
+together. E.g., consider the expression
+
+.. code-block:: easycrypt
+
+   (fun (x : int) => fun (y : int) => fun (z : bool) => y) 0 1 false
+
+which evaluates to ``1``. It may be abbreviated to
+
+.. code-block:: easycrypt
+
+   (fun (x y : int, z : bool) => y) 0 1 false
+
 or
-\begin{easycrypt}{}{}
-(fun (x : int) (y : int) (z : bool) => y) 0 1 false
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   (fun (x : int) (y : int) (z : bool) => y) 0 1 false
+
 or (letting |EasyCrypt| carry out type inference)
-\begin{easycrypt}{}{}
-(fun x y z => y) 0 1 false
-\end{easycrypt}
-In the type inference, only the type of \ec{y} is determined, but
+
+.. code-block:: easycrypt
+
+   (fun x y z => y) 0 1 false
+
+In the type inference, only the type of ``y`` is determined, but
 that's acceptable.
 
 |EasyCrypt| has let expressions
-\begin{center}
-  \ec{let $\;x$ : t = $\;e$ in $\;e'$}
-\end{center}
+
+.. code-block:: easycrypt
+
+   let x : t = e in e'}
+
 which are equivalent to
-\begin{center}
-  \ec{(fun $\;x$ : t => $\;e'$) $e$}
-\end{center}
+
+.. code-block:: easycrypt
+
+   (fun x : t => e') $e$
+
 As with anonymous expressions, the types of their bound variables may
 often be omitted, letting |EasyCrypt| infer them.
 
 An operator may be declared by specifying its type and giving the
 expression to be evaluated. E.g.,
-\begin{easycrypt}{}{}
-op x : int = 3.
-op f : int -> bool -> int = fun (x : int) (y : bool) => x.
-op g : bool -> int = f 1.
-op y : int = g true.
-op z = f 1 true.
-\end{easycrypt}
-Here \ec{f} is a curried function---it takes its arguments one
-at a time. Hence \ec{y} and \ec{z} have the same value: \ec{1}.
-As illustrated by the declaration of \ec{z}, one may omit the
-operator's type when it can be inferred from its expression.
-The declaration of \ec{f} may be abbreviated to
-\begin{easycrypt}{}{}
-op f (x : int) (y : bool) = x.
-\end{easycrypt}
-or
-\begin{easycrypt}{}{}
-op f (x : int, y : bool) = x.
-\end{easycrypt}
 
-\emph{Polymorphic} operators may be declared, as in
-\begin{easycrypt}{}{}
-op g ['a, 'b] : 'a -> 'b -> 'a = fun (x : 'a, y : 'b) => x.
-\end{easycrypt}
-or
-\begin{easycrypt}{}{}
-op g ['a, 'b] (x : 'a, y : 'b) = x.
-\end{easycrypt}
-or
-\begin{easycrypt}{}{}
-op g (x : 'a, y : 'b) = x.
-\end{easycrypt}
-Here \ec{g} has all the types formed
-by substituting types for the types variable \ec{'a} and \ec{'b}
-in \ec{'a -> 'b -> 'a}. This allows us to use \ec{g} at different
-types
-\begin{easycrypt}{}{}
-op a = g true 0.
-op b = g 0 false.
-\end{easycrypt}
-making \ec{a} and \ec{b} evaluate to \ec{true} and \ec{0}, respectively.
+.. code-block:: easycrypt
 
-\emph{Abstract} operators may be declared, i.e., ones whose values
-are unspecified. E.g., we can declare
-\begin{easycrypt}{}{}
-op x : int.
-op f : int -> int.
-op g ['a, 'b] : 'a -> 'b -> 'a.
-\end{easycrypt}
-Equivalently, \ec{f} and \ec{g} may be declared like this:
-\begin{easycrypt}{}{}
-op f (x : int) : int.
-op g ['a, 'b] (x : 'a, y : 'b) : 'a.
-\end{easycrypt}
+   op x : int = 3.
+   op f : int -> bool -> int = fun (x : int) (y : bool) => x.
+   op g : bool -> int = f 1.
+   op y : int = g true.
+   op z = f 1 true.
+
+Here ``f`` is a curried function |---| it takes its arguments one at a
+time. Hence ``y`` and ``z`` have the same value: ``1``.  As
+illustrated by the declaration of ``z``, one may omit the operator's
+type when it can be inferred from its expression.  The declaration of
+``f`` may be abbreviated to
+
+.. code-block:: easycrypt
+
+   op f (x : int) (y : bool) = x.
+
+or
+
+.. code-block:: easycrypt
+
+   op f (x : int, y : bool) = x.
+
+*Polymorphic* operators may be declared, as in
+
+.. code-block:: easycrypt
+
+   op g ['a, 'b] : 'a -> 'b -> 'a = fun (x : 'a, y : 'b) => x.
+
+or
+
+.. code-block:: easycrypt
+
+   op g ['a, 'b] (x : 'a, y : 'b) = x.
+
+or
+
+.. code-block:: easycrypt
+
+   op g (x : 'a, y : 'b) = x.
+
+Here ``g`` has all the types formed by substituting types for the
+types variable ``'a`` and ``'b`` in ``'a -> 'b -> 'a``. This allows us
+to use ``g`` at different types
+
+.. code-block:: easycrypt
+
+   op a = g true 0.
+   op b = g 0 false.
+
+making ``a`` and ``b`` evaluate to ``true`` and ``0``, respectively.
+
+*Abstract* operators may be declared, i.e., ones whose values are
+unspecified. E.g., we can declare
+
+.. code-block:: easycrypt
+
+   op x : int.
+   op f : int -> int.
+   op g ['a, 'b] : 'a -> 'b -> 'a.
+
+Equivalently, ``f`` and ``g`` may be declared like this:
+
+.. code-block:: easycrypt
+
+   op f (x : int) : int.
+   op g ['a, 'b] (x : 'a, y : 'b) : 'a.
+
 One may declare multiple abstract operators of the same type:
-\begin{easycrypt}{}{}
-op f, g : int -> int.
-op g, h ['a, 'b] : 'a -> 'b -> 'a.
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   op f, g : int -> int.
+   op g, h ['a, 'b] : 'a -> 'b -> 'a.
+
 We'll see later how abstract operators may be used.
 
 Binary operators may be declared and used with infix notation (as long
 as they are infix operators). One parenthesizes a binary operator when
 declaring it and using it in non-infix form (i.e., as a value).  If
-$\mathit{io}$ is an infix operator and $e_1,e_2$ are expressions, then
-$e_1\mathbin{\mathit{io}}e_2$ is translated to \ec{($\mathit{io}$)
-  $\,e_1$ $\,e_2$}, whenever the latter expression is
-well-typed. E.g., if we declare
-\begin{easycrypt}{}{}
-op (--) ['a, 'b] (x : 'a) (y : 'b) = x.
-op x : int = (--) 0 true.
-op x' : int = 0 -- true.
-op y : bool = (--) true 0.
-op y' : bool = true -- 0.
-\end{easycrypt}
-then \ec{x} and \ec{x'} evaluate to \ec{0}, and
-\ec{y} and \ec{y'} evaluate to \ec{true}.
-
-Unary operators may be declared and used with prefix notation
-(as long as they are prefix operators).
-One (square) brackets a unary operator when
-declaring it and using it in non-prefix form (i.e., as a value).
-If $\mathit{po}$ is
-a prefix operator and $e$ is an expression, then
-$\mathit{po}\,e$ is translated to
-\ec{[$\mathit{po}$] $\,e$}, whenever the latter
+``io`` is an infix operator and ``e1``, ``e2`` are expressions, then
+``e1 io e2`` is translated to ``(io) e1 e2``, whenever the latter
 expression is well-typed. E.g., if we declare
-\begin{easycrypt}{}{}
-op x : int.
-op f : int -> int.
-op [!] : int -> int.
-op y : int = ! f x.
-op y' : int = [!](f x).
-\end{easycrypt}
-then \ec{y} and \ec{y'} both evaluate to the result of applying the
-abstract operator \ec{!} of type \ec{int -> int} to the result of
-applying the abstract operator \ec{f} of type \ec{int -> int} to the
-abstract value \ec{x} of type \ec{int}.  Function application has
-higher precedence than prefix operators, which have higher precedence
-than infix operators, prefix operators group to the right, and infix
+
+.. code-block:: easycrypt
+
+   op (--) ['a, 'b] (x : 'a) (y : 'b) = x.
+   op x  : int = (--) 0 true.
+   op x' : int = 0 -- true.
+   op y  : bool = (--) true 0.
+   op y' : bool = true -- 0.
+
+then ``x`` and ``x'`` evaluate to ``0``, and ``y`` and ``y'`` evaluate
+to ``true``.
+
+Unary operators may be declared and used with prefix notation (as long
+as they are prefix operators).  One (square) brackets a unary operator
+when declaring it and using it in non-prefix form (i.e., as a value).
+If ``po`` is a prefix operator and ``e`` is an expression, then ``po
+e`` is translated to ``[io] e``, whenever the latter expression is
+well-typed. E.g., if we declare
+
+.. code-block:: easycrypt
+
+   op x : int.
+   op f : int -> int.
+   op [!] : int -> int.
+   op y : int = ! f x.
+   op y' : int = [!](f x).
+
+then ``y`` and ``y'`` both evaluate to the result of applying the
+abstract operator ``!`` of type ``int -> int`` to the result of
+applying the abstract operator ``f`` of type ``int -> int`` to the
+abstract value ``x`` of type ``int``.  Function application has higher
+precedence than prefix operators, which have higher precedence than
+infix operators, prefix operators group to the right, and infix
 operators have the associativities and relative precedences that were
 detailed in Section~\ref{sec:lexical}.
 
 The four mixfix operators may be declared and used as follows. They
 are (double) quoted when being declared or used in non-mixfix form
 (i.e., as values).
-\begin{itemize}
-\item (\ec{[]})\quad \ec{[]} is translated to \ec{\"[]\"}. E.g.,
-  if we declare
-\begin{easycrypt}{}{}
-op "[]" : int = 3.
-op x : int = [].
-\end{easycrypt}
-then \ec{x} will evaluate to \ec{3}.
 
-\item (\ec{`|_|})\quad If $e$ is an expression, then \ec{`|$e$|} is
-  translated to \ec{\"`|_|\" $\,e$}, as long as the latter expression
-  is well-typed.  E.g., if we declare
-\begin{easycrypt}{}{}
-op "`|_|" : int -> bool.
-op x : bool = "`|_|" 3.
-op y : bool = `|3|.
-\end{easycrypt}
-then \ec{y} will evaluate to the same value as \ec{x}.
+- ``[]`` is translated to ``"[]"``. E.g., in the context of the
+  following code , ``x`` evaluates to ``3``.
 
-\item (\ec{_.[_]})\quad If $e_1,e_2$ are expressions, then
-    \ec{$e_1$.[$e_2$]} is translated to \ec{\"_.[_]\" $\,e_1$
-      $\,e_2$}, whenever the latter expression is well-typed. E.g., if
-    we declare
-\begin{easycrypt}{}{}
-op "_.[_]" : int -> int -> bool.
-op x : bool = "_.[_]" 3 4.
-op y : bool = 3.[4].
-\end{easycrypt}
-then \ec{y} will evaluate to the same value as \ec{x}.
+  .. code-block:: easycrypt
 
-\item (\ec{_.[_<-_]})\quad If $e_1,e_2,e_3$ are expressions,
-    \ec{$e_1$.[$e_2$ <- $\,e_3$]} is translated to \ec{\"_.[_<-_]\"
-      $\,e_1$ $\,e_2$ $\,e_3$}, whenever the latter expression is
-    well-typed. E.g., if we declare
-\begin{easycrypt}{}{}
-op "_.[_<-_]" : int -> int -> int -> bool.
-op x : bool = "_.[_<-_]" 3 4 5.
-op y : bool = 3.[4 <- 5].
-\end{easycrypt}
-then \ec{y} will evaluate to the same value as \ec{x}.
-\end{itemize}
-In addition, if $e_1,\ldots,e_n$ are expressions then
-\begin{center}
-\ec{[$e_1$; $\;\ldots\,$; $\,e_n$]}  
-\qquad is translated to \qquad
-\ec{$e_1$ :: $\;\ldots$ :: $\;e_n$ :: []}
-\end{center}
+     op "[]" : int = 3.
+     op x : int = [].
+
+- If ``e`` is an expression, then ``\`|e|`` is translated to
+  ``"\`|_|" e``, as long as the latter expression is well-typed.
+  E.g., if we declare
+
+  .. code-block:: easycrypt
+
+     op "`|_|" : int -> bool.
+     op x : bool = "`|_|" 3.
+     op y : bool = `|3|.
+
+  then ``y`` will evaluate to the same value as ``x``.
+
+- If ``e1`` and ``e2`` are expressions, then ``e1.[e2]`` is translated
+  to ``"_.[_]" e1 e2``, whenever the latter expression is
+  well-typed. E.g., if we declare
+
+  .. code-block:: easycrypt
+
+     op "_.[_]" : int -> int -> bool.
+     op x : bool = "_.[_]" 3 4.
+     op y : bool = 3.[4].
+
+  then ``y`` will evaluate to the same value as ``x``.
+
+- If ``e1``, ``e2`` and ``e3`` are expressions, ``e1.[e2 <- e3]`` is
+  translated to ``"_.[_<-_]" e1 e2 e3``, whenever the latter
+  expression is well-typed. E.g., if we declare
+
+  .. code-block:: easycrypt
+
+     op "_.[_<-_]" : int -> int -> int -> bool.
+     op x : bool = "_.[_<-_]" 3 4 5.
+     op y : bool = 3.[4 <- 5].
+
+  then ``y`` will evaluate to the same value as ``x``.
+
+In addition, if ``e_1``, ``e_2``, ..., ``e_n`` are expressions then
+``[e_1; e_2; ...; e_n]`` is translated to ``e_1 :: e_2 :: ... :: e_n :: []``
 whenever the latter expression is well-typed.
-The initial argument of \ec{\"_.[_]\"} and \ec{\"_.[_<-_]\"} have
-higher precedence than even function application. E.g., one
-can't omit the parentheses in
-\begin{easycrypt}{}{}
-op f : int -> int.
-op y : bool = (f 3).[4].
-op z : bool = (f 3).[4 <- 5].
-\end{easycrypt}
+
+The initial argument of ``"_.[_]"`` and ``"_.[_<-_]"`` have higher
+precedence than even function application. E.g., one can't omit the
+parentheses in
+
+.. code-block:: easycrypt
+
+   op f : int -> int.
+   op y : bool = (f 3).[4].
+   op z : bool = (f 3).[4 <- 5].
 
 Some operators are built-in to |EasyCrypt|, automatically understood
 by its ambient logic:
-\begin{easycrypt}{}{}
-op (=) ['a]: 'a -> 'a -> bool.
 
-op [!] : bool -> bool.
-op (||) : bool -> bool -> bool.
-op (\/) : bool -> bool -> bool.
-op (&&) : bool -> bool -> bool.
-op (/\) : bool -> bool -> bool.
-op (=>) : bool -> bool -> bool.
-op (<=>) : bool -> bool -> bool.
+.. code-block:: easycrypt
 
-op mu : 'a distr -> ('a -> bool) -> real.
-\end{easycrypt}
+   op (=) ['a]: 'a -> 'a -> bool.
+
+   op [!] : bool -> bool.
+   op (||) : bool -> bool -> bool.
+   op (\/) : bool -> bool -> bool.
+   op (&&) : bool -> bool -> bool.
+   op (/\) : bool -> bool -> bool.
+   op (=>) : bool -> bool -> bool.
+   op (<=>) : bool -> bool -> bool.
+   op mu : 'a distr -> ('a -> bool) -> real.
+
 The operator \ec{=} is equality. On the booleans, we have negation
-\ec{!}, two forms of disjunction (\ec{\\/} and \ec{||}) and conjunction
-(\ec{/\\} and \ec{&&}), implication (\ec{=>}) and if-and-only-if
-(\ec{<=>}).  The two disjunctions (respectively, conjunctions) are
-semantically equivalent, but are treated differently by |EasyCrypt|
-proof engine. The associativities and precedences of the infix
-operators were given in Section~\ref{sec:lexical}, and (as a prefix
-operator) \ec{!} has higher precedence than all of them. The
+\ec{!}, two forms of disjunction (\ec{\\/} and \ec{||}) and
+conjunction (\ec{/\\} and \ec{&&}), implication (\ec{=>}) and
+if-and-only-if (\ec{<=>}).  The two disjunctions (respectively,
+conjunctions) are semantically equivalent, but are treated differently
+by |EasyCrypt| proof engine. The associativities and precedences of
+the infix operators were given in Section~\ref{sec:lexical}, and (as a
+prefix operator) \ec{!} has higher precedence than all of them. The
 expression \ec{$e_1$ <> $\;e_2$} is treated as \ec{!($e_1$ =
-  $\;e_2$)}. \ec{<>} is not an operator, but it has the precedence and
-non-associative status of Section~\ref{sec:lexical}.
-The intended meaning of \ec{mu $\,d$ $\,p$} is the probability that
-randomly choosing a value of the given type from the sub-distribution
-$d$ will satisfy the function $p$ (in the sense of causing it to return
+$\;e_2$)}. \ec{<>} is not an operator, but it has the precedence and
+non-associative status of Section~\ref{sec:lexical}.  The intended
+meaning of \ec{mu $\,d$ $\,p$} is the probability that randomly
+choosing a value of the given type from the sub-distribution $d$ will
+satisfy the function $p$ (in the sense of causing it to return
 \ec{true}).
 
-If $e$ is an expression of type \ec{int}, then
-\ec{$e$\%r} is the corresponding real. \ec{$\_$\%r} has higher precedence
-than even function application.
+If $e$ is an expression of type \ec{int}, then \ec{$e$\%r} is the
+corresponding real. \ec{$\_$\%r} has higher precedence than even
+function application.
 
 If $e_1$ is an expression of type \ec{bool} and $e_2,e_3$ are expressions
 of some type $t$, then the \emph{conditional expression}

@@ -8,6 +8,11 @@ div.highlight pre {
   font-size: 13px;
 }
 
+code.docutils.literal {
+  padding: 1px 2px;
+  background-color: #f7fced;
+}
+
 .toggle.container {
   padding: 0 0 10px 0;
 }
