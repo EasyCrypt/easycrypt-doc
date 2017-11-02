@@ -1,9 +1,0 @@
-@import url("css/theme.css");
-
-.keyword.bytac    , .k-ByTac     { color: #ff0000; }
-.keyword.dangerous, .k-Dangerous { color: #ff0000; font-style: italic; }
-.keyword.global   , .k-Global    { color: #cc00cc; }
-.keyword.internal , .k-Internal  { color: #000000; }
-.keyword.prog     , .k-Prog      { color: #cc00cc; }
-.keyword.tactic   , .k-Tactic    { color: #000080; }
-.keyword.tactical , .k-Tactical  { color: #cc00cc; }

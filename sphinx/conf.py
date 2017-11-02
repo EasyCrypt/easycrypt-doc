@@ -14,7 +14,14 @@ import eclexer
 # -- General configuration -------------------------------------------
 
 needs_sphinx   = '1.6'
-extensions     = ['sphinx.ext.todo', 'sphinx.ext.mathjax', 'inlinemath', 'eclexer', 'inlinehg']
+extensions     = [
+    'sphinx.ext.todo',
+    'sphinx.ext.mathjax',
+    'sphinxcontrib.bibtex',
+    'inlinemath',
+    'eclexer',
+    'inlinehg',
+]
 templates_path = ['_templates']
 source_suffix  = '.rst'
 master_doc     = 'index'
@@ -29,13 +36,39 @@ language  = 'en'
 exclude_patterns   = ['_build', 'Thumbs.db', '.DS_Store', '.git']
 pygments_style     = 'sphinx'
 todo_include_todos = True
+numfig             = True
 
+# --------------------------------------------------------------------
+def setup(app):
+    app.add_stylesheet('styles.css')
+    app.add_javascript('collapse.js')
 
 # -- Options for HTML output -----------------------------------------
 
-html_theme       = '_theme'
+import sphinx_bootstrap_theme
+
+html_theme       = 'bootstrap'
 html_static_path = ['_static']
-html_theme_path  = [ROOT]
+html_theme_path  = sphinx_bootstrap_theme.get_html_theme_path()
+
+html_theme_options = dict(
+    navbar_title            = "EasyCrypt RefMan",
+    navbar_site_name        = "Site",
+    navbar_sidebarrel       = False,
+    navbar_pagenav          = True,
+    navbar_pagenav_name     = "Page",
+    globaltoc_depth         = 2,
+    globaltoc_includehidden = True,
+    navbar_class            = "navbar navbar-default",
+    navbar_fixed_top        = True,
+    source_link_position    = "footer",
+    # Bootswatch (http://bootswatch.com/) theme.
+    bootswatch_theme        = "cosmo",
+    bootstrap_version       = "3",
+    navbar_links            = [
+        ("Main Site", "https://www.easycrypt.info/", True)
+    ]
+)
 
 # -- Options for LaTeX output ----------------------------------------
 

@@ -1,0 +1,44 @@
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 750px;
+}
+
+div.highlight pre {
+  font-size: 13px;
+}
+
+.toggle.container {
+  padding: 0 0 10px 0;
+}
+
+.toggle .header {
+  display: block;
+  clear: both;
+}
+
+.toggle .header:after {
+  content: " ▼";
+  display: inline;
+}
+
+.toggle .header.open:after {
+  content: " ▲";
+  display: inline;
+}
+
+.keyword.bytac    , .k.k-ByTac     { color: #ff0000; }
+.keyword.dangerous, .k.k-Dangerous { color: #ff0000; font-style: italic; }
+.keyword.global   , .k.k-Global    { color: #cc00cc; }
+.keyword.internal , .k.k-Internal  { color: #000000; }
+.keyword.prog     , .k.k-Prog      { color: #cc00cc; }
+.keyword.tactic   , .k.k-Tactic    { color: #000080; }
+.keyword.tactical , .k.k-Tactical  { color: #cc00cc; }
+
+div.section p, div.section li, table.citation td {
+  text-align: justify;
+}
+
+.globaltoc p.caption {
+  padding-left: 10px;
+}

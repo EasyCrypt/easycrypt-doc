@@ -13,7 +13,7 @@ help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 publish:
-	rsync -avt --no-p --no-g --chmod=ug=rwX,o=rX \
+	rsync -avt --delete --no-p --no-g --chmod=ug=rwX,o=rX \
 	  _build/html/. ci.easycrypt.info:/var/www/documentation/html/
 
 .PHONY: help Makefile publish
