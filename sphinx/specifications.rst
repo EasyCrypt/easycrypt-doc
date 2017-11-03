@@ -157,7 +157,7 @@ Lexical Categories
   (``!``), a nonempty sequence of plus signs (``+``), a nonempty
   sequence of minus signs (``-``), or a backward slash followed by a
   nonempty sequence of letters, digits, underscores and apostrophes.
-  A \emph{prefix operator name} is any unary operator name not
+  A *prefix operator name* is any unary operator name not
   consisting of either two more plus signs or two or more minus signs.
 
 :Mixfix operator names: A *mixfix operator name* is of the following
@@ -252,19 +252,21 @@ Type Expressions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 |EasyCrypt|'s *type expressions* are built from *type variables*,
-\emph{type constructors} (or \emph{named types}) function types and
-tuple (product) types. Type constructors include built-in types and
-user-defined types, such as \emph{record} types and \emph{datatypes}
-(or \emph{variant types}). The syntax of type expressions is given in
+*type constructors* (or *named types*) function types and tuple
+(product) types. Type constructors include built-in types and
+user-defined types, such as *record* types and *datatypes* (or
+*variant types*). The syntax of type expressions is given in
 Figure~\ref{fig:tyexpr}, whereas the precedence and associativity of
 type operators are given in Figure~\ref{fig:typrec}.
 
 It is worth noting that |EasyCrypt|'s types must be inhabited ---
 i.e. nonempty.
 
-\begin{figure}
-  \begin{center}
-  \begin{tabular}{rcl>{\bf}l}
+.. math::
+   :caption: |EasyCrypt|'s type expressions
+   :name: fig:tyexpr
+
+  \begin{array}{rcl>{\bf}l}
     $\tau, \sigma$ & ::=
       & {\ec{tyvar}} & type variable\\
      && {\ec{_}} & anonymous type variable\\
@@ -274,15 +276,12 @@ i.e. nonempty.
      && {\ec{tyname}} & named type\\
      && {\ec{tau tyname}} & applied type constructor\\
      && {\ec{(tau__1, $\;\ldots$, tau__n) tyname}} & \emph{ibid.}\\
-  \end{tabular}
-  \end{center}
+  \end{array}
 
-  \caption{\label{fig:tyexpr} |EasyCrypt|'s type expressions}
-\end{figure}
+.. math::
+   :caption: Type operators precedence and associativity
+   :name: fig:typrec
 
-\begin{figure}
-  \begin{center}
-  
   \begin{tabular}{lll}
                & \textbf{Operator} & \textbf{Associativity}\\
      \hline
@@ -292,10 +291,6 @@ i.e. nonempty.
      
      \multicolumn{3}{@{}l}{\emph{constructions with higher precedences come first}}
   \end{tabular}
-  \end{center}
-  
-  \caption{\label{fig:typrec} Type operators precedence and associativity}
-\end{figure}
 
 Built-in types
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -305,16 +300,15 @@ integers (``int``) and reals (``real``), along with the singleton type
 ``unit`` that is inhabited by the single element ``tt`` (or ``()``).
 
 In addition, to every type $t$ is associated the type ``t distr`` of
-\emph{discrete sub-distribution}. A discrete sub-distribution over a
-type $t$ is fully defined by its mass function, i.e. by a non-negative
+*discrete sub-distribution*. A discrete sub-distribution over a type
+$t$ is fully defined by its mass function, i.e. by a non-negative
 function from $t$ to $\mathbb{R}$ s.t. $\sum_x f(x) \le 1$ ---
 implying that $f$ has a discrete support. When the sum is equal to
 $1$, we say that we have a *(full) distribution*.  Note that ``distr``
 is not a proper type on its own, but a *type constructor*, i.e. a
-function from types to types.  A proper type is obtained by
-*applying* ``distr`` to an actual type, as in ``int distr``  or
-``bool distr``. See the paragraph on type constructors for more
-information.
+function from types to types.  A proper type is obtained by *applying*
+``distr`` to an actual type, as in ``int distr`` or ``bool
+distr``. See the paragraph on type constructors for more information.
 
 Function types
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -741,1111 +735,1230 @@ by its ambient logic:
    op (<=>) : bool -> bool -> bool.
    op mu : 'a distr -> ('a -> bool) -> real.
 
-The operator \ec{=} is equality. On the booleans, we have negation
-\ec{!}, two forms of disjunction (\ec{\\/} and \ec{||}) and
-conjunction (\ec{/\\} and \ec{&&}), implication (\ec{=>}) and
-if-and-only-if (\ec{<=>}).  The two disjunctions (respectively,
-conjunctions) are semantically equivalent, but are treated differently
-by |EasyCrypt| proof engine. The associativities and precedences of
-the infix operators were given in Section~\ref{sec:lexical}, and (as a
-prefix operator) \ec{!} has higher precedence than all of them. The
-expression \ec{$e_1$ <> $\;e_2$} is treated as \ec{!($e_1$ =
-$\;e_2$)}. \ec{<>} is not an operator, but it has the precedence and
-non-associative status of Section~\ref{sec:lexical}.  The intended
-meaning of \ec{mu $\,d$ $\,p$} is the probability that randomly
-choosing a value of the given type from the sub-distribution $d$ will
-satisfy the function $p$ (in the sense of causing it to return
-\ec{true}).
+The operator ``=`` is equality. On the booleans, we have negation
+``!``, two forms of disjunction (``\/`` and ``||) and conjunction
+(``/\`` and ``&&``), implication (``=>``) and if-and-only-if
+(``<=>``).  The two disjunctions (respectively, conjunctions) are
+semantically equivalent, but are treated differently by |EasyCrypt|
+proof engine. The associativities and precedences of the infix
+operators were given in Section~\ref{sec:lexical}, and (as a prefix
+operator) ``!`` has higher precedence than all of them. The expression
+``e1 <> e2`` is treated as ``!(e1 = e2)``. The symbol ``<>`` is not an
+operator, but it has the precedence and non-associative status of
+Section~\ref{sec:lexical}.  The intended meaning of ``mu d p`` is the
+probability that randomly choosing a value of the given type from the
+sub-distribution ``d`` will satisfy the event ``p`` (in the sense of
+causing it to return ``true``).
 
-If $e$ is an expression of type \ec{int}, then \ec{$e$\%r} is the
-corresponding real. \ec{$\_$\%r} has higher precedence than even
+If ``e`` is an expression of type ``int``, then ``e%r`` is the
+corresponding real. ``_%r`` has higher precedence than even
 function application.
 
-If $e_1$ is an expression of type \ec{bool} and $e_2,e_3$ are expressions
-of some type $t$, then the \emph{conditional expression}
-\begin{center}
-  \ec{$e_1$ ? $\;e_2$ : $\;e_3$}  
-\end{center}
-evaluates to $e_2$, if $e_1$ evaluates to \ec{true}, and evaluates to
-$e_3$, if $e_1$ evaluates to \ec{false}.  Conditionals may also be
-written using if-then-else notation:
-\begin{center}
-  \ec{if $\;e_1$ then $\;e_2$ else $\;e_3$}
-\end{center}
-E.g., if we write
-\begin{easycrypt}{}{}
-op x : int = (3 < 4) ? 4 + 7 : (9 - 1).
-\end{easycrypt}
-then \ec{x} evaluates to \ec{11}. The conditional expression's
-precedence at its first argument is lower than function
-application, but higher than the prefix operators; its second argument
-needn't be parenthesized; and the precedence at its third argument is
-lower than the prefix operators, but higher than the infix operators.
+If ``e1`` is an expression of type ``bool`` and ``e2``, ``e3`` are
+expressions of some type ``t``, then the *conditional expression*
 
-For the built-in types \ec{bool}, \ec{int} and \ec{real}, and the type
-operator \ec{distr}, the |EasyCrypt| Library (see
-Chapter~\ref{chap:library}) provides corresponding theories, \ec{Bool},
-\ec{Int}, \ec{Real} and \ec{Distr}. These theories provide various
+.. code-block:: easycrypt
+
+   e1 ? e2 : e3
+
+evaluates to ``e2`` if ``e1`` evaluates to ``true``, and evaluates to
+``e3`` if ``e1`` evaluates to ``false``.  Conditionals may also be
+written using if-then-else notation:
+
+.. code-block:: easycrypt
+
+   if e1 then e2 else e3
+
+E.g., if we write
+
+.. code-block:: easycrypt
+
+   op x : int = (3 < 4) ? 4 + 7 : (9 - 1).
+
+then ``x`` evaluates to ``11``. The conditional expression's
+precedence at its first argument is lower than function application,
+but higher than the prefix operators; its second argument needn't be
+parenthesized; and the precedence at its third argument is lower than
+the prefix operators, but higher than the infix operators.
+
+For the built-in types ``bool``, ``int`` and ``real``, and the type
+operator ``distr``, the |EasyCrypt| Library (see
+Chapter~\ref{chap:library}) provides corresponding theories, ``Bool``,
+``Int``, ``Real`` and ``Distr``. These theories provide various
 operations, axioms, etc.  To make use of a theory, one must
-``require'' it.  E.g.,
-\begin{easycrypt}{}{}
-require Bool Int Real Distr.
-\end{easycrypt}
-will make the theories just mentioned available. This
-would allow us to write, e.g.,
-\begin{easycrypt}{}{}
-op x = Int.(+) 3 4.
-\end{easycrypt}
-making \ec{x} evaluate to \ec{7}. But to be able to use \ec{+}
-and the other operators provided by \ec{Int}
-in infix form and without qualification (specifying which theory to
-find them in), we need to import \ec{Int}. If we do
-\begin{easycrypt}{}{}
-import Bool Int Real.
-op x : int = 3 + 4 - 7 * 2.
-op y : real = 5%r * 3%r / 2%r.
-op z : bool = x%r >= y.
-\end{easycrypt}
-we'll end up with \ec{z} evaluating to \ec{false}.
-One may combine requiring and importing in one step:
-\begin{easycrypt}{}{}
-require import Bool Int Real Distr.
-\end{easycrypt}
+``require`` it.  E.g.,
+
+.. code-block:: easycrypt
+
+   require Bool Int Real Distr.
+
+will make the theories just mentioned available. This would allow us
+to write, e.g.,
+
+.. code-block:: easycrypt
+
+   op x = Int.(+) 3 4.
+
+making ``x`` evaluate to ``7``. But to be able to use ``+`` and the
+other operators provided by ``Int`` in infix form and without
+qualification (specifying which theory to find them in), we need to
+import ``Int``. If we do
+
+.. code-block:: easycrypt
+
+   import Bool Int Real.
+   op x : int = 3 + 4 - 7 * 2.
+   op y : real = 5%r * 3%r / 2%r.
+   op z : bool = x%r >= y.
+
+we'll end up with ``z`` evaluating to ``false``.  One may combine
+requiring and importing in one step:
+
+.. code-block:: easycrypt
+
+   require import Bool Int Real Distr.
+
 We'll cover theories and their usage in detail in
 Chapter~\ref{chap:structuring}.
 
-Requiring the theory \ec{Bool} makes available the value \ec{\{0,1\}}
-of type \ec{bool distr}, which is the uniform distribution on
-the booleans. (No whitespace is allowed in the name for this distribution,
-and the \ec{0} must come before the \ec{1}.)
-Requiring the theory \ec{Distr} make available syntax for the uniform
-distribution of integers from a finite range. If $e_1$ and $e_2$
-are expressions of type \ec{int} denoting $n_1$ and $n_2$, respectively,
-then \ec{[$e_1$..$e_2$]} is the value of type \ec{int distr}
-that is the uniform distribution on the set of
-all integers that are greater-than-or-equal to $n_1$ and less-than-or-equal-to
-$n_2$---unless $n_1>n_2$, in which case it is the sub-distribution assigning
-probability $0$ to all integers.
+Requiring the theory ``Bool`` makes available the value ``{0,1}`` of
+type ``bool distr``, which is the uniform distribution on the
+booleans. (No whitespace is allowed in the name for this distribution,
+and the ``0`` must come before the ``1``.)  Requiring the theory
+``Distr`` make available syntax for the uniform distribution of
+integers from a finite range. If ``e1`` and ``e2`` are expressions of
+type ``int`` denoting $n_1$ and $n_2$, respectively, then ``[e1..e2]``
+is the value of type ``int distr`` that is the uniform distribution on
+the set of all integers that are greater-than-or-equal to $n_1$ and
+less-than-or-equal-to $n_2$ |---| unless $n_1>n_2$, in which case it
+is the sub-distribution assigning probability $0$ to all integers.
 
 Values of product (tuple) and record types are constructed and
 destructed as follows:
-\begin{easycrypt}{}{}
-op x : int * int * bool = (3, 4, true).
-op b : bool = x .` 3.
-type t = { u : int; v : bool; }.
-op y : t = {| v = false; u = 10; |}.
-op a : bool = y .` v.
-\end{easycrypt}
-Then, \ec{b} evaluates to \ec{true}, and \ec{a} evaluates to \ec{false}.
-Note the field order in the declaration of \ec{y} was allowed to be
-a permutation of that of the record type \ec{t}.
 
-When we declare a datatype, its constructors are available to
-us as values. E.g, if we declare
-\begin{easycrypt}{}{}
-type ('a, 'b) either = [Fst of 'a | Snd of 'b].
-op x : (int, bool) either = Fst 10.
-op y : int -> (int, bool) either = Fst.
-op z : (int, bool) either = y 10.
-\end{easycrypt}
-then \ec{z} evaluates to the same result as \ec{x}.
+.. code-block:: easycrypt
 
-We can declare operators using pattern matching on the constructors
-of datatypes. E.g., continuing the previous example, we can
-declare and use an operator \ec{fst} by:
-\begin{easycrypt}{}{}
-op fst ['a, 'b] (def : 'a) (ei : ('a, 'b) either) : 'a =
-  with ei = Fst a => a
-  with ei = Snd b => def.
-op l1 : (int, bool) either = Fst 10.
-op l2 : (int, bool) either = Snd true.
-op m1 : int = fst (-1) l1.
-op m2 : int = fst (-1) l2.
-\end{easycrypt}
-Here, \ec{m1} will evaluate to \ec{10}, whereas \ec{m2} will
-evaluate to \ec{-1}.
-Such operator declarations may be recursive, as long as |EasyCrypt|
-can determine that the recursion is well-founded. E.g., here is one
-way of declaring an operator \ec{length} that computes the length
-of a list:
-\begin{easycrypt}{}{}
-type 'a list = [Nil | Cons of 'a & 'a list].
-op len ['a] (acc : int, xs : 'a list) : int =
-  with xs = Nil => acc
-  with xs = Cons y ys => len (acc + 1) ys.
-op length ['a] (xs : 'a list) = len 0 xs.
-op xs = Cons 0 (Cons 1 (Cons 2 Nil)).
-op n : int = length xs.
-\end{easycrypt}
-Then \ec{n} will evaluate to \ec{3}.
+   op x : int * int * bool = (3, 4, true).
+   op b : bool = x .` 3.
+   type t = { u : int; v : bool; }.
+   op y : t = {| v = false; u = 10; |}.
+   op a : bool = y .` v.
 
-\section{Module System}
+Then, ``b`` evaluates to ``true``, and ``a`` evaluates to ``false``.
+Note the field order in the declaration of ``y`` was allowed to be a
+permutation of that of the record type ``t``.
 
-\subsection{Modules}
+When we declare a datatype, its constructors are available to us as
+values. E.g, if we declare
 
-|EasyCrypt|'s modules consist of typed global variables and procedures,
-which have different name spaces.
-Listing~\ref{list:simpmod} contains the definition of a simple module,
-\ec{M}, which exemplifies much of the module language.
-\ecinput{examps/specifications-examp1.ec}{Simple
-  Module}{}{list:simpmod}
-\ec{M} has one \emph{global variable}---\ec{x}---which is used by the
-\emph{procedures} of \ec{M}---\ec{init}, \ec{incr}, \ec{get} and
-\ec{main}. Global variables must be declared before the procedures
-that use them.
+.. code-block:: easycrypt
 
-The procedure \ec{init} (``initialize'') has a \emph{parameter} (or
-\emph{argument}) \ec{bnd} (``bound'') of type \ec{int}.  \ec{init}
-uses a \emph{random assignment} to assign to \ec{x} an integer chosen
-uniformly from the integers whose absolute values are at most
-\ec{bnd}.  The return type of \ec{init} is \ec{unit}, whose only
-element is \ec{tt}; this is implicitly returned by \ec{init} upon
+   type ('a, 'b) either = [Fst of 'a | Snd of 'b].
+   op x : (int, bool) either = Fst 10.
+   op y : int -> (int, bool) either = Fst.
+   op z : (int, bool) either = y 10.
+
+then ``z`` evaluates to the same result as ``x``.
+
+We can declare operators using pattern matching on the constructors of
+datatypes. E.g., continuing the previous example, we can declare and
+use an operator ``fst`` by:
+
+.. code-block:: easycrypt
+
+   op fst ['a, 'b] (def : 'a) (ei : ('a, 'b) either) : 'a =
+     with ei = Fst a => a
+     with ei = Snd b => def.
+   op l1 : (int, bool) either = Fst 10.
+   op l2 : (int, bool) either = Snd true.
+   op m1 : int = fst (-1) l1.
+   op m2 : int = fst (-1) l2.
+
+Here, ``m1`` will evaluate to ``10``, whereas ``m2`` will evaluate to
+``-1``.  Such operator declarations may be recursive, as long as
+|EasyCrypt| can determine that the recursion is well-founded. E.g.,
+here is one way of declaring an operator ``length`` that computes the
+length of a list:
+
+.. code-block:: easycrypt
+
+   type 'a list = [Nil | Cons of 'a & 'a list].
+   op len ['a] (acc : int, xs : 'a list) : int =
+     with xs = Nil => acc
+     with xs = Cons y ys => len (acc + 1) ys.
+   op length ['a] (xs : 'a list) = len 0 xs.
+   op xs = Cons 0 (Cons 1 (Cons 2 Nil)).
+   op n : int = length xs.
+
+Then ``n`` will evaluate to ``3``.
+
+Module System
+--------------------------------------------------------------------
+
+Modules
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+|EasyCrypt|'s modules consist of typed global variables and
+procedures, which have different name spaces.
+aListing~\ref{list:simpmod} contains the definition of a simple module,
+``M``, which exemplifies much of the module language.
+
+.. literalinclude:: examples/specifications-examp1.ec
+   :caption: Simple Module
+   :name: list:simpmod
+
+``M`` has one *global variable* ``x`` which is used by the
+``procedures`` of ``M`` |---| ``init``, ``incr``, ``get`` and
+``main``. Global variables must be declared before the procedures that
+use them.
+
+The procedure ``init`` has a *parameter* (or *argument*) ``bnd`` of
+type ``int``.  ``init`` uses a *random assignment* to assign to ``x``
+an integer chosen uniformly from the integers whose absolute values
+are at most ``bnd``.  The return type of ``init`` is ``unit``, whose
+only element is ``tt``; this is implicitly returned by ``init`` upon
 exit.
 
-The procedure \ec{incr} (``increment''), increments the value of
-\ec{x} by its parameter \ec{n}. The procedure \ec{get} takes no
-parameters, but simply returns the value of \ec{x}, using
-a \emph{return statement}---which is only allowed as the
+The procedure ``incr`` (``increment''), increments the value of
+``x`` by its parameter ``n``. The procedure ``get`` takes no
+parameters, but simply returns the value of ``x``, using
+a *return statement* |---| which is only allowed as the
 final statement of a procedure.
 
-And the \ec{main} procedures takes no parameters, and returns a boolean
+And the ``main`` procedures takes no parameters, and returns a boolean
 that's computed as follows:
-\begin{itemize}
-\item It declares a local variable, \ec{n}, of type \ec{int}---local
-  in the sense that other procedures can't access or affect it.
 
-\item It uses a \emph{procedure call} to call the procedure \ec{init}
-  with a bound of \ec{100}, causing \ec{x} to be initialized to an
-  integer between \ec{-100} and \ec{100}.
+- It declares a local variable, ``n``, of type ``int`` |---| local in
+  the sense that other procedures can't access or affect it.
 
-\item It calls \ec{incr} twice, with \ec{10} and then \ec{-50}.
+- It uses a *procedure call* to call the procedure ``init`` with a
+  bound of ``100``, causing ``x`` to be initialized to an integer
+  between ``-100`` and ``100``.
 
-\item It uses a \emph{procedure call assignment} to call the procedure
-  \ec{get} with no arguments, and assign \ec{get}'s return value to \ec{n}.
+- It calls ``incr`` twice, with ``10`` and then ``-50``.
 
-\item It evaluates the boolean expression \ec{n < 0}, and returns
-  the value of this expression as its boolean result.
-\end{itemize}
+- It uses a *procedure call assignment* to call the procedure ``get``
+  with no arguments, and assign ``get``'s return value to ``n``.
+
+- It evaluates the boolean expression ``n  < 0``, and returns the value
+  of this expression as its boolean result.
 
 |EasyCrypt| tries to infer the return types of procedures and the
 types of parameters and local variables. E.g., our example module
-could be written \ecinput{examps/specifications-examp1a.ec}{Simple
-  Module with Type Inference}{3-25}{SimpModInfer} As we've seen, each
-declaration or statement of a procedure is terminated with a
-semicolon.  One may combine multiple local variable declarations, as
-in:
-\begin{easycrypt}{}{}
-var x, y, z : int;
-var u, v;
-var x, y, z : int = 10;
-var x, y, z = 10;
-\end{easycrypt}
+could be written:
+
+.. literalinclude:: examples/specifications-examp1a.ec
+   :caption: Simple Module with Type Inference
+   :name: SimpModInfer
+   :lines: 3-25
+
+As we've seen, each declaration or statement of a procedure is
+terminated with a semicolon.  One may combine multiple local variable
+declarations, as in:
+
+.. code-block:: easycrypt
+
+    var x, y, z : int;
+    var u, v;
+    var x, y, z : int = 10;
+    var x, y, z = 10;
+
+
 Procedure parameters are variables; they may be modified during the
 execution of their procedures.  A procedure's parameters and local
 variables must be distinct variable names.  The three kinds of
 assignment statements differ according to their allowed right-hand
 sides (rhs):
-\begin{itemize}
-\item The rhs of a random assignment must be a single
+
+- The rhs of a random assignment must be a single
   (sub-)distribution. When choosing from a proper sub-distribution,
   the random assignment may fail, causing the procedure call that
   invoked it to fail to terminate.
 
-\item The rhs of an ordinary assignment may be an arbitrary expression
+- The rhs of an ordinary assignment may be an arbitrary expression
   (which doesn't include use of procedures).
 
-\item the rhs of a procedure call assignment must be a single procedure
-  call.  
-\end{itemize}
+- the rhs of a procedure call assignment must be a single procedure
+  call.
+
 If the rhs of an assignment produces a tuple value, its left-hand side
 may use pattern matching, as in
-\begin{easycrypt}{}{}
-(x, y, z) <- #\ldots#;
-\end{easycrypt}
-in the case where $\ldots$ produces a triple.
+
+.. code-block:: easycrypt
+
+   (x, y, z) <- e;
+
+in the case where ``e`` produces a triple.
 
 The two remaining kinds of statements are illustrated in
-Listing~\ref{list:condwhileexamp}: \emph{conditionals} and \emph{while
-  loops}.
-\ecinput{examps/specifications-examp2.ec}{Conditionals
-  and While Loops} {}{list:condwhileexamp}
-\ec{N} has a single procedure,
-\ec{loop}, which begins by initializing a local variable \ec{y} to
-\ec{0}. It then enters a while loop, which continues executing until
-(which may never happen) \ec{y} becomes \ec{10} or more. At each
-iteration of the while loop, an integer between \ec{1} and \ec{10} is
-randomly chosen and assigned to the local variable \ec{z}. The
-conditional is used to behave differently depending upon whether the
-value of \ec{z} is less-than-or-equal-to \ec{5} or not.
-\begin{itemize}
-\item When the answer is ``yes'', \ec{y} is decremented by \ec{z}.
+Listing~\ref{list:condwhileexamp}: *conditionals* and *while loops*.
 
-\item When the answer is ``no'', \ec{y} is incremented by \ec{z - 5}.
-\end{itemize}
-Once (if) the while loop is exited---which means \ec{y} is now \ec{10}
-or more---the procedure returns \ec{y}'s value as its return value.
+.. literalinclude:: examples/specifications-examp2.ec
+   :caption: Conditionals and While Loops
+   :name: list:condwhileexamp
 
-When the body of a while loop, or the then or else part of a conditional,
-has a single statement, the curly braces may be omitted. E.g., the
-conditional of the preceding example could be written:
-\begin{easycrypt}{}{}
-if (z <= 5) y <- y - z;
-else y <- y + (z - 5);
-\end{easycrypt}
-And when the else part of a conditional is empty (consists of
-\ec{\{\}}), it may be omitted, as in:
-\begin{easycrypt}{}{}
-if (z <= 5) y <- y - z;
-\end{easycrypt}
+``N`` has a single procedure, ``loop``, which begins by initializing a
+local variable ``y`` to ``0``. It then enters a while loop, which
+continues executing until (which may never happen) ``y`` becomes
+``10`` or more. At each iteration of the while loop, an integer
+between ``1`` and ``10`` is randomly chosen and assigned to the local
+variable ``z``. The conditional is used to behave differently
+depending upon whether the value of ``z`` is less-than-or-equal-to
+``5`` or not.
 
-As illustrated in Listing~\ref{list:usingothermoduleexamp}, modules may
-access the global variables, and call the procedures, of previously
-declared modules.
-\ecinput{examps/specifications-examp3.ec}{One
-  Module Using Another Module} {}{list:usingothermoduleexamp} Procedure
-\ec{g} of \ec{N} both accesses the global variable \ec{x} of module
-\ec{M} (\ec{M.x}), and calls \ec{M}'s procedure, \ec{f} (\ec{M.f}).
-The parameter list of \ec{g} could equivalently be written:
-\begin{easycrypt}{}{}
-n : int, m : int, b : bool  
-\end{easycrypt}
+- When the answer is ``yes'', ``y`` is decremented by ``z``.
+
+- When the answer is ``no'', ``y`` is incremented by ``z - 5``.
+
+Once (if) the while loop is exited |---| which means ``y`` is now
+``10`` or more |---| the procedure returns ``y``'s value as its return
+value.
+
+When the body of a while loop, or the then or else part of a
+conditional, has a single statement, the curly braces may be
+omitted. E.g., the conditional of the preceding example could be
+written:
+
+.. code-block:: easycrypt
+
+   if (z <= 5)
+     y <- y - z;
+   else
+     y <- y + (z - 5);
+
+And when the else part of a conditional is empty, it may be omitted,
+as in:
+
+.. code-block:: easycrypt
+
+   if (z <= 5) y <- y - z;
+
+As illustrated in Listing~\ref{list:usingothermoduleexamp}, modules
+may access the global variables, and call the procedures, of
+previously declared modules.
+
+.. literalinclude:: examples/specifications-examp3.ec
+   :caption: One Module Using Another Module
+   :name: list:usingothermoduleexamp
+
+Procedure ``g`` of ``N`` both accesses the global variable ``x`` of
+module ``M`` (``M.x``), and calls ``M``'s procedure, ``f`` (``M.f``).
+The parameter list of ``g`` could equivalently be written:
+
+.. code-block:: easycrypt
+
+   n : int, m : int, b : bool  
+
 A module may refer to its own global variables using its own module
 name, allowing us to write
-\begin{easycrypt}{}{}
-proc f() : unit = {
-  M.x <- M.x + 1;
-}
-\end{easycrypt}
-for the definition of procedure \ec{M.f}.  The procedure \ec{h} of
-\ec{N} is an alias for procedure \ec{M.f}: calling it is equivalent to
-directly calling \ec{M.f}.
-One declare a module name to be an alias for a module, as in
-\begin{easycrypt}{}{}
-module L = N.
-\end{easycrypt}
 
-A procedure call is carried out in the context of a \emph{memory}
-recording the values of all global variables of all declared modules.
-So all global variables are---by definition---initialized. On the
+.. code-block:: easycrypt
+
+   proc f() : unit = {
+     M.x <- M.x + 1;
+   }
+
+for the definition of procedure ``M.f``.  The procedure ``h`` of ``N``
+is an alias for procedure ``M.f``: calling it is equivalent to
+directly calling ``M.f``.  One declare a module name to be an alias
+for a module, as in
+
+.. code-block:: easycrypt
+
+   module L = N.
+
+A procedure call is carried out in the context of a *memory* recording
+the values of all global variables of all declared modules.  So all
+global variables are |---| by definition |---| initialized. On the
 other hand, the local variables of a procedure start out as arbitrary
-values of their types.  This is modeled in |EasyCrypt|'s program logics
-by our not knowing anything about them. For example, the probability
-of \ec{X.f()}
-\begin{easycrypt}{}{}
-module X = {
-  proc f() : bool = {
-    var b : bool;
-    return b;
-  }
-}.
-\end{easycrypt}
-returning \ec{true} is undefined---we can't prove anything about it.
-On the other hand, just because a local variable isn't initialized
-before use doesn't mean the result of its use will be indeterminate,
-as illustrated by the procedure \ec{Y.f}, which always returns \ec{0}:
-\begin{easycrypt}{}{}
-module Y = {
-  proc f() : int = {
-    var x : int;
-    return x - x;
-  }
-}.
-\end{easycrypt}
+values of their types.  This is modeled in |EasyCrypt|'s program
+logics by our not knowing anything about them. For example, the
+probability of ``X.f()``
 
-\subsection{Module Types}
+.. code-block:: easycrypt
 
-|EasyCrypt|'s \emph{module types} specify the types of a set of
-procedures.  E.g., consider the module type \ec{OR} :
-\ecinput{examps/specifications-examp4.ec}{} {3-7}{} \ec{OR} describes
-minimum expectations for a ``guessing oracle''---that it provide at
-least procedures with the specified types.  The order of the
-procedures in a module type is irrelevant. In a procedure's type, one
-may combine multiple parameters of the same type, as in:
-\begin{easycrypt}{}{}
-proc init(secret tries : int) : unit
-\end{easycrypt}
+   module X = {
+     proc f() : bool = {
+       var b : bool;
+       return b;
+     }
+   }.
+
+returning ``true`` is undefined |---| we can't prove anything about
+it.  On the other hand, just because a local variable isn't
+initialized before use doesn't mean the result of its use will be
+indeterminate, as illustrated by the procedure ``Y.f``, which always
+returns ``0``:
+
+.. code-block:: easycrypt
+
+   module Y = {
+     proc f() : int = {
+       var x : int;
+       return x - x;
+     }
+   }.
+
+Module Types
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+|EasyCrypt|'s *module types* specify the types of a set of
+procedures.  E.g., consider the module type ``OR``:
+
+.. literalinclude:: examples/specifications-examp4.ec
+   :caption: Module Type Example
+   :lines: 3-4
+
+``OR`` describes minimum expectations for a *guessing oracle* |---|
+that it provide at least procedures with the specified types.  The
+order of the procedures in a module type is irrelevant. In a
+procedure's type, one may combine multiple parameters of the same
+type, as in:
+
+.. code-block:: easycrypt
+
+   proc init(secret tries : int) : unit
+
 The names of procedure parameters used in module types
 are purely for documentation purposes; one may elide them instead
 using underscores, writing, e.g.,
-\begin{easycrypt}{}{}
-proc init(_ : int, _ : int) : unit
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   proc init(_ : int, _ : int) : unit
+
 Note that module types say nothing about the global variables a module
 should have. Modules types have a different name space than modules.
 
 Listing~\ref{list:guessormodule} contains an example guessing oracle
-implementation.  \ecinput{examps/specifications-examp4.ec}{Guessing
-  Oracle Module} {9-30}{list:guessormodule} Its \ec{init} procedure stores
-the supplied secret in the global variable \ec{sec}, initializes the
-allowed number of guesses in the global variable \ec{tris}, and
-initializes the \ec{guessed} global variable to record that the secret
-hasn't yet been guessed.  If more allowed tries remain, the \ec{guess}
-procedure updates \ec{guessed} to take into account the supplied
-guess, and decrements the allowed number of tries; otherwise, it does
-nothing.  And its \ec{guessed} procedure returns the value of
-\ec{guessed}, indicating whether the secret has been successfully
-guessed, so far.
-\ec{Or} \emph{satisfies} the specification of the
-module type \ec{OR}, and we can ask |EasyCrypt| to check this by
-supplying that module type when declaring \ec{Or}, as in
+implementation.
+
+.. literalinclude:: examples/specifications-examp4.ec
+   :caption: Guessing Oracle Module
+   :lines: 9-30
+   :name: list:guessormodule
+
+Its ``init`` procedure stores the supplied secret in the global
+variable ``sec``, initializes the allowed number of guesses in the
+global variable ``tris``, and initializes the ``guessed`` global
+variable to record that the secret hasn't yet been guessed.  If more
+allowed tries remain, the ``guess`` procedure updates ``guessed`` to
+take into account the supplied guess, and decrements the allowed
+number of tries; otherwise, it does nothing.  And its ``guessed``
+procedure returns the value of ``guessed``, indicating whether the
+secret has been successfully guessed, so far.  ``Or`` *satisfies* the
+specification of the module type ``OR``, and we can ask |EasyCrypt| to
+check this by supplying that module type when declaring ``Or``, as in
 Listing~\ref{list:guessormodulecheck}.
-\ecinput{examps/specifications-examp5.ec}{Guessing Oracle Module with
-  Module Type Check}{9-30}{list:guessormodulecheck}
-Supplying a module type \emph{doesn't} change the result of a module
-declaration. E.g., if we had omitted \ec{guessed} from the module type
-\ec{OR}, the module \ec{Or} would still have had the procedure
-\ec{guessed}. Furthermore, when declaring a module, we can ask
+
+.. literalinclude:: examples/specifications-examp5.ec
+   :caption: Guessing Oracle Module with Module Type Check
+   :lines: 9-30
+   :name: list:guessormodulecheck
+
+Supplying a module type *doesn't* change the result of a module
+declaration. E.g., if we had omitted ``guessed`` from the module type
+``OR``, the module ``Or`` would still have had the procedure
+``guessed``. Furthermore, when declaring a module, we can ask
 |EasyCrypt| to check whether it satisfies multiple module types, as
 in:
-\begin{easycrypt}{}{}
-module type A = { proc f() : unit }.
-module type B = { proc g() : unit }.
-module X : A, B = {
-  var x, y : int
-  proc f() : unit = { x <- x + 1; }
-  proc g() : unit = { y <- y + 1; }
-}.
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   module type A = { proc f() : unit }.
+   module type B = { proc g() : unit }.
+   module X : A, B = {
+     var x, y : int
+     proc f() : unit = { x <- x + 1; }
+     proc g() : unit = { y <- y + 1; }
+   }.
+
 When declaring a module alias, one may ask |EasyCrypt| to check that
 the module matches a module type, as in:
-\begin{easycrypt}{}{}
-module X' : A, B = X.
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   module X' : A, B = X.
 
 Suppose we want to declare a cryptographic game using our guessing
-oracle, parameterized by an adversary with access to the \ec{guess}
-procedure of the oracle, and which provides two procedures---one
+oracle, parameterized by an adversary with access to the ``guess``
+procedure of the oracle, and which provides two procedures |---| one
 for choosing the range in which the guessing game will operate, and
 one for doing the guessing.  We'd like to write something like:
-\begin{easycrypt}{}{}
-module type GAME = {
-  proc main() : bool
-}.
 
-module Game(Adv : ADV) : GAME = {
-  module A = Adv(Or)
-  proc main() : bool = { #\ldots# }
-}.
-\end{easycrypt}
-Thus, the module type \ec{ADV} for adversaries must be parameterized
-by an implementation of \ec{OR}. Given the adversary procedures we have
-in mind, the syntax for this is
-\begin{easycrypt}{}{}
-module type ADV(O : OR) = {
-  proc chooseRange() : int * int
-  proc doGuessing() : unit
-}.
-\end{easycrypt}
-But this declaration would give the adversary access to all of \ec{O}'s
+.. code-block:: easycrypt
+
+   module type GAME = {
+     proc main() : bool
+   }.
+
+   module Game(Adv : ADV) : GAME = {
+     module A = Adv(Or)
+     proc main() : bool = { #\ldots# }
+   }.
+
+Thus, the module type ``ADV`` for adversaries must be parameterized by
+an implementation of ``OR``. Given the adversary procedures we have in
+mind, the syntax for this is
+
+.. code-block:: easycrypt
+
+   module type ADV(O : OR) = {
+     proc chooseRange() : int * int
+     proc doGuessing() : unit
+   }.
+
+But this declaration would give the adversary access to all of ``O``'s
 procedures, which isn't what we want. Instead, we can write
-\begin{easycrypt}{}{}
-module type ADV(O : OR) = {
-  proc chooseRange() : int * int {}
-  proc doGuessing() : unit {O.guess}
-}.
-\end{easycrypt}
-meaning that \ec{chooseRange} has no access to the oracle, and
-\ec{doGuessing} may only call its \ec{guess} procedure. Using
-this notation, our original attempt would have to be written
-\begin{easycrypt}{}{}
-module type ADV(O : OR) = {
-  proc chooseRange() : int * int {O.init O.guess O.guessed}
-  proc doGuessing() : unit {O.init O.guess O.guessed}
-}
-\end{easycrypt}
-Finally, we can specify that \ec{chooseRange} must initialize
-all of the adversary's global variables (if any) by using a
-star annotation:
-\begin{easycrypt}{}{}
-module type ADV(O : OR) = {
-  proc * chooseRange() : int * int {}
-  proc doGuessing() : unit {O.guess}
-}.
-\end{easycrypt}
 
-The full Guessing Game example is contained in Listing~\ref{list:fullguessing}.
-\ecinput{examps/specifications-examp5.ec}{Full
-  Guessing Game Example} {}{list:fullguessing}
-\ec{SimpAdv} is a simple implementation of an adversary.
-The inclusion of the constraint \ec{SimpAdv : ADV} in \ec{SimpAdv}'s declaration
-\begin{easycrypt}{}{}
-module (SimpAdv : ADV) (O : OR) = #\ldots#
-\end{easycrypt}
-makes |EasyCrypt| check that \ec{SimpAdv} implements the module type
-\ec{ADV}: its implementation of \ec{chooseRange} doesn't use \ec{O} at
-all; its implementation of \ec{doGuessing} doesn't use any of \ec{O}'s
-procedures other than \ec{guess}; and that \ec{chooseRange}
-initializes \ec{SimpAdv}'s global variables.  Its \ec{chooseRange}
-procedure chooses the range of \ec{1} to \ec{100}, and initializes
-global variables recording this range and the number of guesses it
-will make (see the code of \ec{Game} to see why \ec{10} is a sensible
-choice). The \ec{doGuessing} procedure makes \ec{10} random guesses.
-It would be legal for the parameter \ec{O} in \ec{SimpAdv}'s
-definition to be constrained to match a module type \ec{T} providing
-a proper subset of \ec{OR}'s procedures, but that would further limit
-what procedures of \ec{O} \ec{SimpAdv}'s procedures
-could call. On the other hand, it would be illegal for \ec{T} to
-provide procedures not in \ec{OR}.
+.. code-block:: easycrypt
 
-Despite \ec{SimpAdv} being a parameterized module, to refer to one
-of its global variables from another module one ignores the parameter,
+   module type ADV(O : OR) = {
+     proc chooseRange() : int * int {}
+     proc doGuessing() : unit {O.guess}
+   }.
+
+meaning that ``chooseRange`` has no access to the oracle, and
+``doGuessing`` may only call its ``guess`` procedure. Using this
+notation, our original attempt would have to be written
+
+.. code-block:: easycrypt
+
+   module type ADV(O : OR) = {
+     proc chooseRange() : int * int {O.init O.guess O.guessed}
+     proc doGuessing() : unit {O.init O.guess O.guessed}
+   }
+
+Finally, we can specify that ``chooseRange`` must initialize all of
+the adversary's global variables (if any) by using a star annotation:
+
+.. code-block:: easycrypt
+
+   module type ADV(O : OR) = {
+     proc * chooseRange() : int * int {}
+     proc doGuessing() : unit {O.guess}
+   }.
+
+The full Guessing Game example is contained in
+Listing~\ref{list:fullguessing}.
+
+.. literalinclude:: examples/specifications-examp5.ec
+   :caption: Full Guessing Game Example
+   :name: list:fullguessing
+
+``SimpAdv`` is a simple implementation of an adversary.  The inclusion
+of the constraint ``SimpAdv : ADV`` in ``SimpAdv``'s declaration
+
+.. code-block:: easycrypt
+
+   module (SimpAdv : ADV) (O : OR) = #\ldots#
+
+makes |EasyCrypt| check that ``SimpAdv`` implements the module type
+``ADV``: its implementation of ``chooseRange`` doesn't use ``O`` at
+all; its implementation of ``doGuessing`` doesn't use any of ``O``'s
+procedures other than ``guess``; and that ``chooseRange`` initializes
+``SimpAdv``'s global variables.  Its ``chooseRange`` procedure chooses
+the range of ``1`` to ``100``, and initializes global variables
+recording this range and the number of guesses it will make (see the
+code of ``Game`` to see why ``10`` is a sensible choice). The
+``doGuessing`` procedure makes ``10`` random guesses.  It would be
+legal for the parameter ``O`` in ``SimpAdv``'s definition to be
+constrained to match a module type ``T`` providing a proper subset of
+``OR``'s procedures, but that would further limit what procedures of
+``O`` ``SimpAdv``'s procedures could call. On the other hand, it would
+be illegal for ``T`` to provide procedures not in ``OR``.
+
+Despite ``SimpAdv`` being a parameterized module, to refer to one of
+its global variables from another module one ignores the parameter,
 saying, e.g.,
-\begin{easycrypt}{}{}
-module X = {
-  proc f() : int = {
-    return SimpAdv.tries;
-  }
-}.
-\end{easycrypt}
-On the other hand, to call one of \ec{SimpAdv}'s procedures, one needs
+
+.. code-block:: easycrypt
+
+   module X = {
+     proc f() : int = {
+       return SimpAdv.tries;
+     }
+   }.
+
+On the other hand, to call one of ``SimpAdv``'s procedures, one needs
 to specify which oracle parameter it will use, as in:
-\begin{easycrypt}{}{}
-module X = {
-  proc f() : unit = {
-    SimpAdv(Or).doGuessing();
-  }
-}.
-\end{easycrypt}
 
-The module \ec{Game} gives its adversary parameter, \ec{Adv}, the
-concrete guessing oracle \ec{Or}, calling the resulting module \ec{A}. Its
-main function then uses \ec{Or} and \ec{A} to run the game.
-\begin{itemize}
-\item It calls \ec{A}'s \ec{chooseRange} procedure to get the adversary's
-  choice of guessing range. If the range doesn't have at least ten elements,
-  it returns \ec{false} without doing anything else---the adversary
-  has supplied a range that's too small.
+.. code-block:: easycrypt
 
-\item Otherwise, it uses \ec{Or.init} to initialize the guessing
-  oracle with a secret that's randomly chosen from the range, plus a
-  number of allowed guesses that's one tenth of the range's size.
+   module X = {
+     proc f() : unit = {
+       SimpAdv(Or).doGuessing();
+     }
+   }.
 
-\item It then calls \ec{A.doGuessing}, allowing the adversary to
-  attempt the guess the secret.
+The module ``Game`` gives its adversary parameter, ``Adv``, the
+concrete guessing oracle ``Or``, calling the resulting module
+``A``. Its main function then uses ``Or`` and ``A`` to run the game.
 
-\item Finally, it calls \ec{Or.guessed} to learn whether the
-  adversary has guessed the secret, returning this boolean
-  value as its result.
-\end{itemize}
+- It calls ``A``'s ``chooseRange`` procedure to get the adversary's
+  choice of guessing range. If the range doesn't have at least ten
+  elements, it returns ``false`` without doing anything else |---| the
+  adversary has supplied a range that's too small.
+
+- Otherwise, it uses ``Or.init`` to initialize the guessing oracle
+  with a secret that's randomly chosen from the range, plus a number
+  of allowed guesses that's one tenth of the range's size.
+
+- It then calls ``A.doGuessing``, allowing the adversary to attempt
+  the guess the secret.
+
+- Finally, it calls ``Or.guessed`` to learn whether the adversary has
+  guessed the secret, returning this boolean value as its result.
 
 Finally, the declaration
-\begin{easycrypt}{}{}
-module SimpGame = Game(SimpAdv).
-\end{easycrypt}
-declares \ec{SimpGame} to be the specialization of \ec{Game} to
-our simple adversary, \ec{SimpAdv}. When processing this declaration,
-|EasyCrypt|'s type checker verifies that \ec{SimpAdv} satisfies
-the specification \ec{ADV}.
-The reader might be wondering what---if anything---prevents us writing
-a version of \ec{SimpAdv} that directly accesses/calls the global
-variables and procedures of \ec{Or} (or of \ec{Game}, were \ec{SimpAdv}
-declared after it), violating our understanding of the adversary's
-power. The answer is that |EasyCrypt|'s type checker isn't in a position
-to do this. Instead, we'll see in the next section how such
-constraints are modeled using |EasyCrypt|'s logic.
 
-\subsection{Global Variables}
+.. code-block:: easycrypt
+
+    module SimpGame = Game(SimpAdv).
+
+declares ``SimpGame`` to be the specialization of ``Game`` to our
+simple adversary, ``SimpAdv``. When processing this declaration,
+|EasyCrypt|'s type checker verifies that ``SimpAdv`` satisfies the
+specification ``ADV``.  The reader might be wondering what |---| if
+anything |---| prevents us writing a version of ``SimpAdv`` that
+directly accesses/calls the global variables and procedures of ``Or``
+(or of ``Game``, were ``SimpAdv`` declared after it), violating our
+understanding of the adversary's power. The answer is that
+|EasyCrypt|'s type checker isn't in a position to do this. Instead,
+we'll see in the next section how such constraints are modeled using
+|EasyCrypt|'s logic.
+
+Global Variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 \label{subsec:globalvariables}
 
-The set of all \emph{global variables of} a module $M$ is the
-union of
-\begin{itemize}
-\item the set of global variables that are declared in $M$; and
+The set of all *global variables of* a module ``M`` is the union of
 
-\item the set of all that global variables declared in other modules
-  such that the variables \emph{could} be read or written by a series
-  of procedure calls beginning with a call of one of $M$'s
-  procedures. By ``could'' we mean the read/write analysis assumes the
+- the set of global variables that are declared in ``M``; and
+
+- the set of all that global variables declared in other modules such
+  that the variables *could* be read or written by a series of
+  procedure calls beginning with a call of one of ``M``'s
+  procedures. By *could* we mean the read/write analysis assumes the
   execution of both branches of conditionals, the execution of while
   loop bodies, and the terminal of while loops.
-\end{itemize}
-To print the global variables of a module $M$, one runs:
-\begin{easycrypt}{}{}
-print glob #$M$#.
-\end{easycrypt}
+
+To print the global variables of a module ``M``, one runs:
+
+.. code-block:: easycrypt
+
+   print glob M.
 
 For example, suppose we make these declarations:
-\begin{easycrypt}{}{}
-module Y1 = {
-  var y, z : int
-  proc f() : unit = { y <- 0; }
-  proc g() : unit = { }
-}.
-module Y2 = {
-  var y : int
-  proc f() : unit = { Y1.f(); }
-}.
-module Y3 = {
-  var y : int
-  proc f() : unit = { Y1.g(); }
-}.
-module type X = {
-  proc f() : unit
-}.
-module Z(X : X) = {
-  var y : int
-  proc f() : unit = { X.f(); }
-}.
-\end{easycrypt}
-Then: the set of global variables of \ec{Y1} consists of \ec{Y1.y} and
-\ec{Y1.z}; the set of global variables of \ec{Y2} consists of
-\ec{Y1.y} and \ec{Y2.y}; the set of global variables of \ec{Y3}
-consists of \ec{Y3.y}; the set of global variables of \ec{Z} consists
-of \ec{Z.y}; and the set of global variables of \ec{Z(Y1)} consists of
-\ec{Z.y} and \ec{Y1.y}. In the case of \ec{Z}, because its parameter
-\ec{X} is abstract, no global variables are obtained from \ec{X}.
 
-For every module $M$, there is a corresponding type, \ec{glob $\,M$},
-where a value of type \ec{glob $\,M$} is a tuple consisting of
-a value for each of the global variables of $M$. Nothing can be done with
-values of such types other than compare them for equality.
+.. code-block:: easycrypt
 
-\section{Logics}
+   module Y1 = {
+     var y, z : int
+     proc f() : unit = { y <- 0; }
+     proc g() : unit = { }
+   }.
+   module Y2 = {
+     var y : int
+     proc f() : unit = { Y1.f(); }
+   }.
+   module Y3 = {
+     var y : int
+     proc f() : unit = { Y1.g(); }
+   }.
+   module type X = {
+     proc f() : unit
+   }.
+   module Z(X : X) = {
+     var y : int
+     proc f() : unit = { X.f(); }
+   }.
 
-\subsection{Formulas}
+Then: the set of global variables of ``Y1`` consists of ``Y1.y`` and
+``Y1.z``; the set of global variables of ``Y2`` consists of ``Y1.y``
+and ``Y2.y``; the set of global variables of ``Y3`` consists of
+``Y3.y``; the set of global variables of ``Z`` consists of ``Z.y``;
+and the set of global variables of ``Z(Y1)`` consists of ``Z.y`` and
+``Y1.y``. In the case of ``Z``, because its parameter ``X`` is
+abstract, no global variables are obtained from ``X``.
 
-The \emph{formulas} of |EasyCrypt|'s ambient logic are formed by
-adding to |EasyCrypt|'s expressions
-\begin{itemize}
-\item universal and existential quantification,
+For every module ``M``, there is a corresponding type, ``glob M$``,
+where a value of type ``glob M$`` is a tuple consisting of a value for
+each of the global variables of ``M``. Nothing can be done with values
+of such types other than compare them for equality.
 
-\item application of built-in and user-defined predicates,
+Logics
+--------------------------------------------------------------------
 
-\item probability expressions and lossless assertions, and
+Formulas
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-\item |hl|, |phl| and |prhl| judgments,
-\end{itemize}
+The *formulas*} of |EasyCrypt|'s ambient logic are formed by adding to
+|EasyCrypt|'s expressions
+
+- universal and existential quantification,
+
+- application of built-in and user-defined predicates,
+
+- probability expressions and lossless assertions, and
+
+- |hl|, |phl| and |prhl| judgments,
+
 and identifying the formulas with the extended expressions of type
-\ec{bool}.
-This means we automatically have all boolean operators as operators on
-formulas, with their normal precedences and associativities, including
-negation
-\begin{easycrypt}{}{}
-op [!] : bool -> bool.
-\end{easycrypt}
+``bool``.  This means we automatically have all boolean operators as
+operators on formulas, with their normal precedences and
+associativities, including negation
+
+.. code-block:: easycrypt
+
+   op [!] : bool -> bool.
+
 the two semantically equivalent disjunctions
-\begin{easycrypt}{}{}
-op (||) : bool -> bool -> bool.
-op (\/) : bool -> bool -> bool.
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   op (||) : bool -> bool -> bool.
+   op (\/) : bool -> bool -> bool.
+
 the two semantically equivalent conjunctions
-\begin{easycrypt}{}{}
-op (&&) : bool -> bool -> bool.
-op (/\) : bool -> bool -> bool.
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   op (&&) : bool -> bool -> bool.
+   op (/\) : bool -> bool -> bool.
+
 implication
-\begin{easycrypt}{}{}
-op (=>) : bool -> bool -> bool.
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   op (=>) : bool -> bool -> bool.
+
 and if-and-only-if
-\begin{easycrypt}{}{}
-op (<=>) : bool -> bool -> bool.
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   op (<=>) : bool -> bool -> bool.
 
 The quantifiers' bound identifiers are typed, although |EasyCrypt|
 will attempt to infer their types if they are omitted. Universal and
 existential quantification are written as
-\begin{easycrypt}{}{}
-forall (#$x$# : #$t$#), #$\,\phi$#
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   forall (x : t), \phi
+
 and
-\begin{easycrypt}{}{}
-exists (#$x$# : #$t$#), #$\,\phi$#
-\end{easycrypt}
-respectively, where the formula $\phi$ typically involves the
-identifier $x$ of type $t$. We can abbreviate nested universal or
+
+.. code-block:: easycrypt
+
+   exists (x : t), phi
+
+respectively, where the formula ``phi`` typically involves the
+identifier ``x`` of type ``t``. We can abbreviate nested universal or
 existential quantification in the style of nested anonymous functions,
 writing, e.g.,
-\begin{easycrypt}{}{}
-forall (x : int, y : int, z : bool), #\ldots#
-forall (x y : int, z : bool), #\ldots#
-forall (x y : int) (z : bool), #\ldots#
-exists (x : int, y : int, z : bool), #\ldots#
-exists (x y : int, z : bool), #\ldots#
-exists (x y : int) (z : bool), #\ldots#
-\end{easycrypt}
-Quantification extends as far to the right as possible, i.e.,
-has lower precedence than the binary operations on formulas.
 
-Abstract \emph{predicates} may be defined as in:
-\begin{easycrypt}{}{}
-pred P0.
-pred P1 : int.
-pred P2 : int & (int * bool).
-pred P3 : int & (int * bool) & (real -> int).
-\end{easycrypt}
-\ec{P0}, \ec{P1}, \ec{P2} and \ec{P3} are extended expressions
-of types \ec{bool}, \ec{int -> bool}, \ec{int -> int * bool -> bool}
-and \ec{int -> int * bool -> (real -> int) -> bool}, respectively.
-The parentheses are mandatory in \ec{(int * bool)} and \ec{(real -> int)}.
-Thus, if $e_1$, $e_2$ and $e_3$ are extended expressions of types
-\ec{int}, \ec{int * bool} and \ec{real -> int}, respectively, then
-\ec{P0}, ``P1 $\,e_1$``, ``P2 $\,e_1$ $\,e_2$`` and ``P3
-  $\,e_1$ $\,e_2$ $\,e_3$`` are formulas.
+.. code-block:: easycrypt
+
+   forall (x : int, y : int, z : bool), ...
+   forall (x y : int, z : bool), ...
+   forall (x y : int) (z : bool), ...
+   exists (x : int, y : int, z : bool), ...
+   exists (x y : int, z : bool), ...
+   exists (x y : int) (z : bool), ...
+
+Quantification extends as far to the right as possible, i.e., has
+lower precedence than the binary operations on formulas.
+
+Abstract *predicates* may be defined as in:
+
+.. code-block:: easycrypt
+
+   pred P0.
+   pred P1 : int.
+   pred P2 : int & (int * bool).
+   pred P3 : int & (int * bool) & (real -> int).
+
+``P0``, ``P1``, ``P2`` and ``P3`` are extended expressions of types
+``bool``, ``int -> bool``, ``int -> int * bool -> bool`` and ``int ->
+int * bool -> (real -> int) -> bool``, respectively.  The parentheses
+are mandatory in ``(int * bool)`` and ``(real -> int)``.  Thus, if
+``e1``, ``e2`` and ``e3`` are extended expressions of types ``int``,
+``int * bool`` and ``real -> int``, respectively, then ``P0``,
+``P1 e1``, ``P2 e1 e2`` and ``P3 e1 e2 e3`` are formulas.
 
 Concrete predicates are defined in a way that is similar to how
 operators are declared.  E.g., if we declare
-\begin{easycrypt}{}{}
-pred Q (x y : int, z : bool) = x = y /\ z.
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   pred Q (x y : int, z : bool) = x = y /\ z.
+
 or
-\begin{easycrypt}{}{}
-pred Q (x : int) (y : int) (z : bool) = x = y /\ z.
-\end{easycrypt}
-then \ec{Q} is an extended expression of type
-\begin{easycrypt}{}{}
-int -> int -> bool -> bool
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   pred Q (x : int) (y : int) (z : bool) = x = y /\ z.
+
+then ``Q`` is an extended expression of type
+
+.. code-block:: easycrypt
+
+   int -> int -> bool -> bool
+
 meaning that, e.g.,
-\begin{easycrypt}{}{}
-(fun (b : bool -> bool) => b true) (Q 3 4)
-\end{easycrypt}
-is a formula.
-And here is how polymorphic predicates may be defined:
-\begin{easycrypt}{}{}
-pred R ['a, 'b] : ('a, 'a * 'b).
-pred R' ['a, 'b] (x : 'a, y : 'a * 'b) = (y.`1 = x).
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   (fun (b : bool -> bool) => b true) (Q 3 4)
+
+is a formula.  And here is how polymorphic predicates may be defined:
+
+.. code-block:: easycrypt
+
+   pred R ['a, 'b] : ('a, 'a * 'b).
+   pred R' ['a, 'b] (x : 'a, y : 'a * 'b) = (y.`1 = x).
 
 Extended expressions also include program memories, although there
 isn't a type of memories, and anonymous functions and operators can't
-take memories as inputs.  If \ec{&$m$} is a memory and $x$ is a
-program variable that's in \ec{&$m$}'s domain, then \ec{x\{$m$\}} is
-the extended expression for the value of $x$ in \ec{&$m$}.
-Quantification over memories is allowed:
-\begin{easycrypt}{}{}
-forall &#$m$#, #$\phi$#
-\end{easycrypt}
-Here, \ec{&$m$} ranges over all memories with domains equal to the
-set of all variables declared as global in currently declared modules.
-E.g., suppose we have declared:
-\begin{easycrypt}{}{}
-module X = { var x : int }.
-module Y = { var y : int }.
-\end{easycrypt}
+take memories as inputs.  If ``&m`` is a memory and $x$ is a program
+variable that's in ``&m``'s domain, then ``x{&m}`` is the extended
+expression for the value of ``x`` in ``&m``.  Quantification over
+memories is allowed:
+
+.. code-block:: easycrypt
+
+   forall &m, phi
+
+Here, ``&m`` ranges over all memories with domains equal to the set of
+all variables declared as global in currently declared modules.  E.g.,
+suppose we have declared:
+
+.. code-block:: easycrypt
+
+   module X = { var x : int }.
+   module Y = { var y : int }.
+
 Then, this is a (true) formula:
-\begin{easycrypt}{}{}
-forall &m, X.x{m} < Y.y{m} => X.x{m} + 1 <= Y.y{m}
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   forall &m, X.x{m} < Y.y{m} => X.x{m} + 1 <= Y.y{m}
 
 |EasyCrypt|'s logics can introduce memories whose domains include not
 just the global variables of modules but also:
-\begin{itemize}
-\item the local variables and parameters of
-  procedures; and
 
-\item \ec{res}, whose value in a memory resulting from running a
-  procedure will record the result (return value) of the procedure.
-\end{itemize}
+- the local variables and parameters of procedures; and
+
+- ``res``, whose value in a memory resulting from running a procedure
+  will record the result (return value) of the procedure.
+
 There is no way for the user to introduce such memories directly.  We
 can't do anything with memories other than look up the values of
 variables in them. In particular, formulas can't test or assert the
 equality of memories.
 
-If $M$ is a module and \ec{&$m$} is a memory, then \ec{(glob
-  $\,M$)\{$m$\}} is the value of type \ec{glob $\,M$} consisting of the
-tuple whose components are the values of all the global variables of
-$M$ in \ec{&$m$}.  (See Subsection~\ref{subsec:globalvariables} for the
-definition of the set of all global variables of a module.)
+If ``M`` is a module and ``&m`` is a memory, then ``(glob M){m}`` is
+the value of type ``glob M`` consisting of the tuple whose components
+are the values of all the global variables of ``M`` in ``&m``.  (See
+Subsection~\ref{subsec:globalvariables} for the definition of the set
+of all global variables of a module.)
 
 For convenience, we have the following derived syntax for formulas: If
-$\phi$ is a formula and \ec{&$m$} is a memory, then \ec{$\phi$\{$m$\}}
-means the formula in which every subterm $u$ of $\phi$ consisting of a
-variable or \ec{res} or \ec{glob $\,M$}, for a module
-$M$, is replaced by \ec{$u$\{$m$\}}.  For example,
-\begin{easycrypt}{}{}
-(Y1.y = Y1.z => Y1.z = Y1.y){m}
-\end{easycrypt}
+$\phi$ is a formula and ``&m`` is a memory, then ``phi{m}`` means the
+formula in which every subterm ``u`` of ``phi`` consisting of a
+variable or ``res`` or ``glob M``, for a module ``M``, is replaced
+by ``u{m}``.  For example,
+
+.. code-block:: easycrypt
+
+   (Y1.y = Y1.z => Y1.z = Y1.y){m}
+
 expands to
-\begin{easycrypt}{}{}
-Y1.y{m} = Y1.z{m} => Y1.z{m} = Y1.y{m}
-\end{easycrypt}
-The parentheses are necessary, because \ec{$\_$\{$m$\}} has
-higher precedence than even function application.
-We say that \ec{&$m$} satisfies $\phi$ iff \ec{$\phi$\{$m$\}} holds.
+
+.. code-block:: easycrypt
+
+   Y1.y{m} = Y1.z{m} => Y1.z{m} = Y1.y{m}
+
+The parentheses are necessary, because ``_{m}`` has higher precedence
+than even function application.  We say that ``&m`` satisfies ``phi``
+iff ``phi{m}`` holds.
 
 Extended expressions also include modules, although there isn't a type
 of modules, and anonymous functions and operators can't take modules
-as inputs.  Quantification over modules is allowed. If $T$ is a module
-type, and $M$ is a module name, then
-\begin{easycrypt}{}{}
-forall (#$M$# <: #$T$#), #$\phi$#
-\end{easycrypt}
-means
-\begin{center}
- for all modules $M$ satisfying $T$, $\phi$ holds.
-\end{center}
+as inputs.  Quantification over modules is allowed. If ``T`` is a
+module type, and ``M`` is a module name, then
+
+.. code-block:: easycrypt
+
+   forall (M <: T), phi
+
+means **for all modules ``M`` satisfying ``T``, ``phi`` holds**.
+
 Formulas can't talk about module equality.
 
 There is also a variant form of module quantification of the
 the form
-\begin{easycrypt}{}{}
-forall (#$M$# <: #$T$#{#$N_1$#,#\ldots#,#$N_l$#}), #$\phi$#
-\end{easycrypt}
-where $N_1,\ldots,N_l$ are modules, for $l\geq 1$. Its meaning is
-\begin{center}
-  for all modules $M$ satisfying $T$ whose sets of global
-  variables\\are disjoint from the sets of global variables of the
-  $N_i$, $\phi$ holds.
-\end{center}
 
-Finally, |EasyCrypt|'s ambient logic has probability expressions, |hl|,
-|phl| and |prhl| judgments, and lossless assertions:
-\begin{itemize}
-\item (\textbf{Probability Expressions})\quad A \emph{probability expression}
-  has the form
-  \begin{center}
-    \ec{Pr[$M$.$p$($e_1$,$\,\ldots$,$\,e_n$) @ &$m$ : $\,\phi$]}
-  \end{center}
-where:
-\begin{itemize}
-\item $p$ is a procedure of module $M$ that takes $n$ arguments, whose
-types agree with the types of the $e_i$;
+.. code-block:: easycrypt
 
-\item \ec{&$m$} is a memory whose domain is the global variables
-  of all declared modules;
+   forall (M <: T{N_1,...,N_l}), phi
 
-\item the formula $\phi$ may involve the term \ec{res}, whose
-  type is \ec{$M$.$p$}'s return type, as well as global variables
-  of modules.
-\end{itemize}
-Occurrences in $\phi$ of bound identifiers (bound outside the
-probability expression) whose names conflict with parameters and local
-variables of \ec{$M$.$p$} will refer to the bound identifiers, not the
-parameters/local variables.
+where the ``N_i``'s are modules. Its meaning is **for all modules
+``M`` satisfying ``T`` whose sets of global variables are disjoint
+from the sets of global variables of the ``N_i``'s, ``phi`` holds**.
 
-The informal meaning of the probability expression is
-the probability that running \ec{$M$.$p$} with arguments
-$e_1$, \ldots, $e_n$, and initial memory \ec{&$m$} will terminate
-in a final memory satisfying $\phi$. To run \ec{$M$.$p$}:
-\begin{itemize}
-\item \ec{&$m$} is extended to map \ec{$M$.$p$}'s parameters to the
- $e_i$, and to map the procedure's local variables to \emph{arbitrary}
- initial values;
+Finally, |EasyCrypt|'s ambient logic has probability expressions,
+|hl|, |phl| and |prhl| judgments, and lossless assertions:
 
-\item the body of the procedure is run in this extended memory;
 
-\item if the procedure returns, its return value will be stored in
-  a component \ec{res} of the resulting memory, and the procedure's
-  parameters and local variables will be removed from that
-  memory.
-\end{itemize}
-If the procedure doesn't initialize its local variables before using
-them, the probability expression may be undefined.
+- **Probability Expressions..** A *probability expression*
+  has the form ``Pr[M.p(e_1,...,e_n) @ &m : \phi]`` where:
 
-\item (|hl| Judgments)\quad A |hl| \emph{judgment} has the form
-  \begin{center}
-    \ec{hoare[$M$.$p$ : $\,\phi$ ==> $\,\psi$]}
-  \end{center}
-where:
-\begin{itemize}
-\item $p$ is a procedure of module $M$;
+  - ``p`` is a procedure of module ``M`` that takes $n$ arguments, whose
+    types agree with the types of the ``e_i``'s;
 
-\item the formula $\phi$ may involve the global variables of declared
-  modules, as well as the parameters of \ec{$M$.$p$};
+  - ``&m`` is a memory whose domain is the global variables of all
+    declared modules;
 
-\item the formula $\psi$ may involve the term \ec{res}, whose type is
-  \ec{$M$.$p$}'s return type, as well as the global variables of
-  declared modules.
-\end{itemize}
-Occurrences in $\phi$ and $\psi$ of bound identifiers (bound outside
-the judgment) whose names conflict with parameters and local
-variables of \ec{$M$.$p$} will refer to the bound identifiers, not the
-parameters/local variables.
+  - the formula ``phi`` may involve the term ``res``, whose type is
+    ``M.p``'s return type, as well as global variables of modules.
 
-The informal meaning of the |hl| judgment is that, for all initial
-memories \ec{&$m$} satisfying $\phi$ and whose domains consist of the
-global variables of declared modules plus the parameters and local
-variables of \ec{$M$.$p$}, if running the body of \ec{$M$.$p$} in
-\ec{&$m$} results in termination with a memory, the restriction of that
-memory to \ec{res} and the global variables of declared modules
-satisfies $\psi$.
+  Occurrences in ``phi`` of bound identifiers (bound outside the
+  probability expression) whose names conflict with parameters and
+  local variables of ``M.p`` will refer to the bound identifiers, not
+  the parameters/local variables.
 
-\item (|phl| Judgments)\quad A |phl| \emph{judgment} has one of the forms
-  \begin{center}
-    \ec{phoare [$M$.$p$ : $\,\phi$ ==> $\,\psi$] < $\,e$} \\
-    \ec{phoare [$M$.$p$ : $\,\phi$ ==> $\,\psi$] = $\,e$} \\
-    \ec{phoare [$M$.$p$ : $\,\phi$ ==> $\,\psi$] > $\,e$}
-  \end{center}
-where:
-\begin{itemize}
-\item $p$ is a procedure of module $M$;
+  The informal meaning of the probability expression is the
+  probability that running ``M.p`` with arguments ``e_1,...,e_n``, and
+  initial memory ``&m`` will terminate in a final memory satisfying
+  ``phi``. To run ``M.p``:
 
-\item the formula $\phi$ may involve the global variables of declared
-  modules, as well as the parameters of \ec{$M$.$p$};
+  - ``&m`` is extended to map ``M.p``'s parameters to the ``e_i``'s,
+    and to map the procedure's local variables to *arbitrary* initial
+    values;
 
-\item the formula $\psi$ may involve the term \ec{res}, whose type is
-  \ec{$M$.$p$}'s return type, as well as the global variables of
-  declared modules;
+  - the body of the procedure is run in this extended memory;
 
-\item $e$ is an expression of type \ec{real}.
-\end{itemize}
-Occurrences in $\phi$ and $\psi$ and of bound identifiers (bound
-outside the judgment) whose names conflict with parameters or local
-variables of \ec{$M$.$p$} will refer to the bound identifiers, not the
-parameters/local variables. \ec{e} will have to be parenthesized
-unless it is a constant or nullary operator.
+  - if the procedure returns, its return value will be stored in a
+    component ``res`` of the resulting memory, and the procedure's
+    parameters and local variables will be removed from that memory.
 
-The informal meaning of the |phl| judgment is that, for all initial
-memories \ec{&$m$} satisfying $\phi$ and whose domains consist of the
-global variables of declared modules plus the parameters and local
-variables of \ec{$M$.$p$}, the probability that
-\begin{center}
-  running the body of \ec{$M$.$p$} in \ec{&$m$} results in
-  termination \\ with a memory whose restriction to \ec{res} and
-  the global \\ variables of declared modules satisfies $\psi$
-\end{center}
-has the indicated relation to the value of $e$.
+  If the procedure doesn't initialize its local variables before using
+  them, the probability expression may be undefined.
 
-\item (|prhl| Judgments)\quad A |prhl| \emph{judgment} has the form
-  \begin{center}
-     \ec{equiv[$M$.$p$ ~ $\,N$.$q$ : $\,\phi$ ==> $\,\psi$]}
-  \end{center}
-where:
-\begin{itemize}
-\item $p$ is a procedure of module $M$, and $q$ is a procedure of module
- $N$;
+- **|hl| Judgments**. A |hl| *judgment* has the form ``hoare[$M$.$p$ :
+  $\,\phi$ ==> $\,\psi$]`` where:
 
-\item the formula $\phi$ may involve the global variables of declared
-  modules, the parameters of \ec{$M$.$p$}, which must be interpreted
-  in memory \ec{&1} (e.g., \ec{x\{1\}}), and the parameters of
-  \ec{$N$.$q$}, which must be interpreted in memory \ec{&2};
+  - ``p`` is a procedure of module ``M``;
 
-\item the formula $\psi$ may involve the global variables of declared
-  modules, \ec{res\{1\}}, which has the type of \ec{$M$.$p$}'s return type,
-  and \ec{res\{2\}}, which has the type of \ec{$N$.$q$}'s return type.
-\end{itemize}
-Occurrences in $\psi$ of bound identifiers (bound outside the
-judgment) whose names conflict with parameters and local variables of
-\ec{$M$.$p$} and \ec{$N$.$q$} will refer to the bound identifiers, not
-the parameters and local variables, even if they are enclosed in
-memory references (e.g., \ec{x\{1\}}). If \ec{&1} (resp., \ec{&2}) is
-a bound memory (outside the judgment), then all references to \ec{&1}
-(resp., \ec{&2}) in $\phi$ and $\psi$ are renamed to use a fresh
-memory.
+  - the formula ``phi`` may involve the global variables of declared
+    modules, as well as the parameters of ``M.p``;
 
-The informal meaning of the |prhl| judgment is that, for all initial
-memories \ec{&1} whose domains consist of the global variables of
-declared modules plus the parameters and local variables of
-\ec{$M$.$p$}, for all initial memories \ec{&2} whose domains consist
-of the global variables of declared modules plus the parameters and
-local variables of \ec{$N$.$q$}, if $\phi$ holds, then the
-sub-distributions on memories $\Pi_p$ and $\Pi_q$ obtained by running
-\ec{$M$.$p$} on \ec{&1}, storing $p$'s result in the component
-\ec{res} of the resulting memory, from which $p$'s parameters and
-local variables are removed, and running \ec{$N$.$q$} on \ec{&2},
-storing $q$'s result in the component \ec{res} of the resulting
-memory, from which $q$'s parameters and local variables are removed,
-satisfy $\psi$, in the following sense.  (The probability of a memory
-in $\Pi_p$ (resp., $\Pi_q$) is the probability that $p$ (resp., $q$)
-will terminate with that memory. $\Pi_p$ and $\Pi_q$ are
-\emph{sub}-distributions on memories because $p$ and $q$ may
-fail to terminate.)
+  - the formula $\psi$ may involve the term ``res``, whose type is
+    ``M.p``'s return type, as well as the global variables of
+    declared modules.
 
-We say that $(\Pi_p, \Pi_q)$ \emph{satisfy} $\psi$ iff there is a
-function $f$ dividing the probability assigned to each memory
-\ec{&$m$} by $\Pi_p$ among the memories \ec{&$n$} related to it by
-$\psi$ (\ec{&$m$} and \ec{&$n$} are related according to $\psi$ iff
-$\psi$ holds when references to \ec{&1} are replaced by reference to
-\ec{&$m$}, and reference to \ec{&2} are replaced by reference to
-\ec{&$n$}) such that, for all memories \ec{&$n$}, the value assigned
-to \ec{&$n$} by $\Pi_q$ is the sum of all the probabilities
-distributed to \ec{&$n$} by $f$. (When $\psi$ is an
-equivalence like \ec{=\{res\}} (i.e., \ec{res\{1\} = res\{2\}}), this
-  is particularly easy to interpret.)
+  Occurrences in ``phi`` and ``psi`` of bound identifiers (bound
+  outside the judgment) whose names conflict with parameters and local
+  variables of ``M.p`` will refer to the bound identifiers, not the
+  parameters/local variables.
 
-\item (Lossless Assertions)\quad A \emph{lossless assertion} has the form
-  \begin{center}
-    \ec{islossless $\,M$.$p$}
-  \end{center}
-  and is simply an abbreviation for
-  \begin{center}
-    \ec{phoare [$M$.$p$ : true ==> true] = 1\%r}
-  \end{center}
-\end{itemize}
+  The informal meaning of the |hl| judgment is that, for all initial
+  memories ``&m`` satisfying ``phi`` and whose domains consist of the
+  global variables of declared modules plus the parameters and local
+  variables of ``M.p``, if running the body of ``M.p`` in ``&m``
+  results in termination with a memory, the restriction of that memory
+  to ``res`` and the global variables of declared modules satisfies
+  ``psi``.
+
+- **|phl| Judgments**. A |phl| *judgment* has one of the following
+  forms:
+
+  - ``phoare [M.p : phi ==> psi] < e``
+  - ``phoare [M.p : phi ==> psi] = e``
+  - ``phoare [M.p : phi ==> psi] > e``
+
+  where:
+
+  - ``p`` is a procedure of module ``M``;
+
+  - the formula ``phi`` may involve the global variables of declared
+    modules, as well as the parameters of ``M.p``;
+
+  - the formula $\psi$ may involve the term ``res``, whose type is
+    ``M.p``'s return type, as well as the global variables of
+    declared modules;
+
+  - ``e`` is an expression of type ``real``.
+
+  Occurrences in ``phi`` and ``psi`` and of bound identifiers (bound
+  outside the judgment) whose names conflict with parameters or local
+  variables of ``M.p`` will refer to the bound identifiers, not the
+  parameters/local variables. ``e`` will have to be parenthesized
+  unless it is a constant or nullary operator.
+
+  The informal meaning of the |phl| judgment is that, for all initial
+  memories ``&m`` satisfying $\phi$ and whose domains consist of the
+  global variables of declared modules plus the parameters and local
+  variables of ``M.p``, the probability that **running the body of
+  ``M.p`` in ``&m`` results in termination with a memory whose
+  restriction to ``res`` and the global variables of declared modules
+  satisfies ``psi`` has the indicated relation to the value of $e$**.
+
+- **|prhl| Judgments**. A |prhl| *judgment* has the form
+  ``equiv[M.p ~ N.q : phi ==> psi]`` where:
+
+  - ``p`` is a procedure of module ``M``, and ``q`` is a procedure of module
+    ``N``;
+
+  - the formula ``phi`` may involve the global variables of declared
+    modules, the parameters of ``M.p``, which must be interpreted
+    in memory ``&1`` (e.g., ``x{1}), and the parameters of
+    ``N.q``, which must be interpreted in memory ``&2``;
+
+  - the formula ``psi`` may involve the global variables of declared
+    modules, ``res{1}``, which has the type of ``M.p``'s return type,
+    and ``res{2}``, which has the type of ``N.q``'s return type.
+
+  Occurrences in ``psi`` of bound identifiers (bound outside the
+  judgment) whose names conflict with parameters and local variables
+  of ``M.p`` and ``N.q`` will refer to the bound identifiers, not the
+  parameters and local variables, even if they are enclosed in memory
+  references (e.g., ``x{1}``). If ``&1`` (resp., ``&2``) is a bound
+  memory (outside the judgment), then all references to ``&1`` (resp.,
+  ``&2``) in ``phi`` and ``psi`` are renamed to use a fresh memory.
+
+  The informal meaning of the |prhl| judgment is that, for all initial
+  memories ``&1`` whose domains consist of the global variables of
+  declared modules plus the parameters and local variables of ``M.p``,
+  for all initial memories ``&2`` whose domains consist of the global
+  variables of declared modules plus the parameters and local
+  variables of ``N.q``, if ``phi`` holds, then the sub-distributions
+  on memories $\Pi_p$ and $\Pi_q$ obtained by running ``M.p`` on
+  ``&1``, storing ``p``'s result in the component ``res`` of the
+  resulting memory, from which ``p``'s parameters and local variables
+  are removed, and running ``N.q`` on ``&2``, storing ``q``'s result
+  in the component ``res`` of the resulting memory, from which ``q``'s
+  parameters and local variables are removed, satisfy ``psi``, in the
+  following sense.  (The probability of a memory in $\Pi_p$ (resp.,
+  $\Pi_q$) is the probability that ``p`` (resp., ``q``) will terminate
+  with that memory. $\Pi_p$ and $\Pi_q$ are *sub*-distributions on
+  memories because ``p`` and ``q`` may fail to terminate.)
+
+  We say that $(\Pi_p, \Pi_q)$ *satisfy* ``psi`` iff there is a
+  function $f$ dividing the probability assigned to each memory ``&m``
+  by $\Pi_p$ among the memories ``&n`` related to it by ``psi``
+  (``&m`` and ``&n`` are related according to ``psi`` iff ``psi``
+  holds when references to ``&1`` are replaced by reference to ``&m``,
+  and reference to ``&2`` are replaced by reference to ``&n``) such
+  that, for all memories ``&n``, the value assigned to ``&n`` by
+  $\Pi_q$ is the sum of all the probabilities distributed to ``&n`` by
+  $f$. (When ``psi`` is an equivalence like ``={res}`` (i.e., ``res{1}
+  = res{2}``), this is particularly easy to interpret.)
+
+- **Lossless Assertions**. A *lossless assertion* has the form
+  ``islossless $\,M$.$p$`` and is simply an abbreviation for ``phoare
+  [M.p : true ==> true] = 1%r``.
 
 For the purpose of giving some examples, consider these declarations:
-\begin{easycrypt}{}{}
-module G1 = {
-  proc f() : bool = {
-    var x : bool;
-    x <$ {0,1};
-    return x;
-  }
-}.
 
-module G2 = {
-  proc f() : bool = {
-    var x, y : bool;
-    x <$ {0,1}; y <$ {0,1};
-    return x ^^ y;  (* ^^ is exclusive or *)
-  }
-}.
-\end{easycrypt}
+.. code-block:: easycrypt
+
+   module G1 = {
+     proc f() : bool = {
+       var x : bool;
+       x <$ {0,1};
+       return x;
+     }
+   }.
+
+   module G2 = {
+     proc f() : bool = {
+       var x, y : bool;
+       x <$ {0,1}; y <$ {0,1};
+       return x ^^ y;  (* ^^ is exclusive or *)
+     }
+   }.
+
 Then:
-\begin{itemize}
-\item The expression
-\begin{easycrypt}{}{}
-Pr[G1.f() @ &m : res]
-\end{easycrypt}
-is the probability that \ec{G1.f()} returns \ec{true} when run
-in the memory \ec{&m}. (The memory is irrelevant, and the expression's
-value is \ec{1\%r / 2\%r}.)
 
-\item The |hl| judgement
-\begin{easycrypt}{}{}
-hoare[G2.f : true ==> !res]
-\end{easycrypt}
-says that, if \ec{G2.f()} halts (which we know it will), then
-its return value will be \ec{false}. (This judgement is \ec{false}.)
+- The expression ``Pr[G1.f() @ &m : res]`` is the probability that
+  ``G1.f()`` returns ``true`` when run in the memory ``&m``. (The
+  memory is irrelevant, and the expression's value is ``1%r /
+  2%r``.)
 
-\item The |phl| judgement
-\begin{easycrypt}{}{}
-phoare [G2.f : true ==> res] = (1%r / 2%r)
-\end{easycrypt}
-says that the probability of \ec{G2.f()} returning \ec{true} is
-\ec{1\%r / 2\%r}. (This judgement is \ec{true}.)
+- The |hl| judgement ``hoare[G2.f : true ==> !res]`` says that, if
+  ``G2.f()`` halts (which we know it will), then its return value will
+  be ``false``. (This judgement is ``false``.)
 
-\item The |prhl| judgement
-\begin{easycrypt}{}{}
-equiv[G1.f ~ G2.f : true ==> res]
-\end{easycrypt}
-says that \ec{G1.f()} and \ec{G2.f()} are equally likely to return
-\ec{true} as well as equally likely to return \ec{false}.
-(This judgement is \ec{true}.)
+- The |phl| judgement ``phoare [G2.f : true ==> res] = (1%r / 2%r)``
+  says that the probability of ``G2.f()`` returning ``true`` is ``1%r
+  / 2%r``. (This judgement is ``true``.)
 
-\item The lossless assertion
-\begin{easycrypt}{}{}
-lossless G2.f    
-\end{easycrypt}
-says that \ec{G2.f()} always terminates, no matter what memory it's
-run in. (This judgement is \ec{true}.)
-\end{itemize}
+- The |prhl| judgement ``equiv[G1.f ~ G2.f : true ==> res]`` says that
+  ``G1.f()`` and ``G2.f()`` are equally likely to return ``true`` as
+  well as equally likely to return ``false``.  (This judgement is
+  ``true``.)
 
-\subsection{Axioms and Lemmas}
+- The lossless assertion ``lossless G2.f`` says that ``G2.f()`` always
+  terminates, no matter what memory it's run in. (This judgement is
+  ``true``.)
 
-One states an \emph{axiom} or \emph{lemma} by giving a well-typed formula with
+Axioms and Lemmas
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+One states an *axiom* or *lemma* by giving a well-typed formula with
 no free identifiers, as in:
-\begin{easycrypt}{}{}
-axiom Sym : forall (x y : int), x = y => y = x.
-lemma Sym : forall (x y : int), x = y => y = x.
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   axiom Sym : forall (x y : int), x = y => y = x.
+   lemma Sym : forall (x y : int), x = y => y = x.
+
 The difference between axioms and lemmas is that axioms are trusted
 by |EasyCrypt|, whereas lemmas must be proved, in the steps that
-follow. The \emph{proof} of a lemma has the form
-\begin{easycrypt}{}{}
-proof.
-#$\mathit{tactic}_1$#. #\ldots# #$\mathit{tactic}_n$#.
-qed.
-\end{easycrypt}
-Actually the \ec{proof} step is optional, but it's good style to include
-it. The steps of the proof consist of tactic applications; but
-\ec{print} and \ec{search} commands are also legal steps.
-The \ec{qed} step saves the lemma, making it available for reuse;
-it's only allowed when the proof is complete.
-If the name chosen for a lemma conflicts with an already stated
-axiom or lemma, one only finds this out upon running \ec{qed}, which
-will fail.
+follow. The *proof* of a lemma has the form
+
+.. code-block:: easycrypt
+
+   proof.
+   tactic_1. tactic_2. ... tactic_n.
+   qed.
+
+Actually the ``proof`` step is optional, but it's good style to
+include it. The steps of the proof consist of tactic applications; but
+``print`` and ``search`` commands are also legal steps.  The ``qed``
+step saves the lemma, making it available for reuse; it's only allowed
+when the proof is complete.  If the name chosen for a lemma conflicts
+with an already stated axiom or lemma, one only finds this out upon
+running ``qed``, which will fail.
+
 When the proof for a lemma has a very simple form, the proof may be
 included as part of the lemma's statement:
-\begin{easycrypt}{}{}
-lemma #$\mathit{name}$# : #$\phi$# by [#$\mathit{tactic}$].
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   lemma L : phi by [tactic].
+
 or
-\begin{easycrypt}{}{}
-lemma #$\mathit{name}$# : #$\phi$# by [].
-\end{easycrypt}
-In the first case, the proof consists of a single tactic; the meaning of
-\ec{by []} will be described in Chapter~\ref{chap:tactics}.
+
+.. code-block:: easycrypt
+
+   lemma L : phi by [].
+
+In the first case, the proof consists of a single tactic; the meaning
+of ``by []`` will be described in Chapter~\ref{chap:tactics}.
 
 One may also parameterize an axiom of lemma by the free identifiers of
 its formula, as in:
-\begin{easycrypt}{}{}
-lemma Sym (x : int) (y : int) : x = y => y = x.
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   lemma Sym (x : int) (y : int) : x = y => y = x.
+
 or
-\begin{easycrypt}{}{}
-lemma Sym (x y : int) : x = y => y = x.
-\end{easycrypt}
-This version of \ec{Sym} has the same logical meaning as the previous
-one. But we'll see in Chapter~\ref{chap:tactics} why the
-parameterized form makes an axiom or lemma easier to apply.
+
+.. code-block:: easycrypt
+
+   lemma Sym (x y : int) : x = y => y = x.
+
+This version of ``Sym`` has the same logical meaning as the previous
+one. But we'll see in Chapter~\ref{chap:tactics} why the parameterized
+form makes an axiom or lemma easier to apply.
 
 Polymorphic axioms and lemmas may be stated using a syntax reminiscent
 of the one for polymorphic operators:
-\begin{easycrypt}{}{}
-lemma Sym ['a] (x y : 'a) : x = y => y = x.
-lemma PairEq ['a, 'b] (x x' : 'a) (y y' : 'b) :
-  x = x' => y = y' => (x, y) = (x', y').
-\end{easycrypt}
+
+.. code-block:: easycrypt
+
+   lemma Sym ['a] (x y : 'a) : x = y => y = x.
+   lemma PairEq ['a, 'b] (x x' : 'a) (y y' : 'b) :
+     x = x' => y = y' => (x, y) = (x', y').
+
 or
-\begin{easycrypt}{}{}
-lemma Sym (x y : 'a) : x = y => y = x.
-lemma PairEq (x x' : 'a) (y y' : 'b) :
-  x = x' => y = y' => (x, y) = (x', y').
-\end{easycrypt}
 
-We can axiomatize the meaning of abstract types, operators and relations.
-E.g., an abstract type of monoids may be axiomatized by:
-\begin{easycrypt}{}{}
-type monoid.
-op id : monoid.
-op (+) : monoid -> monoid -> monoid.
-axiom LeftIdentity (x : monoid) : id + x = x.
-axiom RightIdentity (x : monoid) : x + id = x.
-axiom Associative (x y z : monoid) : x + (y + z) = (x + y) + z.
-\end{easycrypt}
+.. code-block:: easycrypt
+
+   lemma Sym (x y : 'a) : x = y => y = x.
+   lemma PairEq (x x' : 'a) (y y' : 'b) :
+     x = x' => y = y' => (x, y) = (x', y').
+
+We can axiomatize the meaning of abstract types, operators and
+relations.  E.g., an abstract type of monoids may be axiomatized by:
+
+.. code-block:: easycrypt
+
+   type monoid.
+   op id : monoid.
+   op (+) : monoid -> monoid -> monoid.
+   axiom LeftIdentity (x : monoid) : id + x = x.
+   axiom RightIdentity (x : monoid) : x + id = x.
+   axiom Associative (x y z : monoid) : x + (y + z) = (x + y) + z.
+
 Any proofs we do involving monoids will then apply to any valid
-instantiation of \ec{monoid}, \ec{id} and \ec{(+)}. In
-Chapter~\ref{chap:structuring}, we'll see how to carry out such instantiations
-using theory cloning.
+instantiation of ``monoid``, ``id`` and ``(+)``. In
+Chapter~\ref{chap:structuring}, we'll see how to carry out such
+instantiations using theory cloning.
 
-One must be careful with axioms, however, because it's easy to introduce
-inconsistencies, allowing one to prove false formulas. E.g., because
-all types must be nonempty in |EasyCrypt|, writing
-\begin{easycrypt}{}{}
-type t.
-axiom Empty : !(exists (x : t), true).
-\end{easycrypt}
-will allow us to prove \ec{false}.
+One must be careful with axioms, however, because it's easy to
+introduce inconsistencies, allowing one to prove false formulas. E.g.,
+because all types must be nonempty in |EasyCrypt|, writing
 
-Axioms and lemmas may be parameterized by
-memories and modules. Consider the declarations:
-\begin{easycrypt}{}{}
-module type T = {
-  proc f() : unit
-}.
-module G(X : T) = {
-  var x : int
-  proc g() : unit = {
-    X.f();
-  }
-}.
-\end{easycrypt}
-Then lemma \ec{Lossless}
-\begin{easycrypt}{}{}
-lemma Lossless (X <: T) : islossless X.f => islossless G(X).g.
-\end{easycrypt}
-which is parameterized by an abstract module \ec{X} of module type
-\ec{T}, says that \ec{G(X).g} always terminates, no matter the memory
-it's run in, as long as this is true of \ec{X.f}.
-Lemma \ec{Invar}
-\begin{easycrypt}{}{}
-lemma Invar (X <: T{G}) (n : int) :
-  islossless X.f =>
-  phoare [G(X).g : G.x = n ==> G.x = n] = 1%r.
-\end{easycrypt}
-which is parameterized by an abstract module \ec{X} of module type
-\ec{T} that is guaranteed not to access or modify \ec{G.x}, and an
-integer \ec{n}, says that, assuming \ec{X.f} is lossless, if
-\ec{G(X).g()} is run in a memory giving \ec{G.x} the value \ec{n},
-then \ec{G(X).g()} is guaranteed to terminate in a memory in which
-\ec{G.x}'s value is still \ec{n}.  Finally lemma \ec{Invar'}
-\begin{easycrypt}{}{}
-lemma Invar' (X <: T{G}) (n : int) &m :
-  islossless X.f => G.x{m} = n =>
-  Pr[G(X).g() @ &m : G.x = n] = 1%r.
-\end{easycrypt}
-which has the parameters of \ec{Invar} plus a memory \ec{&m},
-says the same thing as \ec{Invar}, but using a probability
-expression rather than a |phl| judgement.
+.. code-block:: easycrypt
+
+   type t.
+   axiom Empty : !(exists (x : t), true).
+
+will allow us to prove ``false``.
+
+Axioms and lemmas may be parameterized by memories and
+modules. Consider the declarations:
+
+.. code-block:: easycrypt
+
+   module type T = {
+     proc f() : unit
+   }.
+   module G(X : T) = {
+     var x : int
+     proc g() : unit = {
+       X.f();
+     }
+   }.
+
+Then lemma ``Lossless``
+
+.. code-block:: easycrypt
+
+   lemma Lossless (X <: T) : islossless X.f => islossless G(X).g.
+
+which is parameterized by an abstract module ``X`` of module type
+``T``, says that ``G(X).g`` always terminates, no matter the memory
+it's run in, as long as this is true of ``X.f``.
+
+Lemma ``Invar`` (see below)
+
+.. code-block:: easycrypt
+
+   lemma Invar (X <: T{G}) (n : int) :
+     islossless X.f =>
+     phoare [G(X).g : G.x = n ==> G.x = n] = 1%r.
+
+which is parameterized by an abstract module ``X`` of module type
+``T`` that is guaranteed not to access or modify ``G.x``, and an
+integer ``n``, says that, assuming ``X.f`` is lossless, if
+``G(X).g()`` is run in a memory giving ``G.x`` the value ``n``, then
+``G(X).g()`` is guaranteed to terminate in a memory in which ``G.x``'s
+value is still ``n``.  Finally lemma ``Invar'`` (see below)
+
+.. code-block:: easycrypt
+
+   lemma Invar' (X <: T{G}) (n : int) &m :
+     islossless X.f => G.x{m} = n =>
+     Pr[G(X).g() @ &m : G.x = n] = 1%r.
+
+which has the parameters of ``Invar`` plus a memory ``&m``, says the
+same thing as ``Invar``, but using a probability expression rather
+than a |phl| judgement.
