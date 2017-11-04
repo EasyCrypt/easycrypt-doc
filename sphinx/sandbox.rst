@@ -16,3 +16,7 @@ $\overline{\alpha}_i = \sum_{j < i} \alpha_j$
     proof. try admit; first case; by move. qed.
 
 ~admit~ and ~by~ and ~case~.
+
+.. tactic:: case
+
+   coucou

@@ -2,6 +2,7 @@
   margin-right: auto;
   margin-left: auto;
   max-width: 750px;
+  margin-bottom: 10px;
 }
 
 div.highlight pre {
@@ -50,4 +51,25 @@ table.citation .label {
 
 .globaltoc p.caption {
   padding-left: 10px;
+}
+
+.tactic-doc {
+  margin-bottom: 5px;
+}
+
+.tactic-doc .syntax-doc:before {
+  content: "⊚";
+  display: block;
+  position: absolute;
+  pointer-events: none;
+  left: 0px;  
+}
+
+.tactic-doc .syntax-doc {
+  border-bottom: 1px solid #000;
+  border-top: 2px solid #000;
+}
+
+.tactic-doc .tactic-dsc {
+  padding-left: 2px;
 }

@@ -3,10 +3,6 @@
 .. Code highlighting
 .. highlight:: easycrypt
 
-.. role:: easycrypt(code)
-   :language: easycrypt
-   :class: highlight
-
 .. Substitution
 
 .. |---| unicode:: U+2013

@@ -173,38 +173,45 @@ Proof Terms
 
 Formulas introduce identifier and formula assumptions using universal
 quantifiers and implications. For example, the formula
-\begin{easycrypt}{}{}
-forall (x y : bool), x = y => forall (z : bool), y = z => x = z.
-\end{easycrypt}
-introduces the assumptions
-\begin{easycrypt}{}{}
-x     : bool
-y     : bool
-eq_xy : x = y
-z     : bool
-eq_yz : y = z
-\end{easycrypt}
-(where the names of the two formulas were chosen to be meaningful),
-and has \ec{x = z} as its conclusion. We refer to the first assumption
-of a formula as the formula's \emph{top assumption}. E.g., the top
-assumption of the preceding formula is \ec{x : bool}.
 
-|EasyCrypt| has \emph{proof terms}, which partially describe how
-to prove a formula.  Their syntax is described in Figure~\ref{fig:proofterms},
+.. code-block:: easycrypt
+
+   forall (x y : bool), x = y => forall (z : bool), y = z => x = z.
+
+introduces the assumptions
+
+.. code-block:: easycrypt
+
+   x     : bool
+   y     : bool
+   eq_xy : x = y
+   z     : bool
+   eq_yz : y = z
+
+(where the names of the two formulas were chosen to be meaningful),
+and has ``x = z`` as its conclusion. We refer to the first assumption
+of a formula as the formula's *top assumption*. E.g., the top
+assumption of the preceding formula is ``x : bool``.
+
+|EasyCrypt| has *proof terms*, which partially describe how to prove a
+formula.  Their syntax is described in Figure~\ref{fig:proofterms},
 where $X$ ranges over lemma (or formula assumption) names.
-\begin{figure}
-  \begin{center}
-  \begin{tabular}{rcl>{\bf}l}
-    $p$ & ::=
-      & {\ec{_}} & proof hole \\
-     && {\ec{($X$, $\;q_1$, $\;\ldots$, $\;q_n$)}} & lemma application \\[.2cm]
-    $q$ & ::=
-      & {$e$} & expression \\
-      && {$p$} & proof term \\
-  \end{tabular}
-  \end{center}
-  \caption{\label{fig:proofterms}Proof Terms}
-\end{figure}
+
+.. FIXME
+.. \begin{figure}
+..   \begin{center}
+..   \begin{tabular}{rcl>{\bf}l}
+..     $p$ & ::=
+..       & {``_``} & proof hole \\
+..      && {``($X$, $\;q_1$, $\;\ldots$, $\;q_n$)``} & lemma application \\[.2cm]
+..     $q$ & ::=
+..       & {$e$} & expression \\
+..       && {$p$} & proof term \\
+..   \end{tabular}
+..   \end{center}
+..   \caption{\label{fig:proofterms}Proof Terms}
+.. \end{figure}
+
 A proof term for a lemma (or formula assumption) $X$ has components
 corresponding to the assumptions introduced by $X$.  A component
 corresponding to a variable consists of an expression of the
@@ -213,59 +220,62 @@ the lemma's conclusion with these expressions may be proved.  A
 formula component consists of a proof term explaining how the
 instantiation of the formula may be proved.  Proof holes will get
 turned into subgoals when a proof term is used in backward reasoning,
-e.g., by the \rtactic{apply} tactic. \fix{Need explanation of how a
-  proof term may be used in forward reasoning.}
+e.g., by the :tactic:`apply` tactic.
 
 Consider, e.g., the following declarations and axioms
-\begin{easycrypt}{}{}
-pred P : int.
-pred Q : int.
-pred R : int.
-axiom P (x : int) : P x.
-axiom Q (x : int) : P x => Q x.
-axiom R (x : int) : P(x + 1) => Q x => R x.
-\end{easycrypt}
-Then, given that \ec{x : int} is an assumption,
-\begin{easycrypt}{}{}
-(R x (P(x + 1)) (Q x (P x)))
-\end{easycrypt}
-is a proof term proving the conclusion \ec{R x}. And
-\begin{easycrypt}{}{}
-(R x _ (Q x _))
-\end{easycrypt}
-is a proof term that turns proofs of \ec{P(x + 1)} and \ec{P x}
-into proofs of \ec{R x}. When used in backward reasoning, it
-will reduce a goal with conclusion \ec{R x} to subgoals with
-conclusions \ec{P(x + 1)} and \ec{P x}.
-\fix{Can it be used in forward reasoning?}
 
-Some of a proof term's expressions may be replaced by \ec{_}, asking
+.. code-block:: easycrypt
+
+   pred P : int.
+   pred Q : int.
+   pred R : int.
+   axiom P (x : int) : P x.
+   axiom Q (x : int) : P x => Q x.
+   axiom R (x : int) : P(x + 1) => Q x => R x.
+
+Then, given that ``x : int`` is an assumption,
+
+.. code-block:: easycrypt
+
+   (R x (P(x + 1)) (Q x (P x)))
+
+is a proof term proving the conclusion ``R x``. And
+
+.. code-block:: easycrypt
+
+   (R x _ (Q x _))
+
+is a proof term that turns proofs of ``P(x + 1)`` and ``P x`` into
+proofs of ``R x``. When used in backward reasoning, it will reduce a
+goal with conclusion ``R x`` to subgoals with conclusions ``P(x + 1)``
+and ``P x``.
+
+Some of a proof term's expressions may be replaced by ``_``, asking
 |EasyCrypt| to infer them from the context.  Going even further, one
 may abbreviate a one-level proof term all of whose components are
-\ec{_} to just its lemma name. For example, we can write \ec{R} for
-\ec{(R _ _ _)}.  When used in backward reasoning, it will reduce a
-goal with conclusion \ec{R x} to subgoals with conclusions \ec{P(x +
-  1)} and \ec{Q x}. \fix{In forward reasoning they aren't equivalent---why?}
+``_`` to just its lemma name. For example, we can write ``R`` for
+``(R _ _ _)``.  When used in backward reasoning, it will reduce a goal
+with conclusion ``R x`` to subgoals with conclusions ``P(x + 1)`` and
+``Q x``.
 
 .. _subsec:occsels:
 
 Occurrence Selectors and Rewriting Directions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Some ambient logic tactics use \emph{occurrence selectors} to restrict
+Some ambient logic tactics use *occurrence selectors* to restrict
 their operation to certain occurrences of a term or formula in a
-goal's conclusion or formula assumption. The syntax is \ec{\{$i_1$,
-  $\;\ldots$, $\;i_n$\}}, specifying that only occurrences $i_1$
-throught $i_n$ of the term/formula in a depth-first, left-to-right
-traversal of the goal's conclusion or formula assumption should be
-operated on. Specifying \ec{\{- $i_1$, $\;\ldots$, $\;i_n$\}}
-restricts attention to all occurrences \emph{not} in the following
-list. They may also be empty, meaning that all applicable occurrences
-should be operated on.
+goal's conclusion or formula assumption. The syntax is ``{i_1, ...,
+i_n}`` , specifying that only occurrences ``i_1`` throught ``i_n`` of
+the term/formula in a depth-first, left-to-right traversal of the
+goal's conclusion or formula assumption should be operated
+on. Specifying ``{- i_1, ..., i_n}`` restricts attention to all
+occurrences *not* in the following list. They may also be empty,
+meaning that all applicable occurrences should be operated on.
 
-Some ambient logic tactics use \emph{rewriting directions}, $\mathit{dir}$,
-which may either be empty (meaning rewriting from left to right), or \ec{-},
-meaning rewriting from right to left.
+Some ambient logic tactics use *rewriting directions* which may either
+be empty (meaning rewriting from left to right), or ``-``, meaning
+rewriting from right to left.
 
 .. _subsec:introgen:
 
@@ -278,242 +288,286 @@ Introduction.
 One moves the assumptions of a goal's conclusion into the goal's
 context using the introduction tactical.  This tactical uses
 introduction patterns, which are defined in Figure~\ref{fig:intropat}.
-\begin{figure}
-  \begin{center}
-  \begin{tabular}{rcl>{\bf}l}
-    $\iota$ & ::=
-      & {$b$} & name \\
-      && {\ec{_}} & no name \\
-      && {\ec{+}} & auto revert \\
-      && {\ec{?}} & find name \\
-      && {$\mathit{occ}\;$\ec{->}} & rewrite using assumption \\
-      && {$\mathit{occ}\;$\ec{<-}} & rewrite in reverse using assumption \\
-      && {\ec{->>}} & substitute using assumption \\
-      && {\ec{<<-}} & substitute in reverse using assumption \\
-      && {\ec{/$p$}} & replace assumption by applying proof term \\
-      && {\ec{\{$a_1\cdots a_n$\}}} & clear introduced assumptions \\
-      && {\ec{/=}} & simplify \\
-      && {\ec{//}} & trivial \\
-      && {\ec{//=}} & simplify then trivial \\
-      && {\ec{$\mathit{dir}\;\mathit{occ}\;$@/$\mathit{op}$}} & unfold definition of operator \\
-      && {\ec{[$\iota_{11}\cdots\iota_{1{m_1}}$ | $\;\cdots$ | $\;\iota_{r1}\cdots\iota_{r{m_r}}$]}} & case pattern \\[.2cm]
-    $\mathit{b}$ & ::=
-      & {$x$} & identifier \\
-      && {$M$} & module name \\
-      && {\ec{&$m$}} & memory name \\
-  \end{tabular}
-  \end{center}
-  \caption{\label{fig:intropat} Introduction Patterns}
-\end{figure}
 
-In this definition, $\mathit{occ}$ ranges over occurrence selectors,
-and $\mathit{dir}$ ranges over directions---see
-Section :ref:`subsec:occsels`).
+.. FIXME
+.. \begin{figure}
+..   \begin{center}
+..   \begin{tabular}{rcl>{\bf}l}
+..     $\iota$ & ::=
+..       & {$b$} & name \\
+..       && {``_``} & no name \\
+..       && {``+``} & auto revert \\
+..       && {``?``} & find name \\
+..       && {$\mathit{occ}\;$``->``} & rewrite using assumption \\
+..       && {$\mathit{occ}\;$``<-``} & rewrite in reverse using assumption \\
+..       && {``->>``} & substitute using assumption \\
+..       && {``<<-``} & substitute in reverse using assumption \\
+..       && {``/$p$``} & replace assumption by applying proof term \\
+..       && {``\{$a_1\cdots a_n$\``}} & clear introduced assumptions \\
+..       && {``/=``} & simplify \\
+..       && {``//``} & trivial \\
+..       && {``//=``} & simplify then trivial \\
+..       && {``$\mathit{dir``\;\mathit{occ}\;$@/$\mathit{op}$}} & unfold definition of operator \\
+..       && {``[$\iota_{11``\cdots\iota_{1{m_1}}$ | $\;\cdots$ | $\;\iota_{r1}\cdots\iota_{r{m_r}}$]}} & case pattern \\[.2cm]
+..     $\mathit{b}$ & ::=
+..       & {$x$} & identifier \\
+..       && {$M$} & module name \\
+..       && {``&$m$``} & memory name \\
+..   \end{tabular}
+..   \end{center}
+..   \caption{\label{fig:intropat} Introduction Patterns}
+.. \end{figure}
 
-If a list $\iota_1,\ldots,\iota_n$ of introduction patterns consists
-entirely of \ec{//} (apply the \rtactic{trivial} tactic), \ec{/=}
-(apply the \rtactic{simplify} tactic) and \ec{//=} (apply the
-\ec{simplify} and then \ec{trivial}), then \emph{applying}
-$\iota_1,\ldots,\iota_n$ \emph{to} a list of goals $G_1,\ldots,G_m$ is
-done by applying the tactics corresponding to the $\iota_i$ in order
-to each $G_j$, causing some of the goals to be solved and thus
-disappear and some of the goals to be simplified.
+In this definition, ``?occ`` ranges over occurrence selectors, and
+``dir`` ranges over directions---see Section :ref:`subsec:occsels`).
 
-\begin{tactic}[$\tau$=>$\;\iota_1 \cdots \iota_n$]{introduction}
-  \begin{tsyntax}[empty]{}
-    Runs the tactic $\tau$, matching the resulting goals, $G_1,\ldots,G_l$,
-    with the introduction patterns $\iota_1,\ldots,\iota_n$:
-    \begin{itemize}
-    \item Suppose $k$ is such that all of $\iota_1,\ldots,\iota_{k-1}$
-      are \ec{//}, \ec{/=} and \ec{//=}, and either $k>n$ or $\iota_k$
-      is not \ec{//}, \ec{/=} or \ec{//=}.
+If a list ``i_1, ..., i_n`` of introduction patterns consists entirely
+of ``//`` (apply the :tactic:`trivial` tactic), ``/=`` (apply the
+:tactic:`simplify` tactic) and ``//=`` (apply the ``simplify`` and
+then ``trivial``), then *applying* ``i_1, ..., i_n`` *to* a list of
+goals ``G_1``, ..., ``G_m`` is done by applying the tactics
+corresponding to the ``i_k`` in order to each ``G_l``, causing some of
+the goals to be solved and thus disappear and some of the goals to be
+simplified.
 
-    \item Let $G'_1,\ldots,G'_{l'}$ be the goals resulting from
-      applying $\iota_1,\ldots,\iota_{k-1}$ to $G_1,\ldots,G_l$.
+.. tactic:: introduction
+   :display: tactic => i1 ... in
 
-    \item If $l'=0$, the tactical produces no subgoals.
+   Runs the tactic ``tactic`` and apply the introduction patterns
+   ``i1`` to ``in``:
 
-    \item Otherwise, if $k>n$, the tactical's result is
-      $G'_1,\ldots,G'_{l'}$.
+   - Suppose $k$ is such that all of $\iota_1,\ldots,\iota_{k-1}$ are
+     ``//``, ``/=`` and ``//=``, and either $k>n$ or $\iota_k$ is not
+     ``//``, ``/=`` or ``//=``.
 
-    \item Otherwise, if $\iota_k$ is not a case pattern, each subgoal
-      $G'_i$ is matched against $\iota_k,\ldots,\iota_n$ by the
-      procedure described below, with the resulting subgoals being
-      collected into a list of goals (maintaining order viz a viz the
-      indices $i$) as the tactical's result.
+   - Let $G'_1,\ldots,G'_{l'}$ be the goals resulting from applying
+     $\iota_1,\ldots,\iota_{k-1}$ to $G_1,\ldots,G_l$.
 
-    \item Otherwise, $\iota_k$ is a case pattern
-          \ec{[$\iota_{11}\cdots\iota_{1{m_1}}$ | $\;\cdots$ | $\;\iota_{r1}\cdots\iota_{r{m_r}}$]}.
+   - If $l'=0$, the tactical produces no subgoals.
 
-     \item If $\tau$ is not equivalent to \rtactic{idtac}, the tactic fails
-       unless $r = l'$, in which case each $G'_i$ is matched against 
-        \begin{displaymath}
-          \iota_{i1}\cdots\iota_{i{m_i}}\iota_{k+1}\cdots \iota_n
-        \end{displaymath}
-       by the procedure described below, with the resulting subgoals
-       being collected into the tactical's result.
+   - Otherwise, if $k>n$, the tactical's result is
+     $G'_1,\ldots,G'_{l'}$.
 
-     \item Otherwise, $\tau$ is equivalent to \rtactic{idtac} (and so
-       $l'=1$). In this case $G'_1$ is matched against
-       $\iota_k,\ldots,\iota_n$ by the procedure described below, with
-       the resulting subgoals being collected into a list of goals as
-       the tactical's result.
-    \end{itemize}
+   - Otherwise, if $\iota_k$ is not a case pattern, each subgoal
+     $G'_i$ is matched against $\iota_k,\ldots,\iota_n$ by the
+     procedure described below, with the resulting subgoals being
+     collected into a list of goals (maintaining order viz a viz the
+     indices $i$) as the tactical's result.
 
-    To match a goal $G$ against a list of introduction patterns
-    $\iota_1,\ldots,\iota_n$, the introduction patterns are processed
-    from left-to-right, as follows:
-    \begin{itemize}
-    \item ($b$)\quad The top assumption (universally quantified
-      identifier, module name or memory; or left side of implication)
-      is consumed, and introduced with this name. Fails if the top
-      assumption has neither of these forms.
+   - Otherwise, $\iota_k$ is a case pattern
+         ``[$\iota_{11``\cdots\iota_{1{m_1}}$ | $\;\cdots$ |
+         $\;\iota_{r1}\cdots\iota_{r{m_r}}$]}.
 
-    \item (\ec{$b\,$!})\quad Same as the preceding case, except that
-      $b$ is used as the base of the introduced name, extending the
-      base to avoid naming conflicts.
+   - If $\tau$ is not equivalent to :tactic:`idtac`, the tactic fails
+     unless $r = l'$, in which case each $G'_i$ is matched against 
 
-    \item (\ec{_})\quad Same as the preceding case, except the
-      assumption is introduced with an anonymous name (which can't be
-      uttered by the user).
+     .. math::
+        \iota_{i1}\cdots\iota_{i{m_i}}\iota_{k+1}\cdots \iota_n
 
-    \item (\ec{+})\quad Same as the preceding case, except that after
-      a branch of the procedure completes, yielding a goal, the
-      assumption will be reverted, i.e., un-introduced (using a
-      universal quantifier or implication as appropriate).
+     by the procedure described below, with the resulting subgoals
+     being collected into the tactical's result.
 
-    \item (\ec{?})\quad Same as the preceding case, except |EasyCrypt|
-      chooses the name by which the assumption is introduced (using
-      universally quantified names as assumption bases).
+   - Otherwise, $\tau$ is equivalent to :tactic:`idtac` (and so
+     $l'=1$). In this case $G'_1$ is matched against
+     $\iota_k,\ldots,\iota_n$ by the procedure described below, with
+     the resulting subgoals being collected into a list of goals as
+     the tactical's result.
 
-    \item ($\mathit{occ}\;$\ec{->})\quad Consume the top assumption,
-      which must be an equality, and use it as a left-to-right rewriting
-      rule in the remainder of the goal's conclusion, restricting rewriting
-      to the specified occurrences of the equality's left side.
+   To match a goal $G$ against a list of introduction patterns
+   $\iota_1,\ldots,\iota_n$, the introduction patterns are processed
+   from left-to-right, as follows:
 
-    \item ($\mathit{occ}\;$\ec{<-})\quad The same as the preceding case,
-      except the rewriting is from right-to-left.
+   - ($b$)\quad The top assumption (universally quantified identifier,
+     module name or memory; or left side of implication) is consumed,
+     and introduced with this name. Fails if the top assumption has
+     neither of these forms.
 
-    \item (\ec{->>})\quad The same as \ec{->}, except the consumed
-      equality assuption is used to perform a left-to-right substitution
-      in the entire goal, i.e., in its assumptions, as well as its
-      conclusion.
+   - (``$b\,$!``)\quad Same as the preceding case, except that $b$ is
+     used as the base of the introduced name, extending the base to
+     avoid naming conflicts.
 
-    \item (\ec{<<-})\quad The same as the preceding case, except
-      the substitution is from right-to-left.
+   - (``_``)\quad Same as the preceding case, except the assumption is
+     introduced with an anonymous name (which can't be uttered by the
+     user).
 
-    \item (\ec{/$p$})\quad Replace the top assumption by the result
-    of applying the proof term $p$ to it using forward reasoning.
+   - (``+``)\quad Same as the preceding case, except that after a
+     branch of the procedure completes, yielding a goal, the
+     assumption will be reverted, i.e., un-introduced (using a
+     universal quantifier or implication as appropriate).
 
-    \item (\ec{\{$a_1\cdots a_n$\}})\quad Doesn't affect the goal's
-      conclusion, but clears the specified assumptions, i.e., removes
-      them. Fails if one or more of the assumptions can't be cleared,
-      because a remaining assumption depends upon it.
+   - (``?``)\quad Same as the preceding case, except |EasyCrypt|
+     chooses the name by which the assumption is introduced (using
+     universally quantified names as assumption bases).
 
-    \item (\ec{/=})\quad Apply \rtactic{simplify} to goal's conclusion.
+   - (``?occ ->``)\quad Consume the top assumption, which
+     must be an equality, and use it as a left-to-right rewriting rule
+     in the remainder of the goal's conclusion, restricting rewriting
+     to the specified occurrences of the equality's left side.
 
-    \item (\ec{//})\quad Apply \rtactic{trivial} to goal's conclusion;
-      this may solve the goal, i.e., so that the procedure's current
-      branch yields no goals.
+   - (``?occ <-``)\quad The same as the preceding case,
+     except the rewriting is from right-to-left.
 
-    \item (\ec{/=})\quad Apply \rtactic{simplify} and then \rtactic{trivial}
-      to goal's conclusion; this may solve the goal, so that the
-      procedure's current branch yields no goals.
+   - (``->>``)\quad The same as ``->``, except the consumed equality
+     assuption is used to perform a left-to-right substitution in the
+     entire goal, i.e., in its assumptions, as well as its conclusion.
 
-    \item ({\ec{$\mathit{dir}\;\mathit{occ}\;$@/$\mathit{op}$}})\quad
-      Unfold (fold, if the direction is \ec{-}) the definition of
-      operator $\mathit{op}$ at the specified occurrences of the
-      goal's conclusion. See the \rtactic{rewrite} tactic for the
-      details.
+   - (``<<-``)\quad The same as the preceding case, except the
+     substitution is from right-to-left.
 
-    \item (\ec{[$\iota_{11}\cdots\iota_{1{m_1}}$ | $\;\cdots$ | $\;\iota_{r1}\cdots\iota_{r{m_r}}$]})\quad
-      \begin{itemize}
-      \item If $r=0$, then the top assumption of the goal is destructed
-        using the \rtactic{case} tactic, the resulting goals are
-        matched against $\iota_2,\ldots,\iota_n$, and their subgoals
-        are assembled into a list of goals.
+   - (``/$p$``)\quad Replace the top assumption by the result of
+     applying the proof term $p$ to it using forward reasoning.
 
-      \item Otherwise $r>0$. The goal's top assumption is destructed
-        using the \rtactic{case} tactic, yielding subgoals
-        $H_1,\ldots H_p$.  If $p\neq r$, the procedure fails. Otherwise
-        each subgoal $H_i$ is matched against
-        \begin{displaymath}
+   - (``\{$a_1\cdots a_n$\``})\quad Doesn't affect the goal's
+     conclusion, but clears the specified assumptions, i.e., removes
+     them. Fails if one or more of the assumptions can't be cleared,
+     because a remaining assumption depends upon it.
+
+   - (``/=``)\quad Apply :tactic:`simplify` to goal's conclusion.
+
+   - (``//``)\quad Apply :tactic:`trivial` to goal's conclusion; this
+     may solve the goal, i.e., so that the procedure's current branch
+     yields no goals.
+
+   - (``/=``)\quad Apply :tactic:`simplify` and then :tactic:`trivial`
+     to goal's conclusion; this may solve the goal, so that the
+     procedure's current branch yields no goals.
+
+   - ({``$\mathit{dir``\;\mathit{occ}\;$@/$\mathit{op}$}})\quad Unfold
+     (fold, if the direction is ``-``) the definition of operator
+     $\mathit{op}$ at the specified occurrences of the goal's
+     conclusion. See the :tactic:`rewrite` tactic for the details.
+
+   - (``[$\iota_{11``\cdots\iota_{1{m_1}}$ | $\;\cdots$ |
+     $\;\iota_{r1}\cdots\iota_{r{m_r}}$]})\quad
+
+     * If $r=0$, then the top assumption of the goal is destructed
+       using the :tactic:`case` tactic, the resulting goals are
+       matched against $\iota_2,\ldots,\iota_n$, and their subgoals
+       are assembled into a list of goals.
+
+     * Otherwise $r>0$. The goal's top assumption is destructed using
+       the :tactic:`case` tactic, yielding subgoals $H_1,\ldots H_p$.
+       If $p\neq r$, the procedure fails. Otherwise each subgoal $H_i$
+       is matched against
+
+       .. math::
+
           \iota_{i1}\cdots\iota_{i{m_i}}\iota_2\cdots \iota_n
-        \end{displaymath}
-        with the resulting goals being collected into a list as
-        the procedure's result.
-      \end{itemize}
-    \end{itemize}
 
-    The following examples use the tactic \rtactic{move}, which is
-    equivalent to \rtactic{idtac}.
-    In its simplest form, the introduction tactical simply gives names
-    to assumptions.  For example, if the current goal is
-    \ecinput{examps/parts/tactics/introduction/1-1.0.ec}{}{}{}{}
-    then running
-    \ecinput{examps/parts/tactics/introduction/1-1.ec}{}{}{}{}
-    produces
-    \ecinput{examps/parts/tactics/introduction/1-1.1.ec}{}{}{}{}
-    Alternatively, we can use the introduction pattern \ec{?}
-    to let |EasyCrypt| choose the assumption names, using
-    \ec{H} as a base for formula assumptions and starting
-    from the identifier names given in universal quantifiers:
-    \ecinput{examps/parts/tactics/introduction/2-1.ec}{}{}{}{}
-    produces
-    \ecinput{examps/parts/tactics/introduction/2-1.1.ec}{}{}{}{}
+       with the resulting goals being collected into a list as
+       the procedure's result.
 
-    To see how the \ec{->} rewriting pattern works, suppose
-    the current goal is
-    \ecinput{examps/parts/tactics/introduction/4-1.0.ec}{}{}{}{}
-    Then running
-    \ecinput{examps/parts/tactics/introduction/4-1.ec}{}{}{}{}
-    produces
-    \ecinput{examps/parts/tactics/introduction/4-1.1.ec}{}{}{}{}
-    Alternatively, one can introduce the assumption \ec{x = y},
-    and then use the \ec{->>} substitution pattern:
-    if the current goal is
-    \ecinput{examps/parts/tactics/introduction/8-1.0.ec}{}{}{}{}
-    then running
-    \ecinput{examps/parts/tactics/introduction/8-1.ec}{}{}{}{}
-    produces
-    \ecinput{examps/parts/tactics/introduction/8-1.1.ec}{}{}{}{}
+     The following examples use the tactic :tactic:`move`, which is
+     equivalent to :tactic:`idtac`.  In its simplest form, the
+     introduction tactical simply gives names to assumptions.  For
+     example, if the current goal is
 
-    To see how a view may be applied to a not-yet-introduced formula
-    assumption, suppose the current goal is
-    \ecinput{examps/parts/tactics/introduction/5-1.0.ec}{}{}{}{}
-    Then running
-    \ecinput{examps/parts/tactics/introduction/5-1.ec}{}{}{}{}
-    produces
-    \ecinput{examps/parts/tactics/introduction/5-1.1.ec}{}{}{}{}
-    And then running
-    \ecinput{examps/parts/tactics/introduction/5-2.ec}{}{}{}{}
-    on this goal produces
-    \ecinput{examps/parts/tactics/introduction/5-2.1.ec}{}{}{}{}
+     .. literalinclude:: examples/parts/tactics/introduction/1-1.0.ec
 
-    Finally, let's see examples of how a disjunction assumption
-    may be destructed, either using the \ec{case} tactic followed
-    by a case introduction pattern, or by making the
-    case introduction pattern do the destruction.
-    For the first case, if the current goal is
-    \ecinput{examps/parts/tactics/introduction/6-1.0.ec}{}{}{}{}
-    then running
-    \ecinput{examps/parts/tactics/introduction/6-1.ec}{}{}{}{}
-    produces the two goals
-    \ecinput{examps/parts/tactics/introduction/6-1.1.ec}{}{}{}{}
-    and
-    \ecinput{examps/parts/tactics/introduction/6-1.2.ec}{}{}{}{}
-    And for the second case, if the current goal is
-    \ecinput{examps/parts/tactics/introduction/7-1.0.ec}{}{}{}{}
-    then running
-    \ecinput{examps/parts/tactics/introduction/7-1.ec}{}{}{}{}
-    produces the two goals
-    \ecinput{examps/parts/tactics/introduction/7-1.1.ec}{}{}{}{}
-    and
-    \ecinput{examps/parts/tactics/introduction/7-1.2.ec}{}{}{}{}
-    Note how we used the clear pattern to discard the assumption
-    \ec{X}.
-  \end{tsyntax}
-\end{tactic}
+     then running
+
+     .. literalinclude:: examples/parts/tactics/introduction/1-1.ec
+
+     produces
+
+     .. literalinclude:: examples/parts/tactics/introduction/1-1.1.ec
+
+     Alternatively, we can use the introduction pattern ``?`` to let
+     |EasyCrypt| choose the assumption names, using ``H`` as a base
+     for formula assumptions and starting from the identifier names
+     given in universal quantifiers:
+
+     .. literalinclude:: examples/parts/tactics/introduction/2-1.ec
+
+     produces
+
+     .. literalinclude:: examples/parts/tactics/introduction/2-1.1.ec
+
+     To see how the ``->`` rewriting pattern works, suppose the
+     current goal is
+
+     .. literalinclude:: examples/parts/tactics/introduction/4-1.0.ec
+
+     Then running
+
+     .. literalinclude:: examples/parts/tactics/introduction/4-1.ec
+
+     produces
+
+     .. literalinclude:: examples/parts/tactics/introduction/4-1.1.ec
+
+     Alternatively, one can introduce the assumption ``x = y``, and
+     then use the ``->>`` substitution pattern: if the current goal is
+
+     .. literalinclude:: examples/parts/tactics/introduction/8-1.0.ec
+
+     then running
+
+     .. literalinclude:: examples/parts/tactics/introduction/8-1.ec
+
+     produces
+
+     .. literalinclude:: examples/parts/tactics/introduction/8-1.1.ec
+
+     To see how a view may be applied to a not-yet-introduced formula
+     assumption, suppose the current goal is
+
+     .. literalinclude:: examples/parts/tactics/introduction/5-1.0.ec
+
+     Then running
+
+     .. literalinclude:: examples/parts/tactics/introduction/5-1.ec
+
+     produces
+
+     .. literalinclude:: examples/parts/tactics/introduction/5-1.1.ec
+
+     And then running
+
+     .. literalinclude:: examples/parts/tactics/introduction/5-2.ec
+
+     on this goal produces
+
+     .. literalinclude:: examples/parts/tactics/introduction/5-2.1.ec
+
+     Finally, let's see examples of how a disjunction assumption may
+     be destructed, either using the ``case`` tactic followed by a
+     case introduction pattern, or by making the case introduction
+     pattern do the destruction.  For the first case, if the current
+     goal is
+
+     .. literalinclude:: examples/parts/tactics/introduction/6-1.0.ec
+
+     then running
+
+     .. literalinclude:: examples/parts/tactics/introduction/6-1.ec
+
+     produces the two goals
+
+     .. literalinclude:: examples/parts/tactics/introduction/6-1.1.ec
+
+     and
+
+     .. literalinclude:: examples/parts/tactics/introduction/6-1.2.ec
+
+     And for the second case, if the current goal is
+
+     .. literalinclude:: examples/parts/tactics/introduction/7-1.0.ec
+
+     then running
+
+     .. literalinclude:: examples/parts/tactics/introduction/7-1.ec
+
+     produces the two goals
+
+     .. literalinclude:: examples/parts/tactics/introduction/7-1.1.ec
+
+     and
+
+     .. literalinclude:: examples/parts/tactics/introduction/7-1.2.ec
+
+     Note how we used the clear pattern to discard the assumption
+     ``X``.
 
 Generalization.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -521,46 +575,61 @@ Generalization.
 The generalization tactical moves assumptions from the context into
 the conclusion and generalizes subterms or formulas of the conclusion.
 
-\begin{tactic}[$\tau$: $\;\pi_1 \cdots \pi_n$]{generalization}
-  \begin{tsyntax}[empty]{$\tau$: $\;\pi_1 \cdots \pi_n$}
-    Generalize the patterns $\pi_1, \ldots, \pi_n$, starting from
-    $\pi_n$ and going back, and then run tactic $\tau$.  \emph{This
-      tactical is only applicable to certain tactics: \rtactic{move},
-      \rtactic{case} (just the version that destructs the top
-      assumption of a goal's conclusion) and \rtactic{elim}.}
+.. tactic:: generalization
+   :display: tactic: pi_1 \cdots \pi_n
 
-    \begin{itemize}
-    \item When $\pi$ is an assumption from the context, it's moved
-      back into the conclusion, using universal quantification or an
-      implication, as appropriate. If one assumption depends on
-      another, one can't generalize the later without also
-      generalizing the former.
+   Generalize the patterns ``pi_1`` ... ``pi_n``, starting from
+   ``pi_n`` and going back, and then run tactic ``tactic``.  This
+   tactical is only applicable to certain tactics: :tactic:`move`,
+   :tactic:`case` (just the version that destructs the top assumption
+   of a goal's conclusion) and :tactic:`elim`.}
 
-      For example, if the current goal is
-      \ecinput{examps/parts/tactics/generalize/2-1.0.ec}{}{}{}{} then
-      running \ecinput{examps/parts/tactics/generalize/2-1.ec}{}{}{}{}
-      produces
-      \ecinput{examps/parts/tactics/generalize/2-1.1.ec}{}{}{}{} In
-      this example, one can't generalize \ec{x} without also
-      generalizing \ec{eq_xy}.
 
-    \item $\pi$ may also be a subformula or subterm of the goal, or
-      \ec{_}, which stands for the whole goal, possibly prefixed by an
-      occurrence selector. This replaces the formula or subterm with a
-      universally quantified identifier of the approprate type.
+   - When ``pi`` is an assumption from the context, it is moved back
+     into the conclusion, using universal quantification or an
+     implication, as appropriate. If one assumption depends on
+     another, one can't generalize the later without also generalizing
+     the former.
 
-      For example, if the current goal is
-      \ecinput{examps/parts/tactics/generalize/1-1.0.ec}{}{}{}{} then
-      running \ecinput{examps/parts/tactics/generalize/1-1.ec}{}{}{}{}
-      produces
-      \ecinput{examps/parts/tactics/generalize/1-1.1.ec}{}{}{}{}
-      Alternatively, running
-      \ecinput{examps/parts/tactics/generalize/3-1.ec}{}{}{}{}
-      produces
-      \ecinput{examps/parts/tactics/generalize/3-1.1.ec}{}{}{}{}
-    \end{itemize}
-  \end{tsyntax}
-\end{tactic}
+     For example, if the current goal is
+
+     .. literalinclude:: examples/parts/tactics/generalize/2-1.0.ec
+
+     then running
+
+     .. literalinclude:: examples/parts/tactics/generalize/2-1.ec
+
+     produces
+
+     .. literalinclude:: examples/parts/tactics/generalize/2-1.1.ec
+
+     In this example, one cannot generalize ``x`` without also
+      generalizing ``eq_xy``.
+
+   - ``pi`` may also be a subformula or subterm of the goal, or ``_``,
+     which stands for the whole goal, possibly prefixed by an
+     occurrence selector. This replaces the formula or subterm with a
+     universally quantified identifier of the approprate type.
+
+     For example, if the current goal is
+
+     .. literalinclude:: examples/parts/tactics/generalize/1-1.0.ec
+
+     then running
+
+     .. literalinclude:: examples/parts/tactics/generalize/1-1.ec
+
+     produces
+
+     .. literalinclude:: examples/parts/tactics/generalize/1-1.1.ec
+
+     Alternatively, running
+
+     .. literalinclude:: examples/parts/tactics/generalize/3-1.ec
+
+     produces
+
+     .. literalinclude:: examples/parts/tactics/generalize/3-1.1.ec
 
 Tactics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -606,133 +675,156 @@ Tacticals
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Tactics can be combined together, composed and modified by
-\emph{tacticals}. We've already seen the introduction and generalization
+*tacticals*. We've already seen the introduction and generalization
 tacticals, which turn a tactic $\tau$ and a list of patterns into
 a composite tactic, which may then combined with other tactics.
 
-\begin{tactic}[$\tau_1$; $\;\tau_2$]{sequence}
-  \begin{tsyntax}[empty]{t1; t2}
-  Apply $\tau_2$ to all the subgoals generated by $\tau_1$.
-  Sequencing groups to the left, so that
-  \ec{$\tau_1$; $\;\tau_2$; $\;\tau_3$} means
-  \ec{($\tau_1$; $\;\tau_2$); $\;\tau_3$}.
+.. tactic:: sequence
+   :display: tactic_1; tactic_2
+
+   Apply ``tactic_2`` to all the subgoals generated by ``tactic_1``.
+   Sequencing associates to the left.
   
-  For example, if the current goal is
-  \ecinput{examps/parts/tactics/sequence-tactical/1-1.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/sequence-tactical/1-1.ec}{}{}{}{}
-  produces the goals
-  \ecinput{examps/parts/tactics/sequence-tactical/1-1.1.ec}{}{}{}{}
-\end{tsyntax}
-\end{tactic}
+   For example, if the current goal is
 
-\begin{tactic}[$\tau_1$; \[$\;\tau'_1$ | $\;\cdots$ | $\;\tau'_n$\]]{sequence with branching}
-  \begin{tsyntax}[empty]{}
-    Run $\tau_1$, which must generate exactly $n$ subgoals, $G_1,\ldots,G_n$.
-    Then apply $\tau'_i$ to $G_i$, for all $i$.
+   .. literalinclude:: examples/parts/tactics/sequence-tactical/1-1.0.ec
 
-  For example, if the current goal is
-  \ecinput{examps/parts/tactics/sequence-branching-tactical/1-1.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/sequence-branching-tactical/1-1.ec}{}{}{}{}
-  solves the goal.
-  \end{tsyntax}
-\end{tactic}
+   then running
 
-\begin{tactic}[try $\;\tau$]{failure recovery}\label{tactic-try}
-  \begin{tsyntax}[empty]{try t}
-  Execute the tactic $\tau$ if it succeeds; do nothing (leave the
-  goal unchanged) if it fails.
+   .. literalinclude:: examples/parts/tactics/sequence-tactical/1-1.ec
 
-  \paragraph{Remark.}
-  By default, |EasyCrypt| proofs are run in \ec{strict} mode. In this
-  mode, \ec{smt} failures cannot be caught using \ec{try}. This allows
-  |EasyCrypt| to always build the proof tree correctly, even in weak
-  check mode, where \ec{smt} calls are assumed to succeed. Inside a
-  strict proof, weak check mode can be turned on and off at will,
-  allowing for the fast replay of proof sections during
-  development. In any event, we recommend \emph{never} using \ec{try
-    smt}: a little thought is much more cost-effective than failing
-  \ec{smt} calls.
-  \end{tsyntax}
-\end{tactic}
+   produces the goals
 
-\begin{tactic}[do! $\;\tau$]{tactic repetition}
-  \begin{tsyntax}[empty]{do! t}
-    Apply $\tau$ to the current goal, then repeatedly apply it to all
-    subgoals, stopping on a branch only when it fails. An error is
-    produced it $\tau$ does not apply to the current goal.
-  \end{tsyntax}
+   .. literalinclude:: examples/parts/tactics/sequence-tactical/1-1.1.ec
 
-  For example, if the current goal is
-  \ecinput{examps/parts/tactics/do-tactical/1-1.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/do-tactical/1-1.ec}{}{}{}{}
-  produces the goals
-  \ecinput{examps/parts/tactics/do-tactical/1-1.1.ec}{}{}{}{}
-  and
-  \ecinput{examps/parts/tactics/do-tactical/1-1.2.ec}{}{}{}{}
+.. tactic:: sequence with branching
+   :display: tactic; [tactic_1 | ... | tactic_n]
 
-  \paragraph{Variants.}\strut
+   Run ``tactic``, which must generate exactly $n$ subgoals, ``G_1``
+   to ``G_n``, and then, for all ``i``, apply ``tactic_i`` to ``G_i``.
 
-  \begin{tabularx}{\textwidth}{@{}ll@{}}
-  {\ec{do? $\;\tau$}} & apply $\tau$ 0 or more times, until it fails\\
-  {\ec{do $\;n$! $\;\tau$}} & apply $\tau$ with depth exactly $n$\\
-  {\ec{do $\;n$? $\;\tau$}} & apply $\tau$ with depth at most $n$
-  \end{tabularx}
-\end{tactic}
+   For example, if the current goal is
 
-\begin{tactic}[$\tau$; first $\;\tau_2$]{goal selection}
-  \begin{tsyntax}[empty]{t1; first t2}
-    Apply the tactic $\tau_1$, then apply $\tau_2$ on the first
-    subgoal generated by \ec{t1}, leaving the other goals unchanged.
-    An error is produced if no subgoals are generated by $\tau_1$.
+   .. literalinclude:: examples/parts/tactics/sequence-branching-tactical/1-1.0.ec
 
-  \paragraph{Variants.}\strut
+   then running
 
-  \noindent\begin{tabularx}{\textwidth}{@{}ll@{}}
-    {\ec{$\tau_1$; first $\;n$ $\;\tau_2$}} & apply $\tau_2$ on the
-    first $n$ subgoals generated by $\tau_1$\\[.4cm]
-    {\ec{$\tau_1$; last $\;\tau_2$}} & apply $\tau_2$ on the last subgoal
-    generated by $\tau_1$\\[.4cm]
-    {\ec{$\tau_1$; last $\;n$ $\;\tau_2$}} & apply $\tau_2$ on the last $n$
-    subgoals generated by $\tau_1$\\[.4cm]
-    {\ec{$\tau$; first $\;n\!$ last}} & \parbox{250pt}{reorder the subgoals
-      generated by $\tau$, moving the first $n$ to the end of the
-      list} \\[.4cm]
-    {\ec{$\tau$; last $\;n\!$ first}} & \parbox{250pt}{reorder the subgoals
-      generated by $\tau$, moving the last $n$ to the beginning of the
-      list} \\[.4cm]
-    {\ec{$\tau$; last first}} & \parbox{250pt}{reorder the subgoals generated
-    by $\tau$, moving the last one to the beginning of the list}\\[.4cm]
-    {\ec{$\tau$; first last}} & \parbox{250pt}{reorder the subgoals
-     generated by $\tau$, moving the first one to the end of the list}
-  \end{tabularx}
+   .. literalinclude:: examples/parts/tactics/sequence-branching-tactical/1-1.ec
 
-  \bigskip
-  For example, if the current goal is
-  \ecinput{examps/parts/tactics/sequence-reordering-tactical/1-1.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/sequence-reordering-tactical/1-1.ec}{}{}{}{}
-  produces the goals
-  \ecinput{examps/parts/tactics/sequence-reordering-tactical/1-1.1.ec}{}{}{}{}
-  and
-  \ecinput{examps/parts/tactics/sequence-reordering-tactical/1-1.2.ec}{}{}{}{}
-  \end{tsyntax}
-\end{tactic}
+   solves the goal.
 
-\begin{tactic}[by $\;\tau$]{closing goals}
-  \begin{tsyntax}[empty]{by t}
-  Apply the tactic $\tau$ and try to close all the generated subgoals using
-  \rtactic{trivial}. Fail if not all subgoals can be closed.
-  \end{tsyntax}
+.. tactic:: failure recovery
+   :name: tactic-try
+   :display: try tactic
 
-  \paragraph{Remark.} Inside the a lemma's proof, \ec{by []} is
-  equivalent to \ec{by trivial}.  But the form
-\begin{easycrypt}{}{}
-lemma #$\;\cdots$# by [].
-\end{easycrypt}
-  means
-\begin{easycrypt}{}{}
-lemma #$\;\cdots$# by (trivial; smt).
-\end{easycrypt}
-\end{tactic}
+   Execute the tactic ``tactic`` if it succeeds; do nothing (leave the
+   goal unchanged) if it fails.
+
+   **Remark.** By default, |EasyCrypt| proofs are run in ``strict``
+   mode. In this mode, ``smt`` failures cannot be caught using
+   ``try``. This allows |EasyCrypt| to always build the proof tree
+   correctly, even in weak check mode, where ``smt`` calls are assumed
+   to succeed. Inside a strict proof, weak check mode can be turned on
+   and off at will, allowing for the fast replay of proof sections
+   during development. In any event, we recommend *never* using ``try
+   smt``: a little thought is much more cost-effective than failing
+   ``smt`` calls.
+
+.. tactic:: tactic repetition
+   :display: do! tactic
+
+   Apply ``tactic`` to the current goal, then repeatedly apply it to
+   all subgoals, stopping on a branch only when it fails. An error is
+   produced it ``tactic`` does not apply to the current goal.
+
+   For example, if the current goal is
+
+   .. literalinclude:: examples/parts/tactics/do-tactical/1-1.0.ec
+
+   then running
+
+   .. literalinclude:: examples/parts/tactics/do-tactical/1-1.ec
+
+   produces the goals
+
+   .. literalinclude:: examples/parts/tactics/do-tactical/1-1.1.ec
+
+   and
+
+   .. literalinclude:: examples/parts/tactics/do-tactical/1-1.2.ec
+
+   **Variants.**
+
+   - ``do? tactic``: apply ``tactic`` 0 or more times, until it fails
+   - ``do n tactic`` : apply ``tactic`` with depth exactly ``n``
+   - ``do n? tactic`` : apply ``tactic`` with depth at most ``n``
+
+.. tactic:: goal selection
+   :display: tactic_1; first tactic_2
+
+   Apply the tactic ``tactic_1``, then apply ``tactic_2`` on the first
+   subgoal generated by ``tactic_1``, leaving the other goals
+   unchanged.  An error is produced if no subgoals are generated by
+   ``tactic_1``.
+
+   **Variants.**
+
+   - ``tactic_1; first n tactic_2``} : apply ``tactic_2`` on the
+     first ``n`` subgoals generated by ``tactic_1``
+
+   - ``tactic_1; last tactic_2`` : apply ``tactic_2`` on the last subgoal
+     generated by ``tactic_1``
+
+   - ``tactic_1; last n tactic_2`` : apply ``tactic_2`` on the last
+     ``n`` subgoals generated by ``tactic_1``
+
+   - ``tactic; first n last`` : reorder the subgoals generated by
+     ``tactic``, moving the first ``n`` to the end
+
+   - ``tactic; last n first`` : reorder the subgoals generated by
+     ``tactic``, moving the last ``n`` to the beginning
+
+   - ``tactic; last first`` : reorder the subgoals generated
+     by ``tactic``, moving the last one to the beginning
+
+   - ``tacti; first last`` : reorder the subgoals generated by
+     ``tactic``, moving the first one to the end
+
+   For example, if the current goal is
+
+   .. literalinclude:: examples/parts/tactics/sequence-reordering-tactical/1-1.0.ec
+
+   then running
+
+   .. literalinclude:: examples/parts/tactics/sequence-reordering-tactical/1-1.ec
+
+   produces the goals
+
+   .. literalinclude:: examples/parts/tactics/sequence-reordering-tactical/1-1.1.ec
+
+   and
+
+   .. literalinclude:: examples/parts/tactics/sequence-reordering-tactical/1-1.2.ec
+
+.. tactic:: closing goals
+   :display: by tactic
+
+   Apply the tactic ``tactic`` and try to close all the generated
+   subgoals using :tactic:`trivial`. Fail if not all subgoals can be
+   closed.
+
+   **Remarks.** Inside the a lemma's proof, ``by []`` is equivalent to
+   ``by trivial``.  But the form
+
+   .. code-block:: easycrypt
+
+      lemma ... by [].
+
+   means
+
+   .. code-block:: easycrypt
+
+      lemma ... by (trivial; smt).
 
 .. .................................................................
 .. _sec:programlogics:

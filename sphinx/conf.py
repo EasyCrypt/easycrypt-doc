@@ -8,9 +8,6 @@ ROOT = os.path.realpath(os.path.dirname(__file__))
 
 sys.path.insert(0, os.path.join(ROOT, '_extensions'))
 
-# --------------------------------------------------------------------
-import eclexer
-
 # -- General configuration -------------------------------------------
 
 needs_sphinx   = '1.6'
@@ -19,8 +16,7 @@ extensions     = [
     'sphinx.ext.mathjax',
     'sphinxcontrib.bibtex',
     'inlinemath',
-    'eclexer',
-    'inlinehg',
+    'easycrypt',
 ]
 templates_path = ['_templates']
 source_suffix  = '.rst'
@@ -41,6 +37,7 @@ numfig             = True
 # --------------------------------------------------------------------
 def setup(app):
     app.add_stylesheet('styles.css')
+    app.add_stylesheet('xbootstrap.css')
     app.add_javascript('collapse.js')
 
 # -- Options for HTML output -----------------------------------------
@@ -57,9 +54,9 @@ html_theme_options = dict(
     navbar_sidebarrel       = False,
     navbar_pagenav          = True,
     navbar_pagenav_name     = "Page",
-    globaltoc_depth         = 2,
+    globaltoc_depth         = 3,
     globaltoc_includehidden = True,
-    navbar_class            = "navbar navbar-default",
+    navbar_class            = "navbar navbar-default navbar-expand-sm",
     navbar_fixed_top        = True,
     source_link_position    = "footer",
     # Bootswatch (http://bootswatch.com/) theme.
