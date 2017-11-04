@@ -152,13 +152,134 @@ A lemma's proof may be saved, using the step ``qed``, when the list of
 goals becomes empty. And this must be done before anything else may be
 done.
 
-Remark.
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+**Remark.** In the descriptions of |EasyCrypt|'s tactics given in the
+following two sections, unless otherwise specified, you should assume
+that the subgoals to which a tactic reduces a goal have the same
+contexts as that original goal.
 
-In the descriptions of |EasyCrypt|'s tactics given in the following two
-sections, unless otherwise specified, you should assume that the
-subgoals to which a tactic reduces a goal have the same contexts as
-that original goal.
+.. .................................................................
+.. _sec:ambientlogic:
 
-.. FIXME: Ambient Logic Section
-.. FIXME: Program Logic Section
+Ambient logic
+--------------------------------------------------------------------
+
+.. FIXME
+
+.. .................................................................
+.. _sec:programlogics:
+
+Program Logics
+--------------------------------------------------------------------
+
+In this section, we describe the tactics of |EasyCrypt|'s three program
+logics: |prhl|, |phl| and |hl|.  There are five rough classes of program
+logic tactics:
+
+#. those that actually reason about the program in Hoare logic style;
+
+#. those that correspond to semantics-preserving program
+   transformations or compiler optimizations;
+
+#. those that operate at the level of specifications, strenghtening,
+   combining or splitting goals without modifying the program;
+
+#. tactics that automate the application of other tactics;
+
+#. advanced tactics for handling eager/lazy sampling and bounding the
+   probability of failure.
+
+We discuss these five classes in turn.
+
+Some of the program reasoning tactics have two modes when used on
+goals whose conclusions are |prhl| statement judgements.  Their
+default mode is to operate on both programs at once. When a side is
+specified (using ``tau{1}`` or ``tau{2}``), a one-sided variant is
+used, with ``1`` referring to the left program, and ``2`` to the right
+one.
+
+.. _subsec:reasoningprograms:
+
+Tactics for Reasoning about Programs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+
+   proc <tactics/proc>
+   skip <tactics/skip>
+   seq <tactics/seq>
+   sp <tactics/sp>
+   wp <tactics/wp>
+   rnd <tactics/rnd>
+   if <tactics/if>
+   while <tactics/while>
+   call <tactics/call>
+
+.. _subsec:transformingprograms:
+
+Tactics for Transforming Programs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Unless otherwise specified, the tactics of this subsection only apply
+to goals whose conclusions are |prhl|, |phl| or |hl| statement
+judgements, reducing such a goal to a single subgoal in which only the
+program(s) of those statement judgements have changed.
+
+Many of these tactics take *code positions* consisting of a sequence
+of positive numerals separated by dots.  E.g., ``2.1.3`` says to go to
+the statement 2 of the program, then to substatement 1 of it, then to
+sub-substatement 3 of it. We use the variable ``c`` to range over code
+positions.
+
+.. toctree::
+
+   swap <tactics/swap>
+   inline <tactics/inline>
+   rcondt <tactics/rcondt>
+   rcondf <tactics/rcondf>
+   
+   unroll <tactics/unroll>
+   splitwhile <tactics/splitwhile>
+   fission <tactics/fission>
+   fusion <tactics/fusion>
+   
+   alias <tactics/alias>
+   cfold <tactics/cfold>
+   kill <tactics/kill>
+
+Tactics for Reasoning about Specifications
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+
+   symmetry <tactics/symmetry>
+   transitivity <tactics/transitivity>
+   conseq <tactics/conseq>
+   case_pl <tactics/case_pl>
+   byequiv <tactics/byequiv>
+   byphoare <tactics/byphoare>
+   bypr <tactics/bypr>
+   exists_star <tactics/exists_star>
+   elim_star <tactics/elim_star>
+   hoare <tactics/hoare>
+   phoare_split <tactics/phoare_split>
+
+.. _subsec:automatedtactics:
+
+Automated Tactics
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+
+   exfalso <tactics/exfalso>
+   auto <tactics/auto>
+   sim <tactics/sim>
+
+.. _subsec:advancedtactics:
+
+Advanced Tactics
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+
+   fel <tactics/fel>
+   eager <tactics/eager>
