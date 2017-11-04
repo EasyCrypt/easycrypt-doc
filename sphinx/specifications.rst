@@ -1,8 +1,8 @@
 .. -*- rst -*-
 
-.. chap:specifications:
-
 .. include:: prelude.rhst
+
+.. _chap:specifications:
 
 Specifications
 ====================================================================
@@ -61,19 +61,19 @@ higher-order logic for proving general mathematical facts, as well as
 for connecting judgments from the other logics
 
 Proofs are carried out using tactics, which is the focus of
-Chapter~\ref{chap:tactics}.  |EasyCrypt| also has ways (theories and
+Chapter :ref:`chap:tactics`.  |EasyCrypt| also has ways (theories and
 sections) of structuring specifications and proofs, which will be
-described in Chapter~\ref{chap:structuring}. In
-Chapter~\ref{chap:library}, we'll survey the |EasyCrypt| Library,
+described in Chapter :ref:`chap:structuring`. In
+Chapter :ref:`chap:library`, we'll survey the |EasyCrypt| Library,
 which consists of numerous theories, defining mathematical structures
 (like groups, rings and fields), data structures (like finite sets and
 maps), and cryptographic constructions (like random oracles and
 different forms of encryption).
 
+.. _sec:lexical:
+
 Lexical Categories
 --------------------------------------------------------------------
-
-\label{sec:lexical}
 
 |EasyCrypt|'s language has a number of lexical categories:
 
@@ -256,8 +256,8 @@ Type Expressions
 (product) types. Type constructors include built-in types and
 user-defined types, such as *record* types and *datatypes* (or
 *variant types*). The syntax of type expressions is given in
-Figure~\ref{fig:tyexpr}, whereas the precedence and associativity of
-type operators are given in Figure~\ref{fig:typrec}.
+:numref:`fig:tyexpr`, whereas the precedence and associativity of
+type operators are given in :numref:`fig:typrec`.
 
 It is worth noting that |EasyCrypt|'s types must be inhabited ---
 i.e. nonempty.
@@ -333,9 +333,9 @@ Type variables
 Type variables represent unknown types or type parameters. For
 example, the type ``'a * 'a`` is the type the of pair whose elements
 are of unknown type ``'a``. Type variables may be used in type
-declarations (Section~\ref{subsec:tydecl}) to define type constructors
+declarations (Section :ref:`subsec:tydecl`) to define type constructors
 or in operators/predicates declarations
-(Section~\ref{subsec:expressions}) to define polymorphic
+(Section :ref:`subsec:expressions`) to define polymorphic
 operators/predicates. The special type variable ``_`` (underscore)
 represents a type variable whose name is not specified.
 
@@ -364,13 +364,13 @@ Datatypes and record types
 
 There are no expressions for describing datatypes and record
 types. Indeed, those are always named and must be defined and named
-before use. See Section~\ref{subsec:tydecl} for how to define variant
+before use. See Section :ref:`subsec:tydecl` for how to define variant
 and record types.
+
+.. _subsec:tydecl:
 
 Type Declarations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-\label{subsec:tydecl}
 
 Record types may be declared like this:
 
@@ -470,10 +470,10 @@ Finally, abstract types and type operators may be declared, as in:
 
 We'll see later how such types and type operators may be used.
 
+.. _subsec:expressions:
+
 Expressions and Operator Declarations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-\label{subsec:expressions}
 
 We'll now survey |EasyCrypt|'s typed expressions. Anonymous functions
 are written
@@ -655,7 +655,7 @@ abstract value ``x`` of type ``int``.  Function application has higher
 precedence than prefix operators, which have higher precedence than
 infix operators, prefix operators group to the right, and infix
 operators have the associativities and relative precedences that were
-detailed in Section~\ref{sec:lexical}.
+detailed in Section :ref:`sec:lexical`.
 
 The four mixfix operators may be declared and used as follows. They
 are (double) quoted when being declared or used in non-mixfix form
@@ -741,11 +741,11 @@ The operator ``=`` is equality. On the booleans, we have negation
 (``<=>``).  The two disjunctions (respectively, conjunctions) are
 semantically equivalent, but are treated differently by |EasyCrypt|
 proof engine. The associativities and precedences of the infix
-operators were given in Section~\ref{sec:lexical}, and (as a prefix
+operators were given in Section :ref:`sec:lexical`, and (as a prefix
 operator) ``!`` has higher precedence than all of them. The expression
 ``e1 <> e2`` is treated as ``!(e1 = e2)``. The symbol ``<>`` is not an
 operator, but it has the precedence and non-associative status of
-Section~\ref{sec:lexical}.  The intended meaning of ``mu d p`` is the
+Section :ref:`sec:lexical`.  The intended meaning of ``mu d p`` is the
 probability that randomly choosing a value of the given type from the
 sub-distribution ``d`` will satisfy the event ``p`` (in the sense of
 causing it to return ``true``).
@@ -783,7 +783,7 @@ the prefix operators, but higher than the infix operators.
 
 For the built-in types ``bool``, ``int`` and ``real``, and the type
 operator ``distr``, the |EasyCrypt| Library (see
-Chapter~\ref{chap:library}) provides corresponding theories, ``Bool``,
+Chapter :ref:`chap:library`) provides corresponding theories, ``Bool``,
 ``Int``, ``Real`` and ``Distr``. These theories provide various
 operations, axioms, etc.  To make use of a theory, one must
 ``require`` it.  E.g.,
@@ -819,7 +819,7 @@ requiring and importing in one step:
    require import Bool Int Real Distr.
 
 We'll cover theories and their usage in detail in
-Chapter~\ref{chap:structuring}.
+Chapter :ref:`chap:structuring`.
 
 Requiring the theory ``Bool`` makes available the value ``{0,1}`` of
 type ``bool distr``, which is the uniform distribution on the
@@ -899,9 +899,9 @@ Modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 |EasyCrypt|'s modules consist of typed global variables and
-procedures, which have different name spaces.
-aListing~\ref{list:simpmod} contains the definition of a simple module,
-``M``, which exemplifies much of the module language.
+procedures, which have different name spaces.  :numref:`list:simpmod`
+contains the definition of a simple module, ``M``, which exemplifies
+much of the module language.
 
 .. literalinclude:: examples/specifications-examp1.ec
    :caption: Simple Module
@@ -991,7 +991,7 @@ may use pattern matching, as in
 in the case where ``e`` produces a triple.
 
 The two remaining kinds of statements are illustrated in
-Listing~\ref{list:condwhileexamp}: *conditionals* and *while loops*.
+:numref:`list:condwhileexamp`: *conditionals* and *while loops*.
 
 .. literalinclude:: examples/specifications-examp2.ec
    :caption: Conditionals and While Loops
@@ -1033,9 +1033,9 @@ as in:
 
    if (z <= 5) y <- y - z;
 
-As illustrated in Listing~\ref{list:usingothermoduleexamp}, modules
-may access the global variables, and call the procedures, of
-previously declared modules.
+As illustrated in :numref:`list:usingothermoduleexamp`, modules may
+access the global variables, and call the procedures, of previously
+declared modules.
 
 .. literalinclude:: examples/specifications-examp3.ec
    :caption: One Module Using Another Module
@@ -1130,7 +1130,7 @@ using underscores, writing, e.g.,
 Note that module types say nothing about the global variables a module
 should have. Modules types have a different name space than modules.
 
-Listing~\ref{list:guessormodule} contains an example guessing oracle
+:numref:`list:guessormodule` contains an example guessing oracle
 implementation.
 
 .. literalinclude:: examples/specifications-examp4.ec
@@ -1149,7 +1149,7 @@ procedure returns the value of ``guessed``, indicating whether the
 secret has been successfully guessed, so far.  ``Or`` *satisfies* the
 specification of the module type ``OR``, and we can ask |EasyCrypt| to
 check this by supplying that module type when declaring ``Or``, as in
-Listing~\ref{list:guessormodulecheck}.
+:numref:`list:guessormodulecheck`.
 
 .. literalinclude:: examples/specifications-examp5.ec
    :caption: Guessing Oracle Module with Module Type Check
@@ -1240,7 +1240,7 @@ the adversary's global variables (if any) by using a star annotation:
    }.
 
 The full Guessing Game example is contained in
-Listing~\ref{list:fullguessing}.
+:numref:`list:fullguessing`.
 
 .. literalinclude:: examples/specifications-examp5.ec
    :caption: Full Guessing Game Example
@@ -1328,10 +1328,10 @@ understanding of the adversary's power. The answer is that
 we'll see in the next section how such constraints are modeled using
 |EasyCrypt|'s logic.
 
+.. _subsec:globalvariables:
+
 Global Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-\label{subsec:globalvariables}
 
 The set of all *global variables of* a module ``M`` is the union of
 
@@ -1562,7 +1562,7 @@ equality of memories.
 If ``M`` is a module and ``&m`` is a memory, then ``(glob M){m}`` is
 the value of type ``glob M`` consisting of the tuple whose components
 are the values of all the global variables of ``M`` in ``&m``.  (See
-Subsection~\ref{subsec:globalvariables} for the definition of the set
+Subsection :ref:`subsec:globalvariables` for the definition of the set
 of all global variables of a module.)
 
 For convenience, we have the following derived syntax for formulas: If
@@ -1849,7 +1849,7 @@ or
    lemma L : phi by [].
 
 In the first case, the proof consists of a single tactic; the meaning
-of ``by []`` will be described in Chapter~\ref{chap:tactics}.
+of ``by []`` will be described in Chapter :ref:`chap:tactics`.
 
 One may also parameterize an axiom of lemma by the free identifiers of
 its formula, as in:
@@ -1865,7 +1865,7 @@ or
    lemma Sym (x y : int) : x = y => y = x.
 
 This version of ``Sym`` has the same logical meaning as the previous
-one. But we'll see in Chapter~\ref{chap:tactics} why the parameterized
+one. But we'll see in Chapter :ref:`chap:tactics` why the parameterized
 form makes an axiom or lemma easier to apply.
 
 Polymorphic axioms and lemmas may be stated using a syntax reminiscent
@@ -1899,7 +1899,7 @@ relations.  E.g., an abstract type of monoids may be axiomatized by:
 
 Any proofs we do involving monoids will then apply to any valid
 instantiation of ``monoid``, ``id`` and ``(+)``. In
-Chapter~\ref{chap:structuring}, we'll see how to carry out such
+Chapter :ref:`chap:structuring`, we'll see how to carry out such
 instantiations using theory cloning.
 
 One must be careful with axioms, however, because it's easy to

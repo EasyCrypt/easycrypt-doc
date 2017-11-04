@@ -1,6 +1,6 @@
 Type variables: <none>
 
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 forall _ (z : int),
   phoare[ x <- x + (i + 1); i <- i + 1 :
            ((0 <= i <= n /\ x <= i * i) /\ i < n) /\ n - i = z ==>

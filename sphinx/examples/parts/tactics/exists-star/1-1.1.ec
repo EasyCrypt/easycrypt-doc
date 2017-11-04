@@ -1,6 +1,6 @@
 Type variables: <none>
 
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 pre =
   exists (f f0 : int),
     (f = y{1} + 1 /\ f0 = N.x{2} - y{1}) /\

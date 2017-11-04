@@ -8,7 +8,14 @@ EasyCrypt Reference Manual
 
    started
    specifications
+   structuring
+   tactics
+   library
+   advanced
+   examples
+   z_bibliography
    sandbox
+
 
 Indices and tables
 ====================================================================

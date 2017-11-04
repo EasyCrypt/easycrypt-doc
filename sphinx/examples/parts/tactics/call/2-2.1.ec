@@ -1,7 +1,7 @@
 Type variables: <none>
 
 x2: int
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 &1 (left ) : M.g
 &2 (right) : N.g
 

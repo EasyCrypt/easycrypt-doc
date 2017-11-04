@@ -1,6 +1,6 @@
 Type variables: <none>
 
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 Context : N.f
 
 pre = N.y %% 2 = 0

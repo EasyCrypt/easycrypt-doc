@@ -1,6 +1,6 @@
 Type variables: <none>
 
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 &1 (left ) : N.f
 &2 (right) : M.f
 

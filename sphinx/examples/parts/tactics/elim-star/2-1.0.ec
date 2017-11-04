@@ -1,6 +1,6 @@
 Type variables: <none>
 
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 Context : M.g
 
 pre = x = -1

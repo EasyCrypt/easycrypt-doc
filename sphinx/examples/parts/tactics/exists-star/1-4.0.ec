@@ -1,6 +1,6 @@
 Type variables: <none>
 
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 Context : M.f
 
 pre = 0 <= y /\ 0 <= M.x

@@ -1,6 +1,6 @@
 Type variables: <none>
 
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 forall (f f0 : int),
   equiv[ M.f.z <- (-M.x{hr}) + M.f.y{hr} ~ N.f.z <-
             N.x{hr} - N.f.y{hr} :

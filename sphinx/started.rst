@@ -1,8 +1,8 @@
 .. -*- rst -*-
 
-.. chap:started:
-
 .. include:: prelude.rhst
+
+.. _chap:started:
 
 Getting Started
 ====================================================================
@@ -64,9 +64,9 @@ Running |EasyCrypt|
 --------------------------------------------------------------------
 
 |EasyCrypt| scripts resides in files with the ``.ec`` suffix. (As we
-will see in Chapter `[chap:structuring] <#chap:structuring>`__,
-|EasyCrypt| also has *abstract* theories, which must be cloned before
-being used. Such theories reside in files with the ``.eca`` suffix.)
+will see in :ref:`chap:structuring`, |EasyCrypt| also has *abstract*
+theories, which must be cloned before being used. Such theories reside
+in files with the ``.eca`` suffix.)
 
 To run |EasyCrypt| in *batch* mode, simply invoke it from the shell,
 giving it an |EasyCrypt| script |---| with suffix ``.ec`` as argument:
@@ -75,18 +75,17 @@ giving it an |EasyCrypt| script |---| with suffix ``.ec`` as argument:
 
     easycrypt ${file}.ec
 
-|EasyCrypt| will display its progress as it checks the file. Information
-about |EasyCrypt|’s command-line arguments can be found in Chapter
-`[chap:advanced] <#chap:advanced>`__.
+|EasyCrypt| will display its progress as it checks the
+file. Information about |EasyCrypt|’s command-line arguments can be
+found in :ref:`chap:advanced`.
 
 When developing |EasyCrypt| scripts, though, |EasyCrypt| can be run
 *interactively*, as a subprocess of the Emacs text editor. One’s
 interaction with |EasyCrypt| is mediated by Proof General, a generic
-Emacs front-end for proof assistants. Upon visiting an |EasyCrypt| file,
-the “Proof-General” tab of the Emacs menu may be used execute the file,
-step-by-step, as well as to undo steps, etc. Information about the
-“EasyCrypt” menu tab may be found in Chapter
-`[chap:advanced] <#chap:advanced>`__.
+Emacs front-end for proof assistants. Upon visiting an |EasyCrypt|
+file, the “Proof-General” tab of the Emacs menu may be used execute
+the file, step-by-step, as well as to undo steps, etc. Information
+about the “EasyCrypt” menu tab may be found in :ref:`chap:advanced`.
 
 A sample |EasyCrypt| script is shown in :numref:`list:startedexamp`.
 
@@ -141,13 +140,7 @@ documents, and to contribute improvements to the macros if you have any.
 
 This document is intended as a reference manual for the |EasyCrypt|
 tool, and not as a tutorial on how to build a cryptographic proof, or
-how to conduct interactive proofs. We provide some detailed examples in
-Chapter `[chap:examples] <#chap:examples>`__, but they may still seem
-obscure even with a good understanding of cryptographic theory. We
-recommend experimenting.
-
-Bibliography
---------------------------------------------------------------------
-
-.. bibliography:: references.bib
-   :style: plain
+how to conduct interactive proofs. We provide some detailed examples
+in :ref:`chap:examples`, but they may still seem obscure even with a
+good understanding of cryptographic theory. We recommend
+experimenting.

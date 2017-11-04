@@ -1,7 +1,7 @@
 Type variables: <none>
 
 m : int
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 Context : M.f
 
 pre = (0 <= i <= n /\ x <= i * i) /\ i < n

@@ -1,6 +1,6 @@
 Type variables: <none>
 
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 Context : M.f
 
 pre = exists (f : int), f = y + M.x - 2 /\ 0 <= y /\ 0 <= M.x

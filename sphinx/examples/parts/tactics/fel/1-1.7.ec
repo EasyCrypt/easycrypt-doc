@@ -2,7 +2,7 @@ Type variables: <none>
 
 Adv: ADV{Or}
 &m: memory
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 pre =
   (((0 <= size Or.gens /\ size Or.gens < n) /\ !Or.won) /\
    size Or.gens <= n) /\

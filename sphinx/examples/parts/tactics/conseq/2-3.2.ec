@@ -1,6 +1,6 @@
 Type variables: <none>
 
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 forall &1 &2,
   ={b} /\ M.x{1} %% 2 + N.y{2} %% 2 = 0 =>
   forall (result_L result_R : bool) (x_L y_R : int),

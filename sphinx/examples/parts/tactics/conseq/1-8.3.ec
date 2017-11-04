@@ -1,7 +1,7 @@
 Type variables: <none>
 
 x': int
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 Context : M.f
 
 pre = x' = M.x /\ z <= M.y

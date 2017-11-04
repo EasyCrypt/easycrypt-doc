@@ -1,7 +1,7 @@
 Type variables: <none>
 
 Adv: ADV{Or1, Or2}
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 &1 (left ) : Top.
 &2 (right) : Top.
 

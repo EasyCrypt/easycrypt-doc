@@ -44,6 +44,10 @@ div.section p, div.section li, table.citation td {
   text-align: justify;
 }
 
+table.citation .label {
+  color: #000;
+}
+
 .globaltoc p.caption {
   padding-left: 10px;
 }

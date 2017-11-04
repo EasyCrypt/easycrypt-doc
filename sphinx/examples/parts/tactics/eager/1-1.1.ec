@@ -1,6 +1,6 @@
 Type variables: <none>
 
-#\hrulefill\hspace*{.5cm}#
+------------------------------------------------------------
 &1 (left ) : Or1.incr_y
 &2 (right) : Or2.incr_y
 
