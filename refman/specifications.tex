@@ -922,8 +922,8 @@ in:
 \begin{easycrypt}{}{}
 var x, y, z : int;
 var u, v;
-var x, y, z : int = 10;
-var x, y, z = 10;
+var x, y, z : int <- 10;
+var x, y, z <- 10;
 \end{easycrypt}
 Procedure parameters are variables; they may be modified during the
 execution of their procedures.  A procedure's parameters and local
@@ -1138,6 +1138,7 @@ module type ADV(O : OR) = {
   proc doGuessing() : unit {O.init O.guess O.guessed}
 }
 \end{easycrypt}
+
 Finally, we can specify that \ec{chooseRange} must initialize
 all of the adversary's global variables (if any) by using a
 star annotation:
@@ -1147,6 +1148,9 @@ module type ADV(O : OR) = {
   proc doGuessing() : unit {O.guess}
 }.
 \end{easycrypt}
+The enforcement of such checks is not carried out by \EasyCrypt's type
+checker, but by its logic (see the \rtactic{apply} and \rtactic{rewrite}
+tactics).
 
 The full Guessing Game example is contained in Listing~\ref{list:fullguessing}.
 \ecinput{examps/specifications-examp5.ec}{Full
