@@ -49,11 +49,11 @@ by a sequence of statements:
 \item return statements (which may only appear at the end of
   procedures).
 \end{itemize}
-A module's procedures modules may refer to the global variables of
-previously declared modules. Modules may be parameterized by abstract
-modules, which may be used to model adversaries; and modules
-types---or interfaces---may be formalized, describing modules with at
-least certain specified typed procedures.
+A module's procedures may refer to the global variables of previously
+declared modules. Modules may be nested.  Modules may be parameterized
+by abstract modules, which may be used to model adversaries; and
+modules types---or interfaces---may be formalized, describing modules
+with at least certain specified typed procedures.
 
 \EasyCrypt has four logics: a probabilistic, relational Hoare logic
 (\prhl), relating pairs of procedures; a probabilistic Hoare logic
@@ -79,57 +79,46 @@ forms of encryption).
 \EasyCrypt's language has a number of lexical categories:
 \begin{itemize}
 \item \textbf{Keywords}. \EasyCrypt has the following
-  \emph{keywords}: \ecn{admit}, \ecn{algebra},
-  \ecn{alias}, \ecn{apply}, \ecn{as},
-  \ecn{assert}, \ecn{assumption}, \ecn{auto},
-  \ecn{axiom}, \ecn{axiomatized}, \ecn{beta},
-  \ecn{by}, \ecn{byequiv}, \ecn{byphoare},
-  \ecn{bypr}, \ecn{call}, \ecn{case},
-  \ecn{cfold}, \ecn{change}, \ecn{class},
-  \ecn{clear}, \ecn{clone}, \ecn{congr},
-  \ecn{conseq}, \ecn{const}, \ecn{cut},
-  \ecn{declare}, \ecn{delta}, \ecn{do},
-  \ecn{done}, \ecn{eager}, \ecn{elif},
-  \ecn{elim}, \ecn{else}, \ecn{end},
-  \ecn{equiv}, \ecn{exact}, \ecn{exfalso},
-  \ecn{exists}, \ecn{expect}, \ecn{export},
-  \ecn{fel}, \ecn{fieldeq}, \ecn{first},
-  \ecn{fission}, \ecn{forall}, \ecn{fun},
-  \ecn{fusion}, \ecn{generalize}, \ecn{glob},
-  \ecn{goal}, \ecn{have}, \ecn{hint},
-  \ecn{hoare}, \ecn{hypothesis}, \ecn{idtac},
-  \ecn{if}, \ecn{import}, \ecn{in},
-  \ecn{inline}, \ecn{instance}, \ecn{intros},
-  \ecn{iota}, \ecn{islossless}, \ecn{kill},
-  \ecn{last}, \ecn{left}, \ecn{lemma},
-  \ecn{let}, \ecn{local}, \ecn{logic},
-  \ecn{modpath}, \ecn{module}, \ecn{move},
-  \ecn{nolocals}, \ecn{nosmt}, \ecn{of},
-  \ecn{op}, \ecn{phoare}, \ecn{pose},
-  \ecn{Pr}, \ecn{pr_bounded}, \ecn{pred},
-  \ecn{print}, \ecn{proc}, \ecn{progress},
-  \ecn{proof}, \ecn{prover}, \ecn{qed},
-  \ecn{rcondf}, \ecn{rcondt}, \ecn{realize},
-  \ecn{reflexivity}, \ecn{require}, \ecn{res},
-  \ecn{return}, \ecn{rewrite}, \ecn{right},
-  \ecn{ringeq}, \ecn{rnd}, \ecn{rwnormal},
-  \ecn{search}, \ecn{section}, \ecn{seq},
-  \ecn{sim}, \ecn{simplify}, \ecn{skip},
-  \ecn{smt}, \ecn{sp}, \ecn{split},
-  \ecn{splitwhile}, \ecn{strict}, \ecn{subst},
-  \ecn{swap}, \ecn{symmetry}, \ecn{then},
-  \ecn{theory}, \ecn{timeout}, \ecn{Top},
-  \ecn{transitivity}, \ecn{trivial}, \ecn{try},
-  \ecn{type}, \ecn{unroll}, \ecn{var},
-  \ecn{while}, \ecn{why3}, \ecn{with},
-  \ecn{wp} and \ecn{zeta}.
+  \emph{keywords}:
+\ecn{abbrev}, \ecn{abort}, \ecn{abstract}, \ecn{admit},
+\ecn{admitted}, \ecn{algebra}, \ecn{alias}, \ecn{apply}, \ecn{as},
+\ecn{assert}, \ecn{assumption}, \ecn{async}, \ecn{auto}, \ecn{axiom},
+\ecn{axiomatized}, \ecn{beta}, \ecn{by}, \ecn{byequiv},
+\ecn{byphoare}, \ecn{bypr}, \ecn{call}, \ecn{case}, \ecn{cfold},
+\ecn{change}, \ecn{class}, \ecn{clear}, \ecn{clone}, \ecn{congr},
+\ecn{conseq}, \ecn{const}, \ecn{cut}, \ecn{debug}, \ecn{declare},
+\ecn{delta}, \ecn{do}, \ecn{done}, \ecn{dump}, \ecn{eager},
+\ecn{elif}, \ecn{elim}, \ecn{else}, \ecn{end}, \ecn{equiv}, \ecn{eta},
+\ecn{exact}, \ecn{exfalso}, \ecn{exists}, \ecn{expect}, \ecn{export},
+\ecn{fel}, \ecn{field}, \ecn{fieldeq}, \ecn{first}, \ecn{fission},
+\ecn{forall}, \ecn{fun}, \ecn{fusion}, \ecn{glob}, \ecn{goal},
+\ecn{have}, \ecn{hint}, \ecn{hoare}, \ecn{idtac}, \ecn{if},
+\ecn{import}, \ecn{in}, \ecn{include}, \ecn{inductive}, \ecn{inline},
+\ecn{instance}, \ecn{iota}, \ecn{islossless}, \ecn{kill}, \ecn{last},
+\ecn{left}, \ecn{lemma}, \ecn{let}, \ecn{local}, \ecn{logic},
+\ecn{modpath}, \ecn{module}, \ecn{move}, \ecn{nosmt}, \ecn{notation},
+\ecn{of}, \ecn{op}, \ecn{phoare}, \ecn{pose}, \ecn{Pr},
+\ecn{pr_bounded}, \ecn{pragma}, \ecn{pred}, \ecn{print}, \ecn{proc},
+\ecn{progress}, \ecn{proof}, \ecn{prover}, \ecn{qed}, \ecn{rcondf},
+\ecn{rcondt}, \ecn{realize}, \ecn{reflexivity}, \ecn{remove},
+\ecn{rename}, \ecn{replace}, \ecn{require}, \ecn{res}, \ecn{return},
+\ecn{rewrite}, \ecn{right}, \ecn{ring}, \ecn{ringeq}, \ecn{rnd},
+\ecn{rwnormal}, \ecn{search}, \ecn{section}, \ecn{Self}, \ecn{seq},
+\ecn{sim}, \ecn{simplify}, \ecn{skip}, \ecn{smt}, \ecn{solve},
+\ecn{sp}, \ecn{split}, \ecn{splitwhile}, \ecn{strict}, \ecn{subst},
+\ecn{suff}, \ecn{swap}, \ecn{symmetry}, \ecn{then}, \ecn{theory},
+\ecn{time}, \ecn{timeout}, \ecn{Top}, \ecn{transitivity},
+\ecn{trivial}, \ecn{try}, \ecn{type}, \ecn{undo}, \ecn{unroll},
+\ecn{var}, \ecn{while}, \ecn{why3}, \ecn{with}, \ecn{wlog}, \ecn{wp}
+and \ecn{zeta}.
 
 \item \textbf{Identifiers}. An \emph{identifier} is a sequence of
-  letters, digits, underscores (\ecn{_}) and apostrophes
-  (\ecn{'}) that begins with a letter or underscore, and isn't
-  equal to an underscore or a keyword other than \ecn{expect},
-  \ecn{first}, \ecn{last}, \ecn{left},
-  \ecn{right} or \ecn{strict}.
+  letters, digits, underscores (\ecn{_}) and apostrophes (\ecn{'})
+  that begins with a letter or underscore, and isn't equal to an
+  underscore or a keyword other than \ecn{abort}, \ecn{admitted},
+  \ecn{async}, \ecn{dump}, \ecn{expect}, \ecn{field}, \ecn{fieldeq},
+  \ecn{first}, \ecn{last}, \ecn{left}, \ecn{right}, \ecn{ring},
+  \ecn{ringeq}, \ecn{solve}, \ecn{strict} or \ecn{wlog}.
 
 \item \textbf{Operator names}. An \emph{operator name} is an
   identifier, a binary operator name, a unary operator name, or

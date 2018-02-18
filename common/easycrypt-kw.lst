@@ -1,12 +1,12 @@
-% Generated on Tue Dec  2 19:01:03 2014
+% Generated on Sun Feb 18 17:31:40 2018
 
 \lstdefinelanguage{easycrypt-kw}{
-  morekeywords=[1]{forall,exists,fun,glob,let,in,var,proc,if,then,else,elif,while,assert,return,res},
-  morekeywords=[2]{axiom,hypothesis,axiomatized,lemma,realize,proof,qed,goal,end,import,export,local,declare,hint,nosmt,module,of,const,op,pred,require,theory,section,type,class,instance,print,search,why3,as,Pr,clone,with,prover,timeout,nolocals,Top,equiv,hoare,phoare,islossless},
-  morekeywords=[3]{beta,iota,zeta,logic,delta,simplify,congr,change,split,left,right,generalize,case,intros,pose,have,cut,elim,clear,apply,rewrite,rwnormal,subst,progress,trivial,auto,idtac,move,modpath,fieldeq,ringeq,algebra,transitivity,symmetry,seq,wp,sp,sim,skip,call,rcondt,rcondf,swap,cfold,rnd,pr_bounded,bypr,byphoare,byequiv,fel,conseq,exfalso,inline,alias,fission,fusion,unroll,splitwhile,kill,eager},
+  morekeywords=[1]{forall,exists,fun,glob,let,in,var,proc,if,then,else,elif,while,assert,return,res,equiv,hoare,phoare,islossless,async},
+  morekeywords=[2]{axiom,axiomatized,lemma,realize,proof,qed,abort,goal,end,import,export,include,local,declare,hint,nosmt,module,of,const,op,pred,inductive,notation,abbrev,require,theory,abstract,section,type,class,instance,print,search,as,Pr,clone,with,rename,prover,timeout,why3,dump,remove,Top,Self},
+  morekeywords=[3]{beta,iota,zeta,eta,logic,delta,simplify,congr,change,split,left,right,case,pose,cut,have,suff,elim,clear,wlog,apply,rewrite,rwnormal,subst,progress,trivial,auto,idtac,move,modpath,field,fieldeq,ring,ringeq,algebra,replace,transitivity,symmetry,seq,wp,sp,sim,skip,call,rcondt,rcondf,swap,cfold,rnd,pr_bounded,bypr,byphoare,byequiv,fel,conseq,exfalso,inline,alias,fission,fusion,unroll,splitwhile,kill,eager},
   morekeywords=[4]{try,first,last,do,strict,expect},
-  morekeywords=[5]{exact,assumption,by,reflexivity,done},
-  morekeywords=[6]{admit,smt},
+  morekeywords=[5]{exact,assumption,smt,by,reflexivity,done,solve},
+  morekeywords=[6]{admit,admitted},
 }
 
 \def\Exact{\ensuretext{\ls[language=easycrypt]"exact"}}
@@ -15,18 +15,21 @@
 \def\By{\ensuretext{\ls[language=easycrypt]"by"}}
 \def\Reflexivity{\ensuretext{\ls[language=easycrypt]"reflexivity"}}
 \def\Done{\ensuretext{\ls[language=easycrypt]"done"}}
+\def\Solve{\ensuretext{\ls[language=easycrypt]"solve"}}
 \def\Admit{\ensuretext{\ls[language=easycrypt]"admit"}}
+\def\Admitted{\ensuretext{\ls[language=easycrypt]"admitted"}}
 \def\Axiom{\ensuretext{\ls[language=easycrypt]"axiom"}}
-\def\Hypothesis{\ensuretext{\ls[language=easycrypt]"hypothesis"}}
 \def\Axiomatized{\ensuretext{\ls[language=easycrypt]"axiomatized"}}
 \def\Lemma{\ensuretext{\ls[language=easycrypt]"lemma"}}
 \def\Realize{\ensuretext{\ls[language=easycrypt]"realize"}}
 \def\Proof{\ensuretext{\ls[language=easycrypt]"proof"}}
 \def\Qed{\ensuretext{\ls[language=easycrypt]"qed"}}
+\def\Abort{\ensuretext{\ls[language=easycrypt]"abort"}}
 \def\Goal{\ensuretext{\ls[language=easycrypt]"goal"}}
 \def\End{\ensuretext{\ls[language=easycrypt]"end"}}
 \def\Import{\ensuretext{\ls[language=easycrypt]"import"}}
 \def\Export{\ensuretext{\ls[language=easycrypt]"export"}}
+\def\Include{\ensuretext{\ls[language=easycrypt]"include"}}
 \def\Local{\ensuretext{\ls[language=easycrypt]"local"}}
 \def\Declare{\ensuretext{\ls[language=easycrypt]"declare"}}
 \def\Hint{\ensuretext{\ls[language=easycrypt]"hint"}}
@@ -36,26 +39,35 @@
 \def\Const{\ensuretext{\ls[language=easycrypt]"const"}}
 \def\Op{\ensuretext{\ls[language=easycrypt]"op"}}
 \def\Pred{\ensuretext{\ls[language=easycrypt]"pred"}}
+\def\Inductive{\ensuretext{\ls[language=easycrypt]"inductive"}}
+\def\Notation{\ensuretext{\ls[language=easycrypt]"notation"}}
+\def\Abbrev{\ensuretext{\ls[language=easycrypt]"abbrev"}}
 \def\Require{\ensuretext{\ls[language=easycrypt]"require"}}
 \def\Theory{\ensuretext{\ls[language=easycrypt]"theory"}}
+\def\Abstract{\ensuretext{\ls[language=easycrypt]"abstract"}}
 \def\Section{\ensuretext{\ls[language=easycrypt]"section"}}
 \def\Type{\ensuretext{\ls[language=easycrypt]"type"}}
 \def\Class{\ensuretext{\ls[language=easycrypt]"class"}}
 \def\Instance{\ensuretext{\ls[language=easycrypt]"instance"}}
 \def\Print{\ensuretext{\ls[language=easycrypt]"print"}}
 \def\Search{\ensuretext{\ls[language=easycrypt]"search"}}
-\def\Why3{\ensuretext{\ls[language=easycrypt]"why3"}}
 \def\As{\ensuretext{\ls[language=easycrypt]"as"}}
 \def\Pr{\ensuretext{\ls[language=easycrypt]"Pr"}}
 \def\Clone{\ensuretext{\ls[language=easycrypt]"clone"}}
 \def\With{\ensuretext{\ls[language=easycrypt]"with"}}
+\def\Rename{\ensuretext{\ls[language=easycrypt]"rename"}}
 \def\Prover{\ensuretext{\ls[language=easycrypt]"prover"}}
 \def\Timeout{\ensuretext{\ls[language=easycrypt]"timeout"}}
-\def\Nolocals{\ensuretext{\ls[language=easycrypt]"nolocals"}}
+\def\Why3{\ensuretext{\ls[language=easycrypt]"why3"}}
+\def\Dump{\ensuretext{\ls[language=easycrypt]"dump"}}
+\def\Remove{\ensuretext{\ls[language=easycrypt]"remove"}}
 \def\Top{\ensuretext{\ls[language=easycrypt]"Top"}}
+\def\Self{\ensuretext{\ls[language=easycrypt]"Self"}}
+\def\Time{\ensuretext{\ls[language=easycrypt]"time"}}
 \def\Undo{\ensuretext{\ls[language=easycrypt]"undo"}}
 \def\Debug{\ensuretext{\ls[language=easycrypt]"debug"}}
 \def\Pragma{\ensuretext{\ls[language=easycrypt]"pragma"}}
+\def\Eta{\ensuretext{\ls[language=easycrypt]"eta"}}
 \def\Logic{\ensuretext{\ls[language=easycrypt]"logic"}}
 \def\Simplify{\ensuretext{\ls[language=easycrypt]"simplify"}}
 \def\Congr{\ensuretext{\ls[language=easycrypt]"congr"}}
@@ -63,13 +75,14 @@
 \def\Split{\ensuretext{\ls[language=easycrypt]"split"}}
 \def\Left{\ensuretext{\ls[language=easycrypt]"left"}}
 \def\Right{\ensuretext{\ls[language=easycrypt]"right"}}
-\def\Generalize{\ensuretext{\ls[language=easycrypt]"generalize"}}
 \def\Case{\ensuretext{\ls[language=easycrypt]"case"}}
-\def\Intros{\ensuretext{\ls[language=easycrypt]"intros"}}
 \def\Pose{\ensuretext{\ls[language=easycrypt]"pose"}}
 \def\Cut{\ensuretext{\ls[language=easycrypt]"cut"}}
+\def\Have{\ensuretext{\ls[language=easycrypt]"have"}}
+\def\Suff{\ensuretext{\ls[language=easycrypt]"suff"}}
 \def\Elim{\ensuretext{\ls[language=easycrypt]"elim"}}
 \def\Clear{\ensuretext{\ls[language=easycrypt]"clear"}}
+\def\Wlog{\ensuretext{\ls[language=easycrypt]"wlog"}}
 \def\Apply{\ensuretext{\ls[language=easycrypt]"apply"}}
 \def\Rewrite{\ensuretext{\ls[language=easycrypt]"rewrite"}}
 \def\Rwnormal{\ensuretext{\ls[language=easycrypt]"rwnormal"}}
@@ -80,9 +93,12 @@
 \def\Idtac{\ensuretext{\ls[language=easycrypt]"idtac"}}
 \def\Move{\ensuretext{\ls[language=easycrypt]"move"}}
 \def\Modpath{\ensuretext{\ls[language=easycrypt]"modpath"}}
+\def\Field{\ensuretext{\ls[language=easycrypt]"field"}}
 \def\Fieldeq{\ensuretext{\ls[language=easycrypt]"fieldeq"}}
+\def\Ring{\ensuretext{\ls[language=easycrypt]"ring"}}
 \def\Ringeq{\ensuretext{\ls[language=easycrypt]"ringeq"}}
 \def\Algebra{\ensuretext{\ls[language=easycrypt]"algebra"}}
+\def\Replace{\ensuretext{\ls[language=easycrypt]"replace"}}
 \def\Transitivity{\ensuretext{\ls[language=easycrypt]"transitivity"}}
 \def\Symmetry{\ensuretext{\ls[language=easycrypt]"symmetry"}}
 \def\Seq{\ensuretext{\ls[language=easycrypt]"seq"}}
@@ -137,3 +153,4 @@
 \def\Hoare{\ensuretext{\ls[language=easycrypt]"hoare"}}
 \def\Phoare{\ensuretext{\ls[language=easycrypt]"phoare"}}
 \def\Islossless{\ensuretext{\ls[language=easycrypt]"islossless"}}
+\def\Async{\ensuretext{\ls[language=easycrypt]"async"}}
