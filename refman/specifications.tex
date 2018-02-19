@@ -193,8 +193,8 @@ and \ecn{zeta}.
   \ec{_.[_]} or \ec{_.[_<-_]}.  (We'll see below how they may be used
   in mixfix form.)
 
-\item \textbf{Record projections}. A \emph{record projection} is an
-  identifier.
+\item \textbf{Record field projections}. A \emph{record field
+    projection} is an identifier.
 
 \item \textbf{Constructor names}. A \emph{constructor name} is an identifier
   or a symbolic operator name.
@@ -219,17 +219,26 @@ and \ecn{zeta}.
 \item \textbf{Module type names}. A \emph{module type name} is an
   identifier that begins with an uppercase letter.
 
+\item \textbf{Lemma and axiom names}. A \emph{lemma or axiom
+    name} is an identifier.
+
+\item \textbf{Theory names}. A \emph{theory name} is an
+  identifier that begins with an uppercase letter.
+
+\item \textbf{Section names}. A \emph{section name} is an
+  identifier that begins with an uppercase letter.
+
 \item \textbf{Memory identifiers}. A \emph{memory identifier} consists
   an ampersand followed by either a nonempty sequence of digits or an
   identifier whose initial character isn't an upper case letter.
 \end{itemize}
 
-\section{Script Structure, Printing and Searching}
+\section{Script Structure, Name spaces, Printing and Searching}
 
 An \EasyCrypt script consists of a sequence of \emph{steps},
 terminated by dots (\ec{.}). Steps may:
 \begin{itemize}
-\item declare types and type constructors;
+\item declare types;
 
 \item declare operators and predicates;
 
@@ -241,16 +250,25 @@ terminated by dots (\ec{.}). Steps may:
 
 \item require (make available) theories;
 
+\item enter or exit theories or sections;
+
 \item print types, operators, predicates, modules, module types,
   axioms and lemmas;
 
 \item search for lemmas involving operators.
 \end{itemize}
 
+Operators, predicates, record field projections and type constructors
+share the same name space. Lemmas and axioms share the same name
+space.
+
 To print an entity, one may say:
 \begin{easycrypt}{}{}
 print type t.
 print op f.
+print op (+).
+print op [-].
+print op "_.[_]".
 print pred p.
 print module Foo.
 print module type FOO.
@@ -260,19 +278,21 @@ print lemma goo.
 The entity kind may be omitted, in which case all entities with the
 given name are printed. \ec{print op} and \ec{print pred} may be used
 interchangeably, and may be applied to record field projections and
-datatype constructors, as well as to operators and predicates---all of which
-share the same name space.
-\ec{print axiom} and \ec{print lemma} are also interchangeable---axioms
-and lemmas share the same name space.
+datatype constructors, as well as to operators and predicates.
+\ec{print axiom} and \ec{print lemma} are also interchangeable.
+Infix operators must be parenthesized; unary operators must be
+enclosed in square brackets; and mixfix operators must be enclosed
+in double quotation marks.
 
 To search for axioms and lemmas involving all of a list of operators,
 one can say
 \begin{easycrypt}{}{}
 search f.
 search (+).
+search [-].
+search "_.[_]".
 search (+) (-).  (* axioms/lemmas involving both operators *)
 \end{easycrypt}
-(Infix operators must be parenthesized.)
 
 Declared/stated entities may refer to previously declared/stated entities,
 but not to themselves or later ones (with the exception of recursively
