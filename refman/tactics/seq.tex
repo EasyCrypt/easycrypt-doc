@@ -55,15 +55,31 @@
   \ecinput{examps/parts/tactics/seq/2-1.2.ec}{}{}{}{}
   \end{tsyntax}
 
-%  \begin{tsyntax}{seq $\ n$: R $\ \delta_1\ \delta_2\ \delta_3\ \delta_4$ I}
-%  Non-relational probabilistic sequence rule. Argument \ec{I} is
-%  optional (and defaults to $\mathsf{true}$). When one of
-%  $(\delta_1,\delta_2)$ (resp. $(\delta_3,\delta_4)$) is 0, the other
-%  can be replaced with a wildcard \ec{_}, and the corresponding goal
-%  is not generated, as it is not relevant to the proof. When none of
-%  the $\delta$s are given, the following default values are used:
-%  $\delta_1 = 1$, $\delta_2 = \delta$, $\delta_3 = 0$.
-%
+  \begin{tsyntax}{seq $\ n$: C $\ \delta_1\ \delta_2\ \rho_1\ \rho_2$ R}
+    \textbf{\phl sequence rule.} If $n$ is a natural number and the
+    goal's conclusion is a \phl statement of the form \ec{phoare[$c$ :
+      $\,P$ ==> $\,Q$] $\,\diamond\,$ $e$} where the program $c$ has
+    length at least $n$ and $\diamond$ is one of $<$, $\leq$, $=$,
+    $>$, or $\geq$, then reduce the goal to the following sequence of
+    goals where $c_1$ denotes the first $n$ statements of $c$ and
+    $c_2$ denotes the remainder of $c$.
+    \begin{itemize}
+    \item \ec{hoare[$c_1$ : $\,P$ ==> $\,R$]}
+    \item \ec{phoare[$c_1$ : $\,P$ ==> $\,C$] $\,\diamond\,$ $\delta_1$}
+    \item \ec{phoare[$c_2$ : $\,R \land C$ ==> $\,Q$] $\,\diamond\,$ $\delta_2$}
+    \item \ec{phoare[$c_1$ : $\,P$ ==> $\,!C$] $\,\diamond\,$ $\rho_1$}
+    \item \ec{phoare[$c_2$ : $\,R\, \land\, !C$ ==> $\,Q$] $\,\diamond\,$ $\rho_2$}
+    \item A goal asking to prove $\delta_1 \delta_2 + \rho_1 \rho_2 \mathrel{\diamond} e$
+    \end{itemize}
+    When one of $\delta_1,\delta_2$ (resp. $\rho_1,\rho_2$) is 0,
+    the other can be replaced with a wildcard \ec{_}, and the
+    corresponding goal is not generated, as it is not relevant to the
+    proof. When none of $\delta_i$ or $\rho_i$ are given, the
+    following default values are used: $\delta_1 = e$, $\delta_2 = 1$,
+    $\rho_1 = 0$, $\rho_2 = \_$. \ec{R} is optional and defaults to \ec{true}.
+
+    \fix{Add some Example(s).}
+
 %  \paragraph{Examples:}\strut
 %  
 %  \begin{cmathpar}
@@ -92,5 +108,5 @@
 %  \textbf{Note:} Since most tactics implicitly apply the \rtactic{seq}
 %  rule, most \phl tactics take optional final arguments corresponding
 %  to the $\delta$s and \ec{I}.
-%  \end{tsyntax}
+ \end{tsyntax}
 \end{tactic}
