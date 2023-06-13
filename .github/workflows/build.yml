@@ -1,0 +1,27 @@
+name: Build Documentation
+on:
+  push:
+  pull_request:
+  schedule:
+  - cron: "0 0 1 * *"
+
+jobs:
+  build_refman:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v3
+      - name: Compile Reference Manual
+        uses: xu-cheng/latex-action@v2
+        with:
+          working_directory: refman
+          latexmk_shell_escape: true
+          args: "-pdf -bibtex -file-line-error -halt-on-error -interaction=nonstopmode"
+          root_file: refman.tex
+        env:
+          TEXINPUTS: ".:../common/:"
+      - name: Save Reference Manual
+        uses: actions/upload-artifact@v3
+        with:
+          name: refman
+          path: refman/refman.pdf
