@@ -131,23 +131,23 @@ Statement patterns are an extension of statements.  \fix{Add
   \hline
   Blocks & \\
   \hline
-  \texttt{\{\}} & empty statment \\
+  \texttt{\{\}}  & empty statement \\
   \texttt{\{s\}} & start and end anchors around \texttt{s} \\
-  \texttt{\{s]} & start anchor at the beginning of \texttt{s} \\
-  \texttt{[s\}} & end anchor at the end of \texttt{s} \\
-  \texttt{[s]} & find \texttt{s} at any position in the statments, 
-                 without looking into possible branches \\
-  \texttt{<s>} & find \texttt{s} at any position in the statments, 
-                 and looking into possible branches \\
+  \texttt{\{s]}  & start anchor at the beginning of \texttt{s} \\
+  \texttt{[s\}}  & end anchor at the end of \texttt{s} \\
+  \texttt{[s]}   & find \texttt{s} at any position in the statements, 
+                  without looking into possible branches \\
+  \texttt{<s>}   & find \texttt{s} at any position in the statements, 
+                  and looking into possible branches \\
   \hline
 \end{tabular}
 
 \begin{tabular}{| l | l |}
   \hline
-  Statments&\\
+  Statements&\\
   \hline
-  \texttt{\_} & any sequence of statments \\
-  \texttt{n!\_} & a sequence of  \texttt{n} statments \\
+  \texttt{\_} & any sequence of statements \\
+  \texttt{n!\_} & a sequence of  \texttt{n} statements \\
   \texttt{s as X} &  \texttt{s} that is associated with the name  \texttt{X}\\
   \texttt{X} & interpreted as : \texttt{\_ as X} \\
   \hline
@@ -168,9 +168,9 @@ Statement patterns are an extension of statements.  \fix{Add
   \texttt{\_ <- \_ ;} & any affectation \\
   \texttt{\_ <\$ \_ ;} & any sample \\
   \texttt{\_ <@ \_ ;} & any procedure call \\
-  \texttt{if ;} & any  \texttt{if} statment \\
-  \texttt{while ;} & any  \texttt{while} statment \\
-  \texttt{if \_ bt else bf} & an \texttt{if} statment where  \texttt{bt} is the
+  \texttt{if ;} & any  \texttt{if} statement \\
+  \texttt{while ;} & any  \texttt{while} statement \\
+  \texttt{if \_ bt else bf} & an \texttt{if} statement where  \texttt{bt} is the
   block matched in the true branch's body,\\
   & and \texttt{bf} the block matched in the false branch's body\\
   \texttt{while \_ b} & a \texttt{while} branch where the block  \texttt{b}
