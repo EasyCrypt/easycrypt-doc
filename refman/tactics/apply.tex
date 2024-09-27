@@ -16,19 +16,19 @@ axiom Q (x : int) : P x => Q x.
 axiom R (x : int) : P(x + 1) => Q x => R x.
 \end{easycrypt}
     If the current goal is
-    \ecinput{examps/parts/tactics/apply/1-1.0.ec}{}{}{}{} then
-    running \ecinput{examps/parts/tactics/apply/1-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/apply/1-1.0.ec} then
+    running \ecinput{examps/parts/tactics/apply/1-1.ec}
     produces the goals
-    \ecinput{examps/parts/tactics/apply/1-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/apply/1-1.1.ec}
     and
-    \ecinput{examps/parts/tactics/apply/1-1.2.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/apply/1-1.2.ec}
     And running
-    \ecinput{examps/parts/tactics/apply/2-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/apply/2-1.ec}
     from that initial goal
     produces the goals
-    \ecinput{examps/parts/tactics/apply/2-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/apply/2-1.1.ec}
     and
-    \ecinput{examps/parts/tactics/apply/2-1.2.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/apply/2-1.2.ec}
   \end{tsyntax}
 
   \begin{tsyntax}{apply /$p_1$ $\;\cdots$ /$p_n$}
@@ -41,8 +41,8 @@ axiom R (x : int) : P(x + 1) => Q x => R x.
     changing the goal if any of these applications fails.
 
     For example, if the current goal is
-    \ecinput{examps/parts/tactics/apply/3-1.0.ec}{}{}{}{} then
-    running \ecinput{examps/parts/tactics/apply/3-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/apply/3-1.0.ec} then
+    running \ecinput{examps/parts/tactics/apply/3-1.ec}
     solves the goal.
   \end{tsyntax}
 
@@ -50,9 +50,9 @@ axiom R (x : int) : P(x + 1) => Q x => R x.
     Apply $p$ in forward reasoning to $H$, replacing $H$ by the result.
 
     For example, if the current goal is
-    \ecinput{examps/parts/tactics/apply/4-1.0.ec}{}{}{}{} then
-    running \ecinput{examps/parts/tactics/apply/4-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/apply/4-1.0.ec} then
+    running \ecinput{examps/parts/tactics/apply/4-1.ec}
     produces the goal
-    \ecinput{examps/parts/tactics/apply/4-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/apply/4-1.1.ec}
   \end{tsyntax}
 \end{tactic}

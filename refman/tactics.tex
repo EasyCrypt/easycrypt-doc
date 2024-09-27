@@ -38,12 +38,12 @@ given the truth of the hypotheses, for all valid instantiations
 of the assumption identifiers, memories and module names.
 
 For example,
-\ecinput{examps/parts/tactics-examp0-2.1.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp0-2.1.ec}
 is a goal.
 And, in the context of the declarations
-\ecinput{examps/tactics-examp2.ec}{}{3-11}{}{}
+\ecinput[linerange=3-11]{examps/tactics-examp2.ec}{}
 this is a goal:
-\ecinput{examps/parts/tactics-examp2-2.0.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp2-2.0.ec}
 The conclusion of this goal is just a nonlinear rendering of the formula
 \begin{easycrypt}{}{}
 phoare [G(X).g : G.x = n ==> G.x = n] = 1%r.
@@ -56,9 +56,9 @@ Internally, \EasyCrypt's proof engine also works with \prhl, \phl and
 \hl judgments involving lists of statements rather than procedure
 names, which we'll call \emph{statement judgements}, below. For
 example, given this declaration
-\ecinput{examps/tactics-examp1.ec}{}{3-9}{}{} this is an \phl
+\ecinput[linerange=3-9]{examps/tactics-examp1.ec}{} this is an \phl
 statement judgement:
-\ecinput{examps/parts/tactics-examp1-3.0.ec}{}{}{}{} The pre- and
+\ecinput{examps/parts/tactics-examp1-3.0.ec} The pre- and
 post-conditions of a statement judgement may refer to the parameters
 and local variables of the \emph{procedure context} of the
 conclusion---\ec{M.f} in the preceding example. They may also refer
@@ -84,9 +84,9 @@ statements.
 When the proof of a lemma is begun, the proof engine starts out with
 a single goal, consisting of the lemma's statement. E.g.,
 the lemma
-\ecinput{examps/tactics-examp0.ec}{}{1-3}{}{}
+\ecinput[linerange=1-3]{examps/tactics-examp0.ec}{}
 gives rise to the goal
-\ecinput{examps/parts/tactics-examp0-1.0.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp0-1.0.ec}
 For parameterized lemmas, the goal includes the lemma's parameters
 as assumptions. E.g.,
 \begin{easycrypt}{}{}
@@ -94,18 +94,18 @@ lemma PairEq (x x' : 'a) (y y' : 'b) :
   x = x' => y = y' => (x, y) = (x', y').
 \end{easycrypt}
 gives rise to
-\ecinput{examps/parts/tactics-examp0-2.0.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp0-2.0.ec}
 
 \EasyCrypt's tactics, when applicable, reduce the first goal to zero
 or more subgoals.  E.g., if the first goal is
-\ecinput{examps/parts/tactics-examp1-3.0.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp1-3.0.ec}
 then applying the \ec{if} tactic (handle a conditional) reduces
 (replaces) this goal with the two goals
-\ecinput{examps/parts/tactics-examp1-3.1.ec}{}{}{}{} and
-\ecinput{examps/parts/tactics-examp1-3.2.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp1-3.1.ec} and
+\ecinput{examps/parts/tactics-examp1-3.2.ec}
 (leaving the remaining goals, if any, unchanged).
 If the first goal is
-\ecinput{examps/parts/tactics-examp1-6.0.ec}{}{}{}{}
+\ecinput{examps/parts/tactics-examp1-6.0.ec}
 then applying the \ec{smt} tactic (try to solve the goal using
 SMT provers) solves the goal, i.e., replaces it with no subgoals.
 Applying a tactic may fail; in this case an error message is issued

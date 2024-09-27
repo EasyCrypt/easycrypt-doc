@@ -9,10 +9,10 @@
 
   \bigskip
   For example, if the current goal is
-  \ecinput{examps/parts/tactics/proc/1-1.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/proc/1-1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/1-1.0.ec} then
+  running \ecinput{examps/parts/tactics/proc/1-1.ec}
   produces the goal
-  \ecinput{examps/parts/tactics/proc/1-1.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/1-1.1.ec}
   \end{tsyntax}
 
   \begin{tsyntax}{proc $\;I$}
@@ -37,18 +37,18 @@
 
   \bigskip
   For example, given the declarations
-  \ecinput{examps/tactics/proc/2.ec}{}{3-24}{}
+  \ecinput[linerange=3-24]{examps/tactics/proc/2.ec}
   if the current goal is
-  \ecinput{examps/parts/tactics/proc/2-1.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/proc/2-1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/2-1.0.ec} then
+  running \ecinput{examps/parts/tactics/proc/2-1.ec}
   produces the goals
-  \ecinput{examps/parts/tactics/proc/2-1.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/2-1.1.ec}
   and
-  \ecinput{examps/parts/tactics/proc/2-1.2.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/2-1.2.ec}
   and
-  \ecinput{examps/parts/tactics/proc/2-1.3.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/2-1.3.ec}
   and
-  \ecinput{examps/parts/tactics/proc/2-1.4.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/2-1.4.ec}
   The tactic would fail without the module restriction \ec{T\{Or\}} on
   \ec{M}, as then \ec{M} could directly manipulate \ec{Or.x}.
   It would also fail if, in the declaration of the module type \ec{T},
@@ -76,22 +76,22 @@
 
   \bigskip
   For example, suppose we have the following declarations
-  \ecinput{examps/tactics/proc/3.ec}{}{3-40}{}
+  \ecinput[linerange=3-40]{examps/tactics/proc/3.ec}
   Then, if the current goal is
-  \ecinput{examps/parts/tactics/proc/3-1.0.ec}{}{}{}{}
-  running \ecinput{examps/parts/tactics/proc/3-1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/3-1.0.ec}
+  running \ecinput{examps/parts/tactics/proc/3-1.ec}
   produces the goals
-  \ecinput{examps/parts/tactics/proc/3-1.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/3-1.1.ec}
   and
-  \ecinput{examps/parts/tactics/proc/3-1.2.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/3-1.2.ec}
   and
-  \ecinput{examps/parts/tactics/proc/3-1.3.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/3-1.3.ec}
   and
-  \ecinput{examps/parts/tactics/proc/3-1.4.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/3-1.4.ec}
   and
-  \ecinput{examps/parts/tactics/proc/3-1.5.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/3-1.5.ec}
   and
-  \ecinput{examps/parts/tactics/proc/3-1.6.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/3-1.6.ec}
   \end{tsyntax}
 
   \begin{tsyntax}{proc $\;B$ $\;I$ $\;J$}
@@ -111,20 +111,20 @@
   \medskip
   For example, given the declarations of the \ec{proc $\;B$ $\;I$} example,
   if the current goal is
-  \ecinput{examps/parts/tactics/proc/3-2.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/proc/3-2.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/3-2.0.ec} then
+  running \ecinput{examps/parts/tactics/proc/3-2.ec}
   produces the goals
-  \ecinput{examps/parts/tactics/proc/3-2.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/3-2.1.ec}
   and
-  \ecinput{examps/parts/tactics/proc/3-2.2.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/3-2.2.ec}
   and
-  \ecinput{examps/parts/tactics/proc/3-2.3.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/3-2.3.ec}
   and
-  \ecinput{examps/parts/tactics/proc/3-2.4.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/3-2.4.ec}
   and
-  \ecinput{examps/parts/tactics/proc/3-2.5.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/3-2.5.ec}
   and
-  \ecinput{examps/parts/tactics/proc/3-2.6.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/3-2.6.ec}
   \end{tsyntax}
 
   \begin{tsyntax}{proc*}
@@ -134,10 +134,10 @@
 
   \bigskip
   For example, if the current goal is
-  \ecinput{examps/parts/tactics/proc/4-1.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/proc/4-1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/4-1.0.ec} then
+  running \ecinput{examps/parts/tactics/proc/4-1.ec}
   produces the goal
-  \ecinput{examps/parts/tactics/proc/4-1.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/proc/4-1.1.ec}
 
   \paragraph{Remark.}
   This tactic is particularly useful in combination with

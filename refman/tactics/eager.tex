@@ -22,7 +22,7 @@
   script involving variable incrementation oracles \ec{Or1} and
   \ec{Or2}, which only differ in that \ec{Or2} keeps a ``transcript''
   of its operation.
-  \ecinput{examps/tactics/eager/1-nodumps.ec}{}{5-200}{}
+  \ecinput[linerange=5-200]{examps/tactics/eager/1-nodumps.ec}
 
   \begin{tsyntax}{eager proc}
   Turn a goal whose conclusion is an eager judgement into one
@@ -31,10 +31,10 @@
   bodies.
   \medskip
   For example, if the current goal is
-  \ecinput{examps/parts/tactics/eager/1-1.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/eager/1-1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-1.0.ec} then
+  running \ecinput{examps/parts/tactics/eager/1-1.ec}
   produces the goal
-  \ecinput{examps/parts/tactics/eager/1-1.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-1.1.ec}
   \end{tsyntax}
 
   \begin{tsyntax}{proc*}
@@ -44,10 +44,10 @@
   being inlined.
   \medskip
   For example, if the current goal is
-  \ecinput{examps/parts/tactics/eager/1-2.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/eager/1-2.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-2.0.ec} then
+  running \ecinput{examps/parts/tactics/eager/1-2.ec}
   produces the goal
-  \ecinput{examps/parts/tactics/eager/1-2.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-2.1.ec}
   \end{tsyntax}
 
   \begin{tsyntax}{eager call $\;p$}
@@ -58,11 +58,11 @@
 
   \medskip
   For example, if the current goal is
-  \ecinput{examps/parts/tactics/eager/1-4.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/eager/1-4.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-4.0.ec} then
+  running \ecinput{examps/parts/tactics/eager/1-4.ec}
   (see the statement of \ec{eager_incr}, above)
   produces the goal
-  \ecinput{examps/parts/tactics/eager/1-4.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-4.1.ec}
   \end{tsyntax}
 
   \begin{tsyntax}{eager seq $\;n_1$ $\;n_2$ ($H$ : $\;s_1$ ~ $\;s_2$ :
@@ -84,16 +84,16 @@
 
   \medskip
   For example, if the current goal is
-  \ecinput{examps/parts/tactics/eager/1-3.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/eager/1-3.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-3.0.ec} then
+  running \ecinput{examps/parts/tactics/eager/1-3.ec}
   produces the goals
-  \ecinput{examps/parts/tactics/eager/1-3.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-3.1.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-3.2.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-3.2.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-3.3.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-3.3.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-3.4.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-3.4.ec}
   \end{tsyntax}
 
   \begin{tsyntax}{eager if}
@@ -107,16 +107,16 @@
 
   \medskip
   For example, if the current goal is
-  \ecinput{examps/parts/tactics/eager/1-6.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/eager/1-6.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-6.0.ec} then
+  running \ecinput{examps/parts/tactics/eager/1-6.ec}
   produces the goals
-  \ecinput{examps/parts/tactics/eager/1-6.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-6.1.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-6.2.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-6.2.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-6.3.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-6.3.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-6.4.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-6.4.ec}
   \end{tsyntax}
 
   \begin{tsyntax}{eager while ($H$ : $\;s_1$ ~ $\;s_2$ :
@@ -131,16 +131,16 @@
 
   \medskip
   For example, if the current goal is
-  \ecinput{examps/parts/tactics/eager/1-5.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/eager/1-5.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-5.0.ec} then
+  running \ecinput{examps/parts/tactics/eager/1-5.ec}
   produces the goals
-  \ecinput{examps/parts/tactics/eager/1-5.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-5.1.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-5.2.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-5.2.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-5.3.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-5.3.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-5.4.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-5.4.ec}
   \end{tsyntax}
 
   \begin{tsyntax}{eager proc ($H$ : $\;s_1$ ~ $\;s_2$ :
@@ -158,34 +158,34 @@
 
   \medskip
   For example, if the current goal is
-  \ecinput{examps/parts/tactics/eager/1-7.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/eager/1-7.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-7.0.ec} then
+  running \ecinput{examps/parts/tactics/eager/1-7.ec}
   produces the goals
-  \ecinput{examps/parts/tactics/eager/1-7.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-7.1.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-7.2.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-7.2.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-7.3.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-7.3.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-7.4.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-7.4.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-7.5.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-7.5.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-7.6.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-7.6.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-7.7.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-7.7.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-7.8.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-7.8.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-7.9.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-7.9.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-7.10.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-7.10.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-7.11.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-7.11.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-7.12.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-7.12.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-7.13.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-7.13.ec}
   \end{tsyntax}
 
   \begin{tsyntax}{eager ($H$ : $\;s_1$ ~ $\;s_2$ :
@@ -200,13 +200,13 @@
 
   \medskip
   For example, if the current goal is
-  \ecinput{examps/parts/tactics/eager/1-8.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/eager/1-8.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-8.0.ec} then
+  running \ecinput{examps/parts/tactics/eager/1-8.ec}
   produces the goals
-  \ecinput{examps/parts/tactics/eager/1-8.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-8.1.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-8.2.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-8.2.ec}
   and
-  \ecinput{examps/parts/tactics/eager/1-8.3.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/eager/1-8.3.ec}
   \end{tsyntax}
 \end{tactic}

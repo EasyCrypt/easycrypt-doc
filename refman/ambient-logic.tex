@@ -281,67 +281,67 @@ disappear and some of the goals to be simplified.
     equivalent to \rtactic{idtac}.
     In its simplest form, the introduction tactical simply gives names
     to assumptions.  For example, if the current goal is
-    \ecinput{examps/parts/tactics/introduction/1-1.0.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/1-1.0.ec}
     then running
-    \ecinput{examps/parts/tactics/introduction/1-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/1-1.ec}
     produces
-    \ecinput{examps/parts/tactics/introduction/1-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/1-1.1.ec}
     Alternatively, we can use the introduction pattern \ec{?}
     to let \EasyCrypt choose the assumption names, using
     \ec{H} as a base for formula assumptions and starting
     from the identifier names given in universal quantifiers:
-    \ecinput{examps/parts/tactics/introduction/2-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/2-1.ec}
     produces
-    \ecinput{examps/parts/tactics/introduction/2-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/2-1.1.ec}
 
     To see how the \ec{->} rewriting pattern works, suppose
     the current goal is
-    \ecinput{examps/parts/tactics/introduction/4-1.0.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/4-1.0.ec}
     Then running
-    \ecinput{examps/parts/tactics/introduction/4-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/4-1.ec}
     produces
-    \ecinput{examps/parts/tactics/introduction/4-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/4-1.1.ec}
     Alternatively, one can introduce the assumption \ec{x = y},
     and then use the \ec{->>} substitution pattern:
     if the current goal is
-    \ecinput{examps/parts/tactics/introduction/8-1.0.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/8-1.0.ec}
     then running
-    \ecinput{examps/parts/tactics/introduction/8-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/8-1.ec}
     produces
-    \ecinput{examps/parts/tactics/introduction/8-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/8-1.1.ec}
 
     To see how a view may be applied to a not-yet-introduced formula
     assumption, suppose the current goal is
-    \ecinput{examps/parts/tactics/introduction/5-1.0.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/5-1.0.ec}
     Then running
-    \ecinput{examps/parts/tactics/introduction/5-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/5-1.ec}
     produces
-    \ecinput{examps/parts/tactics/introduction/5-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/5-1.1.ec}
     And then running
-    \ecinput{examps/parts/tactics/introduction/5-2.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/5-2.ec}
     on this goal produces
-    \ecinput{examps/parts/tactics/introduction/5-2.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/5-2.1.ec}
 
     Finally, let's see examples of how a disjunction assumption
     may be destructed, either using the \ec{case} tactic followed
     by a case introduction pattern, or by making the
     case introduction pattern do the destruction.
     For the first case, if the current goal is
-    \ecinput{examps/parts/tactics/introduction/6-1.0.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/6-1.0.ec}
     then running
-    \ecinput{examps/parts/tactics/introduction/6-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/6-1.ec}
     produces the two goals
-    \ecinput{examps/parts/tactics/introduction/6-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/6-1.1.ec}
     and
-    \ecinput{examps/parts/tactics/introduction/6-1.2.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/6-1.2.ec}
     And for the second case, if the current goal is
-    \ecinput{examps/parts/tactics/introduction/7-1.0.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/7-1.0.ec}
     then running
-    \ecinput{examps/parts/tactics/introduction/7-1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/7-1.ec}
     produces the two goals
-    \ecinput{examps/parts/tactics/introduction/7-1.1.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/7-1.1.ec}
     and
-    \ecinput{examps/parts/tactics/introduction/7-1.2.ec}{}{}{}{}
+    \ecinput{examps/parts/tactics/introduction/7-1.2.ec}
     Note how we used the clear pattern to discard the assumption
     \ec{X}.
   \end{tsyntax}
@@ -368,10 +368,10 @@ the conclusion and generalizes subterms or formulas of the conclusion.
       generalizing the former.
 
       For example, if the current goal is
-      \ecinput{examps/parts/tactics/generalize/2-1.0.ec}{}{}{}{} then
-      running \ecinput{examps/parts/tactics/generalize/2-1.ec}{}{}{}{}
+      \ecinput{examps/parts/tactics/generalize/2-1.0.ec} then
+      running \ecinput{examps/parts/tactics/generalize/2-1.ec}
       produces
-      \ecinput{examps/parts/tactics/generalize/2-1.1.ec}{}{}{}{} In
+      \ecinput{examps/parts/tactics/generalize/2-1.1.ec} In
       this example, one can't generalize \ec{x} without also
       generalizing \ec{eq_xy}.
 
@@ -381,14 +381,14 @@ the conclusion and generalizes subterms or formulas of the conclusion.
       universally quantified identifier of the approprate type.
 
       For example, if the current goal is
-      \ecinput{examps/parts/tactics/generalize/1-1.0.ec}{}{}{}{} then
-      running \ecinput{examps/parts/tactics/generalize/1-1.ec}{}{}{}{}
+      \ecinput{examps/parts/tactics/generalize/1-1.0.ec} then
+      running \ecinput{examps/parts/tactics/generalize/1-1.ec}
       produces
-      \ecinput{examps/parts/tactics/generalize/1-1.1.ec}{}{}{}{}
+      \ecinput{examps/parts/tactics/generalize/1-1.1.ec}
       Alternatively, running
-      \ecinput{examps/parts/tactics/generalize/3-1.ec}{}{}{}{}
+      \ecinput{examps/parts/tactics/generalize/3-1.ec}
       produces
-      \ecinput{examps/parts/tactics/generalize/3-1.1.ec}{}{}{}{}
+      \ecinput{examps/parts/tactics/generalize/3-1.1.ec}
     \end{itemize}
   \end{tsyntax}
 \end{tactic}
@@ -444,10 +444,10 @@ a composite tactic, which may then combined with other tactics.
   \ec{($\tau_1$; $\;\tau_2$); $\;\tau_3$}.
   
   For example, if the current goal is
-  \ecinput{examps/parts/tactics/sequence-tactical/1-1.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/sequence-tactical/1-1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/sequence-tactical/1-1.0.ec} then
+  running \ecinput{examps/parts/tactics/sequence-tactical/1-1.ec}
   produces the goals
-  \ecinput{examps/parts/tactics/sequence-tactical/1-1.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/sequence-tactical/1-1.1.ec}
 \end{tsyntax}
 \end{tactic}
 
@@ -457,8 +457,8 @@ a composite tactic, which may then combined with other tactics.
     Then apply $\tau'_i$ to $G_i$, for all $i$.
 
   For example, if the current goal is
-  \ecinput{examps/parts/tactics/sequence-branching-tactical/1-1.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/sequence-branching-tactical/1-1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/sequence-branching-tactical/1-1.0.ec} then
+  running \ecinput{examps/parts/tactics/sequence-branching-tactical/1-1.ec}
   solves the goal.
   \end{tsyntax}
 \end{tactic}
@@ -489,12 +489,12 @@ a composite tactic, which may then combined with other tactics.
   \end{tsyntax}
 
   For example, if the current goal is
-  \ecinput{examps/parts/tactics/do-tactical/1-1.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/do-tactical/1-1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/do-tactical/1-1.0.ec} then
+  running \ecinput{examps/parts/tactics/do-tactical/1-1.ec}
   produces the goals
-  \ecinput{examps/parts/tactics/do-tactical/1-1.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/do-tactical/1-1.1.ec}
   and
-  \ecinput{examps/parts/tactics/do-tactical/1-1.2.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/do-tactical/1-1.2.ec}
 
   \paragraph{Variants.}\strut
 
@@ -534,12 +534,12 @@ a composite tactic, which may then combined with other tactics.
 
   \bigskip
   For example, if the current goal is
-  \ecinput{examps/parts/tactics/sequence-reordering-tactical/1-1.0.ec}{}{}{}{} then
-  running \ecinput{examps/parts/tactics/sequence-reordering-tactical/1-1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/sequence-reordering-tactical/1-1.0.ec} then
+  running \ecinput{examps/parts/tactics/sequence-reordering-tactical/1-1.ec}
   produces the goals
-  \ecinput{examps/parts/tactics/sequence-reordering-tactical/1-1.1.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/sequence-reordering-tactical/1-1.1.ec}
   and
-  \ecinput{examps/parts/tactics/sequence-reordering-tactical/1-1.2.ec}{}{}{}{}
+  \ecinput{examps/parts/tactics/sequence-reordering-tactical/1-1.2.ec}
   \end{tsyntax}
 \end{tactic}
 
